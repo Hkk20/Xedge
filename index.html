@@ -407,3 +407,16 @@
                             <li><a href="#" class="text-gray-400 hover:text-blue-400 transition">Terms of Service</a></li>
                             <li><a href="#" class="text-gray-400 hover:text-blue-400 transition">Cookie Policy</a></li>
              
+                        </ul>
+                    </div>
+                
+                          <!-- LOAD MAIN JS FILES -->
+<script src="tools.js"></script>
+<script src="app.js"></script>
+
+<script>
+  // Re-render icons after DOM loads
+  document.addEventListener("DOMContentLoaded", () => {
+    if (window.feather) feather.replace();
+  });
+</script>
