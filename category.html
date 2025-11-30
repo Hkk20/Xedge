@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>X Edge – Category</title>
+
+  <!-- Preconnect for faster Google Script fetch -->
+  <link rel="preconnect" href="https://script.google.com">
+
+  
+
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-900 text-white">
+
+  <nav class="bg-gray-900/80 fixed w-full z-30">
+    <div class="max-w-6xl mx-auto px-6 py-3 flex justify-between items-center">
+      <a href="index.html" class="flex items-center gap-3">
+        <img src="logo.png" class="w-8 h-8"/>
+        <span class="font-bold">X Edge</span>
+      </a>
+      <a href="categories.html" class="text-gray-300 hover:text-blue-400">← Categories</a>
+    </div>
+  </nav>
+
+  <main class="pt-20 max-w-6xl mx-auto px-6 pb-24">
+    <h1 id="categoryTitle" class="text-3xl font-semibold mb-6">Loading...</h1>
+    <section id="toolsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></section>
+  </main>
+
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+
+  const RAW_URL = "https://script.google.com/macros/s/AKfycbxaA3BcQgW7PTFlSP9j4h16-p2us5IiuaYESUUpZiy8bObezI-nMUxXAC28tR15FU_U/exec";
+
+  // Add nocache param but support caching inside localStorage
+  const CSV_URL = RAW_URL + "?nocache=" + Date.now();
+
+  const params = new URLSearchParams(window.location.search);
+  const selectedCat = params.get("cat");
+
+  const titleEl = document.getElementById("categoryTitle");
+  const container = document.getElementById("toolsContainer");
+
+  // Handle missing category safely
+  if (!selectedCat) {
+    titleEl.textContent = "Unknown Category";
+    container.innerHTML = `<p class="text-gray-400">No category selected.</p>`;
+    return;
+  }
+
+  titleEl.textContent = selectedCat;
+
+  // ⭐ LocalStorage cache (FAST)
+  async function getToolsCached(url) {
+    const cached = localStorage.getItem("tools_cache");
+    if (cached) {
+      console.log("⚡ Loaded tools from cache");
+      return JSON.parse(cached);
+    }
+
+    console.log("🌐 Fetching fresh tools...");
+    const res = await fetch(url, { cache: "no-store" });
+    const data = await res.json();
+    localStorage.setItem("tools_cache", JSON.stringify(data));
+    return data;
+  }
+
+  try {
+    const tools = await getToolsCached(CSV_URL);
+
+    const filtered = tools.filter(t =>
+      t.category?.trim().toLowerCase() === selectedCat.toLowerCase()
+    );
+
+    if (!filtered.length) {
+      container.innerHTML = `<p class="text-gray-400">No tools found in this category.</p>`;
+      return;
+    }
+
+    // ⭐ Render with optimized images + lazy loading
+    container.innerHTML = filtered.map(tool => {
+
+      // Resize Google logos (safe)
+      let img = tool.logo_url || "";
+      if (img.includes("=s")) {
+        img = img.replace("=s", "=w200-h200");
+      }
+
+      return `
+      <div class="bg-gray-800 p-6 rounded-xl border border-gray-700 hover:bg-gray-700 transition will-change-transform">
+
+        <img loading="lazy"
+             src="${img}"
+             class="w-16 h-16 mx-auto mb-4 rounded"
+             onerror="this.src='https://via.placeholder.com/100'">
+
+        <h3 class="text-xl font-semibold text-center">${tool.name}</h3>
+        <p class="text-gray-300 text-sm text-center mt-2">${tool.description}</p>
+
+        <div class="text-center mt-4">
+          <a href="${tool.link}" target="_blank"
+             class="bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded-lg text-white">
+            Visit Tool ›
+          </a>
+        </div>
+      </div>
+      `;
+    }).join("");
+
+  } catch (err) {
+    console.error(err);
+    container.innerHTML = `<p class="text-red-400">Failed to load tools.</p>`;
+  }
+});
+</script>
+
+</body>
+</html>

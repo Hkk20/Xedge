@@ -1,0 +1,63 @@
+/* Only apply these styles on the image-tool page */
+.image-tool * { box-sizing: border-box; }
+
+.image-tool {
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.image-tool #container {
+    position: relative;
+    gap: 0.4rem;
+
+    width: 640px;
+    height: 640px;
+    max-width: 100%;
+    max-height: 100%;
+
+    border: 2px dashed #D1D5DB;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    cursor: pointer;
+    margin: 1rem;
+
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    font-size: 18px;
+}
+
+.image-tool #upload {
+    display: none;
+}
+
+.image-tool svg {
+    pointer-events: none;
+}
+
+.image-tool #example {
+    font-size: 14px;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.image-tool #example:hover {
+    color: #2563EB;
+}
+
+.image-tool .bounding-box {
+    position: absolute;
+    box-sizing: border-box;
+    border: solid 2px;
+}
+
+.image-tool .bounding-box-label {
+    color: white;
+    position: absolute;
+    font-size: 12px;
+    margin: -16px 0 0 -2px;
+    padding: 1px;
+}

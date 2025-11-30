@@ -1,0 +1,74 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Explore — X Edge</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" href="xedge-logo.png">
+
+  <style>
+    /* small, performant UI styles */
+    :root { --card-bg: rgba(31,41,55,0.45); --card-border: rgba(55,65,81,0.6); }
+    body { -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+    /* container */
+    #toolsContainer { min-height: 300px; }
+    /* card */
+    .xe-card { background: var(--card-bg); border: 1px solid var(--card-border); transition: transform .12s ease, box-shadow .12s ease; }
+    .xe-card:active { transform: translateY(1px); }
+    /* placeholder tile to prevent layout shift */
+    .xe-thumb { width:64px;height:64px;flex-shrink:0;border-radius:8px;background:linear-gradient(90deg,#0f172a,#0b1220);display:block; }
+    /* image will fill and be replaced via data-src */
+    .xe-thumb img{width:64px;height:64px;border-radius:8px;object-fit:cover;display:block}
+    /* avoid heavy filters on mobile; no blur filters */
+    /* skeleton */
+    .skeleton { background: linear-gradient(90deg, rgba(55,65,81,0.2), rgba(71,85,105,0.15)); animation: pulse 1.1s infinite; border-radius:10px; }
+    @keyframes pulse { 0%{opacity:1}50%{opacity:.6}100%{opacity:1} }
+    /* keep card heights stable */
+    .xe-card { padding:.9rem; border-radius:12px; display:block; }
+    .xe-card-title { font-size:1rem; font-weight:600; }
+    /* sentinel */
+    #load-more-sentinel { height: 1px; }
+  </style>
+</head>
+<body class="bg-gray-900 text-white">
+
+  <!-- NAV -->
+  <nav class="bg-gray-900/80 fixed w-full z-30 border-b border-gray-800">
+    <div class="max-w-6xl mx-auto px-6 py-3 flex justify-between items-center">
+      <a href="index.html" class="flex items-center gap-3">
+        <img src="xedge-logo.png" class="w-8 h-8" alt="X Edge Logo">
+        <span class="font-bold">X Edge</span>
+      </a>
+      <a href="join.html" class="bg-gradient-to-r from-blue-500 to-blue-600 px-3 py-1 rounded">Join Beta</a>
+    </div>
+  </nav>
+
+  <main class="pt-20 max-w-6xl mx-auto px-6 pb-24">
+    <h1 class="text-3xl font-semibold">All AI Tools</h1>
+    <p class="text-gray-400">Search and filter tools loaded from Google Sheets.</p>
+
+    <div class="mt-4 flex gap-4">
+      <input id="toolSearch" placeholder="Search tools..." class="bg-gray-800 px-4 py-2 rounded w-full outline-none border border-gray-700 focus:border-blue-500" />
+    </div>
+
+    <section id="toolsContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6"></section>
+
+    <div id="explore-loader" class="text-center py-6 hidden">
+      <span class="text-gray-400">Loading more…</span>
+    </div>
+
+    <!-- sentinel used to detect end-of-list for infinite loads -->
+    <div id="load-more-sentinel" aria-hidden="true"></div>
+  </main>
+
+  <script src="tools.js"></script>
+  <script>
+    window.addEventListener("DOMContentLoaded", () => {
+      if (typeof initExplorePage === "function") initExplorePage();
+    });
+  </script>
+</body>
+</html>

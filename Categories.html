@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>X Edge – Categories</title>
+
+  <!-- Preconnect for faster Google Script fetch -->
+  <link rel="preconnect" href="https://script.google.com">
+  
+
+
+  <!-- GPU acceleration -->
+  <style>
+    
+    .loader {
+      width: 50px; height: 50px;
+      border: 5px solid #1e40af; border-top-color: transparent;
+      border-radius: 50%; animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<!-- Fullscreen Loader -->
+<div id="pageLoader" class="fixed inset-0 bg-gray-900/90 flex items-center justify-center z-50 hidden">
+  <div class="loader"></div>
+</div>
+
+<body class="bg-gray-950 text-white">
+
+  <div id="categories-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 p-6"></div>
+
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+
+  const RAW_URL = "https://script.google.com/macros/s/AKfycbxaA3BcQgW7PTFlSP9j4h16-p2us5IiuaYESUUpZiy8bObezI-nMUxXAC28tR15FU_U/exec";
+  const CSV_URL = RAW_URL + "?nocache=" + Date.now();
+  const container = document.getElementById("categories-grid");
+
+  // ⭐ SUPER FAST: LocalStorage Caching
+  async function getCachedTools(url) {
+    const cached = localStorage.getItem("tools_cache");
+    if (cached) return JSON.parse(cached);
+
+    const res = await fetch(url, { cache: "no-store" });
+    const data = await res.json();
+    localStorage.setItem("tools_cache", JSON.stringify(data));
+    return data;
+  }
+
+  try {
+    const tools = await getCachedTools(CSV_URL);
+
+    // Extract unique categories
+    const categories = [...new Set(tools.map(t => t.category?.trim()).filter(Boolean))];
+
+    if (!categories.length) {
+      container.innerHTML = `<p class="text-gray-400">No categories found.</p>`;
+      return;
+    }
+
+    // ⭐ Render instantly with will-change for smooth GPU rendering
+    container.innerHTML = categories.map(cat => `
+      <a href="category.html?cat=${encodeURIComponent(cat)}"
+         class="bg-gray-800/50 border border-gray-700 rounded-xl p-6 text-center 
+                hover:bg-gray-700 transition will-change-transform">
+        <h3 class="font-semibold text-white">${cat}</h3>
+      </a>
+    `).join("");
+
+  } catch (err) {
+    console.error("Error loading categories:", err);
+    container.innerHTML = `<p class="text-red-400">Cannot load categories.</p>`;
+  }
+});
+</script>
+
+<script>
+// Show loader when user clicks a category card
+document.addEventListener("click", (e) => {
+  const link = e.target.closest("a");
+  if (link && link.href.includes("category.html?cat=")) {
+    document.getElementById("pageLoader").classList.remove("hidden");
+  }
+});
+</script>
+
+</body>
+</html>

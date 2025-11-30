@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>X Edge – Tool Details</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <meta id="meta-description" name="description" content="AI tool details on X Edge">
+  <style>
+    /* clean minimal */
+    body{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+    .xe-container { max-width:900px; margin:0 auto; padding:2rem; }
+    .xe-hero img{ border-radius:.5rem; width:96px; height:96px; object-fit:cover; }
+    .fade-in{ opacity:0; transform:translateY(6px); transition:opacity .28s ease, transform .28s ease; }
+    .fade-in.show{ opacity:1; transform:none; }
+  </style>
+</head>
+<body class="bg-gray-900 text-white">
+<nav class="bg-gray-900/80 fixed w-full z-30 border-b border-gray-800">
+  <div class="max-w-6xl mx-auto px-6 py-3 flex justify-between items-center">
+    <a href="index.html" class="flex items-center gap-3">
+      <img src="xedge-logo.png" class="w-8 h-8" alt="X Edge logo"/>
+      <span class="font-bold">X Edge</span>
+    </a>
+    <a href="Explore.html" class="text-blue-400 hover:text-blue-300">← Back</a>
+  </div>
+</nav>
+
+<main class="pt-24 xe-container">
+  <div id="loading" class="text-center text-gray-400 text-lg py-10">Loading tool…</div>
+  <div id="tool-container" class="hidden"></div>
+</main>
+
+<script src="tools.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    if (typeof renderToolDetailsPageHydrate === "function") {
+      renderToolDetailsPageHydrate();
+    }
+  });
+</script>
+</body>
+</html>
