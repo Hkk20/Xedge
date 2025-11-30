@@ -73,54 +73,46 @@
   <!-- top wrapper - everything visible above vanta -->
   <div class="page-top">
 
-    <!-- NAVBAR -->
     <header>
-      <nav class="border-b border-gray-800 backdrop-blur-md bg-gray-900/80 py-4 px-6 fixed w-full top-0 left-0 right-0">
-        <div class="max-w-7xl mx-auto flex justify-between items-center">
-          <a class="flex items-center gap-3" id="brand-link" href="index.html" aria-label="X Edge home">
-            <img src="xedge-logo.png" alt="X Edge Logo" id="site-logo" class="w-8 h-8 object-contain"/>
-            <span class="text-xl font-bold bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">X EDGE</span>
-          </a>
+  <nav class="border-b border-gray-800 backdrop-blur-md bg-gray-900/80 py-4 px-6 fixed w-full top-0 left-0 right-0 z-50">
+    <div class="max-w-7xl mx-auto flex justify-between items-center">
 
-          <div class="hidden md:flex items-center space-x-8">
-            <a class="hover:text-blue-400 transition nav-link" href="index.html" data-file="index.html">Home</a>
-            <a class="hover:text-blue-400 transition nav-link" href="Explore.html" data-file="Explore.html">Explore</a>
-            <a class="hover:text-blue-400 transition nav-link" href="Categories.html" data-file="Categories.html">Categories</a>
-            <a class="hover:text-blue-400 transition nav-link" href="About.html" data-file="About.html">About</a>
-          </div>
+      <!-- LOGO + BRAND -->
+      <a class="flex items-center gap-3" id="brand-link" href="index.html" aria-label="X Edge home">
+        <img src="xedge-logo.png" alt="X Edge Logo" id="site-logo" class="w-8 h-8 object-contain"/>
+        <span class="text-xl font-bold bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">X EDGE</span>
+      </a>
 
-          <div class="flex items-center gap-3">
-            <a class="hidden md:inline-block bg-gradient-to-r from-blue-500 to-blue-600 px-6 py-2 rounded-full glow-on-hover font-medium" href="Join.html" data-file="Join.html">Join Beta</a>
-            <button class="md:hidden p-2" id="mobile-menu-toggle" aria-label="Open menu"><i data-feather="menu"></i></button>
-          </div>
-        </div> <!-- NAV -->
-<nav class="bg-gray-900/80 fixed w-full z-50 border-b border-gray-800 backdrop-blur-xl">
-  <div class="max-w-6xl mx-auto px-6 py-3 flex justify-between items-center">
+      <!-- DESKTOP NAV -->
+      <div class="hidden md:flex items-center space-x-8">
+        <a class="hover:text-blue-400 transition nav-link" href="index.html">Home</a>
+        <a class="hover:text-blue-400 transition nav-link" href="Explore.html">Explore</a>
+        <a class="hover:text-blue-400 transition nav-link" href="Categories.html">Categories</a>
+        <a class="hover:text-blue-400 transition nav-link" href="About.html">About</a>
+      </div>
 
-    
+      <!-- CTA + MOBILE MENU BUTTON -->
+      <div class="flex items-center gap-3">
+        <a class="hidden md:inline-block bg-gradient-to-r from-blue-500 to-blue-600 px-6 py-2 rounded-full glow-on-hover font-medium" 
+           href="Join.html">Join Beta</a>
 
-    <!-- Desktop Menu -->
-    <div class="hidden md:flex items-center gap-8">
-      <a href="Explore.html" class="hover:text-blue-400">Explore</a>
-      <a href="Categories.html" class="hover:text-blue-400">Categories</a>
-      <a href="About.html" class="hover:text-blue-400">About</a>
-      <a href="Join.html" class="bg-blue-600 px-4 py-1 rounded hover:bg-blue-700">Join Beta</a>
+        <!-- Mobile Button -->
+        <button class="md:hidden p-2 text-3xl" id="menu-btn" aria-label="Open menu">
+          ☰
+        </button>
+      </div>
     </div>
 
-    <!-- Mobile Hamburger Button -->
-    <button id="menu-btn" class="md:hidden text-3xl">
-      ☰
-    </button>
-  </div>
-
-  <!-- Mobile Menu -->
-  <div id="mobile-menu" class="hidden md:hidden bg-gray-900 px-6 pb-4">
-    <a href="Explore.html" class="block py-2 hover:text-blue-400">Explore</a>
-    <a href="Categories.html" class="block py-2 hover:text-blue-400">Categories</a>
-    <a href="About.html" class="block py-2 hover:text-blue-400">About</a>
-    <a href="Join.html" class="block py-2 bg-blue-600 rounded text-center mt-2">Join Beta</a>
-  </div>
-</nav>
+    <!-- MOBILE MENU DROPDOWN -->
+    <div id="mobile-menu" class="hidden md:hidden bg-gray-900/95 px-6 pb-4 mt-3 rounded-b-xl border-t border-gray-800">
+      <a href="index.html" class="block py-2 hover:text-blue-400">Home</a>
+      <a href="Explore.html" class="block py-2 hover:text-blue-400">Explore</a>
+      <a href="Categories.html" class="block py-2 hover:text-blue-400">Categories</a>
+      <a href="About.html" class="block py-2 hover:text-blue-400">About</a>
+      <a href="Join.html" class="block py-2 bg-blue-600 rounded text-center mt-2">Join Beta</a>
+    </div>
+  </nav>
+</header>
 
         
     <!-- PAGE CONTENT -->
