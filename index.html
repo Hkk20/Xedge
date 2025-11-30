@@ -93,7 +93,38 @@
             <a class="hidden md:inline-block bg-gradient-to-r from-blue-500 to-blue-600 px-6 py-2 rounded-full glow-on-hover font-medium" href="Join.html" data-file="Join.html">Join Beta</a>
             <button class="md:hidden p-2" id="mobile-menu-toggle" aria-label="Open menu"><i data-feather="menu"></i></button>
           </div>
-        </div>
+        </div> <!-- NAV -->
+<nav class="bg-gray-900/80 fixed w-full z-50 border-b border-gray-800 backdrop-blur-xl">
+  <div class="max-w-6xl mx-auto px-6 py-3 flex justify-between items-center">
+
+    <!-- Logo -->
+    <a href="index.html" class="flex items-center gap-3">
+      <img src="xedge-logo.png" class="w-8 h-8" alt="X Edge Logo">
+      <span class="font-bold">X Edge</span>
+    </a>
+
+    <!-- Desktop Menu -->
+    <div class="hidden md:flex items-center gap-8">
+      <a href="Explore.html" class="hover:text-blue-400">Explore</a>
+      <a href="Categories.html" class="hover:text-blue-400">Categories</a>
+      <a href="About.html" class="hover:text-blue-400">About</a>
+      <a href="Join.html" class="bg-blue-600 px-4 py-1 rounded hover:bg-blue-700">Join Beta</a>
+    </div>
+
+    <!-- Mobile Hamburger Button -->
+    <button id="menu-btn" class="md:hidden text-3xl">
+      ☰
+    </button>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div id="mobile-menu" class="hidden md:hidden bg-gray-900 px-6 pb-4">
+    <a href="Explore.html" class="block py-2 hover:text-blue-400">Explore</a>
+    <a href="Categories.html" class="block py-2 hover:text-blue-400">Categories</a>
+    <a href="About.html" class="block py-2 hover:text-blue-400">About</a>
+    <a href="Join.html" class="block py-2 bg-blue-600 rounded text-center mt-2">Join Beta</a>
+  </div>
+</nav>
 
         <!-- Mobile menu -->
         <div id="mobileMenu" class="md:hidden hidden px-6 pb-4">
@@ -329,6 +360,14 @@
           </form>
         </div>
       </section>
+      <script>
+  const btn = document.getElementById("menu-btn");
+  const menu = document.getElementById("mobile-menu");
+
+  btn.addEventListener("click", () => {
+    menu.classList.toggle("hidden");
+  });
+      </script>
 
     </main>
 
