@@ -78,41 +78,57 @@
     <div class="max-w-7xl mx-auto flex justify-between items-center">
 
       <!-- LOGO + BRAND -->
-      <a class="flex items-center gap-3" id="brand-link" href="index.html" aria-label="X Edge home">
-        <img src="xedge-logo.png" alt="X Edge Logo" id="site-logo" class="w-8 h-8 object-contain"/>
-        <span class="text-xl font-bold bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">X EDGE</span>
+      <a class="flex items-center gap-3" href="index.html">
+        <img src="xedge-logo.png" class="w-8 h-8 object-contain" />
+        <span class="text-xl font-bold bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
+          X EDGE
+        </span>
       </a>
 
       <!-- DESKTOP NAV -->
       <div class="hidden md:flex items-center space-x-8">
-        <a class="hover:text-blue-400 transition nav-link" href="index.html">Home</a>
-        <a class="hover:text-blue-400 transition nav-link" href="Explore.html">Explore</a>
-        <a class="hover:text-blue-400 transition nav-link" href="Categories.html">Categories</a>
-        <a class="hover:text-blue-400 transition nav-link" href="About.html">About</a>
+        <a class="hover:text-blue-400" href="index.html">Home</a>
+        <a class="hover:text-blue-400" href="Explore.html">Explore</a>
+        <a class="hover:text-blue-400" href="Categories.html">Categories</a>
+        <a class="hover:text-blue-400" href="About.html">About</a>
+        <a class="bg-gradient-to-r from-blue-500 to-blue-600 px-6 py-2 rounded-full" href="Join.html">Join Beta</a>
       </div>
 
-      <!-- CTA + MOBILE MENU BUTTON -->
-      <div class="flex items-center gap-3">
-        <a class="hidden md:inline-block bg-gradient-to-r from-blue-500 to-blue-600 px-6 py-2 rounded-full glow-on-hover font-medium" 
-           href="Join.html">Join Beta</a>
-
-        <!-- Mobile Button -->
-        <button class="md:hidden p-2 text-3xl" id="menu-btn" aria-label="Open menu">
-          ☰
-        </button>
-      </div>
+      <!-- MOBILE MENU BUTTON -->
+      <button id="menu-btn" class="md:hidden p-2 text-3xl">☰</button>
     </div>
 
-    <!-- MOBILE MENU DROPDOWN -->
-    <div id="mobile-menu" class="hidden md:hidden bg-gray-900/95 px-6 pb-4 mt-3 rounded-b-xl border-t border-gray-800">
-      <a href="index.html" class="block py-2 hover:text-blue-400">Home</a>
-      <a href="Explore.html" class="block py-2 hover:text-blue-400">Explore</a>
-      <a href="Categories.html" class="block py-2 hover:text-blue-400">Categories</a>
-      <a href="About.html" class="block py-2 hover:text-blue-400">About</a>
-      <a href="Join.html" class="block py-2 bg-blue-600 rounded text-center mt-2">Join Beta</a>
+    <!-- MOBILE MENU (SLIDE FROM RIGHT) -->
+    <div id="mobile-menu"
+         class="fixed top-0 right-0 w-64 h-full bg-gray-900/95 shadow-xl z-50 transform translate-x-full transition-transform duration-300 md:hidden">
+
+      <div class="p-6 flex flex-col space-y-4 text-right">
+        <button id="close-menu" class="text-3xl self-end mb-4">✕</button>
+
+        <a href="index.html" class="block py-2 hover:text-blue-400">Home</a>
+        <a href="Explore.html" class="block py-2 hover:text-blue-400">Explore</a>
+        <a href="Categories.html" class="block py-2 hover:text-blue-400">Categories</a>
+        <a href="About.html" class="block py-2 hover:text-blue-400">About</a>
+
+        <a href="Join.html" class="block py-2 bg-blue-600 rounded text-center mt-4">Join Beta</a>
+      </div>
     </div>
   </nav>
 </header>
+
+<script>
+  const menuBtn = document.getElementById("menu-btn");
+  const closeBtn = document.getElementById("close-menu");
+  const mobileMenu = document.getElementById("mobile-menu");
+
+  menuBtn.addEventListener("click", () => {
+    mobileMenu.classList.remove("translate-x-full");
+  });
+
+  closeBtn.addEventListener("click", () => {
+    mobileMenu.classList.add("translate-x-full");
+  });
+</script>
 
         
     <!-- PAGE CONTENT -->
