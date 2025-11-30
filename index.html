@@ -7,249 +7,184 @@
   <meta name="description" content="Discover the top AI tools of 2025. XEdge is your gateway to the world of Artificial Intelligence — from image creators to business automation AIs.">
   <meta name="keywords" content="AI tools, artificial intelligence, productivity AI, best AI tools 2025, AI automation">
   <meta name="author" content="XEdge Team">
-  <link rel="icon" href="https://static.photos/technology/200x200/42">
+  <link rel="icon" href="xedge-logo.png">
 
   <!-- Tailwind CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-
   <!-- Feather icons -->
   <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
-
-  <!-- Vanta background (keep it as requested) -->
+  <!-- Vanta (optional) -->
   <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
 
-  <!-- Tabletop (optional, left available) -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/tabletop.js/1.5.1/tabletop.min.js"></script>
-
   <style>
-    /* Basic theme tweaks */
-    body { font-family: 'Space Grotesk', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
-    .glow-on-hover { transition: all 0.28s ease, box-shadow 0.28s ease; }
-    .glow-on-hover:hover { box-shadow: 0 6px 30px rgba(56,182,255,0.12); transform: translateY(-4px); }
-    .feature-card:hover, .category-card:hover, .tool-card:hover { transform: translateY(-4px); box-shadow: 0 10px 30px rgba(56,182,255,0.06); }
+    /* Theme */ 
+    :root { --bg: #0f1724; --card: #0b1220; }
+    html,body { height:100%; }
+    body { margin:0; font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; background:var(--bg); color:#fff; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
     .rounded-2xl { border-radius: 1rem; }
-    @keyframes fadeInUp { from {opacity:0; transform:translateY(20px);} to {opacity:1; transform:translateY(0);} }
-    .animate-fadeInUp { animation: fadeInUp 0.6s ease-out forwards; }
+    .glow-on-hover { transition: all .24s ease; }
+    .glow-on-hover:hover { transform: translateY(-4px); box-shadow: 0 10px 30px rgba(30,64,175,.12); }
+    .card-h { min-height: 140px; }
+    .scrollbar-none::-webkit-scrollbar { display: none; } .scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
 
-    /* Larger featured category buttons (user requested) */
-    .featured-cat {
-      min-height: 140px;
-      padding: 2.25rem;
-    }
-    .featured-cat i { width: 56px; height: 56px; }
-    /* align featured categories slightly closer to hero */
-    .featured-group { margin-top: -12px; margin-bottom: 20px; }
+    /* Header */
+    header { z-index: 60; }
+    /* Mobile menu slide-from-right */
+    #mobile-menu { transform: translateX(110%); transition: transform .28s ease; }
+    #mobile-menu.open { transform: translateX(0%); }
+    /* Lock page scroll when menu open */
+    .no-scroll { overflow: hidden !important; height: 100%; }
 
-    /* Vanta container should sit behind everything */
-    #vanta-bg { position: fixed; inset: 0; z-index: 0; }
+    /* Vanta container must be behind everything */
+    #vanta-bg { position: fixed; inset: 0; z-index: 0; pointer-events:none; }
     .page-top { position: relative; z-index: 10; }
 
-    /* keep nav visible above sections */
-    nav { z-index: 30; }
+    /* Utility for skeletons */
+    .pulse { animation: pulse 1.2s infinite; }
+    @keyframes pulse { 0% { opacity: .6 } 50% { opacity: .35 } 100% { opacity: .6 } }
 
-    /* Ensure large CTA spacing */
-    .hero-cta { gap: 1rem; }
-
-    /* Responsive tweak for featured category text size */
-    @media (min-width: 1024px) {
-      .featured-cat h3 { font-size: 1.125rem; } /* 18px */
+    /* Small responsive fixes */
+    @media (max-width: 420px) {
+      .hero-title { font-size: 1.6rem; }
     }
-    /* Hide scrollbar */
-.scrollbar-none::-webkit-scrollbar { display: none; }
-.scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
-
-/* Make horizontal scroll with mouse wheel */
-#top-tools-wrapper {
-  overscroll-behavior-x: contain;
-}
-
   </style>
 </head>
 
-<body class="bg-gray-900 text-white">
-  <!-- Vanta container (kept) -->
+<body>
+  <!-- Vanta background (safe init at end) -->
   <div id="vanta-bg"></div>
 
-  <!-- top wrapper - everything visible above vanta -->
   <div class="page-top">
+    <!-- NAVBAR -->
+    <header class="fixed w-full top-0 left-0 right-0 z-50">
+      <div class="bg-gray-900/80 backdrop-blur border-b border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="flex items-center justify-between h-16">
+            <!-- Brand -->
+            <a href="index.html" class="flex items-center gap-3">
+              <img src="xedge-logo.png" alt="X Edge" class="w-8 h-8 object-contain"/>
+              <span class="text-lg font-semibold text-blue-400">X EDGE</span>
+            </a>
 
-    <header>
-  <nav class="border-b border-gray-800 backdrop-blur-md bg-gray-900/80 py-4 px-6 fixed w-full top-0 left-0 right-0 z-50">
-    <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <!-- Desktop nav -->
+            <nav class="hidden md:flex items-center gap-8">
+              <a href="index.html" class="text-gray-200 hover:text-blue-400">Home</a>
+              <a href="Explore.html" class="text-gray-200 hover:text-blue-400">Explore</a>
+              <a href="Categories.html" class="text-gray-200 hover:text-blue-400">Categories</a>
+              <a href="About.html" class="text-gray-200 hover:text-blue-400">About</a>
+              <a href="Join.html" class="bg-gradient-to-r from-blue-500 to-indigo-600 px-4 py-2 rounded-full text-white">Join Beta</a>
+            </nav>
 
-      <!-- LOGO + BRAND -->
-      <a class="flex items-center gap-3" href="index.html">
-        <img src="xedge-logo.png" class="w-8 h-8 object-contain" />
-        <span class="text-xl font-bold bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
-          X EDGE
-        </span>
-      </a>
+            <!-- Mobile menu button -->
+            <div class="md:hidden flex items-center">
+              <button id="menu-open" aria-label="Open menu" class="p-2 text-2xl">☰</button>
+            </div>
+          </div>
+        </div>
 
-      <!-- DESKTOP NAV -->
-      <div class="hidden md:flex items-center space-x-8">
-        <a class="hover:text-blue-400" href="index.html">Home</a>
-        <a class="hover:text-blue-400" href="Explore.html">Explore</a>
-        <a class="hover:text-blue-400" href="Categories.html">Categories</a>
-        <a class="hover:text-blue-400" href="About.html">About</a>
-        <a class="bg-gradient-to-r from-blue-500 to-blue-600 px-6 py-2 rounded-full" href="Join.html">Join Beta</a>
+        <!-- Mobile menu (SLIDE FROM RIGHT) -->
+        <div id="mobile-menu" class="fixed top-0 right-0 h-full w-72 bg-gray-900/95 border-l border-gray-800 z-60 md:hidden">
+          <div class="p-4 flex items-center justify-between border-b border-gray-800">
+            <div class="flex items-center gap-2">
+              <img src="xedge-logo.png" class="w-8 h-8"/>
+              <span class="font-semibold text-blue-400">X EDGE</span>
+            </div>
+            <button id="menu-close" aria-label="Close menu" class="text-2xl">✕</button>
+          </div>
+          <div class="p-4 space-y-3">
+            <a href="index.html" class="block py-2 px-2 rounded hover:bg-gray-800">Home</a>
+            <a href="Explore.html" class="block py-2 px-2 rounded hover:bg-gray-800">Explore</a>
+            <a href="Categories.html" class="block py-2 px-2 rounded hover:bg-gray-800">Categories</a>
+            <a href="category.html" class="block py-2 px-2 rounded hover:bg-gray-800">category.html</a>
+            <a href="About.html" class="block py-2 px-2 rounded hover:bg-gray-800">About</a>
+            <a href="Join.html" class="block mt-4 w-full text-center bg-blue-600 px-3 py-2 rounded">Join Beta</a>
+          </div>
+        </div>
       </div>
+    </header>
 
-      <!-- MOBILE MENU BUTTON -->
-      <button id="menu-btn" class="md:hidden p-2 text-3xl">☰</button>
-    </div>
-
-    <!-- MOBILE MENU (SLIDE FROM RIGHT) -->
-    <div id="mobile-menu"
-         class="fixed top-0 right-0 w-64 h-full bg-gray-900/95 shadow-xl z-50 transform translate-x-full transition-transform duration-300 md:hidden">
-
-      <div class="p-6 flex flex-col space-y-4 text-right">
-        <button id="close-menu" class="text-3xl self-end mb-4">✕</button>
-
-        <a href="index.html" class="block py-2 hover:text-blue-400">Home</a>
-        <a href="Explore.html" class="block py-2 hover:text-blue-400">Explore</a>
-        <a href="Categories.html" class="block py-2 hover:text-blue-400">Categories</a>
-        <a href="About.html" class="block py-2 hover:text-blue-400">About</a>
-
-        <a href="Join.html" class="block py-2 bg-blue-600 rounded text-center mt-4">Join Beta</a>
-      </div>
-    </div>
-  </nav>
-</header>
-
-<script>
-  const menuBtn = document.getElementById("menu-btn");
-  const closeBtn = document.getElementById("close-menu");
-  const mobileMenu = document.getElementById("mobile-menu");
-
-  menuBtn.addEventListener("click", () => {
-    mobileMenu.classList.remove("translate-x-full");
-  });
-
-  closeBtn.addEventListener("click", () => {
-    mobileMenu.classList.add("translate-x-full");
-  });
-</script>
-
-        
-    <!-- PAGE CONTENT -->
-    <main class="pt-28">
-
+    <!-- MAIN -->
+    <main class="pt-24">
       <!-- HERO -->
-      <section id="home" class="pt-8 pb-20 px-6">
-        <div class="max-w-7xl mx-auto text-center">
-          <h1 class="text-4xl md:text-6xl font-bold mb-6 leading-tight">
-            Welcome to <span class="bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">X Edge</span><br>
+      <section class="pt-8 pb-16 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-6xl mx-auto text-center">
+          <h1 class="text-4xl md:text-5xl font-bold leading-tight hero-title">
+            Welcome to <span class="text-blue-400">X Edge</span><br>
             The Future of AI in One Place.
           </h1>
-          <p class="text-xl text-gray-300 max-w-3xl mx-auto mb-10">Discover, Compare, and Access the Smartest AI Tools of 2025</p>
-          <div class="flex flex-col sm:flex-row justify-center hero-cta">
-            <a id="cta-explore" href="Explore.html" data-file="Explore.html" class="bg-gradient-to-r from-blue-500 to-blue-600 px-8 py-3 rounded-full glow-on-hover font-medium text-center">Explore Now</a>
-            <button id="cta-demo" class="border border-blue-500 text-blue-400 px-8 py-3 rounded-full glow-on-hover font-medium">sign up</button>
+          <p class="mt-4 text-gray-300 max-w-3xl mx-auto">Discover, compare and access the smartest AI tools in one place.</p>
+          <div class="mt-6 flex flex-col sm:flex-row justify-center gap-3">
+            <a href="Explore.html" class="bg-gradient-to-r from-blue-500 to-indigo-600 px-6 py-3 rounded-full text-white glow-on-hover">Explore Now</a>
+            <a href="Join.html" class="border border-blue-600 px-6 py-3 rounded-full text-blue-400">Join Beta</a>
           </div>
         </div>
       </section>
 
-      <!-- TOP ALIGNED FEATURED CATEGORIES (Bigger + moved slightly up) -->
-      <section class="mt-4 px-6 pb-4 featured-group">
+      <!-- FEATURED CATEGORIES -->
+      <section class="px-4 sm:px-6 lg:px-8 pb-8">
         <div class="max-w-7xl mx-auto">
-          <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
-            <a href="Categories.html?category=AI-Image"
-               class="featured-cat bg-gray-800/50 border border-gray-700 rounded-2xl text-center hover:bg-gray-700 transition duration-300 glow-on-hover flex flex-col items-center justify-center">
-              <i data-feather="image" class="text-blue-400 mb-4"></i>
+          <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+            <a href="Categories.html?category=AI-Image" class="featured-cat bg-gray-800/50 border border-gray-700 rounded-2xl text-center p-6 hover:bg-gray-700 transition">
+              <i data-feather="image" class="text-blue-400 mb-2"></i>
               <h3 class="text-lg font-semibold">AI Image</h3>
             </a>
-
-            <a href="Categories.html?category=Chatbot"
-               class="featured-cat bg-gray-800/50 border border-gray-700 rounded-2xl text-center hover:bg-gray-700 transition duration-300 glow-on-hover flex flex-col items-center justify-center">
-              <i data-feather="message-circle" class="text-blue-400 mb-4"></i>
+            <a href="Categories.html?category=Chatbot" class="featured-cat bg-gray-800/50 border border-gray-700 rounded-2xl text-center p-6 hover:bg-gray-700 transition">
+              <i data-feather="message-circle" class="text-blue-400 mb-2"></i>
               <h3 class="text-lg font-semibold">Chatbot</h3>
             </a>
-
-            <a href="Categories.html?category=Business"
-               class="featured-cat bg-gray-800/50 border border-gray-700 rounded-2xl text-center hover:bg-gray-700 transition duration-300 glow-on-hover flex flex-col items-center justify-center">
-              <i data-feather="briefcase" class="text-blue-400 mb-4"></i>
+            <a href="Categories.html?category=Business" class="featured-cat bg-gray-800/50 border border-gray-700 rounded-2xl text-center p-6 hover:bg-gray-700 transition">
+              <i data-feather="briefcase" class="text-blue-400 mb-2"></i>
               <h3 class="text-lg font-semibold">Business</h3>
             </a>
-
-            <a href="Categories.html?category=Video"
-               class="featured-cat bg-gray-800/50 border border-gray-700 rounded-2xl text-center hover:bg-gray-700 transition duration-300 glow-on-hover flex flex-col items-center justify-center">
-              <i data-feather="video" class="text-blue-400 mb-4"></i>
+            <a href="Categories.html?category=Video" class="featured-cat bg-gray-800/50 border border-gray-700 rounded-2xl text-center p-6 hover:bg-gray-700 transition">
+              <i data-feather="video" class="text-blue-400 mb-2"></i>
               <h3 class="text-lg font-semibold">Video</h3>
             </a>
-
-            <a href="Categories.html?category=Productivity"
-               class="featured-cat bg-gray-800/50 border border-gray-700 rounded-2xl text-center hover:bg-gray-700 transition duration-300 glow-on-hover flex flex-col items-center justify-center">
-              <i data-feather="activity" class="text-blue-400 mb-4"></i>
+            <a href="Categories.html?category=Productivity" class="featured-cat bg-gray-800/50 border border-gray-700 rounded-2xl text-center p-6 hover:bg-gray-700 transition">
+              <i data-feather="activity" class="text-blue-400 mb-2"></i>
               <h3 class="text-lg font-semibold">Productivity</h3>
             </a>
           </div>
         </div>
       </section>
-    <!-- TOP TOOLS -->
-<section class="px-6 py-16">
-  <div class="max-w-7xl mx-auto relative will-change-transform">
 
-    <div class="flex justify-between items-center mb-6">
-      <h2 class="text-3xl font-bold">Top Tools Used</h2>
+      <!-- TOP TOOLS USED -->
+      <section class="px-4 sm:px-6 lg:px-8 pt-6 pb-12">
+        <div class="max-w-7xl mx-auto">
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-2xl font-bold">Top Tools Used</h2>
+            <a href="Explore.html" class="text-blue-400">View All</a>
+          </div>
 
-      <a href="Explore.html"
-         class="flex items-center gap-1 text-blue-400 hover:text-blue-300 font-medium">
-        View All <i data-feather="chevron-right"></i>
-      </a>
-    </div>
+          <div id="top-tools-wrapper" class="flex gap-4 overflow-x-auto pb-4 -mx-4 px-4 scrollbar-none">
+            <div class="min-w-[220px] w-56 shrink-0 bg-gray-800/30 rounded-xl p-4 pulse h-40"></div>
+            <div class="min-w-[220px] w-56 shrink-0 bg-gray-800/30 rounded-xl p-4 pulse h-40"></div>
+            <div class="min-w-[220px] w-56 shrink-0 bg-gray-800/30 rounded-xl p-4 pulse h-40"></div>
+          </div>
+        </div>
+      </section>
 
-    <!-- Scroll Buttons -->
-    <button id="scroll-left"
-            class="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 bg-gray-800/70 border border-gray-700 
-                   rounded-full p-3 z-20 hover:bg-gray-700 transition will-change-transform active:scale-90">
-      <i data-feather="chevron-left"></i>
-    </button>
+      <!-- BROWSE BY CATEGORY -->
+      <section class="px-4 sm:px-6 lg:px-8 py-10 bg-gray-800/20">
+        <div class="max-w-7xl mx-auto">
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-2xl font-bold">Browse By Category</h2>
+            <a href="Categories.html" class="text-blue-400">View All</a>
+          </div>
 
-    <button id="scroll-right"
-            class="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 bg-gray-800/70 border border-gray-700 
-                   rounded-full p-3 z-20 hover:bg-gray-700 transition will-change-transform active:scale-90">
-      <i data-feather="chevron-right"></i>
-    </button>
+          <div id="browse-category-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+            <div class="bg-gray-800/30 rounded-xl p-4 pulse h-36"></div>
+            <div class="bg-gray-800/30 rounded-xl p-4 pulse h-36"></div>
+            <div class="bg-gray-800/30 rounded-xl p-4 pulse h-36"></div>
+          </div>
+        </div>
+      </section>
 
-    <!-- Scroller -->
-    <div id="top-tools-wrapper"
-         class="flex overflow-x-auto gap-6 pb-4 snap-x snap-mandatory scroll-smooth scrollbar-none
-                touch-pan-x will-change-transform">
-      <!-- JS injects cards -->
-    </div>
-
-  </div>
-</section>
-
-
-<!-- BROWSE BY CATEGORY -->
-<section class="py-16 px-6 bg-gray-800/30">
-  <div class="max-w-7xl mx-auto">
-
-    <div class="flex justify-between items-center mb-8">
-      <h2 class="text-3xl font-bold">Browse By Category</h2>
-
-      <a href="Categories.html" 
-         class="text-blue-400 hover:text-blue-300 font-medium flex items-center gap-1">
-        View All <i data-feather="chevron-right"></i>
-      </a>
-    </div>
-
-    <!-- Optimized Grid -->
-    <div id="browse-category-grid" 
-         class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 will-change-transform">
-      <!-- JS injects categories -->
-    </div>
-
-  </div>
-</section>
-
-
-      <!-- WHY CHOOSE X EDGE – long scrollable paragraphs (kept, refined) -->
-      <section class="py-20 px-6 bg-gray-900">
+      <!-- WHY CHOOSE X EDGE — FULL DETAILED POINTS -->
+      <section class="px-4 sm:px-6 lg:px-8 py-20 bg-gray-900">
         <div class="max-w-5xl mx-auto">
-          <h2 class="text-4xl font-bold mb-12 text-center">
-            Why Choose <span class="bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">X Edge</span>
+          <h2 class="text-4xl font-bold mb-10 text-center">
+            Why Choose <span class="text-blue-400">X Edge</span>
           </h2>
 
           <!-- Point 1 -->
@@ -295,7 +230,7 @@
               <h3 class="text-2xl font-semibold mb-2">Save Hours of Research</h3>
               <p class="text-gray-300 leading-relaxed text-lg">
                 X Edge eliminates the endless search. Instead of wasting hours jumping between websites and confusing reviews,
-                we bring everything into a single, intelligent dashboard. In seconds youll discover tools matched to your goals,
+                we bring everything into a single, intelligent dashboard. In seconds you'll discover tools matched to your goals,
                 skill-level, and workflow. Our curated breakdowns, instant comparisons, and expert insights remove guesswork and
                 speed you from discovery to execution.
               </p>
@@ -311,112 +246,155 @@
               <h3 class="text-2xl font-semibold mb-2">Exclusive Deals & Early Access</h3>
               <p class="text-gray-300 leading-relaxed text-lg">
                 X Edge partners directly with AI companies to give you discounts, private beta access, free trials, and special perks.
+                Members get priority invites, early access to closed betas, and exclusive discounts negotiated directly with vendors.
               </p>
             </div>
           </div>
-
         </div>
       </section>
 
       <!-- NEWSLETTER -->
-      <section class="py-16 px-6">
-        <div class="max-w-4xl mx-auto bg-gradient-to-br from-gray-800 to-gray-900 border border-gray-700 rounded-2xl p-8 md:p-12 text-center">
-          <h2 class="text-3xl font-bold mb-4">Join the Edge</h2>
-          <p class="text-xl text-gray-300 mb-8">Get the Latest AI Tools Weekly</p>
-
-          <form action="https://formspree.io/f/mblzvykd" method="POST" class="flex flex-col sm:flex-row gap-4 max-w-2xl mx-auto">
-            <input type="email" name="email" placeholder="Your email address" required 
-                   class="flex-grow bg-gray-700 border border-gray-600 rounded-full px-6 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <button type="submit" 
-                    class="bg-gradient-to-r from-blue-500 to-blue-600 px-8 py-3 rounded-full glow-on-hover font-medium whitespace-nowrap">
-              Subscribe Now
-            </button>
-          </form>
-
-          <p class="text-gray-400 text-sm mt-4">We respect your privacy. Unsubscribe at any time.</p>
-        </div>
-      </section>
-
-      <!-- REVIEW SECTION -->
-      <section class="py-16 px-6">
-        <div class="max-w-4xl mx-auto bg-gray-800/60 border border-gray-700 rounded-2xl p-10 text-center">
-          <h2 class="text-3xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">Share Your Review</h2>
-          <p class="text-lg text-gray-300 mb-8">Your opinion helps us improve X Edge. Leave your thoughts and get featured!</p>
-
-          <form action="https://formspree.io/f/mblzvykd" method="POST" class="space-y-4 max-w-2xl mx-auto">
-            <input type="text" name="name" placeholder="Your Name" required
-                   class="w-full bg-gray-700 border border-gray-600 rounded-lg px-6 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <textarea name="review" placeholder="Write your review here..." required
-                      class="w-full bg-gray-700 border border-gray-600 rounded-lg px-6 py-3 h-32 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
-            <button type="submit" class="bg-gradient-to-r from-blue-500 to-blue-600 px-8 py-3 rounded-full glow-on-hover font-medium">Submit Review</button>
+      <section class="px-4 sm:px-6 lg:px-8 py-12">
+        <div class="max-w-3xl mx-auto bg-gradient-to-br from-gray-800 to-gray-900 border border-gray-700 rounded-2xl p-8 text-center">
+          <h3 class="text-2xl font-bold mb-2">Join the Edge</h3>
+          <p class="text-gray-300 mb-4">Get weekly updates on the best AI tools.</p>
+          <form action="https://formspree.io/f/mblzvykd" method="POST" class="flex gap-3">
+            <input type="email" name="email" placeholder="Your email" required class="flex-1 bg-gray-700 border border-gray-600 rounded-full px-4 py-3 focus:outline-none">
+            <button class="bg-blue-600 px-5 py-3 rounded-full">Subscribe</button>
           </form>
         </div>
       </section>
-      <script>
-  const btn = document.getElementById("menu-btn");
-  const menu = document.getElementById("mobile-menu");
 
-  btn.addEventListener("click", () => {
-    menu.classList.toggle("hidden");
-  });
-      </script>
-
+      <!-- REVIEWS -->
+      <section class="px-4 sm:px-6 lg:px-8 py-12">
+        <div class="max-w-4xl mx-auto bg-gray-800/60 border border-gray-700 rounded-2xl p-8">
+          <h3 class="text-2xl font-bold mb-4">Share Your Review</h3>
+          <form action="https://formspree.io/f/mblzvykd" method="POST" class="space-y-4">
+            <input type="text" name="name" placeholder="Name" required class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3">
+            <textarea name="review" placeholder="Write review" required class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 h-32"></textarea>
+            <button class="bg-blue-600 px-6 py-3 rounded-full">Submit Review</button>
+          </form>
+        </div>
+      </section>
     </main>
 
     <!-- FOOTER -->
-        <footer class="border-t border-gray-800 py-12 px-6 bg-gray-900/80">
-            <div class="max-w-7xl mx-auto">
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                    <div>
-                        <div class="flex items-center space-x-2 mb-4">
-                            <div class="w-8 h-8 bg-blue-500 rounded-full"></div>
-                            <span class="text-xl font-bold bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">X EDGE</span>
-                        </div>
-                        <p class="text-gray-400">The future of AI in one place.</p>
-                        <div class="flex space-x-4 mt-6">
-                            <a href="#" class="text-gray-400 hover:text-blue-400 transition"><i data-feather="twitter"></i></a>
-                            <a href="#" class="text-gray-400 hover:text-blue-400 transition"><i data-feather="youtube"></i></a>
-                            <a href="#" class="text-gray-400 hover:text-blue-400 transition"><i data-feather="mail"></i></a>
-                        </div>
-                    </div>
-                    
-                    <div>
-                        <h3 class="font-semibold text-lg mb-4">Resources</h3>
-                        <ul class="space-y-2">
-                            <li><a href="#" class="text-gray-400 hover:text-blue-400 transition">All Tools</a></li>
-                            <li><a href="#" class="text-gray-400 hover:text-blue-400 transition">Categories</a></li>
-                            <li><a href="#" class="text-gray-400 hover:text-blue-400 transition">Pricing</a></li>
-                            <li><a href="#" class="text-gray-400 hover:text-blue-400 transition">Blog</a></li>
-                        </ul>
-                    </div>
-                    
-                    <div>
-                        <h3 class="font-semibold text-lg mb-4">Company</h3>
-                        <ul class="space-y-2">
-                            <li><a href="#" class="text-gray-400 hover:text-blue-400 transition">About Us</a></li>
-                            <li><a href="#" class="text-gray-400 hover:text-blue-400 transition">Careers</a></li>
-                            <li><a href="#" class="text-gray-400 hover:text-blue-400 transition">Contact</a></li>
-                            <li><a href="#" class="text-gray-400 hover:text-blue-400 transition">Press</a></li>
-                        </ul>
-                    </div>
-                    
-                    <div>
-                        <h3 class="font-semibold text-lg mb-4">Legal</h3>
-                        <ul class="space-y-2">
-                            <li><a href="#" class="text-gray-400 hover:text-blue-400 transition">Privacy Policy</a></li>
-                            <li><a href="#" class="text-gray-400 hover:text-blue-400 transition">Terms of Service</a></li>
-                            <li><a href="#" class="text-gray-400 hover:text-blue-400 transition">Cookie Policy</a></li>
-             
-                        </ul>
-                    </div>
-                
-                          <!-- LOAD MAIN JS FILES -->
-<script src="tools.js"></script>
-<script src="app.js"></script>
+    <footer class="border-t border-gray-800 py-12 px-4 sm:px-6 lg:px-8 bg-gray-900/80">
+      <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div>
+          <div class="flex items-center gap-2 mb-4">
+            <img src="xedge-logo.png" class="w-8 h-8"/>
+            <span class="font-semibold text-blue-400">X EDGE</span>
+          </div>
+          <p class="text-gray-400">The future of AI in one place.</p>
+          <div class="flex gap-3 mt-4 text-gray-400">
+            <a href="#" aria-label="Twitter"><i data-feather="twitter"></i></a>
+            <a href="#" aria-label="YouTube"><i data-feather="youtube"></i></a>
+            <a href="#" aria-label="Mail"><i data-feather="mail"></i></a>
+          </div>
+        </div>
 
-<script>
-  // Re-render icons after DOM loads
-  document.addEventListener("DOMContentLoaded", () => {
-    if (window.feather) feather.replace();
-  });
-</script>
+        <div>
+          <h4 class="font-semibold mb-3">Resources</h4>
+          <ul class="space-y-2 text-gray-300">
+            <li><a href="Explore.html">All Tools</a></li>
+            <li><a href="Categories.html">Categories</a></li>
+            <li><a href="About.html#pricing">Pricing</a></li>
+            <li><a href="index.html#blog">Blog</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="font-semibold mb-3">Company</h4>
+          <ul class="space-y-2 text-gray-300">
+            <li><a href="About.html">About Us</a></li>
+            <li><a href="index.html#careers">Careers</a></li>
+            <li><a href="index.html#contact">Contact</a></li>
+            <li><a href="index.html#press">Press</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="font-semibold mb-3">Legal</h4>
+          <ul class="space-y-2 text-gray-300">
+            <li><a href="privacy.html">Privacy Policy</a></li>
+            <li><a href="terms.html">Terms of Service</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </div> <!-- .page-top -->
+
+  <!-- SCRIPTS: tools.js populates top tools & categories -->
+  <script src="tools.js" defer></script>
+
+  <!-- main inline script: menu + feather + init (safe calls) -->
+  <script>
+    (function(){
+      function qs(id){ return document.getElementById(id); }
+      const openBtn = qs('menu-open'), closeBtn = qs('menu-close'), mobileMenu = qs('mobile-menu');
+
+      function openMenu(){
+        if(!mobileMenu) return;
+        mobileMenu.classList.add('open');
+        document.documentElement.classList.add('no-scroll');
+        document.body.classList.add('no-scroll');
+      }
+      function closeMenu(){
+        if(!mobileMenu) return;
+        mobileMenu.classList.remove('open');
+        document.documentElement.classList.remove('no-scroll');
+        document.body.classList.remove('no-scroll');
+      }
+
+      document.addEventListener('DOMContentLoaded', function(){
+        if(window.feather && typeof feather.replace === 'function') feather.replace();
+
+        openBtn && openBtn.addEventListener('click', openMenu);
+        closeBtn && closeBtn.addEventListener('click', closeMenu);
+
+        document.addEventListener('click', function(e){
+          if(!mobileMenu) return;
+          if(mobileMenu.classList.contains('open')){
+            const target = e.target;
+            if(!mobileMenu.contains(target) && !openBtn.contains(target)) closeMenu();
+          }
+        });
+
+        // init tools injection after paint
+        try {
+          if(window.initIndexPage && typeof window.initIndexPage === 'function'){
+            setTimeout(()=> window.initIndexPage(), 80);
+          } else if(window.initExplorePage && typeof window.initExplorePage === 'function'){
+            setTimeout(()=> window.initExplorePage(), 80);
+          } else if(window.xedgeFetchTools && typeof window.xedgeFetchTools === 'function'){
+            // fallback: tools.js will likely auto-init or provide a function
+            setTimeout(()=> { if(typeof window.initIndexPage === 'function') window.initIndexPage(); }, 120);
+          }
+        } catch(err){
+          console.warn("Init tools error", err);
+        }
+      });
+
+      // Vanta safe init: only on desktop and if library present
+      (function tryVanta(){
+        try {
+          const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+          if(window.VANTA && typeof VANTA.NET === 'function' && !isMobile){
+            VANTA.NET({
+              el: "#vanta-bg",
+              mouseControls: true,
+              touchControls: false,
+              gyroControls: false,
+              color: 0x0f1724,
+              backgroundColor: 0x0b1220,
+              points: 10,
+              maxDistance: 22
+            });
+          }
+        } catch(e){ /* fail silently */ }
+      })();
+    })();
+  </script>
+</body>
+</html>
