@@ -33,6 +33,53 @@
     #load-more-sentinel { height: 1px; }
   </style>
 </head>
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Explore – X Edge</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="tools.js" defer></script>
+
+  <style>
+    .scrollbar-none::-webkit-scrollbar { display: none; }
+    .scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+</head>
+
+<body class="bg-gray-900 text-white">
+
+  <!-- NAV if you want … -->
+
+  <main class="pt-24 px-6 max-w-7xl mx-auto">
+
+    <h1 class="text-4xl font-bold mb-6">Explore Tools</h1>
+
+    <!-- Search -->
+    <input 
+      id="toolSearch"
+      type="text"
+      placeholder="Search tools..."
+      class="w-full mb-6 p-3 rounded-xl bg-gray-800 border border-gray-700"
+    />
+
+    <!-- TOOL CONTAINER (VERY IMPORTANT) -->
+    <div id="toolsContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- JS will inject cards -->
+    </div>
+
+  </main>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      initExplorePage();
+    });
+  </script>
+
+</body>
+</html>
 <body class="bg-gray-900 text-white">
 
   <!-- NAV -->
