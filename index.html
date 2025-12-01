@@ -1,19 +1,6 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <script>
-  tailwind.config = {
-    theme: {
-      extend: {
-        colors: {
-          xblue: '#3b82f6',
-          xdark: '#0f172a',
-        }
-      }
-    }
-  }
-</script>
-
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>X Edge AI | Premier AI Tool Discovery Platform</title>
@@ -24,409 +11,476 @@
 
   <!-- Tailwind CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+
   <!-- Feather icons -->
   <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
-  <!-- Vanta (optional) -->
-  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
 
   <style>
-    /* small premium card helpers (Option A) */
-.xe-card {
-  min-width: 220px;
-  width: 220px;
-  flex-shrink: 0;
-  background: rgba(255,255,255,0.02);
-  border: 1px solid rgba(255,255,255,0.03);
-  border-radius: 14px;
-  padding: 16px;
-  transition: transform .18s ease, background .18s ease;
-  will-change: transform;
-  scroll-snap-align: start;
-}
-.xe-card:hover { transform: translateY(-6px); background: rgba(255,255,255,0.03); }
-.xe-thumb { width:56px; height:56px; border-radius:10px; overflow:hidden; background:#0f1724; flex-shrink:0; }
-.xe-thumb img { width:100%; height:100%; object-fit:cover; display:block; }
-.xe-card-title { font-weight:600; color:#fff; font-size:16px; }
-.category-box { background: rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.03); border-radius:12px; padding:20px; text-align:center; }
-.category-box h3 { font-weight:700; margin-bottom:8px; }
-.scrollbar-none::-webkit-scrollbar { display:none; }
+    /* ---------- Layout & small utilities (kept lightweight) ---------- */
+    :root {
+      --max-width: 1200px;
+      --card-bg: rgba(31, 41, 55, .6); /* gray-800/60 */
+      --glass: rgba(255,255,255,.03);
+    }
 
-    /* Theme */ 
-    :root { --bg: #0f1724; --card: #0b1220; }
-    html,body { height:100%; }
-    body { margin:0; font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; background:var(--bg); color:#fff; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
-    .rounded-2xl { border-radius: 1rem; }
-    .glow-on-hover { transition: all .24s ease; }
-    .glow-on-hover:hover { transform: translateY(-4px); box-shadow: 0 10px 30px rgba(30,64,175,.12); }
-    .card-h { min-height: 140px; }
-    .scrollbar-none::-webkit-scrollbar { display: none; } .scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
-
-    /* Header */
-    header { z-index: 60; }
-    /* Mobile menu slide-from-right */
-    #mobile-menu { transform: translateX(110%); transition: transform .28s ease; }
-    #mobile-menu.open { transform: translateX(0%); }
-    /* Lock page scroll when menu open */
-    .no-scroll { overflow: hidden !important; height: 100%; }
-
-    /* Vanta container must be behind everything */
-    #vanta-bg { position: fixed; inset: 0; z-index: 0; pointer-events:none; }
+    body { font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; background: #0f172a; color: #fff; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+    a { color: inherit; text-decoration: none; }
     .page-top { position: relative; z-index: 10; }
 
-    /* Utility for skeletons */
-    .pulse { animation: pulse 1.2s infinite; }
-    @keyframes pulse { 0% { opacity: .6 } 50% { opacity: .35 } 100% { opacity: .6 } }
+    /* NAV */
+    nav.site-nav { background: rgba(9,10,11,0.6); backdrop-filter: blur(6px); border-bottom: 1px solid rgba(148,163,184,0.06); }
+    .nav-inner { max-width: var(--max-width); margin: 0 auto; padding: 0 1rem; }
 
-    /* Small responsive fixes */
-    @media (max-width: 420px) {
-      .hero-title { font-size: 1.6rem; }
+    /* Mobile menu (right side slide) */
+    #mobile-menu { transform: translateX(110%); transition: transform .26s ease; }
+    #mobile-menu.open { transform: translateX(0%); }
+
+    /* Hero */
+    .hero {
+      background: linear-gradient(180deg, rgba(15,23,42,0.72), rgba(2,6,23,0.72));
+      padding-top: 5rem;
+      padding-bottom: 4rem;
     }
+
+    /* Featured category cards (premium sizing like HF) */
+    .featured-cat { min-height: 140px; padding: 1.5rem; border-radius: 1rem; background: rgba(31,41,55,0.5); border: 1px solid rgba(148,163,184,0.06); display:flex; align-items:center; justify-content:center; flex-direction:column; gap:.5rem; }
+
+    /* Top tools scroller */
+    #top-tools-wrapper { will-change: transform; -webkit-overflow-scrolling: touch; scroll-behavior: smooth; }
+    .top-tool-card { min-width: 220px; width: 220px; flex: 0 0 auto; background: rgba(31,41,55,0.45); padding: 1rem; border-radius: .9rem; border: 1px solid rgba(148,163,184,0.06); display:flex; gap:.75rem; align-items:flex-start; }
+    .top-tool-card img { width:56px; height:56px; border-radius:.5rem; object-fit:cover; flex-shrink:0; }
+
+    /* Browse by category */
+    .category-card { background: rgba(31,41,55,0.45); border-radius: .9rem; padding: .8rem; display:flex; align-items:center; gap:.75rem; border: 1px solid rgba(148,163,184,0.06); min-height:86px; }
+
+    /* Skeleton */
+    .pulse { background: linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.04), rgba(255,255,255,0.02)); animation: pulse 1.2s infinite; border-radius:.75rem; }
+    @keyframes pulse { 0%{opacity:1}50%{opacity:.65}100%{opacity:1} }
+
+    /* Quick preview (desktop) */
+    .quick-preview { width: 360px; max-width: calc(100vw - 48px); background: rgba(8,10,14,.78); border: 1px solid rgba(148,163,184,0.06); padding: .75rem; border-radius:.75rem; box-shadow: 0 8px 24px rgba(2,6,23,.6); position: absolute; z-index: 80; display:none; }
+    .quick-preview.visible { display:block; }
+
+    /* Favorites star tiny */
+    .fav-star { cursor:pointer; opacity:.9; transition: transform .12s ease; }
+    .fav-star:active { transform: scale(.96); }
+
+    /* Footer links neat */
+    footer a { color: rgba(203,213,225,0.85); }
+    footer a:hover { color: #fff; }
   </style>
 </head>
-
 <body>
-  <!-- Vanta background (safe init at end) -->
-  <div id="vanta-bg"></div>
 
   <div class="page-top">
-    <!-- NAVBAR -->
-    <header class="fixed w-full top-0 left-0 right-0 z-50">
-      <div class="bg-gray-900/80 backdrop-blur border-b border-gray-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div class="flex items-center justify-between h-16">
-            <!-- Brand -->
-            <a href="index.html" class="flex items-center gap-3">
-              <img src="xedge-logo.png" alt="X Edge" class="w-8 h-8 object-contain"/>
-              <span class="text-lg font-semibold text-blue-400">X EDGE</span>
-            </a>
 
-            <!-- Desktop nav -->
-            <nav class="hidden md:flex items-center gap-8">
-              <a href="index.html" class="text-gray-200 hover:text-blue-400">Home</a>
-              <a href="Explore.html" class="text-gray-200 hover:text-blue-400">Explore</a>
-              <a href="Categories.html" class="text-gray-200 hover:text-blue-400">Categories</a>
-              <a href="About.html" class="text-gray-200 hover:text-blue-400">About</a>
-              <a href="Join.html" class="bg-gradient-to-r from-blue-500 to-indigo-600 px-4 py-2 rounded-full text-white">Join Beta</a>
-            </nav>
-
-            <!-- Mobile menu button -->
-            <div class="md:hidden flex items-center">
-              <button id="menu-open" aria-label="Open menu" class="p-2 text-2xl">☰</button>
-            </div>
-          </div>
+    <!-- NAV -->
+    <nav class="site-nav fixed w-full top-0 left-0 z-50">
+      <div class="nav-inner flex items-center justify-between py-3">
+        <div class="flex items-center gap-3">
+          <a href="index.html" class="flex items-center gap-3">
+            <img src="xedge-logo.png" alt="X Edge" class="w-8 h-8 object-contain"/>
+            <span class="font-bold text-lg bg-clip-text text-transparent" style="background:linear-gradient(90deg,#60a5fa,#7c3aed)">X EDGE</span>
+          </a>
         </div>
 
-        <!-- Mobile menu (SLIDE FROM RIGHT) -->
-        <div id="mobile-menu" class="fixed top-0 right-0 h-full w-72 bg-gray-900/95 border-l border-gray-800 z-60 md:hidden">
-          <div class="p-4 flex items-center justify-between border-b border-gray-800">
-            <div class="flex items-center gap-2">
-              <img src="xedge-logo.png" class="w-8 h-8"/>
-              <span class="font-semibold text-blue-400">X EDGE</span>
-            </div>
-            <button id="menu-close" aria-label="Close menu" class="text-2xl">✕</button>
+        <div class="hidden md:flex items-center gap-8">
+          <a href="index.html" class="hover:text-blue-400">Home</a>
+          <a href="Explore.html" class="hover:text-blue-400">Explore</a>
+          <a href="Categories.html" class="hover:text-blue-400">Categories</a>
+          <a href="About.html" class="hover:text-blue-400">About</a>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <a href="Join.html" class="hidden md:inline-block bg-gradient-to-r from-blue-500 to-indigo-600 px-4 py-2 rounded-full text-white font-medium">Join Beta</a>
+
+          <!-- Mobile hamburger -->
+          <button id="menu-btn" class="md:hidden text-2xl px-2 py-1" aria-label="Open menu">☰</button>
+        </div>
+      </div>
+
+      <!-- Mobile right-side sliding menu -->
+      <div id="mobile-menu" class="fixed top-0 right-0 w-64 h-full bg-gray-900/95 shadow-xl z-50 p-6">
+        <div class="flex items-center justify-between mb-6">
+          <div class="flex items-center gap-3">
+            <img src="xedge-logo.png" class="w-8 h-8"/>
+            <div class="font-bold">X EDGE</div>
           </div>
-          <div class="p-4 space-y-3">
-            <a href="index.html" class="block py-2 px-2 rounded hover:bg-gray-800">Home</a>
-            <a href="Explore.html" class="block py-2 px-2 rounded hover:bg-gray-800">Explore</a>
-            <a href="Categories.html" class="block py-2 px-2 rounded hover:bg-gray-800">Categories</a>
-            <a href="category.html" class="block py-2 px-2 rounded hover:bg-gray-800">category.html</a>
-            <a href="About.html" class="block py-2 px-2 rounded hover:bg-gray-800">About</a>
-            <a href="Join.html" class="block mt-4 w-full text-center bg-blue-600 px-3 py-2 rounded">Join Beta</a>
+          <button id="mobile-close" aria-label="Close menu" class="text-2xl">✕</button>
+        </div>
+
+        <nav class="flex flex-col gap-3">
+          <a href="index.html" class="py-2 hover:text-blue-400">Home</a>
+          <a href="Explore.html" class="py-2 hover:text-blue-400">Explore</a>
+          <a href="Categories.html" class="py-2 hover:text-blue-400">Categories</a>
+          <a href="About.html" class="py-2 hover:text-blue-400">About</a>
+          <a href="Join.html" class="mt-4 py-2 bg-blue-600 rounded text-center">Join Beta</a>
+        </nav>
+      </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero pt-20 pb-12">
+      <div class="max-w-7xl mx-auto px-6 text-center">
+        <h1 class="text-4xl md:text-5xl font-extrabold leading-tight mb-4">
+          Discover the best AI tools — curated, compared, ready to use.
+        </h1>
+        <p class="text-gray-300 max-w-2xl mx-auto mb-6">X Edge handpicks and reviews the top AI products for creators, entrepreneurs, and devs. Fast discovery. Honest takes. Instant access.</p>
+        <div class="flex justify-center gap-4">
+          <a href="Explore.html" class="bg-gradient-to-r from-blue-500 to-indigo-600 px-6 py-3 rounded-full font-medium">Explore Now</a>
+          <a href="Join.html" class="border border-blue-500 px-6 py-3 rounded-full text-blue-400 font-medium">Join Beta</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURED CATEGORIES -->
+    <section class="px-6 pb-6">
+      <div class="max-w-7xl mx-auto">
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-6">
+          <!-- keep these static to match HF look — icons use feather -->
+          <a href="Categories.html?category=AI-Image" class="featured-cat">
+            <i data-feather="image" class="text-blue-400"></i>
+            <div class="font-semibold">AI Image</div>
+          </a>
+
+          <a href="Categories.html?category=Chatbot" class="featured-cat">
+            <i data-feather="message-circle" class="text-blue-400"></i>
+            <div class="font-semibold">Chatbot</div>
+          </a>
+
+          <a href="Categories.html?category=Business" class="featured-cat">
+            <i data-feather="briefcase" class="text-blue-400"></i>
+            <div class="font-semibold">Business</div>
+          </a>
+
+          <a href="Categories.html?category=Video" class="featured-cat">
+            <i data-feather="video" class="text-blue-400"></i>
+            <div class="font-semibold">Video</div>
+          </a>
+
+          <a href="Categories.html?category=Productivity" class="featured-cat">
+            <i data-feather="activity" class="text-blue-400"></i>
+            <div class="font-semibold">Productivity</div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOP TOOLS USED (dynamic) -->
+    <section class="px-4 sm:px-6 lg:px-8 pt-6 pb-12">
+      <div class="max-w-7xl mx-auto">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-2xl font-bold">Top Tools Used</h2>
+          <a href="Explore.html" class="text-blue-400">View All</a>
+        </div>
+
+        <div id="top-tools-wrapper" class="flex gap-4 overflow-x-auto pb-4 -mx-4 px-4 scrollbar-none">
+          <!-- skeleton placeholders until tools load -->
+          <div class="top-tool-card pulse"></div>
+          <div class="top-tool-card pulse"></div>
+          <div class="top-tool-card pulse"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BROWSE BY CATEGORY (dynamic) -->
+    <section class="px-4 sm:px-6 lg:px-8 py-10 bg-gray-900/20">
+      <div class="max-w-7xl mx-auto">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-2xl font-bold">Browse By Category</h2>
+          <a href="Categories.html" class="text-blue-400">View All</a>
+        </div>
+
+        <div id="browse-category-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+          <div class="category-card pulse"></div>
+          <div class="category-card pulse"></div>
+          <div class="category-card pulse"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- WHY CHOOSE X EDGE (keep long text preserved) -->
+    <section class="py-20 px-6 bg-transparent">
+      <div class="max-w-5xl mx-auto">
+        <h2 class="text-4xl font-bold mb-6 text-center">Why Choose <span style="background:linear-gradient(90deg,#60a5fa,#7c3aed); -webkit-background-clip:text; color:transparent;">X Edge</span></h2>
+
+        <div class="space-y-10">
+          <div class="flex flex-col md:flex-row gap-6">
+            <div class="flex-shrink-0"><i data-feather="zap" class="w-12 h-12 text-blue-400"></i></div>
+            <div>
+              <h3 class="text-2xl font-semibold mb-2">Cutting-Edge AI Selection</h3>
+              <p class="text-gray-300 leading-relaxed">
+                We handpick only the most advanced, breakthrough AI tools — rigorously tested, expertly vetted, and curated
+                to give you instant access to the technologies shaping the future. Every tool featured on X Edge
+                meets our highest standards for innovation, reliability, and real-world performance.
+              </p>
+            </div>
+          </div>
+
+          <div class="flex flex-col md:flex-row gap-6">
+            <div class="flex-shrink-0"><i data-feather="eye" class="w-12 h-12 text-blue-400"></i></div>
+            <div>
+              <h3 class="text-2xl font-semibold mb-2">Unbiased, Transparent Reviews</h3>
+              <p class="text-gray-300 leading-relaxed">
+                Our assessments are grounded in real performance, hands-on testing, and measurable user impact. No hype —
+                only clear, data-driven guidance so you can pick the right tool with confidence.
+              </p>
+            </div>
+          </div>
+
+          <div class="flex flex-col md:flex-row gap-6">
+            <div class="flex-shrink-0"><i data-feather="clock" class="w-12 h-12 text-blue-400"></i></div>
+            <div>
+              <h3 class="text-2xl font-semibold mb-2">Save Hours of Research</h3>
+              <p class="text-gray-300 leading-relaxed">
+                We remove the guesswork: instant comparisons, curated breakdowns, and expert insights that speed you from discovery
+                to execution — saving you valuable time.
+              </p>
+            </div>
           </div>
         </div>
       </div>
-    </header>
+    </section>
 
-    <!-- MAIN -->
-    <main class="pt-24">
-      <!-- HERO -->
-      <section class="pt-8 pb-16 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-6xl mx-auto text-center">
-          <h1 class="text-4xl md:text-5xl font-bold leading-tight hero-title">
-            Welcome to <span class="text-blue-400">X Edge</span><br>
-            The Future of AI in One Place.
-          </h1>
-          <p class="mt-4 text-gray-300 max-w-3xl mx-auto">Discover, compare and access the smartest AI tools in one place.</p>
-          <div class="mt-6 flex flex-col sm:flex-row justify-center gap-3">
-            <a href="Explore.html" class="bg-gradient-to-r from-blue-500 to-indigo-600 px-6 py-3 rounded-full text-white glow-on-hover">Explore Now</a>
-            <a href="Join.html" class="border border-blue-600 px-6 py-3 rounded-full text-blue-400">Join Beta</a>
-          </div>
-        </div>
-      </section>
+    <!-- NEWSLETTER -->
+    <section class="py-16 px-6">
+      <div class="max-w-4xl mx-auto bg-gradient-to-br from-gray-800 to-gray-900 border border-gray-700 rounded-2xl p-8 text-center">
+        <h2 class="text-3xl font-bold mb-4">Join the Edge</h2>
+        <p class="text-xl text-gray-300 mb-6">Get the Latest AI Tools Weekly</p>
 
-      <!-- FEATURED CATEGORIES -->
-      <section class="px-4 sm:px-6 lg:px-8 pb-8">
-        <div class="max-w-7xl mx-auto">
-          <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-            <a href="Categories.html?category=AI-Image" class="featured-cat bg-gray-800/50 border border-gray-700 rounded-2xl text-center p-6 hover:bg-gray-700 transition">
-              <i data-feather="image" class="text-blue-400 mb-2"></i>
-              <h3 class="text-lg font-semibold">AI Image</h3>
-            </a>
-            <a href="Categories.html?category=Chatbot" class="featured-cat bg-gray-800/50 border border-gray-700 rounded-2xl text-center p-6 hover:bg-gray-700 transition">
-              <i data-feather="message-circle" class="text-blue-400 mb-2"></i>
-              <h3 class="text-lg font-semibold">Chatbot</h3>
-            </a>
-            <a href="Categories.html?category=Business" class="featured-cat bg-gray-800/50 border border-gray-700 rounded-2xl text-center p-6 hover:bg-gray-700 transition">
-              <i data-feather="briefcase" class="text-blue-400 mb-2"></i>
-              <h3 class="text-lg font-semibold">Business</h3>
-            </a>
-            <a href="Categories.html?category=Video" class="featured-cat bg-gray-800/50 border border-gray-700 rounded-2xl text-center p-6 hover:bg-gray-700 transition">
-              <i data-feather="video" class="text-blue-400 mb-2"></i>
-              <h3 class="text-lg font-semibold">Video</h3>
-            </a>
-            <a href="Categories.html?category=Productivity" class="featured-cat bg-gray-800/50 border border-gray-700 rounded-2xl text-center p-6 hover:bg-gray-700 transition">
-              <i data-feather="activity" class="text-blue-400 mb-2"></i>
-              <h3 class="text-lg font-semibold">Productivity</h3>
-            </a>
-          </div>
-        </div>
-      </section>
-
-     <!-- TOP TOOLS USED (REPLACE OLD) -->
-<section id="top-tools-section" class="px-4 sm:px-6 lg:px-8 pt-6 pb-12">
-  <div class="max-w-7xl mx-auto">
-    <div class="flex items-center justify-between mb-4">
-      <h2 class="text-2xl font-bold">Top Tools Used</h2>
-      <a href="Explore.html" class="text-blue-400">View All</a>
-    </div>
-
-    <div id="top-tools-wrapper" class="flex gap-4 overflow-x-auto pb-4 -mx-4 px-4 scrollbar-none snap-x snap-mandatory">
-      <!-- cards injected here -->
-    </div>
-    <!-- small loader / sentinel -->
-    <div id="top-tools-loader" class="mt-4 text-center text-gray-400 hidden">Loading…</div>
-  </div>
-</section>
-
-<!-- BROWSE BY CATEGORY (REPLACE OLD) -->
-<section id="browse-categories-section" class="px-4 sm:px-6 lg:px-8 py-10 bg-gray-800/20">
-  <div class="max-w-7xl mx-auto">
-    <div class="flex items-center justify-between mb-4">
-      <h2 class="text-2xl font-bold">Browse By Category</h2>
-      <a href="Categories.html" class="text-blue-400">View All</a>
-    </div>
-
-    <div id="browse-category-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-      <!-- category cards injected here -->
-    </div>
-  </div>
-</section>
-
-      <!-- WHY CHOOSE X EDGE — FULL DETAILED POINTS -->
-      <section class="px-4 sm:px-6 lg:px-8 py-20 bg-gray-900">
-        <div class="max-w-5xl mx-auto">
-          <h2 class="text-4xl font-bold mb-10 text-center">
-            Why Choose <span class="text-blue-400">X Edge</span>
-          </h2>
-
-          <!-- Point 1 -->
-          <div class="flex flex-col md:flex-row items-start gap-6 mb-12">
-            <div class="flex-shrink-0">
-              <i data-feather="zap" class="w-12 h-12 text-blue-400"></i>
-            </div>
-            <div>
-              <h3 class="text-2xl font-semibold mb-2">Cutting-Edge AI Selection</h3>
-              <p class="text-gray-300 leading-relaxed text-lg">
-                We handpick only the most advanced, breakthrough AI tools on the planet — rigorously tested, expertly vetted,
-                and curated to give you instant access to the technologies shaping the future. Every tool featured on X Edge
-                meets our highest standards for innovation, reliability, and real-world performance. We evaluate hundreds of
-                platforms, filter out the noise, and bring forward only the AI solutions pushing boundaries and redefining
-                what’s possible. Whether you're building, creating, scaling, or automating, our curated selection ensures you
-                always stay ahead of the curve — with the smartest, fastest, and most transformative AI at your fingertips.
-              </p>
-            </div>
-          </div>
-
-          <!-- Point 2 -->
-          <div class="flex flex-col md:flex-row items-start gap-6 mb-12">
-            <div class="flex-shrink-0">
-              <i data-feather="eye" class="w-12 h-12 text-blue-400"></i>
-            </div>
-            <div>
-              <h3 class="text-2xl font-semibold mb-2">Unbiased, Transparent Reviews</h3>
-              <p class="text-gray-300 leading-relaxed text-lg">
-                At X Edge, every review is built on truth, not trends. We evaluate each AI tool with absolute neutrality,
-                free from sponsorship influence or hidden agendas. Our assessments are grounded in real performance, hands-on
-                testing, and measurable user impact. No hype. No sugar coating — only clear, data-driven guidance so you can
-                pick the right tool with confidence.
-              </p>
-            </div>
-          </div>
-
-          <!-- Point 3 -->
-          <div class="flex flex-col md:flex-row items-start gap-6 mb-12">
-            <div class="flex-shrink-0">
-              <i data-feather="clock" class="w-12 h-12 text-blue-400"></i>
-            </div>
-            <div>
-              <h3 class="text-2xl font-semibold mb-2">Save Hours of Research</h3>
-              <p class="text-gray-300 leading-relaxed text-lg">
-                X Edge eliminates the endless search. Instead of wasting hours jumping between websites and confusing reviews,
-                we bring everything into a single, intelligent dashboard. In seconds you'll discover tools matched to your goals,
-                skill-level, and workflow. Our curated breakdowns, instant comparisons, and expert insights remove guesswork and
-                speed you from discovery to execution.
-              </p>
-            </div>
-          </div>
-
-          <!-- Point 4 -->
-          <div class="flex flex-col md:flex-row items-start gap-6">
-            <div class="flex-shrink-0">
-              <i data-feather="star" class="w-12 h-12 text-blue-400"></i>
-            </div>
-            <div>
-              <h3 class="text-2xl font-semibold mb-2">Exclusive Deals & Early Access</h3>
-              <p class="text-gray-300 leading-relaxed text-lg">
-                X Edge partners directly with AI companies to give you discounts, private beta access, free trials, and special perks.
-                Members get priority invites, early access to closed betas, and exclusive discounts negotiated directly with vendors.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- NEWSLETTER -->
-      <section class="px-4 sm:px-6 lg:px-8 py-12">
-        <div class="max-w-3xl mx-auto bg-gradient-to-br from-gray-800 to-gray-900 border border-gray-700 rounded-2xl p-8 text-center">
-          <h3 class="text-2xl font-bold mb-2">Join the Edge</h3>
-          <p class="text-gray-300 mb-4">Get weekly updates on the best AI tools.</p>
-          <form action="https://formspree.io/f/mblzvykd" method="POST" class="flex gap-3">
-            <input type="email" name="email" placeholder="Your email" required class="flex-1 bg-gray-700 border border-gray-600 rounded-full px-4 py-3 focus:outline-none">
-            <button class="bg-blue-600 px-5 py-3 rounded-full">Subscribe</button>
-          </form>
-        </div>
-      </section>
-
-      <!-- REVIEWS -->
-      <section class="px-4 sm:px-6 lg:px-8 py-12">
-        <div class="max-w-4xl mx-auto bg-gray-800/60 border border-gray-700 rounded-2xl p-8">
-          <h3 class="text-2xl font-bold mb-4">Share Your Review</h3>
-          <form action="https://formspree.io/f/mblzvykd" method="POST" class="space-y-4">
-            <input type="text" name="name" placeholder="Name" required class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3">
-            <textarea name="review" placeholder="Write review" required class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 h-32"></textarea>
-            <button class="bg-blue-600 px-6 py-3 rounded-full">Submit Review</button>
-          </form>
-        </div>
-      </section>
-    </main>
+        <form action="https://formspree.io/f/mblzvykd" method="POST" class="flex flex-col sm:flex-row gap-4">
+          <input type="email" name="email" placeholder="Your email address" required class="flex-grow bg-gray-700 border border-gray-600 rounded-full px-6 py-3 focus:outline-none">
+          <button type="submit" class="bg-gradient-to-r from-blue-500 to-indigo-600 px-6 py-3 rounded-full">Subscribe</button>
+        </form>
+      </div>
+    </section>
 
     <!-- FOOTER -->
-    <footer class="border-t border-gray-800 py-12 px-4 sm:px-6 lg:px-8 bg-gray-900/80">
-      <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-6">
+    <footer class="border-t border-gray-800 py-12 px-6 bg-gray-900/80">
+      <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
         <div>
-          <div class="flex items-center gap-2 mb-4">
-            <img src="xedge-logo.png" class="w-8 h-8"/>
-            <span class="font-semibold text-blue-400">X EDGE</span>
+          <div class="flex items-center gap-2 mb-3">
+            <div class="w-8 h-8 bg-blue-500 rounded-full"></div>
+            <span class="font-bold">X EDGE</span>
           </div>
           <p class="text-gray-400">The future of AI in one place.</p>
-          <div class="flex gap-3 mt-4 text-gray-400">
-            <a href="#" aria-label="Twitter"><i data-feather="twitter"></i></a>
-            <a href="#" aria-label="YouTube"><i data-feather="youtube"></i></a>
-            <a href="#" aria-label="Mail"><i data-feather="mail"></i></a>
+          <div class="flex gap-4 mt-4">
+            <a href="#" class="text-gray-400 hover:text-blue-400"><i data-feather="twitter"></i></a>
+            <a href="#" class="text-gray-400 hover:text-blue-400"><i data-feather="youtube"></i></a>
+            <a href="#" class="text-gray-400 hover:text-blue-400"><i data-feather="mail"></i></a>
           </div>
         </div>
 
         <div>
-          <h4 class="font-semibold mb-3">Resources</h4>
-          <ul class="space-y-2 text-gray-300">
+          <h3 class="font-semibold mb-3">Resources</h3>
+          <ul class="space-y-2">
             <li><a href="Explore.html">All Tools</a></li>
             <li><a href="Categories.html">Categories</a></li>
-            <li><a href="About.html#pricing">Pricing</a></li>
-            <li><a href="index.html#blog">Blog</a></li>
+            <li><a href="Pricing.html">Pricing</a></li>
+            <li><a href="Blog.html">Blog</a></li>
           </ul>
         </div>
 
         <div>
-          <h4 class="font-semibold mb-3">Company</h4>
-          <ul class="space-y-2 text-gray-300">
+          <h3 class="font-semibold mb-3">Company</h3>
+          <ul class="space-y-2">
             <li><a href="About.html">About Us</a></li>
-            <li><a href="index.html#careers">Careers</a></li>
-            <li><a href="index.html#contact">Contact</a></li>
-            <li><a href="index.html#press">Press</a></li>
+            <li><a href="Careers.html">Careers</a></li>
+            <li><a href="Contact.html">Contact</a></li>
+            <li><a href="Press.html">Press</a></li>
           </ul>
         </div>
 
         <div>
-          <h4 class="font-semibold mb-3">Legal</h4>
-          <ul class="space-y-2 text-gray-300">
-            <li><a href="privacy.html">Privacy Policy</a></li>
-            <li><a href="terms.html">Terms of Service</a></li>
+          <h3 class="font-semibold mb-3">Legal</h3>
+          <ul class="space-y-2">
+            <li><a href="Privacy.html">Privacy Policy</a></li>
+            <li><a href="Terms.html">Terms of Service</a></li>
+            <li><a href="Security.html">Security</a></li>
           </ul>
         </div>
       </div>
     </footer>
-  </div> <!-- .page-top -->
 
-  <!-- SCRIPTS: tools.js populates top tools & categories -->
-  <script src="tools.js" defer></script>
+  </div> <!-- page-top end -->
 
-  <!-- main inline script: menu + feather + init (safe calls) -->
+  <!-- scripts: tools.js must exist in project and expose getTools() -->
+  <script src="tools.js"></script>
+
   <script>
-    (function(){
-      function qs(id){ return document.getElementById(id); }
-      const openBtn = qs('menu-open'), closeBtn = qs('menu-close'), mobileMenu = qs('mobile-menu');
+  /* Small isolated UI module — non-invasive to other code */
+  (function () {
+    const UI = {
+      topWrapper: document.getElementById('top-tools-wrapper'),
+      catGrid: document.getElementById('browse-category-grid'),
+      mobileMenu: document.getElementById('mobile-menu'),
+      menuBtn: document.getElementById('menu-btn'),
+      mobileClose: document.getElementById('mobile-close'),
+      quickPreview: null,
+      favoritesKey: 'xedge_favs_v1',
+      maxTopTools: 10
+    };
 
-      function openMenu(){
-        if(!mobileMenu) return;
-        mobileMenu.classList.add('open');
-        document.documentElement.classList.add('no-scroll');
-        document.body.classList.add('no-scroll');
-      }
-      function closeMenu(){
-        if(!mobileMenu) return;
-        mobileMenu.classList.remove('open');
-        document.documentElement.classList.remove('no-scroll');
-        document.body.classList.remove('no-scroll');
-      }
+    // mobile menu controls (right-side sliding)
+    UI.menuBtn && UI.menuBtn.addEventListener('click', () => { UI.mobileMenu.classList.add('open'); document.body.style.overflow = 'hidden'; });
+    UI.mobileClose && UI.mobileClose.addEventListener('click', () => { UI.mobileMenu.classList.remove('open'); document.body.style.overflow = ''; });
 
-      document.addEventListener('DOMContentLoaded', function(){
-        if(window.feather && typeof feather.replace === 'function') feather.replace();
+    // small helper: safe JSON parse
+    function safeParse(v){ try { return JSON.parse(v); } catch(e) { return null; } }
 
-        openBtn && openBtn.addEventListener('click', openMenu);
-        closeBtn && closeBtn.addEventListener('click', closeMenu);
+    // favorites store
+    function getFavs(){ return safeParse(localStorage.getItem(UI.favoritesKey)) || []; }
+    function setFavs(arr){ localStorage.setItem(UI.favoritesKey, JSON.stringify(arr)); }
 
-        document.addEventListener('click', function(e){
-          if(!mobileMenu) return;
-          if(mobileMenu.classList.contains('open')){
-            const target = e.target;
-            if(!mobileMenu.contains(target) && !openBtn.contains(target)) closeMenu();
+    // small helper to create an element with optional classes
+    function el(tag, cls){ const e = document.createElement(tag); if (cls) e.className = cls; return e; }
+
+    // Lazy image loader for dynamic content
+    function lazyLoadWithin(root){
+      const imgs = (root || document).querySelectorAll('img[data-src]');
+      if (!imgs.length) return;
+      const obs = new IntersectionObserver((entries, o) => {
+        entries.forEach(en => {
+          if (en.isIntersecting) {
+            const img = en.target;
+            img.src = img.dataset.src;
+            img.removeAttribute('data-src');
+            o.unobserve(img);
+          }
+        });
+      }, { rootMargin: '300px' });
+      imgs.forEach(i => obs.observe(i));
+    }
+
+    // Render top tools (compact HF-like cards)
+    function renderTopTools(tools){
+      if (!UI.topWrapper) return;
+      UI.topWrapper.innerHTML = ''; // clear
+      const top = tools.slice(0, UI.maxTopTools);
+      top.forEach(t => {
+        const card = el('a', 'top-tool-card');
+        card.href = 'tool.html?tool=' + encodeURIComponent(t.name);
+        card.dataset.tool = encodeURIComponent(t.name);
+        card.innerHTML = `
+          <img data-src="${(t.logo_url||'https://dummyimage.com/160x160/1e293b/fff&text='+encodeURIComponent(t.name))}" alt="${t.name}">
+          <div style="flex:1">
+            <div class="font-semibold">${t.name}</div>
+            <div class="text-gray-400 text-sm mt-1">${t.category || ''}</div>
+          </div>
+          <div style="margin-left:.5rem">
+            <button class="fav-star" title="Save to favorites">☆</button>
+          </div>
+        `;
+        // prefetch on click (store selected tool for tool page hydration)
+        card.addEventListener('click', (ev) => {
+          try { sessionStorage.setItem('xedge_selected_tool', JSON.stringify(t)); } catch(e){}
+        });
+
+        // favorites handler
+        const favBtn = card.querySelector('.fav-star');
+        favBtn.addEventListener('click', (ev) => {
+          ev.preventDefault(); ev.stopPropagation();
+          const favs = getFavs();
+          const exists = favs.find(x => x.name === t.name);
+          if (exists) {
+            const updated = favs.filter(x => x.name !== t.name);
+            setFavs(updated);
+            favBtn.textContent = '☆';
+          } else {
+            favs.push({ name: t.name, logo: t.logo_url, category: t.category });
+            setFavs(favs);
+            favBtn.textContent = '★';
           }
         });
 
-        // init tools injection after paint
-        try {
-          if(window.initIndexPage && typeof window.initIndexPage === 'function'){
-            setTimeout(()=> window.initIndexPage(), 80);
-          } else if(window.initExplorePage && typeof window.initExplorePage === 'function'){
-            setTimeout(()=> window.initExplorePage(), 80);
-          } else if(window.xedgeFetchTools && typeof window.xedgeFetchTools === 'function'){
-            // fallback: tools.js will likely auto-init or provide a function
-            setTimeout(()=> { if(typeof window.initIndexPage === 'function') window.initIndexPage(); }, 120);
-          }
-        } catch(err){
-          console.warn("Init tools error", err);
-        }
+        UI.topWrapper.appendChild(card);
       });
 
-      // Vanta safe init: only on desktop and if library present
-      (function tryVanta(){
-        try {
-          const isMobile = /Mobi|Android/i.test(navigator.userAgent);
-          if(window.VANTA && typeof VANTA.NET === 'function' && !isMobile){
-            VANTA.NET({
-              el: "#vanta-bg",
-              mouseControls: true,
-              touchControls: false,
-              gyroControls: false,
-              color: 0x0f1724,
-              backgroundColor: 0x0b1220,
-              points: 10,
-              maxDistance: 22
-            });
-          }
-        } catch(e){ /* fail silently */ }
-      })();
+      lazyLoadWithin(UI.topWrapper);
+      feather.replace();
+    }
+
+    // Render category grid from data (group by category count)
+    function renderCategories(tools){
+      if (!UI.catGrid) return;
+      // count tools per category
+      const counts = {};
+      tools.forEach(t => {
+        const cat = (t.category || 'Other').trim();
+        counts[cat] = (counts[cat] || 0) + 1;
+      });
+      // build array sorted by count desc
+      const cats = Object.keys(counts).map(k => ({ name: k, count: counts[k] })).sort((a,b)=> b.count - a.count);
+
+      UI.catGrid.innerHTML = '';
+      // show top 8 categories (keeps layout lightweight)
+      cats.slice(0, 8).forEach(c => {
+        const a = el('a', 'category-card');
+        a.href = 'Categories.html?category=' + encodeURIComponent(c.name);
+        a.innerHTML = `
+          <div style="display:flex; align-items:center; gap:.75rem;">
+            <div class="w-12 h-12 rounded bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold">${String(c.name || '').charAt(0).toUpperCase()}</div>
+            <div>
+              <div class="font-semibold">${c.name}</div>
+              <div class="text-gray-400 text-sm">${c.count} tools</div>
+            </div>
+          </div>
+        `;
+        UI.catGrid.appendChild(a);
+      });
+
+      feather.replace();
+    }
+
+    // Fetch tools and render both sections
+    async function hydrateToolSections(){
+      // require getTools() from your tools.js
+      if (typeof getTools !== 'function') {
+        // show error skeletons removed but not fatal
+        console.warn('getTools() not available. Make sure tools.js is loaded.');
+        return;
+      }
+      try {
+        // prefer cached results in tools.js/sessionStorage — call without forcing to avoid mobile lag
+        const tools = await getTools(false);
+        if (!Array.isArray(tools) || tools.length === 0) return;
+        renderTopTools(tools);
+        renderCategories(tools);
+      } catch (e) {
+        console.error('Error hydrating tool sections', e);
+      }
+    }
+
+    // Kick off when DOM ready: small debounce to avoid blocking first paint
+    window.addEventListener('DOMContentLoaded', () => {
+      setTimeout(hydrateToolSections, 120); // slight delay to prioritize paint
+    });
+
+    // Expose small API for console debugging (no global pollution)
+    window.XEDGE_UI = {
+      hydrate: hydrateToolSections,
+      getFavorites: getFavs,
+      setFavorites: setFavs
+    };
+
+  })();
+  </script>
+
+  <script>
+    // Feather icons init
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.feather) feather.replace();
+    });
+
+    // ensure mobile menu isn't blocking scroll when closed
+    (function(){
+      const menu = document.getElementById('mobile-menu');
+      if (menu) {
+        // start closed
+        menu.classList.remove('open');
+      }
     })();
   </script>
+
 </body>
 </html>
