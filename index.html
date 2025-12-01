@@ -17,6 +17,27 @@
   <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
 
   <style>
+    /* small premium card helpers (Option A) */
+.xe-card {
+  min-width: 220px;
+  width: 220px;
+  flex-shrink: 0;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.03);
+  border-radius: 14px;
+  padding: 16px;
+  transition: transform .18s ease, background .18s ease;
+  will-change: transform;
+  scroll-snap-align: start;
+}
+.xe-card:hover { transform: translateY(-6px); background: rgba(255,255,255,0.03); }
+.xe-thumb { width:56px; height:56px; border-radius:10px; overflow:hidden; background:#0f1724; flex-shrink:0; }
+.xe-thumb img { width:100%; height:100%; object-fit:cover; display:block; }
+.xe-card-title { font-weight:600; color:#fff; font-size:16px; }
+.category-box { background: rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.03); border-radius:12px; padding:20px; text-align:center; }
+.category-box h3 { font-weight:700; margin-bottom:8px; }
+.scrollbar-none::-webkit-scrollbar { display:none; }
+
     /* Theme */ 
     :root { --bg: #0f1724; --card: #0b1220; }
     html,body { height:100%; }
