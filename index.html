@@ -1,485 +1,391 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>X Edge AI | Premier AI Tool Discovery Platform</title>
-  <meta name="description" content="Discover the top AI tools of 2025. XEdge is your gateway to the world of Artificial Intelligence — from image creators to business automation AIs.">
-  <meta name="keywords" content="AI tools, artificial intelligence, productivity AI, best AI tools 2025, AI automation">
-  <meta name="author" content="XEdge Team">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>X Edge — Tool</title>
+  <meta name="description" content="Tool details — X Edge" />
   <link rel="icon" href="xedge-logo.png">
-
-  <!-- Tailwind CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Feather icons -->
   <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
 
   <style>
-    /* ---------- Layout & small utilities (kept lightweight) ---------- */
-    :root {
-      --max-width: 1200px;
-      --card-bg: rgba(31, 41, 55, .6); /* gray-800/60 */
-      --glass: rgba(255,255,255,.03);
+    :root{
+      --bg:#0b1116;
+      --muted:#94a3b8;
+      --card-border: rgba(148,163,184,0.06);
+      --accent-from:#3b82f6;
+      --accent-to:#7c3aed;
+      --card-radius:1rem;
+      --maxw:1100px;
     }
-
-    body { font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; background: #0f172a; color: #fff; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
-    a { color: inherit; text-decoration: none; }
-    .page-top { position: relative; z-index: 10; }
-
-    /* NAV */
-    nav.site-nav { background: rgba(9,10,11,0.6); backdrop-filter: blur(6px); border-bottom: 1px solid rgba(148,163,184,0.06); }
-    .nav-inner { max-width: var(--max-width); margin: 0 auto; padding: 0 1rem; }
-
-    /* Mobile menu (right side slide) */
-    #mobile-menu { transform: translateX(110%); transition: transform .26s ease; }
-    #mobile-menu.open { transform: translateX(0%); }
-
-    /* Hero */
-    .hero {
-      background: linear-gradient(180deg, rgba(15,23,42,0.72), rgba(2,6,23,0.72));
-      padding-top: 5rem;
-      padding-bottom: 4rem;
+    body{
+      background:var(--bg); color:#e6eef8; font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+      margin:0; -webkit-font-smoothing:antialiased;
     }
+    .page-top{ position:relative; z-index:10; padding-top:72px; }
+    nav.site-nav{ position:fixed; left:0; right:0; top:0; z-index:60; backdrop-filter:blur(8px); background:rgba(6,8,10,0.7); border-bottom:1px solid var(--card-border); padding:.6rem 1rem; }
+    .nav-inner{ max-width:var(--maxw); margin:0 auto; display:flex; justify-content:space-between; align-items:center; gap:1rem; }
+    .brand{ display:flex; gap:.6rem; align-items:center; }
+    .brand img{ width:36px; height:36px; object-fit:contain; border-radius:8px; background:#fff; padding:6px; }
 
-    /* Featured category cards (premium sizing like HF) */
-    .featured-cat { min-height: 140px; padding: 1.5rem; border-radius: 1rem; background: rgba(31,41,55,0.5); border: 1px solid rgba(148,163,184,0.06); display:flex; align-items:center; justify-content:center; flex-direction:column; gap:.5rem; }
+    .container{ max-width:var(--maxw); margin:0 auto; padding:1rem; }
 
-    /* Top tools scroller */
-    #top-tools-wrapper { will-change: transform; -webkit-overflow-scrolling: touch; scroll-behavior: smooth; }
-    .top-tool-card { min-width: 220px; width: 220px; flex: 0 0 auto; background: rgba(31,41,55,0.45); padding: 1rem; border-radius: .9rem; border: 1px solid rgba(148,163,184,0.06); display:flex; gap:.75rem; align-items:flex-start; }
-    .top-tool-card img { width:56px; height:56px; border-radius:.5rem; object-fit:cover; flex-shrink:0; }
+    /* tool hero card */
+    .tool-hero{
+      background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02));
+      border:1px solid var(--card-border);
+      border-radius: var(--card-radius);
+      padding:18px; display:flex; gap:18px; align-items:center; box-shadow:0 8px 30px rgba(2,6,23,0.5);
+    }
+    .tool-logo{ width:96px; height:96px; border-radius:.75rem; object-fit:cover; background:#0f1720; flex-shrink:0; }
+    .tool-title{ font-size:1.6rem; font-weight:800; margin:0; }
+    .tool-cat{ color:var(--muted); font-size:.95rem; margin-top:6px; }
 
-    /* Browse by category */
-    .category-card { background: rgba(31,41,55,0.45); border-radius: .9rem; padding: .8rem; display:flex; align-items:center; gap:.75rem; border: 1px solid rgba(148,163,184,0.06); min-height:86px; }
+    /* sections */
+    .section{ margin-top:20px; }
+    .phase{ background: rgba(255,255,255,0.01); border:1px solid var(--card-border); border-radius:.9rem; padding:16px; }
+    .btn-visit{ background:linear-gradient(90deg,var(--accent-from),var(--accent-to)); color:#fff; padding:.55rem .9rem; border-radius:999px; text-decoration:none; font-weight:600; }
 
-    /* Skeleton */
-    .pulse { background: linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.04), rgba(255,255,255,0.02)); animation: pulse 1.2s infinite; border-radius:.75rem; }
+    /* screenshot grid */
+    .shots{ display:grid; grid-template-columns: 1fr; gap:12px; }
+    @media(min-width:720px){ .shots{ grid-template-columns: repeat(2,1fr); } }
+    .shot{ width:100%; height:220px; object-fit:cover; border-radius:.7rem; background:#0f1720; border:1px solid var(--card-border); }
+
+    .pros-cons{ display:grid; grid-template-columns:1fr; gap:12px; margin-top:12px; }
+    @media(min-width:720px){ .pros-cons{ grid-template-columns: repeat(2,1fr); } }
+
+    .meta-row{ display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-top:10px; }
+    .badge{ background: linear-gradient(90deg,var(--accent-from),var(--accent-to)); color:white; padding:.25rem .6rem; border-radius:.5rem; font-weight:600; font-size:.9rem; }
+
+    .related-grid{ display:grid; grid-template-columns: repeat(1,1fr); gap:10px; }
+    @media(min-width:720px){ .related-grid{ grid-template-columns: repeat(2,1fr); } }
+
+    .skeleton{ background: linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.03), rgba(255,255,255,0.02)); animation: pulse 1.1s infinite; border-radius:.75rem; height:100px; }
     @keyframes pulse { 0%{opacity:1}50%{opacity:.65}100%{opacity:1} }
 
-    /* Quick preview (desktop) */
-    .quick-preview { width: 360px; max-width: calc(100vw - 48px); background: rgba(8,10,14,.78); border: 1px solid rgba(148,163,184,0.06); padding: .75rem; border-radius:.75rem; box-shadow: 0 8px 24px rgba(2,6,23,.6); position: absolute; z-index: 80; display:none; }
-    .quick-preview.visible { display:block; }
-
-    /* Favorites star tiny */
-    .fav-star { cursor:pointer; opacity:.9; transition: transform .12s ease; }
-    .fav-star:active { transform: scale(.96); }
-
-    /* Footer links neat */
-    footer a { color: rgba(203,213,225,0.85); }
-    footer a:hover { color: #fff; }
+    .text-muted{ color:var(--muted); }
   </style>
 </head>
 <body>
-
   <div class="page-top">
-
-    <!-- NAV -->
-    <nav class="site-nav fixed w-full top-0 left-0 z-50">
-      <div class="nav-inner flex items-center justify-between py-3">
-        <div class="flex items-center gap-3">
-          <a href="index.html" class="flex items-center gap-3">
-            <img src="xedge-logo.png" alt="X Edge" class="w-8 h-8 object-contain"/>
-            <span class="font-bold text-lg bg-clip-text text-transparent" style="background:linear-gradient(90deg,#60a5fa,#7c3aed)">X EDGE</span>
-          </a>
+    <nav class="site-nav" role="navigation" aria-label="Main navigation">
+      <div class="nav-inner">
+        <div class="brand">
+          <a href="index.html"><img src="xedge-logo.png" alt="X Edge"></a>
+          <div style="font-weight:700">X EDGE</div>
         </div>
-
-        <div class="hidden md:flex items-center gap-8">
-          <a href="index.html" class="hover:text-blue-400">Home</a>
-          <a href="Explore.html" class="hover:text-blue-400">Explore</a>
-          <a href="Categories.html" class="hover:text-blue-400">Categories</a>
-          <a href="About.html" class="hover:text-blue-400">About</a>
+        <div style="display:flex; gap:12px; align-items:center;">
+          <a href="index.html" class="text-muted">Home</a>
+          <a href="Explore.html" class="text-muted">Explore</a>
+          <a href="Categories.html" class="text-muted">Categories</a>
+          <a href="Join.html" class="btn-visit">Join Beta</a>
         </div>
-
-        <div class="flex items-center gap-3">
-          <a href="Join.html" class="hidden md:inline-block bg-gradient-to-r from-blue-500 to-indigo-600 px-4 py-2 rounded-full text-white font-medium">Join Beta</a>
-
-          <!-- Mobile hamburger -->
-          <button id="menu-btn" class="md:hidden text-2xl px-2 py-1" aria-label="Open menu">☰</button>
-        </div>
-      </div>
-
-      <!-- Mobile right-side sliding menu -->
-      <div id="mobile-menu" class="fixed top-0 right-0 w-64 h-full bg-gray-900/95 shadow-xl z-50 p-6">
-        <div class="flex items-center justify-between mb-6">
-          <div class="flex items-center gap-3">
-            <img src="xedge-logo.png" class="w-8 h-8"/>
-            <div class="font-bold">X EDGE</div>
-          </div>
-          <button id="mobile-close" aria-label="Close menu" class="text-2xl">✕</button>
-        </div>
-
-        <nav class="flex flex-col gap-3">
-          <a href="index.html" class="py-2 hover:text-blue-400">Home</a>
-          <a href="Explore.html" class="py-2 hover:text-blue-400">Explore</a>
-          <a href="Categories.html" class="py-2 hover:text-blue-400">Categories</a>
-          <a href="About.html" class="py-2 hover:text-blue-400">About</a>
-          <a href="Join.html" class="mt-4 py-2 bg-blue-600 rounded text-center">Join Beta</a>
-        </nav>
       </div>
     </nav>
 
-    <!-- HERO -->
-    <section class="hero pt-20 pb-12">
-      <div class="max-w-7xl mx-auto px-6 text-center">
-        <h1 class="text-4xl md:text-5xl font-extrabold leading-tight mb-4">
-          Discover the best AI tools — curated, compared, ready to use.
-        </h1>
-        <p class="text-gray-300 max-w-2xl mx-auto mb-6">X Edge handpicks and reviews the top AI products for creators, entrepreneurs, and devs. Fast discovery. Honest takes. Instant access.</p>
-        <div class="flex justify-center gap-4">
-          <a href="Explore.html" class="bg-gradient-to-r from-blue-500 to-indigo-600 px-6 py-3 rounded-full font-medium">Explore Now</a>
-          <a href="Join.html" class="border border-blue-500 px-6 py-3 rounded-full text-blue-400 font-medium">Join Beta</a>
-        </div>
-      </div>
-    </section>
+    <main class="container" id="main">
+      <!-- Loading skeleton / replaced by JS -->
+      <div id="loading" class="skeleton" style="height:220px;"></div>
 
-    <!-- FEATURED CATEGORIES -->
-    <section class="px-6 pb-6">
-      <div class="max-w-7xl mx-auto">
-        <div class="grid grid-cols-2 md:grid-cols-5 gap-6">
-          <!-- keep these static to match HF look — icons use feather -->
-          <a href="Categories.html?category=AI-Image" class="featured-cat">
-            <i data-feather="image" class="text-blue-400"></i>
-            <div class="font-semibold">AI Image</div>
-          </a>
-
-          <a href="Categories.html?category=Chatbot" class="featured-cat">
-            <i data-feather="message-circle" class="text-blue-400"></i>
-            <div class="font-semibold">Chatbot</div>
-          </a>
-
-          <a href="Categories.html?category=Business" class="featured-cat">
-            <i data-feather="briefcase" class="text-blue-400"></i>
-            <div class="font-semibold">Business</div>
-          </a>
-
-          <a href="Categories.html?category=Video" class="featured-cat">
-            <i data-feather="video" class="text-blue-400"></i>
-            <div class="font-semibold">Video</div>
-          </a>
-
-          <a href="Categories.html?category=Productivity" class="featured-cat">
-            <i data-feather="activity" class="text-blue-400"></i>
-            <div class="font-semibold">Productivity</div>
-          </a>
-        </div>
-      </div>
-    </section>
-
-    <!-- TOP TOOLS USED (dynamic) -->
-    <section class="px-4 sm:px-6 lg:px-8 pt-6 pb-12">
-      <div class="max-w-7xl mx-auto">
-        <div class="flex items-center justify-between mb-4">
-          <h2 class="text-2xl font-bold">Top Tools Used</h2>
-          <a href="Explore.html" class="text-blue-400">View All</a>
-        </div>
-
-        <div id="top-tools-wrapper" class="flex gap-4 overflow-x-auto pb-4 -mx-4 px-4 scrollbar-none">
-          <!-- skeleton placeholders until tools load -->
-          <div class="top-tool-card pulse"></div>
-          <div class="top-tool-card pulse"></div>
-          <div class="top-tool-card pulse"></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- BROWSE BY CATEGORY (dynamic) -->
-    <section class="px-4 sm:px-6 lg:px-8 py-10 bg-gray-900/20">
-      <div class="max-w-7xl mx-auto">
-        <div class="flex items-center justify-between mb-4">
-          <h2 class="text-2xl font-bold">Browse By Category</h2>
-          <a href="Categories.html" class="text-blue-400">View All</a>
-        </div>
-
-        <div id="browse-category-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-          <div class="category-card pulse"></div>
-          <div class="category-card pulse"></div>
-          <div class="category-card pulse"></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- WHY CHOOSE X EDGE (keep long text preserved) -->
-    <section class="py-20 px-6 bg-transparent">
-      <div class="max-w-5xl mx-auto">
-        <h2 class="text-4xl font-bold mb-6 text-center">Why Choose <span style="background:linear-gradient(90deg,#60a5fa,#7c3aed); -webkit-background-clip:text; color:transparent;">X Edge</span></h2>
-
-        <div class="space-y-10">
-          <div class="flex flex-col md:flex-row gap-6">
-            <div class="flex-shrink-0"><i data-feather="zap" class="w-12 h-12 text-blue-400"></i></div>
-            <div>
-              <h3 class="text-2xl font-semibold mb-2">Cutting-Edge AI Selection</h3>
-              <p class="text-gray-300 leading-relaxed">
-                We handpick only the most advanced, breakthrough AI tools — rigorously tested, expertly vetted, and curated
-                to give you instant access to the technologies shaping the future. Every tool featured on X Edge
-                meets our highest standards for innovation, reliability, and real-world performance.
-              </p>
+      <div id="tool-wrap" style="display:none;">
+        <div class="tool-hero" id="tool-hero">
+          <img id="tool-logo" class="tool-logo" src="" alt="logo">
+          <div style="flex:1; min-width:0;">
+            <h1 id="tool-name" class="tool-title">Tool name</h1>
+            <div class="tool-cat" id="tool-cat">Category</div>
+            <div class="meta-row">
+              <a id="visit-btn" class="btn-visit" href="#" target="_blank">Visit</a>
+              <div id="tool-pricing" class="text-muted" style="margin-left:8px;"></div>
             </div>
-          </div>
-
-          <div class="flex flex-col md:flex-row gap-6">
-            <div class="flex-shrink-0"><i data-feather="eye" class="w-12 h-12 text-blue-400"></i></div>
-            <div>
-              <h3 class="text-2xl font-semibold mb-2">Unbiased, Transparent Reviews</h3>
-              <p class="text-gray-300 leading-relaxed">
-                Our assessments are grounded in real performance, hands-on testing, and measurable user impact. No hype —
-                only clear, data-driven guidance so you can pick the right tool with confidence.
-              </p>
-            </div>
-          </div>
-
-          <div class="flex flex-col md:flex-row gap-6">
-            <div class="flex-shrink-0"><i data-feather="clock" class="w-12 h-12 text-blue-400"></i></div>
-            <div>
-              <h3 class="text-2xl font-semibold mb-2">Save Hours of Research</h3>
-              <p class="text-gray-300 leading-relaxed">
-                We remove the guesswork: instant comparisons, curated breakdowns, and expert insights that speed you from discovery
-                to execution — saving you valuable time.
-              </p>
-            </div>
+            <p id="tool-short" class="text-muted" style="margin-top:12px;"></p>
           </div>
         </div>
+
+        <!-- Phase 1: description + pricing -->
+        <div class="section">
+          <div id="phase1" class="phase">
+            <div id="desc-skeleton" class="skeleton" style="height:110px;"></div>
+          </div>
+        </div>
+
+        <!-- Phase 2: screenshots, pros/cons, related -->
+        <div class="section">
+          <div id="phase2" class="phase">
+            <div id="shots-skeleton" class="skeleton" style="height:160px;"></div>
+          </div>
+        </div>
+
       </div>
-    </section>
-
-    <!-- NEWSLETTER -->
-    <section class="py-16 px-6">
-      <div class="max-w-4xl mx-auto bg-gradient-to-br from-gray-800 to-gray-900 border border-gray-700 rounded-2xl p-8 text-center">
-        <h2 class="text-3xl font-bold mb-4">Join the Edge</h2>
-        <p class="text-xl text-gray-300 mb-6">Get the Latest AI Tools Weekly</p>
-
-        <form action="https://formspree.io/f/mblzvykd" method="POST" class="flex flex-col sm:flex-row gap-4">
-          <input type="email" name="email" placeholder="Your email address" required class="flex-grow bg-gray-700 border border-gray-600 rounded-full px-6 py-3 focus:outline-none">
-          <button type="submit" class="bg-gradient-to-r from-blue-500 to-indigo-600 px-6 py-3 rounded-full">Subscribe</button>
-        </form>
-      </div>
-    </section>
-
-    <!-- FOOTER -->
-    <footer class="border-t border-gray-800 py-12 px-6 bg-gray-900/80">
-      <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
-        <div>
-          <div class="flex items-center gap-2 mb-3">
-            <div class="w-8 h-8 bg-blue-500 rounded-full"></div>
-            <span class="font-bold">X EDGE</span>
-          </div>
-          <p class="text-gray-400">The future of AI in one place.</p>
-          <div class="flex gap-4 mt-4">
-            <a href="#" class="text-gray-400 hover:text-blue-400"><i data-feather="twitter"></i></a>
-            <a href="#" class="text-gray-400 hover:text-blue-400"><i data-feather="youtube"></i></a>
-            <a href="#" class="text-gray-400 hover:text-blue-400"><i data-feather="mail"></i></a>
-          </div>
-        </div>
-
-        <div>
-          <h3 class="font-semibold mb-3">Resources</h3>
-          <ul class="space-y-2">
-            <li><a href="Explore.html">All Tools</a></li>
-            <li><a href="Categories.html">Categories</a></li>
-            <li><a href="Pricing.html">Pricing</a></li>
-            <li><a href="Blog.html">Blog</a></li>
-          </ul>
-        </div>
-
-        <div>
-          <h3 class="font-semibold mb-3">Company</h3>
-          <ul class="space-y-2">
-            <li><a href="About.html">About Us</a></li>
-            <li><a href="Careers.html">Careers</a></li>
-            <li><a href="Contact.html">Contact</a></li>
-            <li><a href="Press.html">Press</a></li>
-          </ul>
-        </div>
-
-        <div>
-          <h3 class="font-semibold mb-3">Legal</h3>
-          <ul class="space-y-2">
-            <li><a href="Privacy.html">Privacy Policy</a></li>
-            <li><a href="Terms.html">Terms of Service</a></li>
-            <li><a href="Security.html">Security</a></li>
-          </ul>
-        </div>
-      </div>
-    </footer>
-
-  </div> <!-- page-top end -->
-
-  <!-- scripts: tools.js must exist in project and expose getTools() -->
-  <script src="tools.js"></script>
+    </main>
+  </div>
 
   <script>
-  /* Small isolated UI module — non-invasive to other code */
-  (function () {
-    const UI = {
-      topWrapper: document.getElementById('top-tools-wrapper'),
-      catGrid: document.getElementById('browse-category-grid'),
-      mobileMenu: document.getElementById('mobile-menu'),
-      menuBtn: document.getElementById('menu-btn'),
-      mobileClose: document.getElementById('mobile-close'),
-      quickPreview: null,
-      favoritesKey: 'xedge_favs_v1',
-      maxTopTools: 10
-    };
+  (function(){
+    const API_URL = "https://script.google.com/macros/s/AKfycbxaA3BcQgW7PTFlSP9j4h16-p2us5IiuaYESUUpZiy8bObezI-nMUxXAC28tR15FU_U/exec";
+    const CACHE_KEY = "xedge_tools_cache_v1";
+    const CACHE_TTL = 1000 * 60 * 60 * 6; // 6h
 
-    // mobile menu controls (right-side sliding)
-    UI.menuBtn && UI.menuBtn.addEventListener('click', () => { UI.mobileMenu.classList.add('open'); document.body.style.overflow = 'hidden'; });
-    UI.mobileClose && UI.mobileClose.addEventListener('click', () => { UI.mobileMenu.classList.remove('open'); document.body.style.overflow = ''; });
+    function now(){ return Date.now(); }
+    function safeParse(v){ try{return JSON.parse(v);}catch(e){return null;} }
+    function safeSet(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+    function safeGet(k){ try{ return safeParse(localStorage.getItem(k)); }catch(e){return null;} }
+    function el(tag, cls){ const n=document.createElement(tag); if(cls) n.className=cls; return n; }
+    function normalize(s){ return String(s||"").trim().toLowerCase(); }
+    function makePlaceholder(name){ const tn = encodeURIComponent((name||'Tool').slice(0,20)); return `https://dummyimage.com/900x500/1e293b/ffffff&text=${tn}`; }
 
-    // small helper: safe JSON parse
-    function safeParse(v){ try { return JSON.parse(v); } catch(e) { return null; } }
-
-    // favorites store
-    function getFavs(){ return safeParse(localStorage.getItem(UI.favoritesKey)) || []; }
-    function setFavs(arr){ localStorage.setItem(UI.favoritesKey, JSON.stringify(arr)); }
-
-    // small helper to create an element with optional classes
-    function el(tag, cls){ const e = document.createElement(tag); if (cls) e.className = cls; return e; }
-
-    // Lazy image loader for dynamic content
-    function lazyLoadWithin(root){
-      const imgs = (root || document).querySelectorAll('img[data-src]');
-      if (!imgs.length) return;
-      const obs = new IntersectionObserver((entries, o) => {
-        entries.forEach(en => {
-          if (en.isIntersecting) {
-            const img = en.target;
-            img.src = img.dataset.src;
-            img.removeAttribute('data-src');
-            o.unobserve(img);
-          }
-        });
-      }, { rootMargin: '300px' });
-      imgs.forEach(i => obs.observe(i));
+    // read selected from session (fast)
+    function getSelectedFromSession(){
+      try{
+        const v = sessionStorage.getItem('xedge_selected_tool');
+        if (!v) return null;
+        const parsed = JSON.parse(v);
+        return parsed;
+      }catch(e){ return null; }
     }
 
-    // Render top tools (compact HF-like cards)
-    function renderTopTools(tools){
-      if (!UI.topWrapper) return;
-      UI.topWrapper.innerHTML = ''; // clear
-      const top = tools.slice(0, UI.maxTopTools);
-      top.forEach(t => {
-        const card = el('a', 'top-tool-card');
-        card.href = 'tool.html?tool=' + encodeURIComponent(t.name);
-        card.dataset.tool = encodeURIComponent(t.name);
-        card.innerHTML = `
-          <img data-src="${(t.logo_url||'https://dummyimage.com/160x160/1e293b/fff&text='+encodeURIComponent(t.name))}" alt="${t.name}">
-          <div style="flex:1">
-            <div class="font-semibold">${t.name}</div>
-            <div class="text-gray-400 text-sm mt-1">${t.category || ''}</div>
-          </div>
-          <div style="margin-left:.5rem">
-            <button class="fav-star" title="Save to favorites">☆</button>
-          </div>
-        `;
-        // prefetch on click (store selected tool for tool page hydration)
-        card.addEventListener('click', (ev) => {
-          try { sessionStorage.setItem('xedge_selected_tool', JSON.stringify(t)); } catch(e){}
-        });
-
-        // favorites handler
-        const favBtn = card.querySelector('.fav-star');
-        favBtn.addEventListener('click', (ev) => {
-          ev.preventDefault(); ev.stopPropagation();
-          const favs = getFavs();
-          const exists = favs.find(x => x.name === t.name);
-          if (exists) {
-            const updated = favs.filter(x => x.name !== t.name);
-            setFavs(updated);
-            favBtn.textContent = '☆';
-          } else {
-            favs.push({ name: t.name, logo: t.logo_url, category: t.category });
-            setFavs(favs);
-            favBtn.textContent = '★';
-          }
-        });
-
-        UI.topWrapper.appendChild(card);
-      });
-
-      lazyLoadWithin(UI.topWrapper);
-      feather.replace();
+    // fetch all tools (with lightweight caching)
+    async function fetchTools(force=false){
+      const cache = safeGet(CACHE_KEY);
+      if (!force && cache && cache.t && (now() - cache.t) < (1000*60*60*6)) {
+        return cache.data;
+      }
+      try{
+        const res = await fetch(API_URL + "?t=" + Date.now(), { cache: "no-store" });
+        if (!res.ok) throw new Error("non-ok");
+        const data = await res.json();
+        const normalized = (Array.isArray(data) ? data : []).map(d => ({
+          name: d.name || d.title || d.Name || "Unknown",
+          short_description: d.short_description || d.short || d.summary || "",
+          long_description: d.long_description || d.description || d.long || "",
+          category: d.category || d.cat || d.Category || "Other",
+          logo_url: d.logo_url || d.logo || d.image || "",
+          link: d.link || d.url || "#",
+          pros_raw: d.pros || d.pros_raw || d.pros_list || "",
+          cons_raw: d.cons || d.cons_raw || "",
+          screenshots_raw: d.screenshots || d.screenshots_raw || "",
+          pricing_free: d.pricing_free || d.free || "",
+          pricing_plus: d.pricing_plus || d.plus || "",
+          pricing_team: d.pricing_team || d.team || "",
+          __raw: d
+        }));
+        safeSet(CACHE_KEY, {t: now(), data: normalized});
+        return normalized;
+      }catch(e){
+        if (cache && cache.data) return cache.data;
+        console.warn("Fetch error", e);
+        return [];
+      }
     }
 
-    // Render category grid from data (group by category count)
-    function renderCategories(tools){
-      if (!UI.catGrid) return;
-      // count tools per category
-      const counts = {};
-      tools.forEach(t => {
-        const cat = (t.category || 'Other').trim();
-        counts[cat] = (counts[cat] || 0) + 1;
-      });
-      // build array sorted by count desc
-      const cats = Object.keys(counts).map(k => ({ name: k, count: counts[k] })).sort((a,b)=> b.count - a.count);
-
-      UI.catGrid.innerHTML = '';
-      // show top 8 categories (keeps layout lightweight)
-      cats.slice(0, 8).forEach(c => {
-        const a = el('a', 'category-card');
-        a.href = 'Categories.html?category=' + encodeURIComponent(c.name);
-        a.innerHTML = `
-          <div style="display:flex; align-items:center; gap:.75rem;">
-            <div class="w-12 h-12 rounded bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold">${String(c.name || '').charAt(0).toUpperCase()}</div>
-            <div>
-              <div class="font-semibold">${c.name}</div>
-              <div class="text-gray-400 text-sm">${c.count} tools</div>
-            </div>
-          </div>
-        `;
-        UI.catGrid.appendChild(a);
-      });
-
-      feather.replace();
+    // find tool by query param name or session
+    function getQueryToolName(){
+      try{
+        const params = new URLSearchParams(window.location.search);
+        return params.get('tool') || params.get('name') || "";
+      }catch(e){ return ""; }
     }
 
-    // Fetch tools and render both sections
-    async function hydrateToolSections(){
-      // require getTools() from your tools.js
-      if (typeof getTools !== 'function') {
-        // show error skeletons removed but not fatal
-        console.warn('getTools() not available. Make sure tools.js is loaded.');
+    function parseListField(v){
+      if(!v) return [];
+      return String(v).split(/[,;]\s*/).map(x=>x.trim()).filter(Boolean);
+    }
+
+    // lazy image loader helper
+    function lazyLoad(root=document){
+      const imgs = root.querySelectorAll("img[data-src]");
+      if (!imgs || imgs.length===0) return;
+      const obs = new IntersectionObserver((entries, o)=>{
+        entries.forEach(en=>{
+          if (!en.isIntersecting) return;
+          const img = en.target;
+          img.src = img.dataset.src;
+          img.removeAttribute('data-src');
+          o.unobserve(img);
+        });
+      }, { rootMargin: "300px" });
+      imgs.forEach(i=>obs.observe(i));
+    }
+
+    // render functions
+    function renderPhase0(container, tool){
+      const logoEl = document.getElementById('tool-logo');
+      const nameEl = document.getElementById('tool-name');
+      const catEl = document.getElementById('tool-cat');
+      const visitBtn = document.getElementById('visit-btn');
+      const short = document.getElementById('tool-short');
+      const pricing = document.getElementById('tool-pricing');
+
+      logoEl.src = tool.logo_url || makePlaceholder(tool.name);
+      nameEl.textContent = tool.name || "Unknown";
+      catEl.textContent = tool.category || "";
+      visitBtn.href = tool.link || "#";
+      short.textContent = tool.short_description || "";
+      const priceParts = [];
+      if (tool.pricing_free) priceParts.push("Free: " + tool.pricing_free);
+      if (tool.pricing_plus) priceParts.push("Plus: " + tool.pricing_plus);
+      if (tool.pricing_team) priceParts.push("Team: " + tool.pricing_team);
+      pricing.textContent = priceParts.join(" • ");
+    }
+
+    function renderPhase1(container, tool, merged){
+      const phase1 = document.getElementById('phase1');
+      phase1.innerHTML = "";
+      const p = el('div');
+      p.innerHTML = `<p style="color:var(--muted); margin:0;">${(merged.long_description || tool.long_description || tool.short_description || "No description available.").replace(/\n/g,"<br>")}</p>`;
+      phase1.appendChild(p);
+      // pricing block if available
+      if (merged.pricing && (merged.pricing.free || merged.pricing.plus || merged.pricing.team)){
+        const box = el('div'); box.style.marginTop = "12px";
+        box.innerHTML = `<div style="background:rgba(255,255,255,0.01); border-radius:.6rem; padding:10px; border:1px solid var(--card-border);">
+          ${merged.pricing.free ? `<div style="font-weight:700">Free</div><div class="text-muted">${merged.pricing.free}</div>` : ""}
+          ${merged.pricing.plus ? `<div style="margin-top:6px;font-weight:700">Plus</div><div class="text-muted">${merged.pricing.plus}</div>` : ""}
+          ${merged.pricing.team ? `<div style="margin-top:6px;font-weight:700">Team</div><div class="text-muted">${merged.pricing.team}</div>` : ""}
+        </div>`;
+        phase1.appendChild(box);
+      }
+    }
+
+    async function renderPhase2(container, tool, merged, related){
+      const phase2 = document.getElementById('phase2');
+      phase2.innerHTML = "";
+
+      // screenshots
+      const shots = merged.screenshots && merged.screenshots.length ? merged.screenshots : [
+        makePlaceholder(tool.name), makePlaceholder(tool.name + " screenshot")
+      ];
+      const shotsWrap = el('div');
+      shotsWrap.className = 'shots';
+      shots.slice(0,4).forEach(s=>{
+        const img = el('img'); img.className = 'shot'; img.alt = tool.name + ' screenshot';
+        img.setAttribute('data-src', s);
+        shotsWrap.appendChild(img);
+      });
+      phase2.appendChild(shotsWrap);
+
+      // pros/cons
+      const pros = merged.pros || [];
+      const cons = merged.cons || [];
+      const pcWrap = el('div'); pcWrap.className = 'pros-cons';
+      if (pros.length){
+        const pBox = el('div'); pBox.innerHTML = `<div style="font-weight:700; margin-bottom:8px;">Pros</div><ul style="margin:0;padding-left:18px;color:var(--muted)">${pros.map(x=>`<li>${x}</li>`).join("")}</ul>`;
+        pcWrap.appendChild(pBox);
+      }
+      if (cons.length){
+        const cBox = el('div'); cBox.innerHTML = `<div style="font-weight:700; margin-bottom:8px;">Cons</div><ul style="margin:0;padding-left:18px;color:var(--muted)">${cons.map(x=>`<li>${x}</li>`).join("")}</ul>`;
+        pcWrap.appendChild(cBox);
+      }
+      if (pcWrap.children.length) phase2.appendChild(pcWrap);
+
+      // related
+      const relWrap = el('div'); relWrap.style.marginTop = "12px";
+      relWrap.innerHTML = `<div style="font-weight:700; margin-bottom:8px;">Related Tools</div>`;
+      const grid = el('div'); grid.className = 'related-grid';
+      (related || []).slice(0,4).forEach(r=>{
+        const a = el('a'); a.href = 'tool.html?tool=' + encodeURIComponent(r.name); a.style.display = 'block'; a.style.padding = '10px'; a.style.border = '1px solid var(--card-border)'; a.style.borderRadius = '.6rem'; a.style.textDecoration='none'; a.style.color='inherit';
+        a.innerHTML = `<div style="display:flex; gap:10px; align-items:center;"><img src="${r.logo_url||makePlaceholder(r.name)}" style="width:54px;height:54px;border-radius:.6rem;object-fit:cover"><div><div style="font-weight:700">${r.name}</div><div style="color:var(--muted);font-size:.92rem">${r.category||''}</div></div></div>`;
+        grid.appendChild(a);
+      });
+      relWrap.appendChild(grid);
+      phase2.appendChild(relWrap);
+
+      // lazy load screenshots
+      lazyLoad(phase2);
+    }
+
+    // helper to merge extra sheet fields and TOOL_EXTRA fallback if present
+    function buildMerged(tool){
+      const extraFromSheet = {
+        long_description: tool.long_description || "",
+        pros: parseListField(tool.pros_raw),
+        cons: parseListField(tool.cons_raw),
+        screenshots: parseListField(tool.screenshots_raw),
+        pricing: { free: tool.pricing_free || "", plus: tool.pricing_plus || "", team: tool.pricing_team || "" }
+      };
+      // TOOL_EXTRA global fallback (if you have one)
+      let fallback = {};
+      try { if (window.TOOL_EXTRA) fallback = window.TOOL_EXTRA[normalize(tool.name)] || {}; } catch(e){}
+      return {
+        long_description: extraFromSheet.long_description || fallback.long_description || "",
+        pros: (extraFromSheet.pros.length ? extraFromSheet.pros : (fallback.pros || [])),
+        cons: (extraFromSheet.cons.length ? extraFromSheet.cons : (fallback.cons || [])),
+        screenshots: (extraFromSheet.screenshots.length ? extraFromSheet.screenshots : (fallback.screenshots || [])),
+        pricing: Object.assign({}, (fallback.pricing || {}), (extraFromSheet.pricing || {}))
+      };
+    }
+
+    function parseListField(v){ if(!v) return []; return String(v).split(/[,;]\s*/).map(x=>x.trim()).filter(Boolean); }
+
+    // MAIN hydrate function
+    async function hydrateToolPage(){
+      const loading = document.getElementById('loading');
+      const wrap = document.getElementById('tool-wrap');
+      loading.style.display = '';
+      wrap.style.display = 'none';
+
+      // try session first
+      let selected = getSelectedFromSession();
+      const qName = decodeURIComponent(getQueryToolName() || '').trim();
+      if (!selected && qName) {
+        // try to find in cached list (fast)
+        const cached = safeGet(CACHE_KEY);
+        if (cached && cached.data) {
+          const found = cached.data.find(t => normalize(t.name) === normalize(qName));
+          if (found) selected = found;
+        }
+      }
+
+      // if still not found, fetch tools and find
+      if (!selected) {
+        const tools = await fetchTools(false);
+        const findName = qName || (selected && selected.name) || "";
+        if (findName) {
+          const found = tools.find(t => normalize(t.name) === normalize(findName));
+          if (found) selected = found;
+        } else {
+          // If there's no query param, try to pick the first item (graceful)
+          selected = tools[0] || null;
+        }
+      }
+
+      if (!selected) {
+        loading.textContent = "Tool not found.";
         return;
       }
-      try {
-        // prefer cached results in tools.js/sessionStorage — call without forcing to avoid mobile lag
-        const tools = await getTools(false);
-        if (!Array.isArray(tools) || tools.length === 0) return;
-        renderTopTools(tools);
-        renderCategories(tools);
-      } catch (e) {
-        console.error('Error hydrating tool sections', e);
-      }
+
+      // render phase0 immediately
+      renderPhase0(document.getElementById('tool-hero'), selected);
+
+      // show UI
+      loading.style.display = 'none';
+      wrap.style.display = '';
+
+      // schedule phase1
+      setTimeout(()=> {
+        try {
+          const merged = buildMerged(selected);
+          renderPhase1(document.getElementById('phase1'), selected, merged);
+        } catch(e){ console.error(e); }
+      }, 80);
+
+      // schedule phase2 (defer a bit)
+      setTimeout(async ()=>{
+        try{
+          // ensure we have a tools list to find related
+          const tools = await fetchTools(false);
+          const related = tools.filter(t => normalize(t.category) === normalize(selected.category) && normalize(t.name) !== normalize(selected.name)).slice(0,6);
+          const merged = buildMerged(selected);
+          await renderPhase2(document.getElementById('phase2'), selected, merged, related);
+        }catch(e){ console.error(e); }
+      }, 600);
     }
 
-    // Kick off when DOM ready: small debounce to avoid blocking first paint
-    window.addEventListener('DOMContentLoaded', () => {
-      setTimeout(hydrateToolSections, 120); // slight delay to prioritize paint
-    });
-
-    // Expose small API for console debugging (no global pollution)
-    window.XEDGE_UI = {
-      hydrate: hydrateToolSections,
-      getFavorites: getFavs,
-      setFavorites: setFavs
-    };
-
-  })();
-  </script>
-
-  <script>
-    // Feather icons init
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', ()=> {
+      hydrateToolPage();
       if (window.feather) feather.replace();
     });
 
-    // ensure mobile menu isn't blocking scroll when closed
-    (function(){
-      const menu = document.getElementById('mobile-menu');
-      if (menu) {
-        // start closed
-        menu.classList.remove('open');
-      }
-    })();
+  })();
   </script>
 
 </body>
