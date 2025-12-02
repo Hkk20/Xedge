@@ -19,6 +19,54 @@
   <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js" defer></script>
 
   <style>
+    /* HF accurate category card sizing */
+.featured-cat {
+  width: 240px;
+  height: 200px;
+  padding: 30px;
+  border-radius: 18px;
+  background: #0f141a80;
+  border: 1px solid #1f2a36;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transition: 0.25s ease;
+}
+
+/* Icon circle (HF size) */
+.category-icon {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(56,130,255,0.4), rgba(0,0,0,0.3));
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Icon size */
+.category-icon i {
+  width: 38px !important;
+  height: 38px !important;
+  stroke-width: 2.1;
+  color: #60a5ff;
+}
+
+/* Text size */
+.featured-cat h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-top: 18px;
+  color: #ffffff;
+}
+
+/* Hover glow */
+.featured-cat:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 0 30px rgba(56,130,255,0.15);
+}
+
    .category-card {
   width: 100%;
 }
@@ -184,64 +232,40 @@
     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
 
       <!-- AI Image -->
-      <a href="Categories.html?category=AI-Image"
-         class="featured-cat bg-gray-800/50 border border-gray-700 rounded-2xl text-center 
-                hover:bg-gray-700 transition duration-300 glow-on-hover flex flex-col items-center justify-center">
+     <a href="Categories.html?category=AI-Image" class="featured-cat">
+  <div class="category-icon">
+    <i data-feather="image"></i>
+  </div>
+  <h3>AI Image</h3>
+</a>
 
-        <div class="category-icon mb-4">
-          <i data-feather="image"></i>
-        </div>
+<a href="Categories.html?category=Chatbot" class="featured-cat">
+  <div class="category-icon">
+    <i data-feather="message-circle"></i>
+  </div>
+  <h3>Chatbot</h3>
+</a>
 
-        <h3 class="mt-4 font-semibold">AI Image</h3>
-      </a>
+<a href="Categories.html?category=Business" class="featured-cat">
+  <div class="category-icon">
+    <i data-feather="briefcase"></i>
+  </div>
+  <h3>Business</h3>
+</a>
 
-      <!-- Chatbot -->
-      <a href="Categories.html?category=Chatbot"
-         class="featured-cat bg-gray-800/50 border border-gray-700 rounded-2xl text-center 
-                hover:bg-gray-700 transition duration-300 glow-on-hover flex flex-col items-center justify-center">
+<a href="Categories.html?category=Video" class="featured-cat">
+  <div class="category-icon">
+    <i data-feather="video"></i>
+  </div>
+  <h3>Video</h3>
+</a>
 
-        <div class="category-icon mb-4">
-          <i data-feather="message-circle"></i>
-        </div>
-
-        <h3 class="text-lg font-semibold">Chatbot</h3>
-      </a>
-
-      <!-- Business -->
-      <a href="Categories.html?category=Business"
-         class="featured-cat bg-gray-800/50 border border-gray-700 rounded-2xl text-center 
-                hover:bg-gray-700 transition duration-300 glow-on-hover flex flex-col items-center justify-center">
-
-        <div class="category-icon mb-4">
-          <i data-feather="briefcase"></i>
-        </div>
-
-        <h3 class="text-lg font-semibold">Business</h3>
-      </a>
-
-      <!-- Video -->
-      <a href="Categories.html?category=Video"
-         class="featured-cat bg-gray-800/50 border border-gray-700 rounded-2xl text-center 
-                hover:bg-gray-700 transition duration-300 glow-on-hover flex flex-col items-center justify-center">
-
-        <div class="category-icon mb-4">
-          <i data-feather="video"></i>
-        </div>
-
-        <h3 class="text-lg font-semibold">Video</h3>
-      </a>
-
-      <!-- Productivity -->
-      <a href="Categories.html?category=Productivity"
-         class="featured-cat bg-gray-800/50 border border-gray-700 rounded-2xl text-center 
-                hover:bg-gray-700 transition duration-300 glow-on-hover flex flex-col items-center justify-center">
-
-        <div class="category-icon mb-4">
-          <i data-feather="activity"></i>
-        </div>
-
-        <h3 class="text-lg font-semibold">Productivity</h3>
-      </a>
+<a href="Categories.html?category=Productivity" class="featured-cat">
+  <div class="category-icon">
+    <i data-feather="activity"></i>
+  </div>
+  <h3>Productivity</h3>
+</a>
 
     </div>
   </div>
