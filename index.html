@@ -212,22 +212,23 @@
       </section>
 
       <!-- Browse by category -->
-      <section class="px-4 py-8 bg-gray-800/30">
-        <div class="max-w-[1200px] mx-auto">
-          <div class="flex items-center justify-between mb-6">
-            <h2 class="text-2xl font-bold">Browse By Category</h2>
-            <a href="Categories.html" class="text-blue-400">View All</a>
-          </div>
+<section class="px-4 py-8 bg-gray-800/30">
+  <div class="max-w-[1200px] mx-auto">
+    
+    <div class="flex items-center justify-between mb-6">
+      <h2 class="text-2xl font-bold">Browse By Category</h2>
+      <a href="Categories.html" class="text-blue-400 hover:text-blue-300 flex items-center gap-1">
+        View All <i data-feather="chevron-right"></i>
+      </a>
+    </div>
 
-          <div id="browse-category-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
-            <!-- injected -->
-            <div class="skeleton h-28 rounded-2xl"></div>
-            <div class="skeleton h-28 rounded-2xl"></div>
-            <div class="skeleton h-28 rounded-2xl"></div>
-            <div class="skeleton h-28 rounded-2xl"></div>
-          </div>
-        </div>
-      </section>
+    <div id="browse-category-grid"
+         class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+      <!-- JS Injects Cards -->
+    </div>
+
+  </div>
+</section>
 
       <!-- Why choose X Edge -->
       <section class="px-4 py-16">
@@ -391,23 +392,33 @@
         link: d.link || d.url || d.website || "#"
       }));
 
-      // categories: counts
-      const counts = {};
-      normalized.forEach(t => {
-        const c = (t.category || "Uncategorized").trim();
-        counts[c] = (counts[c] || 0) + 1;
-      });
-      const cats = Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,8);
-      const grid = document.getElementById("browse-category-grid");
-      if (grid) {
-        grid.innerHTML = cats.map(([cat, cnt]) => {
-          return `<div role="button" tabindex="0" onclick="location.href='Categories.html?category=${encodeURIComponent(cat)}'" onkeypress="if(event.key==='Enter') location.href='Categories.html?category=${encodeURIComponent(cat)}'" class="cursor-pointer bg-gray-800/50 border border-gray-700 rounded-2xl p-6 text-center hover:bg-gray-700 transition">
-            <div class="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4 bg-blue-500/10"><svg width="20" height="20"><rect width="20" height="20" fill="currentColor"></rect></svg></div>
-            <h3 class="font-semibold">${cat}</h3>
-            <p class="text-sm text-gray-400 mt-2">${cnt} Tools</p>
-          </div>`;
-        }).join("");
-      }
+      /* ---------- RENDER CATEGORY PREVIEW ---------- */
+const counts = {};
+tools.forEach(t => {
+  if (!t.category) return;
+  const c = t.category.trim();
+  counts[c] = (counts[c] || 0) + 1;
+});
+
+const sortedCats = Object.entries(counts)
+  .sort((a, b) => b[1] - a[1])
+  .slice(0, 10); // you can change limit
+
+const grid = document.getElementById("browse-category-grid");
+
+grid.innerHTML = sortedCats.map(([cat, count]) => `
+  <div onclick="window.location.href='Categories.html?cat=${encodeURIComponent(cat)}'"
+       class="cursor-pointer bg-gray-900/60 border border-gray-700 rounded-2xl p-6 
+              hover:bg-gray-800 transition transform hover:-translate-y-1">
+
+      <div class="w-14 h-14 rounded-full bg-blue-500/10 flex items-center justify-center mx-auto mb-4">
+        <i data-feather="folder" class="text-blue-400 w-6 h-6"></i>
+      </div>
+
+      <h3 class="text-center font-semibold">${cat}</h3>
+      <p class="text-center text-gray-400 text-sm">${count} Tools</p>
+  </div>
+`).join("");
 
       // top tools (priority)
       const pt = normalized.filter(t => normalize(t.name) && PRIORITY.includes(normalize(t.name))).slice(0,8);
