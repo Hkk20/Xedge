@@ -18,7 +18,77 @@
   <!-- Vanta (deferred init) -->
   <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js" defer></script>
 
-  <style>
+  
+    <style>
+
+/* HF accurate category card sizing */
+.featured-cat {
+  width: 240px;
+  height: 200px;
+  padding: 30px;
+  border-radius: 18px;
+  background: #0f141a80;
+  border: 1px solid #1f2a36;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transition: 0.25s ease;
+}
+
+/* Icon circle (HF style) */
+.category-icon {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(56,130,255,0.4), rgba(0,0,0,0.3));
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Icon size */
+.category-icon i {
+  width: 42px;
+  height: 42px;
+}
+
+/* ==============================
+   MOBILE FIX (PREVENT OVERLAP)
+   ============================== */
+@media (max-width: 480px) {
+
+  .featured-group .grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 16px !important;
+  }
+
+  .featured-cat {
+    width: 100% !important;
+    height: auto !important;
+    padding: 18px !important;
+    border-radius: 16px;
+  }
+
+  .category-icon {
+    width: 64px !important;
+    height: 64px !important;
+    border-radius: 50%;
+  }
+
+  .category-icon i {
+    width: 28px !important;
+    height: 28px !important;
+  }
+
+  .featured-cat h3 {
+    font-size: 0.9rem !important;
+    margin-top: 8px;
+  }
+}
+
+
+
     /* HF accurate category card sizing */
 .featured-cat {
   width: 240px;
