@@ -13,6 +13,7 @@
   <style>
     .scrollbar-none::-webkit-scrollbar { display: none; }
     .scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
+
     .xe-card { 
       background: rgba(31,41,55,0.45);
       border: 1px solid rgba(55,65,81,0.6);
@@ -20,18 +21,21 @@
       border-radius: 12px;
       transition: 0.12s;
     }
+
     .xe-thumb img {
       width: 64px;
       height: 64px;
       border-radius: 8px;
       object-fit: cover;
     }
+
     .skeleton {
       height: 90px;
       background: linear-gradient(90deg, rgba(55,65,81,.2), rgba(71,85,105,.15));
       animation: pulse 1.2s infinite;
       border-radius: 10px;
     }
+
     @keyframes pulse {
       0% { opacity: 1 }
       50% { opacity: .6 }
@@ -68,32 +72,33 @@
       class="w-full mb-6 p-3 rounded-xl bg-gray-800 border border-gray-700 focus:border-blue-500 outline-none"
     />
 
-   <!-- TOOLS GRID + SENTINEL -->
-<section class="mt-8">
-  <!-- Search bar already above this -->
-  
-  <!-- Where tools appear -->
-  <div id="toolsContainer"
-       class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-  </div>
+    <!-- TOOLS GRID + SENTINEL -->
+    <section class="mt-8">
 
-  <!-- Sentinel for infinite scroll -->
-  <div id="load-more-sentinel" style="height:40px;"></div>
+      <!-- Tools appear here -->
+      <div id="toolsContainer"
+           class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      </div>
 
-  <!-- Loader -->
-  <div id="explore-loader"
-       class="text-center text-gray-400 py-6 hidden">
-       Loading…
-  </div>
-</section>
-    <script src="tools.js"></script>
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    if (typeof initExplorePage === "function") initExplorePage();
-  });
-</script>
+      <!-- Sentinel for infinite scroll -->
+      <div id="load-more-sentinel" style="height:40px;"></div>
 
+      <!-- Loader -->
+      <div id="explore-loader"
+           class="text-center text-gray-400 py-6 hidden">
+           Loading…
+      </div>
 
+    </section>
+
+    <!-- INIT JS -->
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        if (typeof initExplorePage === "function") {
+          initExplorePage();
+        }
+      });
+    </script>
 
   </main>
 
