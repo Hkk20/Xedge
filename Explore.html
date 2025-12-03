@@ -68,21 +68,32 @@
       class="w-full mb-6 p-3 rounded-xl bg-gray-800 border border-gray-700 focus:border-blue-500 outline-none"
     />
 
-    <!-- TOOL GRID -->
-    <div 
-      id="toolsContainer" 
-      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
-    >
-      <!-- JS injects cards -->
-    </div>
+   <!-- TOOLS GRID + SENTINEL -->
+<section class="mt-8">
+  <!-- Search bar already above this -->
+  
+  <!-- Where tools appear -->
+  <div id="toolsContainer"
+       class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+  </div>
 
-    <!-- Loading indicator -->
-    <div id="explore-loader" class="text-center py-6 hidden">
-      <span class="text-gray-400">Loading more…</span>
-    </div>
+  <!-- Sentinel for infinite scroll -->
+  <div id="load-more-sentinel" style="height:40px;"></div>
 
-    <!-- Sentinel for infinite scroll -->
-    <div id="load-more-sentinel" class="h-1"></div>
+  <!-- Loader -->
+  <div id="explore-loader"
+       class="text-center text-gray-400 py-6 hidden">
+       Loading…
+  </div>
+</section>
+    <script src="tools.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    if (typeof initExplorePage === "function") initExplorePage();
+  });
+</script>
+
+
 
   </main>
 
