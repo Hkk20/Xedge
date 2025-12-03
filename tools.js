@@ -97,7 +97,32 @@ function renderPhase0Instant(containerEl, t) {
   const shortEl = document.getElementById("tool-short");
   const visitBtn = document.getElementById("visit-btn");
 
-  if (logoEl) logoEl.src = t.logo_url ? (t.logo_url + (t.logo_url.includes("?") ? "&" : "?") + XE.IMAGE_HINT.slice(1)) : placeholderLogo(t.name);
+  if (logoEl) let logo = (t.logo_url || "").trim();
+
+// Remove spaces
+logo = logo.replace(/\s+/g, "%20");
+
+// Add https if missing
+if (logo && !logo.startsWith("http")) {
+  logo = "https://" + logo;
+}
+
+// If empty → placeholder
+if (!logo) {
+  logo = placeholderLogo(t.name);
+} else {
+  // Append image params safely
+  const sep = logo.includes("?") ? "&" : "?";
+  logo = logo + sep + "auto=compress&format=webp&w=600";
+}
+
+logoEl.src = logo;
+
+// Hard fallback
+logoEl.onerror = () => {
+  logoEl.src = placeholderLogo(t.name);
+};
+
   if (nameEl) nameEl.textContent = t.name || "Unknown";
   if (catEl) catEl.textContent = t.category || "";
   if (shortEl) shortEl.textContent = t.short_description || "";
