@@ -30,6 +30,14 @@
   </main>
 
 <script>
+  // FIX: prevent infinite loading when returning from back button
+window.addEventListener("pageshow", (event) => {
+  if (event.persisted) {
+    // Reload normally, BFCache is causing freeze
+    window.location.reload();
+  }
+});
+
 document.addEventListener("DOMContentLoaded", async () => {
 
   const RAW_URL = "https://script.google.com/macros/s/AKfycbxaA3BcQgW7PTFlSP9j4h16-p2us5IiuaYESUUpZiy8bObezI-nMUxXAC28tR15FU_U/exec";
