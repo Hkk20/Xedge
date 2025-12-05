@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>X Edge – Category</title>
 
   <link rel="preconnect" href="https://script.google.com">
@@ -25,65 +25,53 @@
         <span class="font-bold text-lg">X Edge</span>
       </a>
 
-      <div class="flex items-center gap-6">
-        <a href="Explore.html" class="hover:text-blue-400 hidden md:inline">Explore</a>
-        <a href="Categories.html" class="hover:text-blue-400 hidden md:inline">Categories</a>
-        <a href="Join.html" class="bg-gradient-to-r from-blue-500 to-blue-600 px-4 py-2 rounded-full hidden md:inline">
+      <div class="hidden md:flex items-center gap-8">
+        <a href="Explore.html" class="hover:text-blue-400">Explore</a>
+        <a href="Categories.html" class="hover:text-blue-400">Categories</a>
+        <a href="Join.html" class="bg-gradient-to-r from-blue-500 to-blue-600 px-4 py-2 rounded-full text-sm">
           Join Beta
         </a>
       </div>
 
-      <!-- Mobile back -->
-      <a href="Categories.html" class="text-gray-300 hover:text-blue-400 md:hidden">
+      <!-- Mobile Back Button -->
+      <a href="Categories.html" class="md:hidden text-gray-300 hover:text-blue-400">
         ← Back
       </a>
-
     </div>
   </nav>
 
   <!-- MAIN CONTENT -->
   <main class="pt-24 max-w-6xl mx-auto px-6 pb-24">
     <h1 id="categoryTitle" class="text-3xl font-bold mb-6">Loading...</h1>
-
-    <section id="toolsContainer"
-             class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-    </section>
+    <section id="toolsContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></section>
   </main>
 
 
 <script>
-/* -------------------------------------------
-   FIX: Browser Back Button (BFCache freeze)
--------------------------------------------- */
+// --------------------------------------------------------------
+// FIX: Prevent browser back button infinite loading (BFCache)
+// --------------------------------------------------------------
 window.addEventListener("pageshow", (event) => {
   if (event.persisted) {
-    location.reload(); // safest & instant fix
+    window.location.reload();
   }
 });
 
 
 document.addEventListener("DOMContentLoaded", async () => {
 
-  /* -------------------------
-     CONFIG
-  -------------------------- */
-  const RAW_URL =
-  "https://script.google.com/macros/s/AKfycbxaA3BcQgW7PTFlSP9j4h16-p2us5IiuaYESUUpZiy8bObezI-nMUxXAC28tR15FU_U/exec";
+  const RAW_URL = "https://script.google.com/macros/s/AKfycbxaA3BcQgW7PTFlSP9j4h16-p2us5IiuaYESUUpZiy8bObezI-nMUxXAC28tR15FU_U/exec";
 
-  const CACHE_KEY = "xedge_tools_cache_v2";
-  const CACHE_TIME_KEY = "xedge_tools_cache_time_v2";
+  const CACHE_KEY = "xedge_tools_cache_v3";
+  const CACHE_TIME_KEY = "xedge_tools_cache_time_v3";
   const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 
-  const params = new URLSearchParams(location.search);
+  const params = new URLSearchParams(window.location.search);
   const selectedCat = params.get("cat");
 
   const titleEl = document.getElementById("categoryTitle");
   const container = document.getElementById("toolsContainer");
 
-
-  /* -------------------------
-     CATEGORY VALIDATION
-  -------------------------- */
   if (!selectedCat) {
     titleEl.textContent = "Unknown Category";
     container.innerHTML = `<p class="text-gray-400">No category selected.</p>`;
@@ -93,16 +81,16 @@ document.addEventListener("DOMContentLoaded", async () => {
   titleEl.textContent = selectedCat;
 
 
-  /* -------------------------
-     FETCH TOOLS WITH CACHE
-  -------------------------- */
+  // --------------------------------------------------------------
+  // Fetch tools with cache
+  // --------------------------------------------------------------
   async function fetchTools() {
     try {
-      const cached = localStorage.getItem(CACHE_KEY);
+      const cache = localStorage.getItem(CACHE_KEY);
       const ts = Number(localStorage.getItem(CACHE_TIME_KEY));
 
-      if (cached && ts && (Date.now() - ts < CACHE_TTL)) {
-        return JSON.parse(cached);
+      if (cache && ts && (Date.now() - ts < CACHE_TTL)) {
+        return JSON.parse(cache);
       }
 
       const res = await fetch(RAW_URL + "?v=" + Date.now(), { cache: "no-store" });
@@ -112,23 +100,23 @@ document.addEventListener("DOMContentLoaded", async () => {
       localStorage.setItem(CACHE_TIME_KEY, Date.now());
 
       return data;
+
     } catch (err) {
-      console.warn("Using fallback cache");
       return JSON.parse(localStorage.getItem(CACHE_KEY) || "[]");
     }
   }
 
 
-  /* -------------------------
-     RENDER CATEGORY
-  -------------------------- */
+  // --------------------------------------------------------------
+  // Render Tools
+  // --------------------------------------------------------------
   async function loadCategory() {
 
-    container.innerHTML =
-      `<div class="col-span-full py-6 text-center text-gray-400">Loading tools…</div>`;
+    container.innerHTML = `<p class='text-gray-400 col-span-full text-center py-6'>Loading tools…</p>`;
 
     const tools = await fetchTools();
 
+    // Normalize tool fields
     const normalized = tools.map(t => ({
       name: t.name || t.title || "Unknown",
       description: t.description || t.short_description || "",
@@ -137,33 +125,49 @@ document.addEventListener("DOMContentLoaded", async () => {
       logo_url: t.logo_url || ""
     }));
 
-    const filtered = normalized.filter(
-      t => t.category.toLowerCase() === selectedCat.toLowerCase()
-    );
+
+    // --------------------------------------------------------------
+    // Flexible Category Matching (Restores previous working behavior)
+    // --------------------------------------------------------------
+    const key = selectedCat.trim().toLowerCase().replace(/[\s_-]+/g, "");
+
+    const filtered = normalized.filter(t => {
+      const catKey = (t.category || "")
+        .trim()
+        .toLowerCase()
+        .replace(/[\s_-]+/g, "");
+      return catKey === key;
+    });
+
 
     if (!filtered.length) {
-      container.innerHTML = `<p class="text-gray-400">No tools found in this category.</p>`;
+      container.innerHTML =
+        `<p class="text-gray-400">No tools found in this category.</p>`;
       return;
     }
 
+
+    // Render tool cards
     container.innerHTML = filtered.map(tool => {
 
       let img = tool.logo_url;
       if (!img) img = "https://via.placeholder.com/200x200?text=X+Edge";
-      if (img.includes("=s")) img = img.replace(/=s\d+/, "=w200-h200");
+
+      if (img.includes("=s")) {
+        img = img.replace(/=s\d+/, "=w200-h200");
+      }
 
       return `
       <div class="bg-gray-800 border border-gray-700 p-6 rounded-xl hover:bg-gray-700 transition">
 
         <img src="${img}" loading="lazy"
              class="w-16 h-16 mx-auto mb-4 rounded object-cover"
-             alt="${tool.name}"
-             onerror="this.src='https://via.placeholder.com/200x200?text=No+Image'">
+             onerror="this.src='https://via.placeholder.com/200?text=No+Image'">
 
-        <h3 class="text-xl font-semibold text-center">${tool.name}</h3>
+        <h3 class="text-lg font-semibold text-center">${tool.name}</h3>
 
         <p class="text-gray-300 text-sm text-center mt-2">
-          ${tool.description.slice(0, 150)}
+          ${tool.description.slice(0, 160)}
         </p>
 
         <div class="text-center mt-4">
@@ -172,14 +176,15 @@ document.addEventListener("DOMContentLoaded", async () => {
             Visit Tool →
           </a>
         </div>
+
       </div>
       `;
-
     }).join("");
+
   }
 
 
-  // INITIAL LOAD
+  // Start loading
   loadCategory();
 
 });
