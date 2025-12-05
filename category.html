@@ -8,8 +8,6 @@
   <!-- Preconnect for faster Google Script fetch -->
   <link rel="preconnect" href="https://script.google.com">
 
-  
-
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
@@ -18,10 +16,11 @@
   <nav class="bg-gray-900/80 fixed w-full z-30">
     <div class="max-w-6xl mx-auto px-6 py-3 flex justify-between items-center">
       <a href="index.html" class="flex items-center gap-3">
-        <img src="logo.png" class="w-8 h-8"/>
+        <img src="logo.png" class="w-8 h-8" alt="X Edge logo"/>
         <span class="font-bold">X Edge</span>
       </a>
-      <a href="categories.html" class="text-gray-300 hover:text-blue-400">← Categories</a>
+      <!-- NOTE: exact filename with capital C to match your filesystem -->
+      <a href="Categories.html" class="text-gray-300 hover:text-blue-400">← Categories</a>
     </div>
   </nav>
 
@@ -34,17 +33,15 @@
 document.addEventListener("DOMContentLoaded", async () => {
 
   const RAW_URL = "https://script.google.com/macros/s/AKfycbxaA3BcQgW7PTFlSP9j4h16-p2us5IiuaYESUUpZiy8bObezI-nMUxXAC28tR15FU_U/exec";
-
-  // Add nocache param but support caching inside localStorage
-  const CSV_URL = RAW_URL + "?nocache=" + Date.now();
+  const CACHE_KEY = "tools_cache";
+  const CACHE_TS_KEY = "tools_cache_time";
+  const CACHE_TTL_MS = 5 * 60 * 1000; // cache expiry 5 minutes, change as needed
 
   const params = new URLSearchParams(window.location.search);
   const selectedCat = params.get("cat");
-
   const titleEl = document.getElementById("categoryTitle");
   const container = document.getElementById("toolsContainer");
 
-  // Handle missing category safely
   if (!selectedCat) {
     titleEl.textContent = "Unknown Category";
     container.innerHTML = `<p class="text-gray-400">No category selected.</p>`;
@@ -53,67 +50,147 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   titleEl.textContent = selectedCat;
 
-  // ⭐ LocalStorage cache (FAST)
-  async function getToolsCached(url) {
-    const cached = localStorage.getItem("tools_cache");
-    if (cached) {
-      console.log("⚡ Loaded tools from cache");
-      return JSON.parse(cached);
-    }
-
-    console.log("🌐 Fetching fresh tools...");
+  async function fetchJsonNoCache(url) {
     const res = await fetch(url, { cache: "no-store" });
-    const data = await res.json();
-    localStorage.setItem("tools_cache", JSON.stringify(data));
-    return data;
+    if (!res.ok) throw new Error("Network error " + res.status);
+    return await res.json();
   }
 
-  try {
-    const tools = await getToolsCached(CSV_URL);
+  function safeParseJSON(v) {
+    try { return JSON.parse(v); } catch(e) { return null; }
+  }
 
-    const filtered = tools.filter(t =>
-      t.category?.trim().toLowerCase() === selectedCat.toLowerCase()
-    );
-
-    if (!filtered.length) {
-      container.innerHTML = `<p class="text-gray-400">No tools found in this category.</p>`;
-      return;
+  async function getToolsCached(url) {
+    try {
+      const cachedRaw = localStorage.getItem(CACHE_KEY);
+      const tsRaw = localStorage.getItem(CACHE_TS_KEY);
+      if (cachedRaw && tsRaw) {
+        const ts = Number(tsRaw) || 0;
+        if (Date.now() - ts < CACHE_TTL_MS) {
+          const parsed = safeParseJSON(cachedRaw);
+          if (Array.isArray(parsed)) return parsed;
+        }
+      }
+    } catch(e) {
+      // ignore cache read errors and fetch fresh
     }
 
-    // ⭐ Render with optimized images + lazy loading
-    container.innerHTML = filtered.map(tool => {
+    // fetch fresh and populate cache with timestamp
+    const json = await fetchJsonNoCache(url);
+    try {
+      localStorage.setItem(CACHE_KEY, JSON.stringify(json));
+      localStorage.setItem(CACHE_TS_KEY, String(Date.now()));
+    } catch(e) {
+      // storage could fail on quota or privacy mode, ignore
+    }
+    return Array.isArray(json) ? json : [];
+  }
 
-      // Resize Google logos (safe)
-      let img = tool.logo_url || "";
-      if (img.includes("=s")) {
-        img = img.replace("=s", "=w200-h200");
+  // handle browsers that restore from bfcache when going back, force refresh if page was persisted
+  window.addEventListener("pageshow", (ev) => {
+    if (ev.persisted) {
+      // attempt to re-run fetching to ensure fresh UI, do not force hard reload
+      initRender().catch(()=>{});
+    }
+  });
+
+  // main render flow
+  async function initRender() {
+    container.innerHTML = `<div class="col-span-full py-6 text-center text-gray-400">Loading tools…</div>`;
+    try {
+      const url = RAW_URL + "?nocache=" + Date.now();
+      const tools = await getToolsCached(url);
+
+      // normalize fields and guard against missing shape
+      const normalized = (Array.isArray(tools) ? tools : []).map(d => ({
+        name: d.name || d.title || d.tool || "Unknown",
+        description: d.description || d.short_description || d.short || d.summary || "",
+        category: (d.category || d.cat || d.type || "").toString(),
+        link: d.link || d.url || d.website || "#",
+        logo_url: d.logo_url || d.logo || d.image || ""
+      }));
+
+      const filtered = normalized.filter(t => (t.category || "").trim().toLowerCase() === selectedCat.toLowerCase());
+
+      if (!filtered.length) {
+        container.innerHTML = `<p class="text-gray-400">No tools found in this category.</p>`;
+        return;
       }
 
-      return `
-      <div class="bg-gray-800 p-6 rounded-xl border border-gray-700 hover:bg-gray-700 transition will-change-transform">
+      // render cards
+      container.innerHTML = filtered.map(tool => {
+        // resize common Google profile images safely, fallback placeholder
+        let img = String(tool.logo_url || "");
+        if (!img || img === "null") img = "";
+        if (img.includes("=s")) {
+          img = img.replace(/=s\d+(-h\d+)?/, "=w200-h200");
+        }
+        const safeImg = img || "https://via.placeholder.com/200x200?text=X+Edge";
+        const safeName = escapeHtml(tool.name);
+        const safeDesc = escapeHtml(tool.description).slice(0, 160);
 
-        <img loading="lazy"
-             src="${img}"
-             class="w-16 h-16 mx-auto mb-4 rounded"
-             onerror="this.src='https://via.placeholder.com/100'">
+        return `
+        <div class="bg-gray-800 p-6 rounded-xl border border-gray-700 hover:bg-gray-700 transition will-change-transform">
+          <img loading="lazy"
+               src="${safeImg}"
+               class="w-16 h-16 mx-auto mb-4 rounded object-cover"
+               alt="${safeName} logo"
+               onerror="this.onerror=null;this.src='https://via.placeholder.com/200x200?text=No+Image'">
 
-        <h3 class="text-xl font-semibold text-center">${tool.name}</h3>
-        <p class="text-gray-300 text-sm text-center mt-2">${tool.description}</p>
+          <h3 class="text-xl font-semibold text-center">${safeName}</h3>
+          <p class="text-gray-300 text-sm text-center mt-2">${safeDesc}</p>
 
-        <div class="text-center mt-4">
-          <a href="${tool.link}" target="_blank"
-             class="bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded-lg text-white">
-            Visit Tool ›
-          </a>
+          <div class="text-center mt-4">
+            <a href="${escapeAttribute(tool.link)}" target="_blank" rel="noopener noreferrer"
+               class="bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded-lg text-white">
+              Visit Tool ›
+            </a>
+          </div>
         </div>
-      </div>
-      `;
-    }).join("");
+        `;
+      }).join("");
 
-  } catch (err) {
-    console.error(err);
-    container.innerHTML = `<p class="text-red-400">Failed to load tools.</p>`;
+      // lazy load images, in case more advanced behavior is needed later
+      lazyLoadImages(container);
+
+    } catch (err) {
+      console.error("Category page error", err);
+      container.innerHTML = `<p class="text-red-400">Failed to load tools, try refreshing the page</p>`;
+    }
   }
+
+  // helper: minimal escaping for innerHTML fields
+  function escapeHtml(s) {
+    return String(s || "").replace(/[&<>"']/g, function(c) {
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+    });
+  }
+  function escapeAttribute(s) {
+    return String(s || "#").replace(/"/g, "%22");
+  }
+
+  function lazyLoadImages(root) {
+    try {
+      const imgs = Array.from(root.querySelectorAll("img[loading='lazy']"));
+      if (!imgs.length) return;
+      const obs = new IntersectionObserver((entries, o) => {
+        entries.forEach(en => {
+          if (!en.isIntersecting) return;
+          const img = en.target;
+          // modern browsers already load images with loading=lazy, this is extra guard
+          if (img.dataset && img.dataset.src) img.src = img.dataset.src;
+          o.unobserve(img);
+        });
+      }, { rootMargin: "300px" });
+      imgs.forEach(i => obs.observe(i));
+    } catch(e) {
+      // ignore intersection observer failures
+    }
+  }
+
+  // initial render
+  await initRender();
+
 });
 </script>
 
