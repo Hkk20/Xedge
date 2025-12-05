@@ -1,55 +1,89 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>X Edge – Category</title>
 
-  <!-- Preconnect for faster Google Script fetch -->
   <link rel="preconnect" href="https://script.google.com">
-
   <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    .scrollbar-none::-webkit-scrollbar { display: none; }
+    .scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
 </head>
 
 <body class="bg-gray-900 text-white">
 
-  <nav class="bg-gray-900/80 fixed w-full z-30">
+  <!-- NAV -->
+  <nav class="bg-gray-900/80 backdrop-blur-sm fixed w-full z-30 border-b border-gray-800">
     <div class="max-w-6xl mx-auto px-6 py-3 flex justify-between items-center">
+
       <a href="index.html" class="flex items-center gap-3">
-        <img src="logo.png" class="w-8 h-8" alt="X Edge logo"/>
-        <span class="font-bold">X Edge</span>
+        <img src="xedge-logo.png" class="w-8 h-8" alt="X Edge Logo">
+        <span class="font-bold text-lg">X Edge</span>
       </a>
-      <!-- NOTE: exact filename with capital C to match your filesystem -->
-      <a href="Categories.html" class="text-gray-300 hover:text-blue-400">← Categories</a>
+
+      <div class="flex items-center gap-6">
+        <a href="Explore.html" class="hover:text-blue-400 hidden md:inline">Explore</a>
+        <a href="Categories.html" class="hover:text-blue-400 hidden md:inline">Categories</a>
+        <a href="Join.html" class="bg-gradient-to-r from-blue-500 to-blue-600 px-4 py-2 rounded-full hidden md:inline">
+          Join Beta
+        </a>
+      </div>
+
+      <!-- Mobile back -->
+      <a href="Categories.html" class="text-gray-300 hover:text-blue-400 md:hidden">
+        ← Back
+      </a>
+
     </div>
   </nav>
 
-  <main class="pt-20 max-w-6xl mx-auto px-6 pb-24">
-    <h1 id="categoryTitle" class="text-3xl font-semibold mb-6">Loading...</h1>
-    <section id="toolsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></section>
+  <!-- MAIN CONTENT -->
+  <main class="pt-24 max-w-6xl mx-auto px-6 pb-24">
+    <h1 id="categoryTitle" class="text-3xl font-bold mb-6">Loading...</h1>
+
+    <section id="toolsContainer"
+             class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    </section>
   </main>
 
+
 <script>
-  // FIX: prevent infinite loading when returning from back button
+/* -------------------------------------------
+   FIX: Browser Back Button (BFCache freeze)
+-------------------------------------------- */
 window.addEventListener("pageshow", (event) => {
   if (event.persisted) {
-    // Reload normally, BFCache is causing freeze
-    window.location.reload();
+    location.reload(); // safest & instant fix
   }
 });
 
+
 document.addEventListener("DOMContentLoaded", async () => {
 
-  const RAW_URL = "https://script.google.com/macros/s/AKfycbxaA3BcQgW7PTFlSP9j4h16-p2us5IiuaYESUUpZiy8bObezI-nMUxXAC28tR15FU_U/exec";
-  const CACHE_KEY = "tools_cache";
-  const CACHE_TS_KEY = "tools_cache_time";
-  const CACHE_TTL_MS = 5 * 60 * 1000; // cache expiry 5 minutes, change as needed
+  /* -------------------------
+     CONFIG
+  -------------------------- */
+  const RAW_URL =
+  "https://script.google.com/macros/s/AKfycbxaA3BcQgW7PTFlSP9j4h16-p2us5IiuaYESUUpZiy8bObezI-nMUxXAC28tR15FU_U/exec";
 
-  const params = new URLSearchParams(window.location.search);
+  const CACHE_KEY = "xedge_tools_cache_v2";
+  const CACHE_TIME_KEY = "xedge_tools_cache_time_v2";
+  const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+
+  const params = new URLSearchParams(location.search);
   const selectedCat = params.get("cat");
+
   const titleEl = document.getElementById("categoryTitle");
   const container = document.getElementById("toolsContainer");
 
+
+  /* -------------------------
+     CATEGORY VALIDATION
+  -------------------------- */
   if (!selectedCat) {
     titleEl.textContent = "Unknown Category";
     container.innerHTML = `<p class="text-gray-400">No category selected.</p>`;
@@ -58,146 +92,95 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   titleEl.textContent = selectedCat;
 
-  async function fetchJsonNoCache(url) {
-    const res = await fetch(url, { cache: "no-store" });
-    if (!res.ok) throw new Error("Network error " + res.status);
-    return await res.json();
-  }
 
-  function safeParseJSON(v) {
-    try { return JSON.parse(v); } catch(e) { return null; }
-  }
-
-  async function getToolsCached(url) {
+  /* -------------------------
+     FETCH TOOLS WITH CACHE
+  -------------------------- */
+  async function fetchTools() {
     try {
-      const cachedRaw = localStorage.getItem(CACHE_KEY);
-      const tsRaw = localStorage.getItem(CACHE_TS_KEY);
-      if (cachedRaw && tsRaw) {
-        const ts = Number(tsRaw) || 0;
-        if (Date.now() - ts < CACHE_TTL_MS) {
-          const parsed = safeParseJSON(cachedRaw);
-          if (Array.isArray(parsed)) return parsed;
-        }
-      }
-    } catch(e) {
-      // ignore cache read errors and fetch fresh
-    }
+      const cached = localStorage.getItem(CACHE_KEY);
+      const ts = Number(localStorage.getItem(CACHE_TIME_KEY));
 
-    // fetch fresh and populate cache with timestamp
-    const json = await fetchJsonNoCache(url);
-    try {
-      localStorage.setItem(CACHE_KEY, JSON.stringify(json));
-      localStorage.setItem(CACHE_TS_KEY, String(Date.now()));
-    } catch(e) {
-      // storage could fail on quota or privacy mode, ignore
-    }
-    return Array.isArray(json) ? json : [];
-  }
-
-  // handle browsers that restore from bfcache when going back, force refresh if page was persisted
-  window.addEventListener("pageshow", (ev) => {
-    if (ev.persisted) {
-      // attempt to re-run fetching to ensure fresh UI, do not force hard reload
-      initRender().catch(()=>{});
-    }
-  });
-
-  // main render flow
-  async function initRender() {
-    container.innerHTML = `<div class="col-span-full py-6 text-center text-gray-400">Loading tools…</div>`;
-    try {
-      const url = RAW_URL + "?nocache=" + Date.now();
-      const tools = await getToolsCached(url);
-
-      // normalize fields and guard against missing shape
-      const normalized = (Array.isArray(tools) ? tools : []).map(d => ({
-        name: d.name || d.title || d.tool || "Unknown",
-        description: d.description || d.short_description || d.short || d.summary || "",
-        category: (d.category || d.cat || d.type || "").toString(),
-        link: d.link || d.url || d.website || "#",
-        logo_url: d.logo_url || d.logo || d.image || ""
-      }));
-
-      const filtered = normalized.filter(t => (t.category || "").trim().toLowerCase() === selectedCat.toLowerCase());
-
-      if (!filtered.length) {
-        container.innerHTML = `<p class="text-gray-400">No tools found in this category.</p>`;
-        return;
+      if (cached && ts && (Date.now() - ts < CACHE_TTL)) {
+        return JSON.parse(cached);
       }
 
-      // render cards
-      container.innerHTML = filtered.map(tool => {
-        // resize common Google profile images safely, fallback placeholder
-        let img = String(tool.logo_url || "");
-        if (!img || img === "null") img = "";
-        if (img.includes("=s")) {
-          img = img.replace(/=s\d+(-h\d+)?/, "=w200-h200");
-        }
-        const safeImg = img || "https://via.placeholder.com/200x200?text=X+Edge";
-        const safeName = escapeHtml(tool.name);
-        const safeDesc = escapeHtml(tool.description).slice(0, 160);
+      const res = await fetch(RAW_URL + "?v=" + Date.now(), { cache: "no-store" });
+      const data = await res.json();
 
-        return `
-        <div class="bg-gray-800 p-6 rounded-xl border border-gray-700 hover:bg-gray-700 transition will-change-transform">
-          <img loading="lazy"
-               src="${safeImg}"
-               class="w-16 h-16 mx-auto mb-4 rounded object-cover"
-               alt="${safeName} logo"
-               onerror="this.onerror=null;this.src='https://via.placeholder.com/200x200?text=No+Image'">
+      localStorage.setItem(CACHE_KEY, JSON.stringify(data));
+      localStorage.setItem(CACHE_TIME_KEY, Date.now());
 
-          <h3 class="text-xl font-semibold text-center">${safeName}</h3>
-          <p class="text-gray-300 text-sm text-center mt-2">${safeDesc}</p>
-
-          <div class="text-center mt-4">
-            <a href="${escapeAttribute(tool.link)}" target="_blank" rel="noopener noreferrer"
-               class="bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded-lg text-white">
-              Visit Tool ›
-            </a>
-          </div>
-        </div>
-        `;
-      }).join("");
-
-      // lazy load images, in case more advanced behavior is needed later
-      lazyLoadImages(container);
-
+      return data;
     } catch (err) {
-      console.error("Category page error", err);
-      container.innerHTML = `<p class="text-red-400">Failed to load tools, try refreshing the page</p>`;
+      console.warn("Using fallback cache");
+      return JSON.parse(localStorage.getItem(CACHE_KEY) || "[]");
     }
   }
 
-  // helper: minimal escaping for innerHTML fields
-  function escapeHtml(s) {
-    return String(s || "").replace(/[&<>"']/g, function(c) {
-      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
-    });
-  }
-  function escapeAttribute(s) {
-    return String(s || "#").replace(/"/g, "%22");
-  }
 
-  function lazyLoadImages(root) {
-    try {
-      const imgs = Array.from(root.querySelectorAll("img[loading='lazy']"));
-      if (!imgs.length) return;
-      const obs = new IntersectionObserver((entries, o) => {
-        entries.forEach(en => {
-          if (!en.isIntersecting) return;
-          const img = en.target;
-          // modern browsers already load images with loading=lazy, this is extra guard
-          if (img.dataset && img.dataset.src) img.src = img.dataset.src;
-          o.unobserve(img);
-        });
-      }, { rootMargin: "300px" });
-      imgs.forEach(i => obs.observe(i));
-    } catch(e) {
-      // ignore intersection observer failures
+  /* -------------------------
+     RENDER CATEGORY
+  -------------------------- */
+  async function loadCategory() {
+
+    container.innerHTML =
+      `<div class="col-span-full py-6 text-center text-gray-400">Loading tools…</div>`;
+
+    const tools = await fetchTools();
+
+    const normalized = tools.map(t => ({
+      name: t.name || t.title || "Unknown",
+      description: t.description || t.short_description || "",
+      category: t.category || "",
+      link: t.link || "#",
+      logo_url: t.logo_url || ""
+    }));
+
+    const filtered = normalized.filter(
+      t => t.category.toLowerCase() === selectedCat.toLowerCase()
+    );
+
+    if (!filtered.length) {
+      container.innerHTML = `<p class="text-gray-400">No tools found in this category.</p>`;
+      return;
     }
+
+    container.innerHTML = filtered.map(tool => {
+
+      let img = tool.logo_url;
+      if (!img) img = "https://via.placeholder.com/200x200?text=X+Edge";
+      if (img.includes("=s")) img = img.replace(/=s\d+/, "=w200-h200");
+
+      return `
+      <div class="bg-gray-800 border border-gray-700 p-6 rounded-xl hover:bg-gray-700 transition">
+
+        <img src="${img}" loading="lazy"
+             class="w-16 h-16 mx-auto mb-4 rounded object-cover"
+             alt="${tool.name}"
+             onerror="this.src='https://via.placeholder.com/200x200?text=No+Image'">
+
+        <h3 class="text-xl font-semibold text-center">${tool.name}</h3>
+
+        <p class="text-gray-300 text-sm text-center mt-2">
+          ${tool.description.slice(0, 150)}
+        </p>
+
+        <div class="text-center mt-4">
+          <a href="${tool.link}" target="_blank"
+             class="bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded-lg">
+            Visit Tool →
+          </a>
+        </div>
+      </div>
+      `;
+
+    }).join("");
   }
 
-  // initial render
-  await initRender();
+
+  // INITIAL LOAD
+  loadCategory();
 
 });
 </script>
