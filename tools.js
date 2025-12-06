@@ -1,7 +1,5 @@
-/* tools.js — Robust, mobile-optimized replacement for tool.html hydration
-   - Works with the provided tool.html (expects ids: loading, tool-container, tool-logo,
-     tool-name, tool-cat, tool-short, visit-btn, xe-phase1, xe-phase2)
-   - Safe caching, graceful fallbacks, lazy loading, low-priority heavy work
+/* tools.js — Optimized + Clean UI version for tool.html
+   Fully compatible with your sheet & layout
 */
 
 /* ======= Config ======= */
@@ -16,24 +14,43 @@ const XE = {
 };
 
 /* ======= Polyfills & helpers ======= */
-window.requestIdleCallback = window.requestIdleCallback || function (cb) {
-  return setTimeout(() => cb({ didTimeout: false, timeRemaining: () => 50 }), 200);
-};
+window.requestIdleCallback =
+  window.requestIdleCallback ||
+  function (cb) {
+    return setTimeout(() => cb({ didTimeout: false, timeRemaining: () => 50 }), 200);
+  };
 
-function normalizeKey(s) { return String(s || "").trim().toLowerCase(); }
-function safeSet(key, value) {
-  try { sessionStorage.setItem(key, JSON.stringify(value)); }
-  catch (e) { window._XE_CACHE = window._XE_CACHE || {}; window._XE_CACHE[key] = value; }
+function normalizeKey(s) {
+  return String(s || "").trim().toLowerCase();
 }
+
+function safeSet(key, value) {
+  try {
+    sessionStorage.setItem(key, JSON.stringify(value));
+  } catch (e) {
+    window._XE_CACHE = window._XE_CACHE || {};
+    window._XE_CACHE[key] = value;
+  }
+}
+
 function safeGet(key) {
-  try { const v = sessionStorage.getItem(key); if (v) return JSON.parse(v); }
-  catch (e) {}
+  try {
+    const v = sessionStorage.getItem(key);
+    if (v) return JSON.parse(v);
+  } catch (e) {}
   return (window._XE_CACHE && window._XE_CACHE[key]) || null;
 }
-function escapeHtml(s){ 
-  return String(s||"").replace(/[&<>"']/g, c => ({
-    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
-  }[c]));
+
+function escapeHtml(s) {
+  return String(s || "").replace(/[&<>"']/g, (c) => {
+    return {
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;"
+    }[c];
+  });
 }
 
 /* ======= Fetch & normalize tools ======= */
@@ -50,7 +67,7 @@ async function getTools(force = false) {
     const data = await res.json();
     if (!Array.isArray(data)) throw new Error("Invalid sheet format");
 
-    const normalized = data.map(d => ({
+    const normalized = data.map((d) => ({
       name: d.name || d.title || "Unknown",
       short_description: d.short_description || d.short || "",
       long_description: d.long_description || d.description || "",
@@ -68,7 +85,6 @@ async function getTools(force = false) {
 
     safeSet(XE.CACHE_KEY, normalized);
     return normalized;
-
   } catch (err) {
     console.warn("getTools error", err);
     const fallback = safeGet(XE.CACHE_KEY);
@@ -81,136 +97,141 @@ function findToolByName(tools, rawName) {
   const key = normalizeKey(rawName || "");
   if (!key) return null;
 
-  let t = tools.find(x => normalizeKey(x.name) === key);
+  let t = tools.find((x) => normalizeKey(x.name) === key);
   if (t) return t;
 
-  t = tools.find(x => normalizeKey(x.name).includes(key));
+  t = tools.find((x) => normalizeKey(x.name).includes(key));
   if (t) return t;
 
   const noSpace = key.replace(/\s+/g, "");
-  t = tools.find(x => normalizeKey(x.name).replace(/\s+/g, "") === noSpace);
+  t = tools.find((x) => normalizeKey(x.name).replace(/\s+/g, "") === noSpace);
   if (t) return t;
 
   const cleaned = key.replace(/[^a-z0-9]/g, "");
-  return tools.find(x => normalizeKey(x.name).replace(/[^a-z0-9]/g, "") === cleaned) || null;
+  return (
+    tools.find((x) => normalizeKey(x.name).replace(/[^a-z0-9]/g, "") === cleaned) ||
+    null
+  );
 }
 
-/* ======= Placeholder helper images ======= */
+/* ======= placeholder logos ======= */
 function placeholderLogo(name) {
   const tn = encodeURIComponent((name || "Tool").slice(0, 20).replace(/\s+/g, "+"));
   return `https://dummyimage.com/320x320/${XE.PLACEHOLDER_BG}/ffffff&text=${tn}`;
 }
 
-/* ======= Phase renderers ======= */
-function renderPhase0Instant(containerEl, t) {
-  const logoEl = document.getElementById("tool-logo");
-  const nameEl = document.getElementById("tool-name");
-  const catEl = document.getElementById("tool-cat");
-  const shortEl = document.getElementById("tool-short");
-  const visitBtn = document.getElementById("visit-btn");
+/* ------- Screenshot List Parser (Powerful, accepts ANY format) ------- */
+function parseScreenshotList(s) {
+  if (!s) return [];
 
-  if (logoEl) {
-    const hasLogo = t.logo_url && t.logo_url.startsWith("http");
-    logoEl.src = hasLogo
-      ? (t.logo_url + (t.logo_url.includes("?") ? "&" : "?") + XE.IMAGE_HINT.slice(1))
-      : placeholderLogo(t.name);
-  }
-
-  if (nameEl) nameEl.textContent = t.name || "Unknown";
-  if (catEl) catEl.textContent = t.category || "";
-  if (shortEl) shortEl.textContent = t.short_description || "";
-
-  if (visitBtn) {
-    visitBtn.href = t.link || "#";
-    visitBtn.setAttribute("rel", "noopener noreferrer");
-  }
+  return String(s)
+    .replace(/\n/g, ",") // newline support
+    .replace(/\|/g, ",") // pipe support
+    .split(/[,;\s]+/) // commas, spaces, semicolons
+    .map((x) => x.trim())
+    .filter((x) => x.startsWith("http"));
 }
 
+/* ======= PHASE 0 - instant render ======= */
+function renderPhase0Instant(containerEl, t) {
+  document.getElementById("tool-logo").src =
+    t.logo_url && t.logo_url.startsWith("http")
+      ? t.logo_url
+      : placeholderLogo(t.name);
+
+  document.getElementById("tool-name").textContent = t.name || "Unknown";
+  document.getElementById("tool-cat").textContent = t.category || "";
+  document.getElementById("tool-short").textContent = t.short_description || "";
+
+  const btn = document.getElementById("visit-btn");
+  btn.href = t.link || "#";
+}
+
+/* ======= PHASE 1 - long description + pricing ======= */
 function renderPhase1(containerEl, merged) {
-  const phase1 = document.getElementById("xe-phase1");
-  if (!phase1) return;
+  const box = document.getElementById("xe-phase1");
+  if (!box) return;
 
   const desc = merged.long_description || "";
-  const pricing = merged.pricing || {};
+  const p = merged.pricing;
 
-  const pricingHtml = (pricing.free || pricing.plus || pricing.team) ? `
-    <div style="background:rgba(55,65,81,0.35);padding:12px;border-radius:10px;margin-top:8px">
-      ${pricing.free ? `<div><strong>Free:</strong> ${escapeHtml(pricing.free)}</div>` : ""}
-      ${pricing.plus ? `<div><strong>Plus:</strong> ${escapeHtml(pricing.plus)}</div>` : ""}
-      ${pricing.team ? `<div><strong>Team:</strong> ${escapeHtml(pricing.team)}</div>` : ""}
-    </div>` : "";
+  const pricingHTML =
+    p.free || p.plus || p.team
+      ? `
+    <div class="mt-4 bg-gray-800/40 border border-gray-700 p-4 rounded-lg">
+      ${p.free ? `<div><strong>Free:</strong> ${escapeHtml(p.free)}</div>` : ""}
+      ${p.plus ? `<div><strong>Plus:</strong> ${escapeHtml(p.plus)}</div>` : ""}
+      ${p.team ? `<div><strong>Team:</strong> ${escapeHtml(p.team)}</div>` : ""}
+    </div>`
+      : "";
 
-  phase1.innerHTML =
-    `<div style="color:#d1d5db;line-height:1.65">${escapeHtml(desc)}</div>${pricingHtml}`;
+  box.innerHTML = `
+    <p class="text-gray-300 leading-relaxed">${escapeHtml(desc)}</p>
+    ${pricingHTML}
+  `;
 }
 
-function lazyLoadImgs(root) {
-  const imgs = Array.from(root.querySelectorAll("img[data-src]"));
-  if (!imgs.length) return;
-
-  const obs = new IntersectionObserver((entries, o) => {
-    entries.forEach(en => {
-      if (!en.isIntersecting) return;
-      const img = en.target;
-      img.src = img.dataset.src;
-      img.removeAttribute("data-src");
-      o.unobserve(img);
-    });
-  }, { rootMargin: "300px" });
-
-  imgs.forEach(i => obs.observe(i));
-}
-
+/* ======= PHASE 2 - screenshots + pros/cons ======= */
 function renderPhase2(containerEl, tool, merged, toolsList) {
-  const phase2 = document.getElementById("xe-phase2");
-  if (!phase2) return;
+  const box = document.getElementById("xe-phase2");
+  if (!box) return;
 
-  const shots = merged.screenshots.length
+  /* ---- screenshots ---- */
+  let shots = merged.screenshots.length
     ? merged.screenshots.slice(0, 2)
     : [
-        `https://dummyimage.com/900x500/${XE.PLACEHOLDER_BG}/ffffff&text=${encodeURIComponent(tool.name)}+Preview+1`,
-        `https://dummyimage.com/900x500/${XE.PLACEHOLDER_BG}/ffffff&text=${encodeURIComponent(tool.name)}+Preview+2`
+        `https://dummyimage.com/900x500/${XE.PLACEHOLDER_BG}/fff&text=${encodeURIComponent(
+          tool.name
+        )}+Preview+1`,
+        `https://dummyimage.com/900x500/${XE.PLACEHOLDER_BG}/fff&text=${encodeURIComponent(
+          tool.name
+        )}+Preview+2`
       ];
 
-  const prosHtml = merged.pros.length
-    ? `<div><h4 style="font-weight:600">Pros</h4><ul>${merged.pros.map(p => `<li>✔ ${escapeHtml(p)}</li>`).join("")}</ul></div>`
-    : "";
-
-  const consHtml = merged.cons.length
-    ? `<div><h4 style="font-weight:600">Cons</h4><ul>${merged.cons.map(c => `<li>✖ ${escapeHtml(c)}</li>`).join("")}</ul></div>`
-    : "";
-
-  const related = toolsList
-    .filter(t => normalizeKey(t.category) === normalizeKey(tool.category) && normalizeKey(t.name) !== normalizeKey(tool.name))
-    .slice(0, 4);
-
-  const relatedHtml = related.length
-    ? `<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-         ${related.map(r => `
-           <a href="tool.html?tool=${encodeURIComponent(r.name)}" style="display:block;padding:8px;background:rgba(55,65,81,0.35);border-radius:8px">
-            <div style="display:flex;align-items:center;gap:8px">
-              <img data-src="${r.logo_url || placeholderLogo(r.name)}" style="width:44px;height:44px;border-radius:8px;object-fit:cover" />
-              <div>
-                <div style="font-weight:600">${escapeHtml(r.name)}</div>
-                <div style="color:#9CA3AF;font-size:12px">${escapeHtml(r.category)}</div>
-              </div>
-            </div>
-           </a>`).join("")}
-       </div>`
-    : `<div style="color:#9CA3AF">No related tools.</div>`;
-
-  const shotsHtml = `
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
-      ${shots.map(s => `<div style="overflow:hidden;border-radius:10px"><img data-src="${s}" style="width:100%;height:140px;object-fit:cover" /></div>`).join("")}
+  const screenshotsHTML = `
+    <div class="grid grid-cols-2 gap-4 mb-8">
+      ${shots
+        .map(
+          (s) => `
+        <div class="overflow-hidden rounded-xl border border-gray-700 bg-gray-900 h-56">
+          <img data-src="${s}" class="w-full h-full object-cover" />
+        </div>`
+        )
+        .join("")}
     </div>
   `;
 
-  phase2.innerHTML =
-    shotsHtml +
-    `<div style="margin-bottom:12px">${prosHtml}${consHtml}</div>` +
-    `<h3 style="font-weight:700;margin-bottom:8px">Related Tools</h3>${relatedHtml}`;
+  /* ---- pros ---- */
+  const prosHTML = `
+    <div class="flex-1 bg-gray-900 border border-gray-700 p-5 rounded-xl">
+      <h3 class="text-xl font-semibold mb-3">Pros</h3>
+      <ul class="space-y-2">
+        ${merged.pros.map((p) => `<li>✔ ${escapeHtml(p)}</li>`).join("")}
+      </ul>
+    </div>
+  `;
 
-  lazyLoadImgs(phase2);
+  /* ---- cons ---- */
+  const consHTML = `
+    <div class="flex-1 bg-gray-900 border border-gray-700 p-5 rounded-xl">
+      <h3 class="text-xl font-semibold mb-3">Cons</h3>
+      <ul class="space-y-2">
+        ${merged.cons.map((c) => `<li>✖ ${escapeHtml(c)}</li>`).join("")}
+      </ul>
+    </div>
+  `;
+
+  /* ---- render ---- */
+  box.innerHTML = `
+    ${screenshotsHTML}
+
+    <div class="flex gap-6 mb-6">
+      ${prosHTML}
+      ${consHTML}
+    </div>
+  `;
+
+  lazyLoadImgs(box);
 }
 
 /* ======= Main hydration ======= */
@@ -223,7 +244,7 @@ async function renderToolDetailsPageHydrate() {
   const toolParam = params.get("tool") || params.get("name") || "";
   const key = normalizeKey(decodeURIComponent(toolParam));
 
-  if (loadingEl) loadingEl.classList.remove("hidden");
+  loadingEl.classList.remove("hidden");
   containerEl.classList.add("hidden");
 
   let selected = safeGet(XE.SELECTED_KEY);
@@ -242,12 +263,11 @@ async function renderToolDetailsPageHydrate() {
     return;
   }
 
-  const parseList = s => (s || "").split(/[,;]\s*/).map(x => x.trim()).filter(Boolean);
   const merged = {
     long_description: tool.long_description || "",
-    pros: parseList(tool.pros_raw),
-    cons: parseList(tool.cons_raw),
-    screenshots: parseList(tool.screenshots_raw),
+    pros: tool.pros_raw.split(/[,;\n]/).map((x) => x.trim()).filter(Boolean),
+    cons: tool.cons_raw.split(/[,;\n]/).map((x) => x.trim()).filter(Boolean),
+    screenshots: parseScreenshotList(tool.screenshots_raw),
     pricing: {
       free: tool.pricing_free,
       plus: tool.pricing_plus,
@@ -255,30 +275,50 @@ async function renderToolDetailsPageHydrate() {
     }
   };
 
+  /* ---- phase 0 ---- */
   renderPhase0Instant(containerEl, tool);
 
+  /* ---- phase 1 ---- */
   requestIdleCallback(() => renderPhase1(containerEl, merged));
   setTimeout(() => renderPhase1(containerEl, merged), XE.PHASE1_TIMEOUT);
 
+  /* ---- phase 2 ---- */
   let done = false;
-  const doPhase2 = () => { if (!done) { done = true; renderPhase2(containerEl, tool, merged, tools); } };
+  const doPhase2 = () => {
+    if (!done) {
+      done = true;
+      renderPhase2(containerEl, tool, merged, tools);
+    }
+  };
 
   const ph2 = document.getElementById("xe-phase2");
   if (ph2) {
-    const obs = new IntersectionObserver((entries, o) => {
-      entries.forEach(e => { if (e.isIntersecting) { doPhase2(); o.disconnect(); } });
-    }, { rootMargin: "400px" });
+    const obs = new IntersectionObserver(
+      (entries, o) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            doPhase2();
+            o.disconnect();
+          }
+        });
+      },
+      { rootMargin: "400px" }
+    );
     obs.observe(ph2);
   }
 
   requestIdleCallback(doPhase2);
   setTimeout(doPhase2, XE.PHASE2_IDLE_MS);
 
+  /* ---- reveal ---- */
   setTimeout(() => loadingEl.classList.add("hidden"), 140);
+  containerEl.classList.remove("hidden");
 }
 
 /* ======= Export ======= */
 window.getTools = getTools;
 window.findToolByName = findToolByName;
 window.renderToolDetailsPageHydrate = renderToolDetailsPageHydrate;
-window.storeSelectedTool = function(t){ safeSet(XE.SELECTED_KEY, t); };
+window.storeSelectedTool = function (t) {
+  safeSet(XE.SELECTED_KEY, t);
+};
