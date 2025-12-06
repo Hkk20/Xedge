@@ -171,37 +171,32 @@ function renderPhase1(containerEl, merged) {
   `;
 }
 
-/* ======= PHASE 2 - screenshots + pros/cons ======= */
 function renderPhase2(containerEl, tool, merged, toolsList) {
   const box = document.getElementById("xe-phase2");
   if (!box) return;
 
-  /* ---- screenshots ---- */
+  /* ---- screenshots (safe) ---- */
   let shots = merged.screenshots.length
     ? merged.screenshots.slice(0, 2)
     : [
-        `https://dummyimage.com/900x500/${XE.PLACEHOLDER_BG}/fff&text=${encodeURIComponent(
-          tool.name
-        )}+Preview+1`,
-        `https://dummyimage.com/900x500/${XE.PLACEHOLDER_BG}/fff&text=${encodeURIComponent(
-          tool.name
-        )}+Preview+2`
+        `https://dummyimage.com/900x500/${XE.PLACEHOLDER_BG}/fff&text=${encodeURIComponent(tool.name)}+Preview+1`,
+        `https://dummyimage.com/900x500/${XE.PLACEHOLDER_BG}/fff&text=${encodeURIComponent(tool.name)}+Preview+2`
       ];
 
   const screenshotsHTML = `
-    <div class="grid grid-cols-2 gap-4 mb-8">
+    <div class="grid grid-cols-2 gap-4 mb-6">
       ${shots
         .map(
           (s) => `
         <div class="overflow-hidden rounded-xl border border-gray-700 bg-gray-900 h-56">
-          <img data-src="${s}" class="w-full h-full object-cover" />
+          <img data-src="${s}" class="w-full h-full object-cover" alt="${escapeHtml(tool.name)} screenshot" />
         </div>`
         )
         .join("")}
     </div>
   `;
 
-  /* ---- pros ---- */
+  /* ---- pros / cons ---- */
   const prosHTML = `
     <div class="flex-1 bg-gray-900 border border-gray-700 p-5 rounded-xl">
       <h3 class="text-xl font-semibold mb-3">Pros</h3>
@@ -211,7 +206,6 @@ function renderPhase2(containerEl, tool, merged, toolsList) {
     </div>
   `;
 
-  /* ---- cons ---- */
   const consHTML = `
     <div class="flex-1 bg-gray-900 border border-gray-700 p-5 rounded-xl">
       <h3 class="text-xl font-semibold mb-3">Cons</h3>
@@ -221,18 +215,50 @@ function renderPhase2(containerEl, tool, merged, toolsList) {
     </div>
   `;
 
-  /* ---- render ---- */
+  /* ---- related tools (up to 4) ---- */
+  const related = (Array.isArray(toolsList) ? toolsList : [])
+    .filter(t => normalizeKey(t.category) === normalizeKey(tool.category) && normalizeKey(t.name) !== normalizeKey(tool.name))
+    .slice(0, 4);
+
+  const relatedHtml = related.length
+    ? `<div>
+         <h3 class="text-xl font-semibold mb-3">Related Tools</h3>
+         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+           ${related.map(r => {
+             const logo = r.logo_url && r.logo_url.startsWith('http') ? r.logo_url : placeholderLogo(r.name);
+             const safeName = escapeHtml(r.name);
+             const safeCat = escapeHtml(r.category || "");
+             const href = `tool.html?tool=${encodeURIComponent(r.name)}`;
+             return `
+               <a href="${href}" class="flex items-center gap-3 p-3 bg-gray-800/40 border border-gray-700 rounded-lg hover:bg-gray-800 transition" >
+                 <img data-src="${logo}" alt="${safeName} logo" class="w-12 h-12 rounded-md object-cover" />
+                 <div class="flex-1">
+                   <div class="font-medium">${safeName}</div>
+                   <div class="text-sm text-gray-400">${safeCat}</div>
+                 </div>
+                 <div class="text-gray-400">→</div>
+               </a>
+             `;
+           }).join("")}
+         </div>
+       </div>`
+    : `<div class="text-gray-400">No related tools.</div>`;
+
+  /* ---- final render ---- */
   box.innerHTML = `
     ${screenshotsHTML}
-
     <div class="flex gap-6 mb-6">
       ${prosHTML}
       ${consHTML}
     </div>
+    ${relatedHtml}
   `;
 
   lazyLoadImgs(box);
 }
+
+
+
 
 /* ======= Main hydration ======= */
 async function renderToolDetailsPageHydrate() {
