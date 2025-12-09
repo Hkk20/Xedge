@@ -1,9 +1,10 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js"></script>
+ <!-- Firebase v8 (works with script tag, non-modular) -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -86,17 +87,19 @@
       feather.replace();
     });
   </script>
-  <script>
+ <script>
   const firebaseConfig = {
     apiKey: "AIzaSyBo9cfhTj2W7ikpdrqz6wAtSBisBo78OAc",
     authDomain: "xedge-1da3a.firebaseapp.com",
     projectId: "xedge-1da3a",
-    storageBucket: "xedge-1da3a.firebasestorage.app",
+    storageBucket: "xedge-1da3a.appspot.com",
     messagingSenderId: "209657807080",
-    appId: "1:209657807080:web:80180596d966b4667d895d"
+    appId: "1:209657807080:web:80180596d966b4667d895d",
+    measurementId: "G-SXW16HCZB8"
   };
 
   firebase.initializeApp(firebaseConfig);
+
   const auth = firebase.auth();
   const db = firebase.firestore();
 </script>
