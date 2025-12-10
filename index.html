@@ -778,6 +778,39 @@ feather.replace();
   const auth = firebase.auth();
   const db = firebase.firestore();
 </script>
+       <script>
+  var provider = new firebase.auth.GoogleAuthProvider();
+
+  function signInWithGoogle() {
+    auth.signInWithPopup(provider)
+      .then(result => {
+        const user = result.user;
+        console.log("Logged in:", user.displayName, user.email, user.photoURL);
+
+        alert("Welcome " + user.displayName);
+      })
+      .catch(err => {
+        console.error(err);
+        alert("Login failed");
+      });
+  }
+
+  function logoutUser() {
+    auth.signOut().then(() => {
+      alert("Logged out");
+    });
+  }
+
+  // Detect login state
+  auth.onAuthStateChanged(user => {
+    if (user) {
+      console.log("User logged in:", user.email);
+    } else {
+      console.log("User logged out");
+    }
+  });
+</script>
+
 
 
 </body>
