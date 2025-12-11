@@ -250,8 +250,14 @@
           </div>
 
           <div class="flex items-center gap-3">
-            <a class="hidden md:inline-block bg-gradient-to-r from-blue-500 to-blue-600 px-4 py-2 rounded-full text-sm" href="Join.html">Join Beta</a>
+           
            <!-- NAV PROFILE (hidden before login) -->
+<!-- Join Beta Button -->
+<a class="hidden md:inline-block bg-gradient-to-r from-blue-500 to-blue-600 px-4 py-2 rounded-full text-sm">
+  Join Beta
+</a>
+
+<!-- Profile UI (hidden until login) -->
 <div id="nav-profile" class="hidden relative ml-4">
   <img 
     id="nav-user-photo"
@@ -259,8 +265,9 @@
   >
 
   <div id="nav-user-menu" 
-       class="hidden absolute right-0 mt-2 bg-gray-800 border border-gray-700 rounded-xl p-3 w-40">
+       class="hidden absolute right-0 mt-2 bg-gray-800 border border-gray-700 rounded-xl p-3 w-40 shadow-xl">
     <p id="nav-user-name" class="text-white font-semibold mb-2"></p>
+
     <button 
       onclick="logoutUser()" 
       class="w-full bg-red-600/20 hover:bg-red-600/30 text-red-400 p-2 rounded-lg">
@@ -268,6 +275,7 @@
     </button>
   </div>
 </div>
+
 
             <!-- Mobile hamburger -->
             <button id="mobile-menu-toggle" aria-label="Open menu" class="md:hidden p-2">
@@ -333,8 +341,12 @@
           Explore Now
         </a>
 
-   <button id="hero-signup-btn" onclick="signInWithGoogle()">
-   Sign Up
+  <button 
+  id="hero-signup-btn"
+  onclick="signInWithGoogle()"
+  class="border border-blue-500 px-8 py-3 rounded-full font-semibold text-lg text-blue-300 hover:bg-blue-500/10 transition"
+>
+  Sign In
 </button>
 
 
