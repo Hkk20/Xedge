@@ -777,8 +777,10 @@ feather.replace();
       if(e.key === 'Tab') document.body.classList.add('user-is-tabbing');
     });
   </script>
-      <script>
-
+     <script>
+  // -------------------------------
+  // Firebase Init
+  // -------------------------------
   const firebaseConfig = {
     apiKey: "AIzaSyBo9cfhTj2W7ikpdrqz6wAtSBisBo78OAc",
     authDomain: "xedge-1da3a.firebaseapp.com",
@@ -792,38 +794,71 @@ feather.replace();
   firebase.initializeApp(firebaseConfig);
 
   const auth = firebase.auth();
+  const db = firebase.firestore();
   const provider = new firebase.auth.GoogleAuthProvider();
 
+
+  // -------------------------------
+  // Google Login
+  // -------------------------------
   function signInWithGoogle() {
     auth.signInWithPopup(provider)
-      .catch((err) => alert("Login failed"));
+      .then(result => {
+        const user = result.user;
+
+        // Save / update firestore user document
+        db.collection("users").doc(user.uid).set({
+          name: user.displayName,
+          email: user.email,
+          photoURL: user.photoURL,
+          uid: user.uid,
+          lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge: true });
+
+        console.log("User logged in:", user.email);
+      })
+      .catch((err) => {
+        console.error(err);
+        alert("Login failed.");
+      });
   }
 
+
+  // -------------------------------
+  // Logout
+  // -------------------------------
   function logoutUser() {
-    auth.signOut();
+    auth.signOut().then(() => {
+      console.log("User logged out");
+    });
   }
 
+
+  // -------------------------------
+  // UI Rendering
+  // -------------------------------
   auth.onAuthStateChanged((user) => {
     const nav = document.getElementById("auth-area");
     const heroBtn = document.getElementById("hero-signin-btn");
 
-    if (!nav) return;
+    if (!nav) return; // if element doesn't exist, skip
 
     if (user) {
       // Hide hero button
       if (heroBtn) heroBtn.classList.add("hidden");
 
-      // Show profile UI
+      // Show profile on navbar
       nav.innerHTML = `
         <div class="relative group">
           <img 
-            src="${user.photoURL}" 
+            src="${user.photoURL}"
             class="w-10 h-10 rounded-full border border-gray-700 cursor-pointer"
           />
 
           <div class="absolute right-0 mt-2 bg-gray-800 border border-gray-700 rounded-xl 
                       p-3 w-40 opacity-0 pointer-events-none group-hover:opacity-100 
-                      group-hover:pointer-events-auto transition-all duration-200">
+                      group-hover:pointer-events-auto transition-all duration-200 shadow-lg">
 
             <p class="text-white font-semibold">${user.displayName}</p>
             <p class="text-gray-400 text-xs mb-3">${user.email}</p>
@@ -836,10 +871,12 @@ feather.replace();
           </div>
         </div>
       `;
-    } else {
-      // User logged out
+    } 
+    else {
+      // Show hero button again
       if (heroBtn) heroBtn.classList.remove("hidden");
 
+      // Show Sign In on navbar
       nav.innerHTML = `
         <button 
           onclick="signInWithGoogle()"
@@ -851,6 +888,7 @@ feather.replace();
     }
   });
 </script>
+
 
 
 
