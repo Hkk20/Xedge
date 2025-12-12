@@ -40,6 +40,23 @@
 
       <div id="auth-area"></div>
     </div>
+    <button 
+  onclick="goBack()"
+  class="px-4 py-2 mb-4 bg-gray-800 border border-gray-700 rounded-lg 
+         text-gray-300 hover:bg-gray-700 hover:text-white transition flex items-center gap-2">
+  ← Back
+</button>
+
+<script>
+function goBack() {
+  if (document.referrer) {
+    history.back();
+  } else {
+    window.location.href = "Categories.html";
+  }
+}
+</script>
+
 
     <!-- Mobile Back -->
     <a href="Categories.html" class="md:hidden text-gray-300 hover:text-blue-400">
