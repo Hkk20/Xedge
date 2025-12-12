@@ -5,13 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>X Edge – Category</title>
 
-  <link rel="preconnect" href="https://script.google.com">
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Firebase Core -->
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
   <style>
     .scrollbar-none::-webkit-scrollbar { display: none; }
@@ -21,59 +20,55 @@
 
 <body class="bg-gray-900 text-white">
 
-  <!-- NAV -->
-  <nav class="bg-gray-900/80 backdrop-blur-sm fixed w-full z-30 border-b border-gray-800">
-    <div class="max-w-6xl mx-auto px-6 py-3 flex justify-between items-center">
+<!-- ================= NAVBAR ================= -->
+<nav class="bg-gray-900/80 backdrop-blur-sm fixed w-full z-30 border-b border-gray-800">
+  <div class="max-w-6xl mx-auto px-6 py-3 flex justify-between items-center">
 
-      <a href="index.html" class="flex items-center gap-3">
-        <img src="xedge-logo.png" class="w-8 h-8" alt="X Edge Logo">
-        <span class="font-bold text-lg">X Edge</span>
+    <a href="index.html" class="flex items-center gap-3">
+      <img src="xedge-logo.png" class="w-8 h-8" />
+      <span class="font-bold text-lg">X Edge</span>
+    </a>
+
+    <div class="hidden md:flex items-center gap-6">
+      <a href="Explore.html" class="hover:text-blue-400">Explore</a>
+      <a href="Categories.html" class="hover:text-blue-400">Categories</a>
+
+      <a href="Join.html"
+         class="bg-gradient-to-r from-blue-500 to-blue-600 px-4 py-2 rounded-full text-sm">
+        Join Beta
       </a>
 
-      <div class="hidden md:flex items-center gap-8">
-        <a href="Explore.html" class="hover:text-blue-400">Explore</a>
-        <a href="Categories.html" class="hover:text-blue-400">Categories</a>
-        <a href="Join.html" class="bg-gradient-to-r from-blue-500 to-blue-600 px-4 py-2 rounded-full text-sm">
-          Join Beta
-        </a>
-        <div id="auth-area"></div>
-      </div>
-
-      <!-- Mobile Back Button -->
-      <a href="Categories.html" class="md:hidden text-gray-300 hover:text-blue-400">
-        ← Back
-      </a>
+      <div id="auth-area"></div>
     </div>
-  </nav>
 
-  <!-- MAIN CONTENT -->
-  <main class="pt-24 max-w-6xl mx-auto px-6 pb-24">
-    <h1 id="categoryTitle" class="text-3xl font-bold mb-6">Loading...</h1>
-    <section id="toolsContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></section>
-  </main>
+    <!-- Mobile Back -->
+    <a href="Categories.html" class="md:hidden text-gray-300 hover:text-blue-400">
+      ← Back
+    </a>
+  </div>
+</nav>
+
+<div class="pt-24"></div>
+
+<!-- MAIN CONTENT -->
+<main class="max-w-6xl mx-auto px-6 pb-24">
+  <h1 id="categoryTitle" class="text-3xl font-bold mb-6">Loading...</h1>
+  <section id="toolsContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></section>
+</main>
 
 
 <script>
-// --------------------------------------------------------------
-// FIX: Prevent browser back button infinite loading (BFCache)
-// --------------------------------------------------------------
+// Prevent infinite loading on back navigation
 window.addEventListener("pageshow", (event) => {
-  if (event.persisted) {
-    window.location.reload();
-  }
+  if (event.persisted) window.location.reload();
 });
-
 
 document.addEventListener("DOMContentLoaded", async () => {
 
   const RAW_URL = "https://script.google.com/macros/s/AKfycbxaA3BcQgW7PTFlSP9j4h16-p2us5IiuaYESUUpZiy8bObezI-nMUxXAC28tR15FU_U/exec";
 
-  const CACHE_KEY = "xedge_tools_cache_v3";
-  const CACHE_TIME_KEY = "xedge_tools_cache_time_v3";
-  const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
-
   const params = new URLSearchParams(window.location.search);
-  const selectedCat = params.get("cat");
+  const selectedCat = params.get("cat")?.trim();
 
   const titleEl = document.getElementById("categoryTitle");
   const container = document.getElementById("toolsContainer");
@@ -86,88 +81,41 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   titleEl.textContent = selectedCat;
 
-
-  // --------------------------------------------------------------
-  // Fetch tools with cache
-  // --------------------------------------------------------------
   async function fetchTools() {
-    try {
-      const cache = localStorage.getItem(CACHE_KEY);
-      const ts = Number(localStorage.getItem(CACHE_TIME_KEY));
-
-      if (cache && ts && (Date.now() - ts < CACHE_TTL)) {
-        return JSON.parse(cache);
-      }
-
-      const res = await fetch(RAW_URL + "?v=" + Date.now(), { cache: "no-store" });
-      const data = await res.json();
-
-      localStorage.setItem(CACHE_KEY, JSON.stringify(data));
-      localStorage.setItem(CACHE_TIME_KEY, Date.now());
-
-      return data;
-
-    } catch (err) {
-      return JSON.parse(localStorage.getItem(CACHE_KEY) || "[]");
-    }
+    let res = await fetch(RAW_URL + "?v=" + Date.now());
+    return res.json();
   }
 
+  const tools = await fetchTools();
 
-  // --------------------------------------------------------------
-  // Render Tools
-  // --------------------------------------------------------------
-  async function loadCategory() {
+  const normalized = tools.map(t => ({
+    name: t.name || "Unknown",
+    description: t.description || t.short_description || "",
+    category: t.category || "",
+    logo_url: t.logo_url || "",
+  }));
 
-    container.innerHTML = `<p class='text-gray-400 col-span-full text-center py-6'>Loading tools…</p>`;
+  const key = selectedCat.toLowerCase().replace(/\s+/g, "");
 
-    const tools = await fetchTools();
+  const filtered = normalized.filter(t =>
+    (t.category || "").toLowerCase().replace(/\s+/g, "") === key
+  );
 
-    // Normalize tool fields
-    const normalized = tools.map(t => ({
-      name: t.name || t.title || "Unknown",
-      description: t.description || t.short_description || "",
-      category: t.category || "",
-      link: t.link || "#",
-      logo_url: t.logo_url || ""
-    }));
+  if (!filtered.length) {
+    container.innerHTML = `<p class="text-gray-400">No tools found.</p>`;
+    return;
+  }
 
+  // FIX: Link to tool.html instead of external website
+  container.innerHTML = filtered.map(tool => {
+    const img = tool.logo_url || "https://via.placeholder.com/200x200?text=X+Edge";
 
-    // --------------------------------------------------------------
-    // Flexible Category Matching (Restores previous working behavior)
-    // --------------------------------------------------------------
-    const key = selectedCat.trim().toLowerCase().replace(/[\s_-]+/g, "");
+    return `
+      <a href="tool.html?tool=${encodeURIComponent(tool.name)}"
+         class="block bg-gray-800 border border-gray-700 p-6 rounded-xl hover:bg-gray-700 transition">
 
-    const filtered = normalized.filter(t => {
-      const catKey = (t.category || "")
-        .trim()
-        .toLowerCase()
-        .replace(/[\s_-]+/g, "");
-      return catKey === key;
-    });
-
-
-    if (!filtered.length) {
-      container.innerHTML =
-        `<p class="text-gray-400">No tools found in this category.</p>`;
-      return;
-    }
-
-
-    // Render tool cards
-    container.innerHTML = filtered.map(tool => {
-
-      let img = tool.logo_url;
-      if (!img) img = "https://via.placeholder.com/200x200?text=X+Edge";
-
-      if (img.includes("=s")) {
-        img = img.replace(/=s\d+/, "=w200-h200");
-      }
-
-      return `
-      <div class="bg-gray-800 border border-gray-700 p-6 rounded-xl hover:bg-gray-700 transition">
-
-        <img src="${img}" loading="lazy"
-             class="w-16 h-16 mx-auto mb-4 rounded object-cover"
+        <img src="${img}"
+             class="w-16 h-16 mx-auto mb-4 object-cover rounded"
              onerror="this.src='https://via.placeholder.com/200?text=No+Image'">
 
         <h3 class="text-lg font-semibold text-center">${tool.name}</h3>
@@ -176,27 +124,16 @@ document.addEventListener("DOMContentLoaded", async () => {
           ${tool.description.slice(0, 160)}
         </p>
 
-        <div class="text-center mt-4">
-          <a href="${tool.link}" target="_blank"
-             class="bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded-lg">
-            Visit Tool →
-          </a>
-        </div>
-
-      </div>
-      `;
-    }).join("");
-
-  }
-
-
-  // Start loading
-  loadCategory();
+        <p class="text-blue-400 text-center mt-3">View Details →</p>
+      </a>
+    `;
+  }).join("");
 
 });
 </script>
- <scrip src="auth.js"></scrip>
-  
+
+<!-- FIXED: Correct script tag -->
+<script src="auth.js"></script>
 
 </body>
 </html>
