@@ -777,33 +777,33 @@ feather.replace();
       if(e.key === 'Tab') document.body.classList.add('user-is-tabbing');
     });
   </script>
-     <script>
- <script>
+    <script>
   // -------------------------------
-  // Firebase Init
+  // FIREBASE INIT (SAFE)
   // -------------------------------
-  const firebaseConfig = {
-    apiKey: "AIzaSyBo9cfhTj2W7ikpdrqz6wAtSBisBo78OAc",
-    authDomain: "xedge-1da3a.firebaseapp.com",
-    projectId: "xedge-1da3a",
-    storageBucket: "xedge-1da3a.appspot.com",
-    messagingSenderId: "209657807080",
-    appId: "1:209657807080:web:80180596d966b4667d895d",
-    measurementId: "G-SXW16HCZB8"
-  };
-
-  firebase.initializeApp(firebaseConfig);
+  if (!firebase.apps.length) {
+    firebase.initializeApp({
+      apiKey: "AIzaSyBo9cfhTj2W7ikpdrqz6wAtSBisBo78OAc",
+      authDomain: "xedge-1da3a.firebaseapp.com",
+      projectId: "xedge-1da3a",
+      storageBucket: "xedge-1da3a.appspot.com",
+      messagingSenderId: "209657807080",
+      appId: "1:209657807080:web:80180596d966b4667d895d",
+      measurementId: "G-SXW16HCZB8"
+    });
+  }
 
   const auth = firebase.auth();
   const db = firebase.firestore();
   const provider = new firebase.auth.GoogleAuthProvider();
 
+
   // -------------------------------
-  // Google Login
+  // GOOGLE SIGN IN (GLOBAL)
   // -------------------------------
-  function signInWithGoogle() {
+  window.signInWithGoogle = function () {
     auth.signInWithPopup(provider)
-      .then(result => {
+      .then((result) => {
         const user = result.user;
 
         db.collection("users").doc(user.uid).set({
@@ -817,25 +817,27 @@ feather.replace();
 
         console.log("User logged in:", user.email);
       })
-      .catch(err => {
+      .catch((err) => {
         console.error(err);
         alert("Login failed.");
       });
-  }
+  };
+
 
   // -------------------------------
-  // Logout
+  // LOGOUT (GLOBAL)
   // -------------------------------
-  function logoutUser() {
+  window.logoutUser = function () {
     auth.signOut().then(() => {
       console.log("User logged out");
     });
-  }
+  };
+
 
   // -------------------------------
-  // UI Rendering (NO HOVER)
+  // AUTH STATE UI
   // -------------------------------
-  auth.onAuthStateChanged(user => {
+  auth.onAuthStateChanged((user) => {
     const nav = document.getElementById("auth-area");
     const heroBtn = document.getElementById("hero-signin-btn");
 
@@ -847,8 +849,8 @@ feather.replace();
       nav.innerHTML = `
         <div class="relative">
           <img
-            src="${user.photoURL}"
             id="profileBtn"
+            src="${user.photoURL}"
             class="w-10 h-10 rounded-full border border-gray-700 cursor-pointer"
             alt="Profile"
           />
@@ -885,8 +887,9 @@ feather.replace();
     }
   });
 
+
   // -------------------------------
-  // Click Toggle Logic (GLOBAL)
+  // CLICK-ONLY DROPDOWN CONTROL
   // -------------------------------
   document.addEventListener("click", (e) => {
     const btn = document.getElementById("profileBtn");
@@ -896,11 +899,12 @@ feather.replace();
 
     if (btn.contains(e.target)) {
       menu.classList.toggle("hidden");
-    } else {
+    } else if (!menu.contains(e.target)) {
       menu.classList.add("hidden");
     }
   });
 </script>
+
 
 
 
