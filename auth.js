@@ -120,4 +120,85 @@ auth.onAuthStateChanged((user) => {
     `;
   }
 });
+<script>
+  let currentUser = null;
+  const toolId =
+    new URLSearchParams(window.location.search).get("tool");
+
+  // Show form only if logged in
+  auth.onAuthStateChanged(user => {
+    currentUser = user;
+    const form = document.getElementById("review-form");
+    if (user && form) form.classList.remove("hidden");
+  });
+
+  // Submit / Update Review
+  function submitReview() {
+    if (!currentUser) {
+      alert("Please sign in to leave a review");
+      return;
+    }
+
+    const rating = Number(document.getElementById("review-rating").value);
+    const text = document.getElementById("review-text").value.trim();
+
+    if (!text) {
+      alert("Please write a review");
+      return;
+    }
+
+    const reviewId = `${toolId}_${currentUser.uid}`;
+
+    db.collection("reviews").doc(reviewId).set({
+      toolId,
+      toolName: toolId,
+
+      userId: currentUser.uid,
+      userName: currentUser.displayName,
+      userPhoto: currentUser.photoURL,
+
+      rating,
+      reviewText: text,
+
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    }, { merge: true })
+    .then(() => {
+      document.getElementById("review-text").value = "";
+      loadReviews();
+    });
+  }
+
+  // Load Reviews
+  function loadReviews() {
+    const list = document.getElementById("reviews-list");
+    list.innerHTML = "";
+
+    db.collection("reviews")
+      .where("toolId", "==", toolId)
+      .orderBy("updatedAt", "desc")
+      .limit(20)
+      .get()
+      .then(snapshot => {
+        snapshot.forEach(doc => {
+          const r = doc.data();
+          list.innerHTML += `
+            <div class="bg-gray-800 border border-gray-700 rounded-xl p-4">
+              <div class="flex items-center gap-3 mb-2">
+                <img src="${r.userPhoto}" class="w-8 h-8 rounded-full">
+                <span class="font-semibold">${r.userName}</span>
+                <span class="ml-auto text-yellow-400">
+                  ${"★".repeat(r.rating)}
+                </span>
+              </div>
+              <p class="text-gray-300">${r.reviewText}</p>
+            </div>
+          `;
+        });
+      });
+  }
+
+  loadReviews();
+</script>
+
 
