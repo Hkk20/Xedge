@@ -1,6 +1,6 @@
-// ---------------------------
+// ===========================
 // FIREBASE INIT
-// ---------------------------
+// ===========================
 const firebaseConfig = {
   apiKey: "AIzaSyBo9cfhTj2W7ikpdrqz6wAtSBisBo78OAc",
   authDomain: "xedge-1da3a.firebaseapp.com",
@@ -10,195 +10,190 @@ const firebaseConfig = {
   appId: "1:209657807080:web:80180596d966b4667d895d",
 };
 
-firebase.initializeApp(firebaseConfig);
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
 
 const auth = firebase.auth();
 const db = firebase.firestore();
 const provider = new firebase.auth.GoogleAuthProvider();
 
+// ===========================
+// GLOBAL STATE
+// ===========================
+let currentUser = null;
+let toolId =
+  new URLSearchParams(window.location.search).get("tool") ||
+  document.getElementById("tool-name")?.textContent?.trim() ||
+  null;
 
-// ---------------------------
-// SIGN IN
-// ---------------------------
+// ===========================
+// AUTH ACTIONS
+// ===========================
 function signInWithGoogle() {
   auth.signInWithPopup(provider).catch(() => {
     alert("Login failed.");
   });
 }
 
-
-// ---------------------------
-// LOGOUT
-// ---------------------------
 function logoutUser() {
   auth.signOut();
 }
 
-
-// ---------------------------
-// UTILITY — SAFE CLICK DROPDOWN
-// ---------------------------
+// ===========================
+// PROFILE DROPDOWN (CLICK ONLY)
+// ===========================
 function setupProfileDropdown() {
   const profile = document.getElementById("nav-profile");
   const menu = document.getElementById("nav-user-menu");
 
   if (!profile || !menu) return;
 
-  // Toggle on click
-  profile.onclick = () => {
+  profile.onclick = (e) => {
+    e.stopPropagation();
     menu.classList.toggle("hidden");
   };
 
-  // Close when clicking outside
-  document.addEventListener("click", (e) => {
-    if (!profile.contains(e.target)) {
-      menu.classList.add("hidden");
-    }
+  document.addEventListener("click", () => {
+    menu.classList.add("hidden");
   });
 }
 
-
-// ---------------------------
-// AUTH STATE HANDLER
-// RUNS ON EVERY PAGE
-// ---------------------------
+// ===========================
+// AUTH STATE — SINGLE SOURCE
+// ===========================
 auth.onAuthStateChanged((user) => {
+  currentUser = user;
+
   const nav = document.getElementById("auth-area");
   const heroBtn = document.getElementById("hero-signin-btn");
+  const reviewForm = document.getElementById("review-form");
 
-  if (!nav) return; // not on pages without navbar
+  // ---------- NAV ----------
+  if (nav) {
+    if (user) {
+      if (heroBtn) heroBtn.classList.add("hidden");
 
-  if (user) {
-    // Hide hero sign in button if exists
-    if (heroBtn) heroBtn.classList.add("hidden");
+      nav.innerHTML = `
+        <div id="nav-profile" class="relative">
+          <img src="${user.photoURL}"
+               class="w-10 h-10 rounded-full border border-gray-700 cursor-pointer"/>
 
-    // Build profile UI
-    nav.innerHTML = `
-      <div id="nav-profile" class="relative">
-        <img 
-          src="${user.photoURL}" 
-          class="w-10 h-10 rounded-full border border-gray-700 cursor-pointer"
-        />
-
-        <div id="nav-user-menu"
-             class="hidden absolute right-0 mt-2 bg-gray-800 border border-gray-700 
-                    rounded-xl p-3 w-40 shadow-xl z-50">
-          <p class="text-white font-semibold">${user.displayName}</p>
-          <p class="text-gray-400 text-xs mb-3">${user.email}</p>
-
-          <button 
-            onclick="logoutUser()" 
-            class="w-full bg-red-600/20 hover:bg-red-600/30 text-red-400 p-2 rounded-lg">
-            Logout
-          </button>
+          <div id="nav-user-menu"
+               class="hidden absolute right-0 mt-2 bg-gray-800 border border-gray-700
+                      rounded-xl p-3 w-40 shadow-xl z-50">
+            <p class="text-white font-semibold">${user.displayName}</p>
+            <p class="text-gray-400 text-xs mb-3">${user.email}</p>
+            <button onclick="logoutUser()"
+                    class="w-full bg-red-600/20 hover:bg-red-600/30
+                           text-red-400 p-2 rounded-lg">
+              Logout
+            </button>
+          </div>
         </div>
-      </div>
-    `;
+      `;
 
-    // Fix dropdown interaction
-    setTimeout(() => setupProfileDropdown(), 100);
+      setTimeout(setupProfileDropdown, 50);
 
-    // Save email (only if new)
-    db.collection("users").doc(user.uid).set({
-      name: user.displayName,
-      email: user.email,
-      photo: user.photoURL,
-      lastLogin: firebase.firestore.FieldValue.serverTimestamp()
-    }, { merge: true });
+      // Save user
+      db.collection("users").doc(user.uid).set({
+        name: user.displayName,
+        email: user.email,
+        photo: user.photoURL,
+        lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+      }, { merge: true });
 
-  } else {
-    // User not logged in → show Sign In button
-    if (heroBtn) heroBtn.classList.remove("hidden");
+    } else {
+      if (heroBtn) heroBtn.classList.remove("hidden");
 
-    nav.innerHTML = `
-      <button 
-        onclick="signInWithGoogle()"
-        class="border border-blue-500 px-6 py-2 rounded-full 
-               font-semibold text-sm text-blue-300 hover:bg-blue-500/10 transition">
-        Sign In
-      </button>
-    `;
+      nav.innerHTML = `
+        <button onclick="signInWithGoogle()"
+          class="border border-blue-500 px-6 py-2 rounded-full
+                 font-semibold text-sm text-blue-300 hover:bg-blue-500/10 transition">
+          Sign In
+        </button>
+      `;
+    }
+  }
+
+  // ---------- REVIEWS ----------
+  if (reviewForm) {
+    user ? reviewForm.classList.remove("hidden")
+         : reviewForm.classList.add("hidden");
   }
 });
-<script>
-  let currentUser = null;
-  const toolId =
-    new URLSearchParams(window.location.search).get("tool");
 
-  // Show form only if logged in
-  auth.onAuthStateChanged(user => {
-    currentUser = user;
-    const form = document.getElementById("review-form");
-    if (user && form) form.classList.remove("hidden");
-  });
+// ===========================
+// REVIEWS
+// ===========================
+function submitReview() {
+  if (!currentUser || !toolId) {
+    alert("Login required.");
+    return;
+  }
 
-  // Submit / Update Review
-  function submitReview() {
-    if (!currentUser) {
-      alert("Please sign in to leave a review");
-      return;
-    }
+  const rating = Number(document.getElementById("review-rating").value);
+  const text = document.getElementById("review-text").value.trim();
 
-    const rating = Number(document.getElementById("review-rating").value);
-    const text = document.getElementById("review-text").value.trim();
+  if (!text) {
+    alert("Write a review first.");
+    return;
+  }
 
-    if (!text) {
-      alert("Please write a review");
-      return;
-    }
+  const reviewId = `${toolId}_${currentUser.uid}`;
+  const ref = db.collection("reviews").doc(reviewId);
 
-    const reviewId = `${toolId}_${currentUser.uid}`;
+  ref.get().then(doc => {
+    const isNew = !doc.exists;
 
-    db.collection("reviews").doc(reviewId).set({
+    ref.set({
       toolId,
       toolName: toolId,
-
       userId: currentUser.uid,
       userName: currentUser.displayName,
       userPhoto: currentUser.photoURL,
-
       rating,
       reviewText: text,
-
       updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-      createdAt: firebase.firestore.FieldValue.serverTimestamp()
-    }, { merge: true })
-    .then(() => {
+      ...(isNew && { createdAt: firebase.firestore.FieldValue.serverTimestamp() })
+    }, { merge: true }).then(() => {
       document.getElementById("review-text").value = "";
       loadReviews();
     });
-  }
+  });
+}
 
-  // Load Reviews
-  function loadReviews() {
-    const list = document.getElementById("reviews-list");
-    list.innerHTML = "";
+function loadReviews() {
+  if (!toolId) return;
 
-    db.collection("reviews")
-      .where("toolId", "==", toolId)
-      .orderBy("updatedAt", "desc")
-      .limit(20)
-      .get()
-      .then(snapshot => {
-        snapshot.forEach(doc => {
-          const r = doc.data();
-          list.innerHTML += `
-            <div class="bg-gray-800 border border-gray-700 rounded-xl p-4">
-              <div class="flex items-center gap-3 mb-2">
-                <img src="${r.userPhoto}" class="w-8 h-8 rounded-full">
-                <span class="font-semibold">${r.userName}</span>
-                <span class="ml-auto text-yellow-400">
-                  ${"★".repeat(r.rating)}
-                </span>
-              </div>
-              <p class="text-gray-300">${r.reviewText}</p>
+  const list = document.getElementById("reviews-list");
+  if (!list) return;
+
+  list.innerHTML = "";
+
+  db.collection("reviews")
+    .where("toolId", "==", toolId)
+    .orderBy("updatedAt", "desc")
+    .limit(20)
+    .get()
+    .then(snapshot => {
+      snapshot.forEach(doc => {
+        const r = doc.data();
+        list.innerHTML += `
+          <div class="bg-gray-800 border border-gray-700 rounded-xl p-4">
+            <div class="flex items-center gap-3 mb-2">
+              <img src="${r.userPhoto}" class="w-8 h-8 rounded-full">
+              <span class="font-semibold">${r.userName}</span>
+              <span class="ml-auto text-yellow-400">
+                ${"★".repeat(r.rating)}
+              </span>
             </div>
-          `;
-        });
+            <p class="text-gray-300">${r.reviewText}</p>
+          </div>
+        `;
       });
-  }
+    });
+}
 
-  loadReviews();
-</script>
-
-
+// Auto load
+document.addEventListener("DOMContentLoaded", loadReviews);
