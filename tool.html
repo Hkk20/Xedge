@@ -80,6 +80,40 @@ function goBack() {
           </a>
         </div>
       </div>
+     <section id="reviews-section" class="mt-12">
+
+  <h2 class="text-2xl font-bold mb-4">User Reviews</h2>
+
+  <!-- Review Form (hidden until login) -->
+  <div id="review-form" class="hidden mb-6 bg-gray-800 border border-gray-700 rounded-xl p-4">
+
+    <label class="block mb-2 text-sm text-gray-300">Your Rating</label>
+    <select id="review-rating"
+      class="w-full bg-gray-900 border border-gray-700 rounded-lg p-2 mb-3">
+      <option value="5">★★★★★ (5)</option>
+      <option value="4">★★★★☆ (4)</option>
+      <option value="3">★★★☆☆ (3)</option>
+      <option value="2">★★☆☆☆ (2)</option>
+      <option value="1">★☆☆☆☆ (1)</option>
+    </select>
+
+    <label class="block mb-2 text-sm text-gray-300">Your Review</label>
+    <textarea id="review-text"
+      class="w-full bg-gray-900 border border-gray-700 rounded-lg p-3"
+      placeholder="Write your experience with this tool..."
+      rows="4"></textarea>
+
+    <button onclick="submitReview()"
+      class="mt-3 bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg">
+      Submit Review
+    </button>
+  </div>
+
+  <!-- Reviews List -->
+  <div id="reviews-list" class="space-y-4"></div>
+
+</section>
+
 
       <!-- PHASE 1: Long Description + Pricing -->
       <div id="xe-phase1"
