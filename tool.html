@@ -85,8 +85,22 @@ function goBack() {
 
   <h2 class="text-2xl font-bold mb-4">User Reviews</h2>
 
-  <!-- Review Form (hidden until login) -->
-  <div id="review-form" class="hidden mb-6 bg-gray-800 border border-gray-700 rounded-xl p-4">
+  <!-- ================= REVIEW & RATING SECTION ================= -->
+<section id="reviews-section" class="mt-12">
+
+  <!-- RATING SUMMARY -->
+  <div class="flex justify-between items-center mb-4">
+    <h2 class="text-2xl font-bold">User Reviews</h2>
+
+    <div id="rating-summary" class="text-right">
+      <div id="avg-rating" class="text-yellow-400 text-xl font-bold">—</div>
+      <div id="rating-count" class="text-sm text-gray-400">No reviews yet</div>
+    </div>
+  </div>
+
+  <!-- REVIEW FORM (only if logged in & not reviewed yet) -->
+  <div id="review-form"
+       class="hidden mb-6 bg-gray-800 border border-gray-700 rounded-xl p-4">
 
     <label class="block mb-2 text-sm text-gray-300">Your Rating</label>
     <select id="review-rating"
@@ -110,18 +124,17 @@ function goBack() {
     </button>
   </div>
 
-  <!-- Reviews List -->
- <button
-  id="toggleReviews"
-  class="mt-4 text-blue-400 hover:text-blue-300 font-medium">
-  View all reviews ↓
-</button>
+  <!-- AMAZON-STYLE TOGGLE -->
+  <button id="toggle-reviews-btn"
+    class="flex items-center gap-2 text-blue-400 hover:text-blue-300 font-medium mb-4">
+    <span id="toggle-text">View all reviews</span>
+    <span id="toggle-arrow">▼</span>
+  </button>
 
-<div id="reviews-wrapper"
-     class="hidden mt-4 overflow-hidden transition-all duration-300">
-  <div id="reviews-list" class="space-y-4"></div>
-</div>
-
+  <!-- REVIEWS CONTAINER -->
+  <div id="reviews-wrapper" class="hidden space-y-4">
+    <div id="reviews-list"></div>
+  </div>
 
 </section>
 
