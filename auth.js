@@ -1,5 +1,5 @@
 // ===========================
-// FIREBASE INIT
+// FIREBASE INIT (SAFE)
 // ===========================
 const firebaseConfig = {
   apiKey: "AIzaSyBo9cfhTj2W7ikpdrqz6wAtSBisBo78OAc",
@@ -22,7 +22,7 @@ const provider = new firebase.auth.GoogleAuthProvider();
 // GLOBAL STATE
 // ===========================
 let currentUser = null;
-let toolId =
+const toolId =
   new URLSearchParams(window.location.search).get("tool") ||
   document.getElementById("tool-name")?.textContent?.trim() ||
   null;
@@ -60,18 +60,16 @@ function setupProfileDropdown() {
 }
 
 // ===========================
-// AUTH STATE — SINGLE SOURCE
+// AUTH STATE (SINGLE SOURCE)
 // ===========================
 auth.onAuthStateChanged((user) => {
   currentUser = user;
-  checkIfUserReviewed();
-
 
   const nav = document.getElementById("auth-area");
   const heroBtn = document.getElementById("hero-signin-btn");
   const reviewForm = document.getElementById("review-form");
 
-  // ---------- NAV ----------
+  // ---- NAV ----
   if (nav) {
     if (user) {
       if (heroBtn) heroBtn.classList.add("hidden");
@@ -80,7 +78,6 @@ auth.onAuthStateChanged((user) => {
         <div id="nav-profile" class="relative">
           <img src="${user.photoURL}"
                class="w-10 h-10 rounded-full border border-gray-700 cursor-pointer"/>
-
           <div id="nav-user-menu"
                class="hidden absolute right-0 mt-2 bg-gray-800 border border-gray-700
                       rounded-xl p-3 w-40 shadow-xl z-50">
@@ -97,7 +94,6 @@ auth.onAuthStateChanged((user) => {
 
       setTimeout(setupProfileDropdown, 50);
 
-      // Save user
       db.collection("users").doc(user.uid).set({
         name: user.displayName,
         email: user.email,
@@ -118,26 +114,22 @@ auth.onAuthStateChanged((user) => {
     }
   }
 
-  // ---------- REVIEWS ----------
   if (reviewForm) {
     user ? reviewForm.classList.remove("hidden")
          : reviewForm.classList.add("hidden");
   }
+
+  checkIfUserReviewed();
 });
 
 // ===========================
-// REVIEWS
+// CHECK IF USER ALREADY REVIEWED
 // ===========================
-function submitReview() {
-  if (!currentUser || !toolId) {
-    alert("Login required.");
-    return;
-  }
 function checkIfUserReviewed() {
   if (!currentUser || !toolId) return;
 
-  const reviewId = `${toolId}_${currentUser.uid}`;
   const form = document.getElementById("review-form");
+  const reviewId = `${toolId}_${currentUser.uid}`;
 
   db.collection("reviews").doc(reviewId).get().then(doc => {
     if (doc.exists && form) {
@@ -146,13 +138,18 @@ function checkIfUserReviewed() {
   });
 }
 
-  const rating = Number(document.getElementById("review-rating").value);
-  const text = document.getElementById("review-text").value.trim();
-
-  if (!text) {
-    alert("Write a review first.");
+// ===========================
+// SUBMIT REVIEW
+// ===========================
+function submitReview() {
+  if (!currentUser || !toolId) {
+    alert("Login required.");
     return;
   }
+
+  const rating = Number(document.getElementById("review-rating").value);
+  const text = document.getElementById("review-text").value.trim();
+  if (!text) return alert("Write a review first.");
 
   const reviewId = `${toolId}_${currentUser.uid}`;
   const ref = db.collection("reviews").doc(reviewId);
@@ -162,7 +159,6 @@ function checkIfUserReviewed() {
 
     ref.set({
       toolId,
-      toolName: toolId,
       userId: currentUser.uid,
       userName: currentUser.displayName,
       userPhoto: currentUser.photoURL,
@@ -172,44 +168,96 @@ function checkIfUserReviewed() {
       ...(isNew && { createdAt: firebase.firestore.FieldValue.serverTimestamp() })
     }, { merge: true }).then(() => {
       document.getElementById("review-text").value = "";
+      document.getElementById("review-form")?.classList.add("hidden");
       loadReviews();
     });
   });
 }
 
+// ===========================
+// LOAD REVIEWS + AVG RATING
+// ===========================
 function loadReviews() {
   if (!toolId) return;
-  checkIfUserReviewed();
-
 
   const list = document.getElementById("reviews-list");
-  if (!list) return;
+  const avgEl = document.getElementById("avg-rating");
+  const countEl = document.getElementById("rating-count");
 
+  if (!list) return;
   list.innerHTML = "";
+
+  let total = 0;
+  let count = 0;
 
   db.collection("reviews")
     .where("toolId", "==", toolId)
     .orderBy("updatedAt", "desc")
-    .limit(20)
     .get()
     .then(snapshot => {
+      if (snapshot.empty) {
+        loadAdminRating();
+        return;
+      }
+
       snapshot.forEach(doc => {
         const r = doc.data();
+        total += r.rating;
+        count++;
+
         list.innerHTML += `
           <div class="bg-gray-800 border border-gray-700 rounded-xl p-4">
             <div class="flex items-center gap-3 mb-2">
               <img src="${r.userPhoto}" class="w-8 h-8 rounded-full">
               <span class="font-semibold">${r.userName}</span>
               <span class="ml-auto text-yellow-400">
-                ${"★".repeat(r.rating)}
+                ${"★".repeat(r.rating)}${"☆".repeat(5 - r.rating)}
               </span>
             </div>
             <p class="text-gray-300">${r.reviewText}</p>
           </div>
         `;
       });
+
+      avgEl.textContent = `${(total / count).toFixed(1)} ★`;
+      countEl.textContent = `${count} reviews`;
     });
 }
 
-// Auto load
+// ===========================
+// ADMIN RATING FALLBACK
+// ===========================
+function loadAdminRating() {
+  const avgEl = document.getElementById("avg-rating");
+  const countEl = document.getElementById("rating-count");
+
+  db.collection("tools").doc(toolId).get().then(doc => {
+    if (doc.exists && doc.data().adminRating) {
+      avgEl.textContent = `${doc.data().adminRating} ★`;
+      countEl.textContent = "Admin rating";
+    } else {
+      avgEl.textContent = "—";
+      countEl.textContent = "No reviews yet";
+    }
+  });
+}
+
+// ===========================
+// AMAZON-STYLE TOGGLE
+// ===========================
+document.getElementById("toggle-reviews-btn")?.addEventListener("click", () => {
+  const wrap = document.getElementById("reviews-wrapper");
+  const text = document.getElementById("toggle-text");
+  const arrow = document.getElementById("toggle-arrow");
+
+  wrap.classList.toggle("hidden");
+  const open = !wrap.classList.contains("hidden");
+
+  text.textContent = open ? "Hide reviews" : "View all reviews";
+  arrow.textContent = open ? "▲" : "▼";
+});
+
+// ===========================
+// AUTO LOAD
+// ===========================
 document.addEventListener("DOMContentLoaded", loadReviews);
