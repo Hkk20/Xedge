@@ -1,10 +1,10 @@
 <!doctype html>
 <html lang="en">
 <head>
- <!-- Firebase v8 (works with script tag, non-modular) -->
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <!-- Firebase v8 -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -21,155 +21,145 @@
 </head>
 
 <body>
- 
 
-  <!-- NAV -->
-  <nav class="bg-gray-900/80 border-b border-gray-800 fixed top-0 left-0 right-0 z-50">
-    <div class="max-w-6xl mx-auto px-6 py-3 flex justify-between items-center">
-      <a href="index.html" class="flex items-center gap-3">
-        <img src="xedge-logo.png" class="w-8 h-8 bg-white p-1 rounded" />
-        <span class="font-bold">X Edge</span>
-      </a>
+<!-- NAV -->
+<nav class="bg-gray-900/80 border-b border-gray-800 fixed top-0 left-0 right-0 z-50">
+  <div class="max-w-6xl mx-auto px-6 py-3 flex justify-between items-center">
 
-      <a href="Explore.html" class="text-blue-400">← Back</a>
-     <div id="auth-area"></div>
-     <button 
-  onclick="goBack()"
-  class="px-4 py-2 mb-4 bg-gray-800 border border-gray-700 rounded-lg 
-         text-gray-300 hover:bg-gray-700 hover:text-white transition flex items-center gap-2">
-  ← Back
-</button>
+    <a href="index.html" class="flex items-center gap-3">
+      <img src="xedge-logo.png" class="w-8 h-8 bg-white p-1 rounded" />
+      <span class="font-bold">X Edge</span>
+    </a>
+
+    <div class="flex items-center gap-4">
+      <button onclick="goBack()"
+        class="px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg
+               text-gray-300 hover:bg-gray-700 transition">
+        ← Back
+      </button>
+
+      <div id="auth-area"></div>
+    </div>
+  </div>
+</nav>
 
 <script>
 function goBack() {
-  if (document.referrer) {
-    history.back();
-  } else {
-    window.location.href = "Categories.html";
-  }
+  if (document.referrer) history.back();
+  else window.location.href = "Categories.html";
 }
 </script>
 
-                          
+<main class="container pt-24">
+
+  <!-- Loading -->
+  <div id="loading" class="text-center text-gray-400 py-16 text-xl">
+    Loading tool...
+  </div>
+
+  <!-- Tool Content -->
+  <div id="tool-container" class="hidden">
+
+    <!-- HERO -->
+    <div class="bg-gray-800/40 border border-gray-700 rounded-xl p-6 mb-10 flex gap-6">
+      <img id="tool-logo" class="w-24 h-24 rounded-lg object-cover bg-gray-900" />
+
+      <div class="flex-1">
+        <h1 id="tool-name" class="text-3xl font-bold"></h1>
+        <p id="tool-cat" class="text-blue-400 font-medium mt-1"></p>
+        <p id="tool-short" class="text-gray-300 mt-3"></p>
+
+        <a id="visit-btn" target="_blank"
+           class="inline-block mt-4 bg-gradient-to-r from-blue-500 to-blue-600
+                  px-5 py-2 rounded-full font-medium">
+          Visit Tool
+        </a>
+      </div>
     </div>
-  </nav>
 
-  <main class="container pt-24">
+    <!-- ================= REVIEWS & RATINGS ================= -->
+    <section class="mb-12">
 
-    <!-- Loading state -->
-    <div id="loading" class="text-center text-gray-400 py-16 text-xl">
-      Loading tool...
-    </div>
+      <!-- Rating summary -->
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-2xl font-bold">User Reviews</h2>
 
-    <!-- Tool Content -->
-    <div id="tool-container" class="hidden">
-
-      <!-- HERO -->
-      <div class="bg-gray-800/40 border border-gray-700 rounded-xl p-6 mb-8 flex gap-6">
-        <img id="tool-logo" class="w-24 h-24 rounded-lg object-cover bg-gray-900" />
-
-        <div class="flex-1">
-          <h1 id="tool-name" class="text-3xl font-bold"></h1>
-          <p id="tool-cat" class="text-blue-400 font-medium mt-1"></p>
-          <p id="tool-short" class="text-gray-300 mt-3"></p>
-
-          <a id="visit-btn"
-             href="#"
-             target="_blank"
-             class="inline-block mt-4 bg-gradient-to-r from-blue-500 to-blue-600 px-5 py-2 rounded-full font-medium">
-            Visit Tool
-          </a>
+        <div class="text-right">
+          <div id="avg-rating" class="text-yellow-400 text-xl font-bold">—</div>
+          <div id="rating-count" class="text-sm text-gray-400">
+            No reviews yet
+          </div>
         </div>
       </div>
-     <section id="reviews-section" class="mt-12">
 
-  <h2 class="text-2xl font-bold mb-4">User Reviews</h2>
+      <!-- Review form -->
+      <div id="review-form"
+           class="hidden mb-6 bg-gray-800 border border-gray-700 rounded-xl p-4">
 
-  <!-- ================= REVIEW & RATING SECTION ================= -->
-<section id="reviews-section" class="mt-12">
+        <label class="block mb-2 text-sm text-gray-300">Your Rating</label>
+        <select id="review-rating"
+          class="w-full bg-gray-900 border border-gray-700 rounded-lg p-2 mb-3">
+          <option value="5">★★★★★ (5)</option>
+          <option value="4">★★★★☆ (4)</option>
+          <option value="3">★★★☆☆ (3)</option>
+          <option value="2">★★☆☆☆ (2)</option>
+          <option value="1">★☆☆☆☆ (1)</option>
+        </select>
 
-  <!-- RATING SUMMARY -->
-  <div class="flex justify-between items-center mb-4">
-    <h2 class="text-2xl font-bold">User Reviews</h2>
+        <label class="block mb-2 text-sm text-gray-300">Your Review</label>
+        <textarea id="review-text"
+          class="w-full bg-gray-900 border border-gray-700 rounded-lg p-3"
+          rows="4"
+          placeholder="Write your experience with this tool..."></textarea>
 
-    <div id="rating-summary" class="text-right">
-      <div id="avg-rating" class="text-yellow-400 text-xl font-bold">—</div>
-      <div id="rating-count" class="text-sm text-gray-400">No reviews yet</div>
-    </div>
-  </div>
-
-  <!-- REVIEW FORM (only if logged in & not reviewed yet) -->
-  <div id="review-form"
-       class="hidden mb-6 bg-gray-800 border border-gray-700 rounded-xl p-4">
-
-    <label class="block mb-2 text-sm text-gray-300">Your Rating</label>
-    <select id="review-rating"
-      class="w-full bg-gray-900 border border-gray-700 rounded-lg p-2 mb-3">
-      <option value="5">★★★★★ (5)</option>
-      <option value="4">★★★★☆ (4)</option>
-      <option value="3">★★★☆☆ (3)</option>
-      <option value="2">★★☆☆☆ (2)</option>
-      <option value="1">★☆☆☆☆ (1)</option>
-    </select>
-
-    <label class="block mb-2 text-sm text-gray-300">Your Review</label>
-    <textarea id="review-text"
-      class="w-full bg-gray-900 border border-gray-700 rounded-lg p-3"
-      placeholder="Write your experience with this tool..."
-      rows="4"></textarea>
-
-    <button onclick="submitReview()"
-      class="mt-3 bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg">
-      Submit Review
-    </button>
-  </div>
-
-  <!-- AMAZON-STYLE TOGGLE -->
-  <button id="toggle-reviews-btn"
-    class="flex items-center gap-2 text-blue-400 hover:text-blue-300 font-medium mb-4">
-    <span id="toggle-text">View all reviews</span>
-    <span id="toggle-arrow">▼</span>
-  </button>
-
-  <!-- REVIEWS CONTAINER -->
-  <div id="reviews-wrapper" class="hidden space-y-4">
-    <div id="reviews-list"></div>
-  </div>
-
-</section>
-
-
-      <!-- PHASE 1: Long Description + Pricing -->
-      <div id="xe-phase1"
-           class="bg-gray-800/30 border border-gray-700 p-6 rounded-xl mb-8">
+        <button onclick="submitReview()"
+          class="mt-3 bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg">
+          Submit Review
+        </button>
       </div>
 
-      <!-- PHASE 2: Screenshots + Pros/Cons + Related -->
-      <div id="xe-phase2"
-           class="bg-gray-800/30 border border-gray-700 p-6 rounded-xl">
+      <!-- Amazon-style toggle -->
+      <button id="toggle-reviews-btn"
+        class="flex items-center gap-2 text-blue-400 hover:text-blue-300
+               font-medium mb-4">
+        <span id="toggle-text">View all reviews</span>
+        <span id="toggle-arrow">▼</span>
+      </button>
+
+      <!-- Reviews list -->
+      <div id="reviews-wrapper" class="hidden space-y-4">
+        <div id="reviews-list"></div>
       </div>
 
+    </section>
+
+    <!-- PHASE 1 -->
+    <div id="xe-phase1"
+         class="bg-gray-800/30 border border-gray-700 p-6 rounded-xl mb-8">
     </div>
 
-  </main>
+    <!-- PHASE 2 -->
+    <div id="xe-phase2"
+         class="bg-gray-800/30 border border-gray-700 p-6 rounded-xl">
+    </div>
 
-  <!-- Load main JS -->
-  <script src="tools.js"></script>
- 
+  </div>
+</main>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      if (typeof renderToolDetailsPageHydrate === "function") {
-        renderToolDetailsPageHydrate();
-      }
-      feather.replace();
-    });
-  </script>
+<!-- Tool logic -->
+<script src="tools.js"></script>
 
- <script src="auth.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  if (typeof renderToolDetailsPageHydrate === "function") {
+    renderToolDetailsPageHydrate();
+  }
+  feather.replace();
+});
+</script>
 
-
+<!-- Auth + Reviews logic -->
+<script src="auth.js"></script>
 
 </body>
 </html>
-
