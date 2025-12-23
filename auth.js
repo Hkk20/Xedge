@@ -64,6 +64,8 @@ function setupProfileDropdown() {
 // ===========================
 auth.onAuthStateChanged((user) => {
   currentUser = user;
+  checkIfUserReviewed();
+
 
   const nav = document.getElementById("auth-area");
   const heroBtn = document.getElementById("hero-signin-btn");
@@ -131,6 +133,18 @@ function submitReview() {
     alert("Login required.");
     return;
   }
+function checkIfUserReviewed() {
+  if (!currentUser || !toolId) return;
+
+  const reviewId = `${toolId}_${currentUser.uid}`;
+  const form = document.getElementById("review-form");
+
+  db.collection("reviews").doc(reviewId).get().then(doc => {
+    if (doc.exists && form) {
+      form.classList.add("hidden");
+    }
+  });
+}
 
   const rating = Number(document.getElementById("review-rating").value);
   const text = document.getElementById("review-text").value.trim();
@@ -165,6 +179,8 @@ function submitReview() {
 
 function loadReviews() {
   if (!toolId) return;
+  checkIfUserReviewed();
+
 
   const list = document.getElementById("reviews-list");
   if (!list) return;
