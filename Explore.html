@@ -51,24 +51,42 @@
 
 <body class="bg-gray-900 text-white">
 
-  <!-- NAV -->
-  <nav class="bg-gray-900/80 fixed w-full z-30 border-b border-gray-800">
-    <div class="max-w-6xl mx-auto px-6 py-3 flex justify-between items-center">
-      <a href="index.html" class="flex items-center gap-3">
-        <img src="xedge-logo.png" class="w-8 h-8" alt="X Edge Logo">
-        <span class="font-bold">X Edge</span>
-      </a>
-      <a href="Join.html" class="bg-gradient-to-r from-blue-500 to-blue-600 px-3 py-1 rounded">
+ <!-- NAV -->
+<nav class="bg-gray-900/80 fixed w-full z-30 border-b border-gray-800">
+  <div class="max-w-6xl mx-auto px-6 py-3 flex justify-between items-center">
+
+    <!-- LOGO -->
+    <a href="index.html" class="flex items-center gap-3">
+      <img src="xedge-logo.png" class="w-8 h-8" alt="X Edge Logo">
+      <span class="font-bold">X Edge</span>
+    </a>
+
+    <!-- RIGHT SIDE -->
+    <div class="flex items-center gap-3">
+
+      <!-- JOIN BETA (DESKTOP ONLY) -->
+      <a href="Join.html"
+         class="hidden md:inline-block bg-gradient-to-r from-blue-500 to-blue-600 px-3 py-1 rounded">
         Join Beta
       </a>
-      
- <div id="auth-area"></div>
-      <button 
-  onclick="goBack()"
-  class="px-4 py-2 mb-4 bg-gray-800 border border-gray-700 rounded-lg 
-         text-gray-300 hover:bg-gray-700 hover:text-white transition flex items-center gap-2">
-  ← Back
-</button>
+
+      <!-- AUTH (DESKTOP ONLY) -->
+      <div id="auth-area" class="hidden md:flex items-center"></div>
+
+      <!-- BACK BUTTON (MOBILE ONLY) -->
+      <button
+        onclick="goBack()"
+        class="md:hidden px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg
+               text-gray-300 hover:bg-gray-700 hover:text-white transition
+               flex items-center gap-2">
+        ← Back
+      </button>
+
+    </div>
+
+  </div>
+</nav>
+
 
 <script>
 function goBack() {
