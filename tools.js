@@ -226,12 +226,12 @@ function lazyLoadImgs(root) {
   imgs.forEach(i => obs.observe(i));
 }
 
-/* ===== MAIN HYDRATION ===== */
+/* ===== MAIN HYDRATION — REFINED ===== */
 async function renderToolDetailsPageHydrate() {
   const load = document.getElementById("loading");
   const box = document.getElementById("tool-container");
-  window.__TOOL_PROS__ = merged.pros;
-  window.__TOOL_CONS__ = merged.cons;
+
+  if (!load || !box) return;
 
   load.classList.remove("hidden");
   box.classList.add("hidden");
@@ -239,8 +239,11 @@ async function renderToolDetailsPageHydrate() {
   const params = new URLSearchParams(location.search);
   const toolKey = normalizeKey(params.get("tool") || "");
 
-  let tools = safeGet(XE.CACHE_KEY) || await getTools();
-  safeSet(XE.CACHE_KEY, tools);
+  let tools = safeGet(XE.CACHE_KEY);
+  if (!Array.isArray(tools) || !tools.length) {
+    tools = await getTools();
+    safeSet(XE.CACHE_KEY, tools);
+  }
 
   const tool = findToolByName(tools, toolKey);
   if (!tool) {
@@ -248,43 +251,55 @@ async function renderToolDetailsPageHydrate() {
     return;
   }
 
-  /* Parse fields */
+  /* ===== PARSE TOOL DATA ===== */
   const merged = {
     long_description: tool.long_description || "",
-    pros: tool.pros_raw.split(/[,;\n]/).map(x => x.trim()).filter(Boolean),
-    cons: tool.cons_raw.split(/[,;\n]/).map(x => x.trim()).filter(Boolean),
+    pros: (tool.pros_raw || "")
+      .split(/[,;\n]/)
+      .map(v => v.trim())
+      .filter(Boolean),
+    cons: (tool.cons_raw || "")
+      .split(/[,;\n]/)
+      .map(v => v.trim())
+      .filter(Boolean),
     screenshots: parseScreenshots(tool.screenshots_raw),
     pricing: {
-      free: tool.pricing_free,
-      plus: tool.pricing_plus,
-      team: tool.pricing_team
+      free: tool.pricing_free || "",
+      plus: tool.pricing_plus || "",
+      team: tool.pricing_team || ""
     }
   };
 
-  /* Render phases */
+  /* ===== GLOBAL ACCESS (MOBILE TOGGLE SAFE) ===== */
+  window.__TOOL_PROS__ = merged.pros;
+  window.__TOOL_CONS__ = merged.cons;
+
+  /* ===== RENDER ===== */
   renderPhase0Instant(tool);
 
   requestIdleCallback(() => renderPhase1(merged));
   setTimeout(() => renderPhase1(merged), XE.PHASE1_TIMEOUT);
 
-  let ph2done = false;
-  const doPhase2 = () => {
-    if (!ph2done) {
-      ph2done = true;
-      renderPhase2(tool, merged, tools);
-    }
+  let phase2Done = false;
+  const runPhase2 = () => {
+    if (phase2Done) return;
+    phase2Done = true;
+    renderPhase2(tool, merged, tools);
   };
 
-  requestIdleCallback(doPhase2);
-  setTimeout(doPhase2, XE.PHASE2_IDLE_MS);
+  requestIdleCallback(runPhase2);
+  setTimeout(runPhase2, XE.PHASE2_IDLE_MS);
 
-  /* Show page */
-  setTimeout(() => load.classList.add("hidden"), 150);
-  box.classList.remove("hidden");
+  /* ===== SHOW PAGE ===== */
+  setTimeout(() => {
+    load.classList.add("hidden");
+    box.classList.remove("hidden");
+  }, 120);
 }
 
-/* EXPORTS */
+/* ===== EXPORTS ===== */
 window.getTools = getTools;
 window.findToolByName = findToolByName;
 window.renderToolDetailsPageHydrate = renderToolDetailsPageHydrate;
 window.storeSelectedTool = t => safeSet(XE.SELECTED_KEY, t);
+
