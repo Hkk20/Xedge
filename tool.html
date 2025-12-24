@@ -15,14 +15,22 @@
   <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
 
   <style>
-    body { background:#0b1116; color:white; font-family:Inter, sans-serif; }
-    .container { max-width:1100px; margin:0 auto; padding:1.2rem; }
+    body {
+      background:#0b1116;
+      color:white;
+      font-family:Inter, system-ui, sans-serif;
+    }
+    .container {
+      max-width:1100px;
+      margin:0 auto;
+      padding:1.2rem;
+    }
   </style>
 </head>
 
 <body>
 
-<!-- NAV -->
+<!-- ================= NAV ================= -->
 <nav class="bg-gray-900/80 border-b border-gray-800 fixed top-0 left-0 right-0 z-50">
   <div class="max-w-6xl mx-auto px-6 py-3 flex justify-between items-center">
 
@@ -50,6 +58,7 @@ function goBack() {
 }
 </script>
 
+<!-- ================= MAIN ================= -->
 <main class="container pt-24">
 
   <!-- Loading -->
@@ -60,7 +69,7 @@ function goBack() {
   <!-- Tool Content -->
   <div id="tool-container" class="hidden">
 
-    <!-- HERO -->
+    <!-- ================= HERO ================= -->
     <div class="bg-gray-800/40 border border-gray-700 rounded-xl p-6 mb-10 flex gap-6">
       <img id="tool-logo" class="w-24 h-24 rounded-lg object-cover bg-gray-900" />
 
@@ -77,25 +86,20 @@ function goBack() {
       </div>
     </div>
 
-    <!-- ================= REVIEWS & RATINGS ================= -->
-    <section class="mb-12">
+    <!-- ================= REVIEWS ================= -->
+    <section class="mb-14">
 
-      <!-- Rating summary -->
       <div class="flex justify-between items-center mb-4">
         <h2 class="text-2xl font-bold">User Reviews</h2>
 
         <div class="text-right">
           <div id="avg-rating" class="text-yellow-400 text-xl font-bold">—</div>
-          <div id="rating-count" class="text-sm text-gray-400">
-            No reviews yet
-          </div>
+          <div id="rating-count" class="text-sm text-gray-400">No reviews yet</div>
         </div>
       </div>
 
-      <!-- Review form -->
       <div id="review-form"
            class="hidden mb-6 bg-gray-800 border border-gray-700 rounded-xl p-4">
-
         <label class="block mb-2 text-sm text-gray-300">Your Rating</label>
         <select id="review-rating"
           class="w-full bg-gray-900 border border-gray-700 rounded-lg p-2 mb-3">
@@ -118,35 +122,69 @@ function goBack() {
         </button>
       </div>
 
-      <!-- Amazon-style toggle -->
       <button id="toggle-reviews-btn"
-        class="flex items-center gap-2 text-blue-400 hover:text-blue-300
-               font-medium mb-4">
+        class="flex items-center gap-2 text-blue-400 hover:text-blue-300 font-medium mb-4">
         <span id="toggle-text">View all reviews</span>
         <span id="toggle-arrow">▼</span>
       </button>
 
-      <!-- Reviews list -->
       <div id="reviews-wrapper" class="hidden space-y-4">
         <div id="reviews-list"></div>
       </div>
-
     </section>
 
-    <!-- PHASE 1 -->
-    <div id="xe-phase1"
-         class="bg-gray-800/30 border border-gray-700 p-6 rounded-xl mb-8">
-    </div>
+    <!-- ================= PROS / CONS (RESPONSIVE) ================= -->
+    <section class="mb-14">
 
-    <!-- PHASE 2 -->
+      <!-- Mobile toggle -->
+      <div class="md:hidden flex gap-2 mb-4">
+        <button onclick="showPros()"
+          class="flex-1 py-2 rounded-lg bg-blue-600 text-white font-semibold">
+          Pros
+        </button>
+        <button onclick="showCons()"
+          class="flex-1 py-2 rounded-lg bg-gray-800 text-gray-300">
+          Cons
+        </button>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-6">
+
+        <div id="pros-box"
+          class="bg-gray-800/40 border border-gray-700 rounded-xl p-6">
+          <h3 class="hidden md:block text-xl font-bold mb-4">Pros</h3>
+          <ul class="space-y-3 text-gray-200">
+            <li>✔ Fully integrated in Notion</li>
+            <li>✔ Great for students and teams</li>
+            <li>✔ Easy to use</li>
+            <li>✔ Saves huge time</li>
+          </ul>
+        </div>
+
+        <div id="cons-box"
+          class="hidden md:block bg-gray-800/40 border border-gray-700 rounded-xl p-6">
+          <h3 class="hidden md:block text-xl font-bold mb-4">Cons</h3>
+          <ul class="space-y-3 text-gray-200">
+            <li>✖ Not free</li>
+            <li>✖ Limited outside Notion</li>
+            <li>✖ Advanced use cases limited</li>
+          </ul>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ================= PHASE CONTENT ================= -->
+    <div id="xe-phase1"
+         class="bg-gray-800/30 border border-gray-700 p-6 rounded-xl mb-8"></div>
+
     <div id="xe-phase2"
-         class="bg-gray-800/30 border border-gray-700 p-6 rounded-xl">
-    </div>
+         class="bg-gray-800/30 border border-gray-700 p-6 rounded-xl"></div>
 
   </div>
 </main>
 
-<!-- Tool logic -->
+<!-- ================= SCRIPTS ================= -->
 <script src="tools.js"></script>
 
 <script>
@@ -156,9 +194,18 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   feather.replace();
 });
+
+function showPros() {
+  document.getElementById("pros-box").classList.remove("hidden");
+  document.getElementById("cons-box").classList.add("hidden");
+}
+
+function showCons() {
+  document.getElementById("cons-box").classList.remove("hidden");
+  document.getElementById("pros-box").classList.add("hidden");
+}
 </script>
 
-<!-- Auth + Reviews logic -->
 <script src="auth.js"></script>
 
 </body>
