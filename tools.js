@@ -162,18 +162,7 @@ function renderPhase2(tool, merged, toolsList) {
     </div>
   `;
 
-  /* Pros + Cons */
-  const prosHTML = `
-    <div class="flex-1 bg-gray-900 border border-gray-700 p-6 rounded-xl">
-      <h3 class="text-xl font-semibold mb-3">Pros</h3>
-      <ul class="space-y-2">${merged.pros.map(p => `<li>✔ ${escapeHtml(p)}</li>`).join("")}</ul>
-    </div>`;
 
-  const consHTML = `
-    <div class="flex-1 bg-gray-900 border border-gray-700 p-6 rounded-xl">
-      <h3 class="text-xl font-semibold mb-3">Cons</h3>
-      <ul class="space-y-2">${merged.cons.map(c => `<li>✖ ${escapeHtml(c)}</li>`).join("")}</ul>
-    </div>`;
 
   /* Related Tools */
   const related = toolsList
@@ -209,11 +198,10 @@ function renderPhase2(tool, merged, toolsList) {
     : `<p class="text-gray-400">No related tools.</p>`;
 
   /* Final render */
-  box.innerHTML = `
-    ${screenshotHTML}
-    <div class="flex gap-6 mb-6">${prosHTML}${consHTML}</div>
-    ${relatedHTML}
-  `;
+box.innerHTML = `
+  ${screenshotHTML}
+  ${relatedHTML}
+`;
 
   lazyLoadImgs(box);
 }
@@ -241,6 +229,8 @@ function lazyLoadImgs(root) {
 async function renderToolDetailsPageHydrate() {
   const load = document.getElementById("loading");
   const box = document.getElementById("tool-container");
+  window.__TOOL_PROS__ = merged.pros;
+  window.__TOOL_CONS__ = merged.cons;
 
   load.classList.remove("hidden");
   box.classList.add("hidden");
