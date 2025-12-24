@@ -222,6 +222,33 @@ function showCons() {
 </script>
 
 <script src="auth.js"></script>
+  <script>
+document.addEventListener("DOMContentLoaded", () => {
+  const prosBox = document.getElementById("pros-box");
+  const consBox = document.getElementById("cons-box");
+
+  if (prosBox && window.__TOOL_PROS__) {
+    prosBox.querySelector("ul").innerHTML =
+      window.__TOOL_PROS__.map(p => `<li>✔ ${p}</li>`).join("");
+  }
+
+  if (consBox && window.__TOOL_CONS__) {
+    consBox.querySelector("ul").innerHTML =
+      window.__TOOL_CONS__.map(c => `<li>✖ ${c}</li>`).join("");
+  }
+});
+
+function showPros() {
+  document.getElementById("pros-box").classList.remove("hidden");
+  document.getElementById("cons-box").classList.add("hidden");
+}
+
+function showCons() {
+  document.getElementById("cons-box").classList.remove("hidden");
+  document.getElementById("pros-box").classList.add("hidden");
+}
+</script>
+
 
 </body>
 </html>
