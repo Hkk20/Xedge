@@ -5,6 +5,7 @@
    ✔ Fully compatible with your previous HTML + Explore + Categories
 */
 
+
 /* ===== CONFIG ===== */
 const XE = {
   SHEET_URL: "https://script.google.com/macros/s/AKfycbxaA3BcQgW7PTFlSP9j4h16-p2us5IiuaYESUUpZiy8bObezI-nMUxXAC28tR15FU_U/exec",
