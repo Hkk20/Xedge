@@ -133,23 +133,26 @@ function goBack() {
       </div>
     </section>
 
-    <!-- ================= PROS / CONS (RESPONSIVE) ================= -->
+    <!-- ================= PROS / CONS (FIXED) ================= -->
     <section class="mb-14">
 
       <!-- Mobile toggle -->
       <div class="md:hidden flex gap-2 mb-4">
-        <button onclick="showPros()"
-          class="flex-1 py-2 rounded-lg bg-blue-600 text-white font-semibold">
+        <button id="btn-pros"
+          onclick="showPros()"
+          class="flex-1 py-2 rounded-lg font-semibold bg-blue-600 text-white">
           Pros
         </button>
-        <button onclick="showCons()"
-          class="flex-1 py-2 rounded-lg bg-gray-800 text-gray-300">
+        <button id="btn-cons"
+          onclick="showCons()"
+          class="flex-1 py-2 rounded-lg font-semibold bg-gray-800 text-gray-300">
           Cons
         </button>
       </div>
 
       <div class="grid md:grid-cols-2 gap-6">
 
+        <!-- PROS -->
         <div id="pros-box"
           class="bg-gray-800/40 border border-gray-700 rounded-xl p-6">
           <h3 class="hidden md:block text-xl font-bold mb-4">Pros</h3>
@@ -161,6 +164,7 @@ function goBack() {
           </ul>
         </div>
 
+        <!-- CONS -->
         <div id="cons-box"
           class="hidden md:block bg-gray-800/40 border border-gray-700 rounded-xl p-6">
           <h3 class="hidden md:block text-xl font-bold mb-4">Cons</h3>
@@ -174,7 +178,7 @@ function goBack() {
       </div>
     </section>
 
-    <!-- ================= PHASE CONTENT ================= -->
+    <!-- ================= EXTRA CONTENT ================= -->
     <div id="xe-phase1"
          class="bg-gray-800/30 border border-gray-700 p-6 rounded-xl mb-8"></div>
 
@@ -195,14 +199,25 @@ document.addEventListener("DOMContentLoaded", () => {
   feather.replace();
 });
 
+/* PROS / CONS MOBILE TOGGLE */
 function showPros() {
   document.getElementById("pros-box").classList.remove("hidden");
   document.getElementById("cons-box").classList.add("hidden");
+
+  document.getElementById("btn-pros").className =
+    "flex-1 py-2 rounded-lg font-semibold bg-blue-600 text-white";
+  document.getElementById("btn-cons").className =
+    "flex-1 py-2 rounded-lg font-semibold bg-gray-800 text-gray-300";
 }
 
 function showCons() {
   document.getElementById("cons-box").classList.remove("hidden");
   document.getElementById("pros-box").classList.add("hidden");
+
+  document.getElementById("btn-cons").className =
+    "flex-1 py-2 rounded-lg font-semibold bg-blue-600 text-white";
+  document.getElementById("btn-pros").className =
+    "flex-1 py-2 rounded-lg font-semibold bg-gray-800 text-gray-300";
 }
 </script>
 
