@@ -796,27 +796,23 @@ document.addEventListener("keydown", (e) => {
       // keyboard: esc to close
       document.addEventListener("keydown", (e) => { if (e.key === "Escape") close(); });
      </script>  
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
-<script>
+       <script>
+function initVantaDeferred() {
+  const el = document.getElementById("hero-bg");
+  if (!el || !window.VANTA || !window.THREE) return;
 
-    // Vanta init deferred for performance
-    function initVantaDeferred(){
-      try {
-        if (typeof VANTA !== "undefined" && document.getElementById("vanta-bg")) {
-          VANTA.NET({
-            el: "#vanta-bg",
-            color: 0x0b2940,
-            backgroundColor: 0x0b0f15,
-            points: 12,
-            maxDistance: 22,
-            spacing: 20,
-            showDots: false
-          });
-        }
-      } catch(e){}
-    }
-    feather.replace();
+  VANTA.NET({
+    el,
+    mouseControls: true,
+    touchControls: true,
+    gyroControls: false,
+    color: 0x2563eb,
+    backgroundColor: 0x0b1116
+  });
+}
+
+window.addEventListener("load", initVantaDeferred);
+
     
 
     // run on DOMContentLoaded
