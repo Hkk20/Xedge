@@ -692,11 +692,6 @@ const sortedCats = Object.entries(counts)
   .sort((a, b) => b[1] - a[1])
   .slice(0, 6);
 
-const grid =
-  document.getElementById("browse-theme-grid") ||
-  document.getElementById("browse-category-grid");
-
-if (!grid) return;
 
 const grid =
   document.getElementById("browse-theme-grid") ||
