@@ -682,9 +682,9 @@ document.addEventListener("DOMContentLoaded", renderBrowseThemes);
 /* ---------- CLEAN PREMIUM CATEGORY PREVIEW ---------- */
 const counts = {};
 tools.forEach(t => {
-  if (!t.category) return;
-  const c = t.category.trim();
-  counts[c] = (counts[c] || 0) + 1;
+  if (!t.goal) return;
+  const g = t.goal.trim();
+  counts[g] = (counts[g] || 0) + 1;
 });
 
 // pick only top 6 categories
