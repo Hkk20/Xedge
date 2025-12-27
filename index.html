@@ -760,43 +760,42 @@ feather.replace();
       }
     }
 
-    // mobile menu logic
-    function setupMobileMenu(){
-      const toggle = document.getElementById("mobile-menu-toggle");
-      const menu = document.getElementById("mobileMenu");
-      const closeBtn = document.getElementById("mobileClose");
-      const backdrop = document.getElementById("nav-backdrop");
+  
 
-     function openMenu() {
-  if (!menu || !backdrop) return;
+  
+<script>
+function setupMobileMenu() {
+  const toggle = document.getElementById("mobile-menu-toggle");
+  const menu = document.getElementById("mobileMenu");
+  const closeBtn = document.getElementById("mobileClose");
+  const backdrop = document.getElementById("nav-backdrop");
 
-  menu.classList.add("open");
-  backdrop.classList.add("show");
-  menu.setAttribute("aria-hidden", "false");
-  backdrop.setAttribute("aria-hidden", "false");
-}
+  function openMenu() {
+    if (!menu || !backdrop) return;
+    menu.classList.add("open");
+    backdrop.classList.add("show");
+    menu.setAttribute("aria-hidden", "false");
+    backdrop.setAttribute("aria-hidden", "false");
+  }
 
-function closeMenu() {
-  if (!menu || !backdrop) return;
+  function closeMenu() {
+    if (!menu || !backdrop) return;
+    menu.classList.remove("open");
+    backdrop.classList.remove("show");
+    menu.setAttribute("aria-hidden", "true");
+    backdrop.setAttribute("aria-hidden", "true");
+  }
 
-  menu.classList.remove("open");
-  backdrop.classList.remove("show");
-  menu.setAttribute("aria-hidden", "true");
-  backdrop.setAttribute("aria-hidden", "true");
-}
   if (toggle) toggle.addEventListener("click", openMenu);
-if (closeBtn) closeBtn.addEventListener("click", closeMenu);
-if (backdrop) backdrop.addEventListener("click", closeMenu);
+  if (closeBtn) closeBtn.addEventListener("click", closeMenu);
+  if (backdrop) backdrop.addEventListener("click", closeMenu);
 
-document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape") closeMenu();
-});
-   
-
-      // keyboard: esc to close
-      document.addEventListener("keydown", (e) => { if (e.key === "Escape") close(); });
-     </script>  
-       <script>
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeMenu();
+  });
+}
+</script>
+<script>
 function initVantaDeferred() {
   const el = document.getElementById("hero-bg");
   if (!el || !window.VANTA || !window.THREE) return;
@@ -812,35 +811,26 @@ function initVantaDeferred() {
 }
 
 window.addEventListener("load", initVantaDeferred);
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  setupMobileMenu();
 
-    
+  if (typeof renderHome === "function") {
+    renderHome();
+  }
 
-    // run on DOMContentLoaded
-    document.addEventListener("DOMContentLoaded", () => {
-      setupMobileMenu();
-      // render content
-      renderHome();
-      // feather icons
-      if (window.feather) feather.replace();
+  if (window.feather) {
+    feather.replace();
+  }
 
-      // init vanta after small idle to avoid blocking page load on mobile
-      if ('requestIdleCallback' in window) {
-        requestIdleCallback(() => initVantaDeferred(), {timeout:1000});
-      } else {
-        setTimeout(initVantaDeferred, 800);
-      }
-    });
-
-  
-       window.addEventListener("DOMContentLoaded", () => {
-  if (window.VANTA && window.THREE) {
-    VANTA.NET({
-      el: "#hero-bg",
-      color: 0x3b82f6,
-      backgroundColor: 0x0b1116
-    });
+  if ("requestIdleCallback" in window) {
+    requestIdleCallback(initVantaDeferred, { timeout: 1000 });
+  } else {
+    setTimeout(initVantaDeferred, 800);
   }
 });
+</script>
 
   </script>
 
