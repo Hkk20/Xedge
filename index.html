@@ -721,128 +721,150 @@ grid.innerHTML = sortedCats.map(([cat, count]) => `
 
 feather.replace();
 
-      // top tools (priority)
-      const pt = normalized.filter(t => normalize(t.name) && PRIORITY.includes(normalize(t.name))).slice(0,8);
-      const scroller = document.getElementById("top-tools-wrapper");
-      if (scroller) {
-        if (!pt.length) {
-          // fallback: take first few
-          scroller.innerHTML = normalized.slice(0,6).map(t => `
-            <div class="min-w-[260px] snap-start bg-gray-800/60 border border-gray-700 rounded-2xl p-6 text-center flex flex-col items-center">
-              <img data-src="${t.logo || makePlaceholder(t.name,160,160)}" class="w-20 h-20 object-contain mb-4 rounded-lg" alt="${t.name} icon" />
-              <h3 class="text-xl font-semibold mb-1">${t.name}</h3>
-              <p class="text-gray-400 text-sm mb-4">${(t.short||"").slice(0,80)}</p>
-              <a href="${t.link||'#'}" target="_blank" class="bg-blue-600 px-4 py-2 rounded-full text-sm">Visit →</a>
-            </div>`).join("");
-        } else {
-          scroller.innerHTML = pt.map(t => `
-            <div class="min-w-[260px] snap-start bg-gray-800/60 border border-gray-700 rounded-2xl p-6 text-center flex flex-col items-center">
-              <img data-src="${t.logo || makePlaceholder(t.name,160,160)}" class="w-20 h-20 object-contain mb-4 rounded-lg" alt="${t.name} icon" />
-              <h3 class="text-xl font-semibold mb-1">${t.name}</h3>
-              <p class="text-gray-400 text-sm mb-4">${(t.short||"").slice(0,80)}</p>
-              <a href="${t.link||'#'}" target="_blank" class="bg-blue-600 px-4 py-2 rounded-full text-sm">Visit →</a>
-            </div>
-          `).join("");
-        }
-        lazyLoadContainerImages(scroller);
-      }
+      <script>
+(function () {
+  "use strict";
 
-      // feather icons (replace)
-      if (window.feather) try { feather.replace(); } catch(e){}
+  /* =========================
+     TOP TOOLS (PRIORITY)
+  ========================= */
+  function renderTopTools(normalized) {
+    if (!Array.isArray(normalized)) return;
 
-      // scroller buttons
-      const left = document.getElementById("scroll-left");
-      const right = document.getElementById("scroll-right");
-      if (left && right && scroller) {
-        left.classList.remove("hidden"); right.classList.remove("hidden");
-        right.onclick = () => scroller.scrollBy({ left: 350, behavior: "smooth" });
-        left.onclick = () => scroller.scrollBy({ left: -350, behavior: "smooth" });
-      }
+    const PRIORITY = ["chat gpt","runway ml","notion ai","leonardo ai","github copilot","mid journey","perplexity"];
+
+    const pt = normalized
+      .filter(t => t?.name && PRIORITY.includes(String(t.name).toLowerCase()))
+      .slice(0, 8);
+
+    const scroller = document.getElementById("top-tools-wrapper");
+    if (!scroller) return;
+
+    // Remove skeleton if present
+    const skeleton = document.getElementById("top-tools-skel");
+    if (skeleton) skeleton.remove();
+
+    const list = pt.length ? pt : normalized.slice(0, 6);
+
+    scroller.innerHTML = list.map(t => `
+      <div class="min-w-[260px] snap-start bg-gray-800/60 border border-gray-700 rounded-2xl p-6 text-center flex flex-col items-center">
+        <img data-src="${t.logo || makePlaceholder(t.name,160,160)}"
+             class="w-20 h-20 object-contain mb-4 rounded-lg"
+             alt="${t.name} icon" />
+        <h3 class="text-xl font-semibold mb-1">${t.name}</h3>
+        <p class="text-gray-400 text-sm mb-4">${(t.short || "").slice(0,80)}</p>
+        <a href="${t.link || "#"}" target="_blank"
+           class="bg-blue-600 px-4 py-2 rounded-full text-sm">
+          Visit →
+        </a>
+      </div>
+    `).join("");
+
+    if (typeof lazyLoadContainerImages === "function") {
+      lazyLoadContainerImages(scroller);
     }
+
+    // Scroll buttons
+    const left = document.getElementById("scroll-left");
+    const right = document.getElementById("scroll-right");
+
+    if (left && right) {
+      left.classList.remove("hidden");
+      right.classList.remove("hidden");
+
+      right.onclick = () => scroller.scrollBy({ left: 350, behavior: "smooth" });
+      left.onclick = () => scroller.scrollBy({ left: -350, behavior: "smooth" });
+    }
+
+    if (window.feather) {
+      try { feather.replace(); } catch (e) {}
+    }
+  }
+
+  /* =========================
+     MOBILE MENU
+  ========================= */
+  function setupMobileMenu() {
+    const toggle = document.getElementById("mobile-menu-toggle");
+    const menu = document.getElementById("mobileMenu");
+    const closeBtn = document.getElementById("mobileClose");
+    const backdrop = document.getElementById("nav-backdrop");
+
+    if (!menu || !backdrop) return;
+
+    function openMenu() {
+      menu.classList.add("open");
+      backdrop.classList.add("show");
+      menu.setAttribute("aria-hidden", "false");
+      backdrop.setAttribute("aria-hidden", "false");
+    }
+
+    function closeMenu() {
+      menu.classList.remove("open");
+      backdrop.classList.remove("show");
+      menu.setAttribute("aria-hidden", "true");
+      backdrop.setAttribute("aria-hidden", "true");
+    }
+
+    if (toggle) toggle.addEventListener("click", openMenu);
+    if (closeBtn) closeBtn.addEventListener("click", closeMenu);
+    backdrop.addEventListener("click", closeMenu);
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeMenu();
+    });
+  }
+
+  /* =========================
+     VANTA (SAFE INIT)
+  ========================= */
+  function initVantaDeferred() {
+    const el = document.getElementById("hero-bg");
+    if (!el || !window.VANTA || !window.THREE) return;
+
+    VANTA.NET({
+      el,
+      mouseControls: true,
+      touchControls: true,
+      gyroControls: false,
+      color: 0x2563eb,
+      backgroundColor: 0x0b1116
+    });
+  }
+
+  /* =========================
+     DOM READY
+  ========================= */
+  document.addEventListener("DOMContentLoaded", () => {
+    setupMobileMenu();
+
+    if (typeof renderHome === "function") {
+      renderHome();
+    }
+
+    if (window.feather) {
+      try { feather.replace(); } catch (e) {}
+    }
+
+    if ("requestIdleCallback" in window) {
+      requestIdleCallback(initVantaDeferred, { timeout: 1000 });
+    } else {
+      setTimeout(initVantaDeferred, 800);
+    }
+  });
+
 })();
-
-  
-   </script>
-  
-<script>
-function setupMobileMenu() {
-  const toggle = document.getElementById("mobile-menu-toggle");
-  const menu = document.getElementById("mobileMenu");
-  const closeBtn = document.getElementById("mobileClose");
-  const backdrop = document.getElementById("nav-backdrop");
-
-  function openMenu() {
-    if (!menu || !backdrop) return;
-    menu.classList.add("open");
-    backdrop.classList.add("show");
-    menu.setAttribute("aria-hidden", "false");
-    backdrop.setAttribute("aria-hidden", "false");
-  }
-
-  function closeMenu() {
-    if (!menu || !backdrop) return;
-    menu.classList.remove("open");
-    backdrop.classList.remove("show");
-    menu.setAttribute("aria-hidden", "true");
-    backdrop.setAttribute("aria-hidden", "true");
-  }
-
-  if (toggle) toggle.addEventListener("click", openMenu);
-  if (closeBtn) closeBtn.addEventListener("click", closeMenu);
-  if (backdrop) backdrop.addEventListener("click", closeMenu);
-
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") closeMenu();
-  });
-}
 </script>
+
+<!-- Accessibility helper -->
 <script>
-function initVantaDeferred() {
-  const el = document.getElementById("hero-bg");
-  if (!el || !window.VANTA || !window.THREE) return;
-
-  VANTA.NET({
-    el,
-    mouseControls: true,
-    touchControls: true,
-    gyroControls: false,
-    color: 0x2563eb,
-    backgroundColor: 0x0b1116
-  });
-}
-
-window.addEventListener("load", initVantaDeferred);
-</script>
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  setupMobileMenu();
-
-  if (typeof renderHome === "function") {
-    renderHome();
-  }
-
-  if (window.feather) {
-    feather.replace();
-  }
-
-  if ("requestIdleCallback" in window) {
-    requestIdleCallback(initVantaDeferred, { timeout: 1000 });
-  } else {
-    setTimeout(initVantaDeferred, 800);
+document.addEventListener("keydown", function(e){
+  if (e.key === "Tab") {
+    document.body.classList.add("user-is-tabbing");
   }
 });
 </script>
-
-  
-
-  <!-- small accessibility helper -->
-  <script>
-    // ensure smooth focus outline visibility
-    document.addEventListener('keydown', function(e){
-      if(e.key === 'Tab') document.body.classList.add('user-is-tabbing');
-    });
-  </script>
-    <script>
+<script>
   // -------------------------------
   // FIREBASE INIT (SAFE)
   // -------------------------------
