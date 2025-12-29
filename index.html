@@ -611,250 +611,206 @@ document.addEventListener("DOMContentLoaded", renderBrowseThemes);
   </div>
         
           <!-- page-top -->
-
-  <!-- SCRIPT: logic, fetch, rendering, mobile menu + vanta init (deferred for performance) -->
-  <script>
-  (function(){
-    "use strict";
-
-    // CONFIG
-    const SHEET_URL = "https://script.google.com/macros/s/AKfycbxaA3BcQgW7PTFlSP9j4h16-p2us5IiuaYESUUpZiy8bObezI-nMUxXAC28tR15FU_U/exec";
-    const CACHE_KEY = "xedge_tools_cache_v1";
-    const PLACEHOLDER_BG = "1e293b";
-    const PRIORITY = ["chat gpt","runway ml","notion ai","leonardo ai","github copilot","mid journey","perplexity"];
-
-    // util
-    function normalize(s){ return String(s||"").trim().toLowerCase(); }
-    function makePlaceholder(name, w=240,h=240){ const t = encodeURIComponent(String(name||"Tool").slice(0,20)); return `https://dummyimage.com/${w}x${h}/${PLACEHOLDER_BG}/ffffff&text=${t}`; }
-    function safeParse(v){ try { return JSON.parse(v); } catch(e){ return null; } }
-
-    // cache-first fetch
-    async function fetchTools(force=false){
-      if (!force) {
-        const cached = safeParse(localStorage.getItem(CACHE_KEY));
-        if (Array.isArray(cached) && cached.length) return cached;
-      }
-      try {
-        const resp = await fetch(SHEET_URL + "?t=" + Date.now(), { cache: "no-store" });
-        if (!resp.ok) throw new Error("bad");
-        const data = await resp.json();
-        if (Array.isArray(data)) {
-          localStorage.setItem(CACHE_KEY, JSON.stringify(data));
-          return data;
-        }
-      } catch (e) {
-        // fallback to cache or empty
-        const cached = safeParse(localStorage.getItem(CACHE_KEY));
-        if (Array.isArray(cached)) return cached;
-        return [];
-      }
-    }
-
-    // lazy image helper: use data-src then swap when visible
-    function lazyLoadContainerImages(root){
-      const imgs = root.querySelectorAll("img[data-src]");
-      if (!imgs.length) return;
-      const obs = new IntersectionObserver((entries, o) => {
-        entries.forEach(en => {
-          if (!en.isIntersecting) return;
-          const img = en.target;
-          img.src = img.dataset.src;
-          img.removeAttribute("data-src");
-          o.unobserve(img);
-        });
-      }, { rootMargin: "400px", threshold: 0.01 });
-      imgs.forEach(i => obs.observe(i));
-    }
-
-    // render top tools & categories
-    async function renderHome() {
-      const tools = await fetchTools();
-      // normalize fields - handle different column names
-      const normalized = tools.map(d => ({
-        name: d.name || d.title || d.tool || "",
-        short: d.short_description || d.short || d.summary || d.description || "",
-        category: d.category || d.cat || d.type || "",
-        logo: d.logo_url || d.logo || d.image || "",
-        link: d.link || d.url || d.website || "#"
-      }));
-
-      /* ---------- RENDER CATEGORY PREVIEW ---------- */
-/* ---------- CLEAN PREMIUM CATEGORY PREVIEW ---------- */
-const counts = {};
-tools.forEach(t => {
-  if (!t.goal) return;
-  const g = t.goal.trim();
-  counts[g] = (counts[g] || 0) + 1;
-});
-
-// pick only top 6 categories
-const sortedCats = Object.entries(counts)
-  .sort((a, b) => b[1] - a[1])
-  .slice(0, 6);
-
-
-const grid =
-  document.getElementById("browse-theme-grid") ||
-  document.getElementById("browse-category-grid");
-
-if (!grid) return;
-
-grid.innerHTML = sortedCats.map(([cat, count]) => `
-  <div 
-    onclick="window.location.href='Categories.html?cat=${encodeURIComponent(cat)}'"
-    class="cursor-pointer group bg-gray-800/60 border border-gray-700 
-           hover:bg-gray-700/60 transition rounded-2xl p-8 flex flex-col 
-           items-center text-center shadow-md hover:shadow-xl duration-200">
-
-    <div class="w-16 h-16 rounded-full bg-blue-500/10 flex items-center 
-                justify-center mb-4 group-hover:bg-blue-500/20 transition">
-      <i data-feather="folder" class="text-blue-400 w-8 h-8"></i>
-    </div>
-
-    <h3 class="font-semibold text-lg group-hover:text-blue-300">
-      ${cat}
-    </h3>
-
-    <p class="text-gray-400 text-sm mt-1">${count} Tools</p>
-  </div>
-`).join("");
-
-feather.replace();
-
-      
+<script>
 (function () {
   "use strict";
 
-  /* =========================
-     TOP TOOLS (PRIORITY)
-  ========================= */
+  /* ================= CONFIG ================= */
+  const SHEET_URL =
+    "https://script.google.com/macros/s/AKfycbxaA3BcQgW7PTFlSP9j4h16-p2us5IiuaYESUUpZiy8bObezI-nMUxXAC28tR15FU_U/exec";
+  const CACHE_KEY = "xedge_tools_cache_v1";
+  const PLACEHOLDER_BG = "1e293b";
+  const PRIORITY = [
+    "chat gpt",
+    "runway ml",
+    "notion ai",
+    "leonardo ai",
+    "github copilot",
+    "mid journey",
+    "perplexity"
+  ];
+
+  /* ================= UTILS ================= */
+  const normalize = s => String(s || "").trim().toLowerCase();
+
+  const makePlaceholder = (name, w = 240, h = 240) =>
+    `https://dummyimage.com/${w}x${h}/${PLACEHOLDER_BG}/ffffff&text=${encodeURIComponent(
+      String(name || "Tool").slice(0, 20)
+    )}`;
+
+  const safeParse = v => {
+    try { return JSON.parse(v); } catch { return null; }
+  };
+
+  /* ================= FETCH ================= */
+  async function fetchTools(force = false) {
+    if (!force) {
+      const cached = safeParse(localStorage.getItem(CACHE_KEY));
+      if (Array.isArray(cached) && cached.length) return cached;
+    }
+
+    try {
+      const res = await fetch(SHEET_URL + "?t=" + Date.now(), { cache: "no-store" });
+      const data = await res.json();
+      if (Array.isArray(data)) {
+        localStorage.setItem(CACHE_KEY, JSON.stringify(data));
+        return data;
+      }
+    } catch {}
+
+    return safeParse(localStorage.getItem(CACHE_KEY)) || [];
+  }
+
+  /* ================= LAZY IMAGES ================= */
+  function lazyLoadContainerImages(root) {
+    if (!root) return;
+    const imgs = root.querySelectorAll("img[data-src]");
+    if (!imgs.length) return;
+
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        const img = e.target;
+        img.src = img.dataset.src;
+        img.removeAttribute("data-src");
+        obs.unobserve(img);
+      });
+    }, { rootMargin: "400px" });
+
+    imgs.forEach(i => obs.observe(i));
+  }
+
+  /* ================= TOP TOOLS ================= */
   function renderTopTools(normalized) {
-    if (!Array.isArray(normalized)) return;
-
-    const PRIORITY = ["chat gpt","runway ml","notion ai","leonardo ai","github copilot","mid journey","perplexity"];
-
-    const pt = normalized
-      .filter(t => t?.name && PRIORITY.includes(String(t.name).toLowerCase()))
-      .slice(0, 8);
-
     const scroller = document.getElementById("top-tools-wrapper");
     if (!scroller) return;
 
-    // Remove skeleton if present
     const skeleton = document.getElementById("top-tools-skel");
     if (skeleton) skeleton.remove();
+
+    const pt = normalized
+      .filter(t => normalize(t.name) && PRIORITY.includes(normalize(t.name)))
+      .slice(0, 8);
 
     const list = pt.length ? pt : normalized.slice(0, 6);
 
     scroller.innerHTML = list.map(t => `
       <div class="min-w-[260px] snap-start bg-gray-800/60 border border-gray-700 rounded-2xl p-6 text-center flex flex-col items-center">
         <img data-src="${t.logo || makePlaceholder(t.name,160,160)}"
-             class="w-20 h-20 object-contain mb-4 rounded-lg"
-             alt="${t.name} icon" />
+             class="w-20 h-20 object-contain mb-4 rounded-lg" />
         <h3 class="text-xl font-semibold mb-1">${t.name}</h3>
         <p class="text-gray-400 text-sm mb-4">${(t.short || "").slice(0,80)}</p>
         <a href="${t.link || "#"}" target="_blank"
-           class="bg-blue-600 px-4 py-2 rounded-full text-sm">
-          Visit →
-        </a>
+           class="bg-blue-600 px-4 py-2 rounded-full text-sm">Visit →</a>
       </div>
     `).join("");
 
-    if (typeof lazyLoadContainerImages === "function") {
-      lazyLoadContainerImages(scroller);
-    }
+    lazyLoadContainerImages(scroller);
 
-    // Scroll buttons
     const left = document.getElementById("scroll-left");
     const right = document.getElementById("scroll-right");
 
     if (left && right) {
       left.classList.remove("hidden");
       right.classList.remove("hidden");
-
       right.onclick = () => scroller.scrollBy({ left: 350, behavior: "smooth" });
       left.onclick = () => scroller.scrollBy({ left: -350, behavior: "smooth" });
     }
 
-    if (window.feather) {
-      try { feather.replace(); } catch (e) {}
-    }
+    if (window.feather) feather.replace();
   }
 
-  /* =========================
-     MOBILE MENU
-  ========================= */
+  /* ================= HOME ================= */
+  async function renderHome() {
+    const tools = await fetchTools();
+
+    const normalized = tools.map(d => ({
+      name: d.name || d.title || "",
+      short: d.short_description || d.short || d.summary || "",
+      category: d.category || "",
+      goal: d.goal || "",
+      logo: d.logo_url || d.logo || "",
+      link: d.link || "#"
+    }));
+
+    /* ---- Browse by Goal ---- */
+    const grid =
+      document.getElementById("browse-theme-grid") ||
+      document.getElementById("browse-category-grid");
+
+    if (grid) {
+      const counts = {};
+      tools.forEach(t => {
+        if (!t.goal) return;
+        counts[t.goal] = (counts[t.goal] || 0) + 1;
+      });
+
+      grid.innerHTML = Object.entries(counts)
+        .slice(0, 6)
+        .map(([g, c]) => `
+          <div onclick="location.href='Categories.html?goal=${encodeURIComponent(g)}'"
+               class="cursor-pointer group bg-gray-800/60 border border-gray-700 rounded-2xl p-8 text-center">
+            <div class="w-16 h-16 mx-auto mb-4 bg-blue-500/10 rounded-full flex items-center justify-center">
+              <i data-feather="folder"></i>
+            </div>
+            <h3 class="font-semibold">${g}</h3>
+            <p class="text-gray-400 text-sm">${c} Tools</p>
+          </div>
+        `).join("");
+
+      if (window.feather) feather.replace();
+    }
+
+    renderTopTools(normalized);
+  }
+
+  /* ================= MOBILE MENU ================= */
   function setupMobileMenu() {
     const toggle = document.getElementById("mobile-menu-toggle");
     const menu = document.getElementById("mobileMenu");
-    const closeBtn = document.getElementById("mobileClose");
     const backdrop = document.getElementById("nav-backdrop");
 
     if (!menu || !backdrop) return;
 
-    function openMenu() {
-      menu.classList.add("open");
-      backdrop.classList.add("show");
-      menu.setAttribute("aria-hidden", "false");
-      backdrop.setAttribute("aria-hidden", "false");
-    }
-
-    function closeMenu() {
+    const close = () => {
       menu.classList.remove("open");
       backdrop.classList.remove("show");
-      menu.setAttribute("aria-hidden", "true");
-      backdrop.setAttribute("aria-hidden", "true");
-    }
+    };
 
-    if (toggle) toggle.addEventListener("click", openMenu);
-    if (closeBtn) closeBtn.addEventListener("click", closeMenu);
-    backdrop.addEventListener("click", closeMenu);
+    if (toggle) toggle.onclick = () => {
+      menu.classList.add("open");
+      backdrop.classList.add("show");
+    };
 
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") closeMenu();
-    });
+    backdrop.onclick = close;
+    document.addEventListener("keydown", e => e.key === "Escape" && close());
   }
 
-  /* =========================
-     VANTA (SAFE INIT)
-  ========================= */
+  /* ================= VANTA ================= */
   function initVantaDeferred() {
     const el = document.getElementById("hero-bg");
     if (!el || !window.VANTA || !window.THREE) return;
-
     VANTA.NET({
       el,
       mouseControls: true,
       touchControls: true,
-      gyroControls: false,
-      color: 0x2563eb,
       backgroundColor: 0x0b1116
     });
   }
 
-  /* =========================
-     DOM READY
-  ========================= */
+  /* ================= INIT ================= */
   document.addEventListener("DOMContentLoaded", () => {
     setupMobileMenu();
-
-    if (typeof renderHome === "function") {
-      renderHome();
-    }
-
-    if (window.feather) {
-      try { feather.replace(); } catch (e) {}
-    }
-
-    if ("requestIdleCallback" in window) {
-      requestIdleCallback(initVantaDeferred, { timeout: 1000 });
-    } else {
-      setTimeout(initVantaDeferred, 800);
-    }
+    renderHome();
+    requestIdleCallback
+      ? requestIdleCallback(initVantaDeferred, { timeout: 1000 })
+      : setTimeout(initVantaDeferred, 800);
   });
 
 })();
 </script>
+
+
 
 <!-- Accessibility helper -->
 <script>
