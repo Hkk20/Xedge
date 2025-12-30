@@ -736,36 +736,64 @@ document.addEventListener("DOMContentLoaded", renderBrowseThemes);
       link: d.link || "#"
     }));
 
-    /* ---- Browse by Goal ---- */
-    const grid =
-      document.getElementById("browse-theme-grid") ||
-      document.getElementById("browse-category-grid");
+  /* ---- Browse by Goal (FIXED & SAFE) ---- */
+(function renderBrowseByGoal() {
+  const grid =
+    document.getElementById("browse-theme-grid") ||
+    document.getElementById("browse-category-grid");
 
-    if (grid) {
-      const counts = {};
-      tools.forEach(t => {
-        if (!t.goal) return;
-        counts[t.goal] = (counts[t.goal] || 0) + 1;
-      });
+  if (!grid || !Array.isArray(normalized)) return;
 
-      grid.innerHTML = Object.entries(counts)
-        .slice(0, 6)
-        .map(([g, c]) => `
-          <div onclick="location.href='Categories.html?goal=${encodeURIComponent(g)}'"
-               class="cursor-pointer group bg-gray-800/60 border border-gray-700 rounded-2xl p-8 text-center">
-            <div class="w-16 h-16 mx-auto mb-4 bg-blue-500/10 rounded-full flex items-center justify-center">
-              <i data-feather="folder"></i>
-            </div>
-            <h3 class="font-semibold">${g}</h3>
-            <p class="text-gray-400 text-sm">${c} Tools</p>
-          </div>
-        `).join("");
+  const counts = {};
 
-      if (window.feather) feather.replace();
+  normalized.forEach(t => {
+    const goal = (t.goal || "").trim();
+    if (!goal) return;
+
+    const key = goal.toLowerCase(); // normalize for counting
+    if (!counts[key]) {
+      counts[key] = { label: goal, count: 0 };
     }
+    counts[key].count++;
+  });
 
-    renderTopTools(normalized);
+  const goals = Object.values(counts).slice(0, 6);
+
+  if (!goals.length) {
+    grid.innerHTML = `
+      <div class="col-span-full text-gray-400 text-center">
+        No goals available yet
+      </div>`;
+    return;
   }
+
+  grid.innerHTML = goals.map(g => `
+    <div
+      onclick="location.href='Categories.html?goal=${encodeURIComponent(g.label)}'"
+      class="cursor-pointer group bg-gray-800/60 border border-gray-700 
+             hover:bg-gray-700/60 transition rounded-2xl p-8 text-center
+             shadow-md hover:shadow-xl duration-200">
+
+      <div class="w-16 h-16 mx-auto mb-4 bg-blue-500/10 rounded-full 
+                  flex items-center justify-center group-hover:bg-blue-500/20">
+        <i data-feather="target" class="text-blue-400 w-8 h-8"></i>
+      </div>
+
+      <h3 class="font-semibold text-lg group-hover:text-blue-300">
+        ${g.label}
+      </h3>
+
+      <p class="text-gray-400 text-sm mt-1">
+        ${g.count} Tools
+      </p>
+    </div>
+  `).join("");
+
+  if (window.feather) {
+    try { feather.replace(); } catch (e) {}
+  }
+})();
+
 
   /* ================= MOBILE MENU ================= */
   function setupMobileMenu() {
