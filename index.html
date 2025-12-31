@@ -610,8 +610,7 @@ document.addEventListener("DOMContentLoaded", renderBrowseThemes);
        
   </div>
         
-          <!-- page-top -->
-<script>
+ <script>
 (function () {
   "use strict";
 
@@ -643,11 +642,9 @@ document.addEventListener("DOMContentLoaded", renderBrowseThemes);
   };
 
   /* ================= FETCH ================= */
-  async function fetchTools(force = false) {
-    if (!force) {
-      const cached = safeParse(localStorage.getItem(CACHE_KEY));
-      if (Array.isArray(cached) && cached.length) return cached;
-    }
+  async function fetchTools() {
+    const cached = safeParse(localStorage.getItem(CACHE_KEY));
+    if (Array.isArray(cached) && cached.length) return cached;
 
     try {
       const res = await fetch(SHEET_URL + "?t=" + Date.now(), { cache: "no-store" });
@@ -658,7 +655,7 @@ document.addEventListener("DOMContentLoaded", renderBrowseThemes);
       }
     } catch {}
 
-    return safeParse(localStorage.getItem(CACHE_KEY)) || [];
+    return [];
   }
 
   /* ================= LAZY IMAGES ================= */
@@ -700,11 +697,10 @@ document.addEventListener("DOMContentLoaded", renderBrowseThemes);
              class="w-20 h-20 object-contain mb-4 rounded-lg" />
         <h3 class="text-xl font-semibold mb-1">${t.name}</h3>
         <p class="text-gray-400 text-sm mb-4">${(t.short || "").slice(0,80)}</p>
-       <a href="tool.html?tool=${encodeURIComponent(t.name)}"
-   class="bg-blue-600 px-4 py-2 rounded-full text-sm">
-  View Tool →
-</a>
-
+        <a href="tool.html?tool=${encodeURIComponent(t.name)}"
+           class="bg-blue-600 px-4 py-2 rounded-full text-sm">
+          View Tool →
+        </a>
       </div>
     `).join("");
 
@@ -736,71 +732,46 @@ document.addEventListener("DOMContentLoaded", renderBrowseThemes);
       link: d.link || "#"
     }));
 
-  /* ---- Browse by Goal (FIXED & SAFE) ---- */
-(function renderBrowseByGoal() {
-  const grid =
-    document.getElementById("browse-theme-grid") ||
-    document.getElementById("browse-category-grid");
+    /* ---- Browse by Goal ---- */
+    const grid =
+      document.getElementById("browse-theme-grid") ||
+      document.getElementById("browse-category-grid");
 
-  if (!grid || !Array.isArray(normalized)) return;
+    if (grid) {
+      const counts = {};
+      normalized.forEach(t => {
+        if (!t.goal) return;
+        const key = t.goal.toLowerCase();
+        counts[key] = counts[key] || { label: t.goal, count: 0 };
+        counts[key].count++;
+      });
 
-  const counts = {};
+      const goals = Object.values(counts).slice(0, 6);
 
-  normalized.forEach(t => {
-    const goal = (t.goal || "").trim();
-    if (!goal) return;
+      grid.innerHTML = goals.length
+        ? goals.map(g => `
+          <div onclick="location.href='Categories.html?goal=${encodeURIComponent(g.label)}'"
+               class="cursor-pointer group bg-gray-800/60 border border-gray-700 rounded-2xl p-8 text-center">
+            <div class="w-16 h-16 mx-auto mb-4 bg-blue-500/10 rounded-full flex items-center justify-center">
+              <i data-feather="target"></i>
+            </div>
+            <h3 class="font-semibold">${g.label}</h3>
+            <p class="text-gray-400 text-sm">${g.count} Tools</p>
+          </div>
+        `).join("")
+        : `<div class="text-gray-400 text-center col-span-full">No goals yet</div>`;
 
-    const key = goal.toLowerCase(); // normalize for counting
-    if (!counts[key]) {
-      counts[key] = { label: goal, count: 0 };
+      if (window.feather) feather.replace();
     }
-    counts[key].count++;
-  });
 
-  const goals = Object.values(counts).slice(0, 6);
-
-  if (!goals.length) {
-    grid.innerHTML = `
-      <div class="col-span-full text-gray-400 text-center">
-        No goals available yet
-      </div>`;
-    return;
+    renderTopTools(normalized);
   }
-
-  grid.innerHTML = goals.map(g => `
-    <div
-      onclick="location.href='Categories.html?goal=${encodeURIComponent(g.label)}'"
-      class="cursor-pointer group bg-gray-800/60 border border-gray-700 
-             hover:bg-gray-700/60 transition rounded-2xl p-8 text-center
-             shadow-md hover:shadow-xl duration-200">
-
-      <div class="w-16 h-16 mx-auto mb-4 bg-blue-500/10 rounded-full 
-                  flex items-center justify-center group-hover:bg-blue-500/20">
-        <i data-feather="target" class="text-blue-400 w-8 h-8"></i>
-      </div>
-
-      <h3 class="font-semibold text-lg group-hover:text-blue-300">
-        ${g.label}
-      </h3>
-
-      <p class="text-gray-400 text-sm mt-1">
-        ${g.count} Tools
-      </p>
-    </div>
-  `).join("");
-
-  if (window.feather) {
-    try { feather.replace(); } catch (e) {}
-  }
-})();
-
 
   /* ================= MOBILE MENU ================= */
   function setupMobileMenu() {
     const toggle = document.getElementById("mobile-menu-toggle");
     const menu = document.getElementById("mobileMenu");
     const backdrop = document.getElementById("nav-backdrop");
-
     if (!menu || !backdrop) return;
 
     const close = () => {
@@ -818,51 +789,41 @@ document.addEventListener("DOMContentLoaded", renderBrowseThemes);
   }
 
   /* ================= VANTA ================= */
- function initVantaDeferred() {
-  const el = document.getElementById("hero-bg");
-  if (!el || !window.VANTA || !window.THREE) return;
+  function initVantaDeferred() {
+    const el = document.getElementById("hero-bg");
+    if (!el || !window.VANTA || !window.THREE) return;
 
-  VANTA.NET({
-    el,
-    mouseControls: true,
-    touchControls: true,
-    gyroControls: false,
-    backgroundColor: 0x0b1116
-  });
-}
-
+    VANTA.NET({
+      el,
+      mouseControls: true,
+      touchControls: true,
+      gyroControls: false,
+      backgroundColor: 0x0b1116
+    });
+  }
 
   /* ================= INIT ================= */
-  /* ============ INIT ============ */
-document.addEventListener("DOMContentLoaded", () => {
-  setupMobileMenu();
-
-  if (typeof renderHome === "function") {
+  document.addEventListener("DOMContentLoaded", () => {
+    setupMobileMenu();
     renderHome();
-  }
 
-  if (window.feather) {
-    try { feather.replace(); } catch (e) {}
-  }
+    if ("requestIdleCallback" in window) {
+      requestIdleCallback(initVantaDeferred, { timeout: 1000 });
+    } else {
+      setTimeout(initVantaDeferred, 800);
+    }
+  });
 
-  if ("requestIdleCallback" in window) {
-    requestIdleCallback(initVantaDeferred, { timeout: 1000 });
-  } else {
-    setTimeout(initVantaDeferred, 800);
-  }
-});
+})();
+</script>
 
-
-
-
-/*-- Accessibility helper -->*/
-
-document.addEventListener("keydown", function(e){
-  if (e.key === "Tab") {
-    document.body.classList.add("user-is-tabbing");
-  }
+<script>
+/* Accessibility helper */
+document.addEventListener("keydown", e => {
+  if (e.key === "Tab") document.body.classList.add("user-is-tabbing");
 });
 </script>
+
 <script>
   // -------------------------------
   // FIREBASE INIT (SAFE)
