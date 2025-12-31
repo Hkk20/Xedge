@@ -749,6 +749,41 @@ document.addEventListener("DOMContentLoaded", renderBrowseGoals);
       link: d.link || "#"
     }));
 
+       /* ---- Browse by Goal ---- */
+    const grid =
+      document.getElementById("browse-theme-grid") ||
+      document.getElementById("browse-category-grid");
+
+    if (grid) {
+      const counts = {};
+      normalized.forEach(t => {
+        if (!t.goal) return;
+        const key = t.goal.toLowerCase();
+        counts[key] = counts[key] || { label: t.goal, count: 0 };
+        counts[key].count++;
+      });
+
+      const goals = Object.values(counts).slice(0, 6);
+
+      grid.innerHTML = goals.length
+        ? goals.map(g => `
+          <div onclick="location.href='Categories.html?goal=${encodeURIComponent(g.label)}'"
+               class="cursor-pointer group bg-gray-800/60 border border-gray-700 rounded-2xl p-8 text-center">
+            <div class="w-16 h-16 mx-auto mb-4 bg-blue-500/10 rounded-full flex items-center justify-center">
+              <i data-feather="target"></i>
+            </div>
+            <h3 class="font-semibold">${g.label}</h3>
+            <p class="text-gray-400 text-sm">${g.count} Tools</p>
+          </div>
+        `).join("")
+        : `<div class="text-gray-400 text-center col-span-full">No goals yet</div>`;
+
+      if (window.feather) feather.replace();
+    }
+
+    renderTopTools(normalized);
+  }
+
   /* ================= MOBILE MENU ================= */
   function setupMobileMenu() {
     const toggle = document.getElementById("mobile-menu-toggle");
