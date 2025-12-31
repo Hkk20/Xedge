@@ -437,52 +437,69 @@
   </div>
 </section>
 <script>
-async function renderBrowseThemes() {
-  const grid = document.getElementById("browse-theme-grid");
+async function renderBrowseGoals() {
+  const grid =
+    document.getElementById("browse-theme-grid") ||
+    document.getElementById("browse-category-grid");
+
   if (!grid || typeof getTools !== "function") return;
 
   const tools = await getTools();
 
-  // Collect unique themes
-  const themeSet = new Set();
+  const goalMap = {};
 
   tools.forEach(t => {
-    if (!t.themes) return;
-    t.themes
-      .split(",")
-      .map(x => x.trim())
-      .filter(Boolean)
-      .forEach(theme => themeSet.add(theme));
+    if (!t.goal) return;
+
+    const goal = t.goal.trim();
+    if (!goal) return;
+
+    const key = goal.toLowerCase();
+
+    if (!goalMap[key]) {
+      goalMap[key] = { label: goal, count: 0 };
+    }
+    goalMap[key].count++;
   });
 
-  const themes = Array.from(themeSet);
+  const goals = Object.values(goalMap)
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 6);
 
-  if (!themes.length) {
-    grid.innerHTML = `<p class="text-gray-400">No themes found.</p>`;
+  if (!goals.length) {
+    grid.innerHTML = `<p class="text-gray-400 text-center">No goals found.</p>`;
     return;
   }
 
-  // Render cards (same style as categories)
-  grid.innerHTML = themes.map(theme => `
-    <a href="Themes.html?theme=${encodeURIComponent(theme)}"
-       class="bg-gray-800/50 border border-gray-700 rounded-xl p-6
-              hover:bg-gray-700 transition">
+  grid.innerHTML = goals.map(g => `
+    <div
+      onclick="location.href='Categories.html?goal=${encodeURIComponent(g.label)}'"
+      class="cursor-pointer group bg-gray-800/60 border border-gray-700
+             hover:bg-gray-700/60 transition rounded-2xl p-8
+             flex flex-col items-center text-center
+             shadow-md hover:shadow-xl duration-200">
 
-      <h3 class="text-lg font-semibold text-white mb-2">
-        ${theme}
+      <div class="w-16 h-16 rounded-full bg-blue-500/10 flex items-center justify-center mb-4
+                  group-hover:bg-blue-500/20 transition">
+        <i data-feather="target" class="w-8 h-8 text-blue-400"></i>
+      </div>
+
+      <h3 class="font-semibold text-lg group-hover:text-blue-300">
+        ${g.label}
       </h3>
 
-      <p class="text-gray-400 text-sm">
-        Tools curated to help you ${theme.toLowerCase()}
+      <p class="text-gray-400 text-sm mt-1">
+        ${g.count} Tools
       </p>
-    </a>
+    </div>
   `).join("");
 
   if (window.feather) feather.replace();
 }
 
-document.addEventListener("DOMContentLoaded", renderBrowseThemes);
+document.addEventListener("DOMContentLoaded", renderBrowseGoals);
 </script>
+
 
 
       <!-- Why choose X Edge -->
