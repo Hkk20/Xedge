@@ -833,19 +833,25 @@ document.addEventListener("DOMContentLoaded", renderBrowseThemes);
 
 
   /* ================= INIT ================= */
-  document.addEventListener("DOMContentLoaded", () => {
-    setupMobileMenu();
+  /* ============ INIT ============ */
+document.addEventListener("DOMContentLoaded", () => {
+  setupMobileMenu();
+
+  if (typeof renderHome === "function") {
     renderHome();
+  }
+
+  if (window.feather) {
+    try { feather.replace(); } catch (e) {}
+  }
+
   if ("requestIdleCallback" in window) {
-  requestIdleCallback(initVantaDeferred, { timeout: 1000 });
-} else {
-  setTimeout(initVantaDeferred, 800);
-}
+    requestIdleCallback(initVantaDeferred, { timeout: 1000 });
+  } else {
+    setTimeout(initVantaDeferred, 800);
+  }
+});
 
-  });
-
-})();
-</script>
 
 
 
