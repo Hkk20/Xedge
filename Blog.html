@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Blog | X-Edge</title>
+  <meta name="description" content="X-Edge Blog — insights on AI tools, security, startups, and product building." />
+
+  <!-- Basic Security -->
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; style-src 'self' 'unsafe-inline';">
+
+  <!-- SEO -->
+  <meta name="robots" content="index, follow" />
+
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #0f172a;
+      color: #e5e7eb;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 3rem 1.25rem;
+    }
+
+    header {
+      margin-bottom: 3rem;
+    }
+
+    h1 {
+      font-size: 2.4rem;
+      margin-bottom: 0.5rem;
+      color: #ffffff;
+    }
+
+    .subtitle {
+      color: #9ca3af;
+      font-size: 1.05rem;
+    }
+
+    .blog-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+    }
+
+    .post-card {
+      background: #020617;
+      border: 1px solid #1f2933;
+      border-radius: 10px;
+      padding: 1.5rem;
+      transition: transform 0.15s ease, border 0.15s ease;
+    }
+
+    .post-card:hover {
+      transform: translateY(-4px);
+      border-color: #38bdf8;
+    }
+
+    .post-meta {
+      font-size: 0.85rem;
+      color: #9ca3af;
+      margin-bottom: 0.5rem;
+    }
+
+    .post-title {
+      font-size: 1.25rem;
+      margin: 0.25rem 0 0.75rem;
+      color: #ffffff;
+    }
+
+    .post-desc {
+      font-size: 0.95rem;
+      color: #d1d5db;
+      line-height: 1.6;
+    }
+
+    .read-more {
+      display: inline-block;
+      margin-top: 1rem;
+      font-size: 0.9rem;
+      color: #38bdf8;
+      text-decoration: none;
+    }
+
+    .read-more:hover {
+      text-decoration: underline;
+    }
+
+    footer {
+      margin-top: 4rem;
+      border-top: 1px solid #1f2933;
+      padding-top: 1.5rem;
+      font-size: 0.9rem;
+      color: #9ca3af;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    footer a {
+      color: #38bdf8;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="container">
+
+    <header>
+      <h1>X-Edge Blog</h1>
+      <p class="subtitle">
+        Building, securing, and scaling AI-powered products — transparently.
+      </p>
+    </header>
+
+    <section class="blog-grid">
+
+      <!-- Blog Post Card -->
+      <article class="post-card">
+        <div class="post-meta">Jan 2026 · Security</div>
+        <h2 class="post-title">Is My App Secure Enough as an MVP?</h2>
+        <p class="post-desc">
+          A realistic breakdown of security expectations for early-stage products,
+          static sites, and solo founders.
+        </p>
+        <a class="read-more" href="blog/is-my-app-secure.html">
+          Read article →
+        </a>
+      </article>
+
+      <!-- Blog Post Card -->
+      <article class="post-card">
+        <div class="post-meta">Jan 2026 · Privacy</div>
+        <h2 class="post-title">Why X-Edge Collects Emails (And How We Protect Them)</h2>
+        <p class="post-desc">
+          Full transparency on why we collect emails, how Firebase is used,
+          and what data we never collect.
+        </p>
+        <a class="read-more" href="blog/email-privacy.html">
+          Read article →
+        </a>
+      </article>
+
+      <!-- Blog Post Card -->
+      <article class="post-card">
+        <div class="post-meta">Coming Soon · AI Tools</div>
+        <h2 class="post-title">How We Evaluate AI Tools for X-Edge</h2>
+        <p class="post-desc">
+          Our criteria for listing tools — usefulness, safety, pricing,
+          and real-world value.
+        </p>
+        <a class="read-more" href="#">
+          Coming soon
+        </a>
+      </article>
+
+    </section>
+
+    <footer>
+      <span>© 2026 X-Edge</span>
+      <a href="index.html">Home</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+      <a href="cookies.html">Cookies</a>
+    </footer>
+
+  </main>
+</body>
+</html>
