@@ -638,22 +638,28 @@ function renderBrowseByGoal(normalized) {
     document.getElementById("browse-theme-grid") ||
     document.getElementById("browse-category-grid");
 
-  if (!grid || !Array.isArray(normalized)) return;
+  if (!grid || !Array.isArray(normalized)) {
+    console.warn("Browse by Goal: grid or data missing");
+    return;
+  }
 
-  const map = {};
+  const counts = {};
 
   normalized.forEach(t => {
-    const raw = (t.goal || "").trim();
-    if (!raw) return;
+    if (!t || typeof t.goal !== "string") return;
 
-    const key = raw.toLowerCase();
-    if (!map[key]) {
-      map[key] = { label: raw, count: 0 };
+    const cleanGoal = t.goal.replace(/\s+/g, " ").trim();
+    if (!cleanGoal) return;
+
+    const key = cleanGoal.toLowerCase();
+
+    if (!counts[key]) {
+      counts[key] = { label: cleanGoal, count: 0 };
     }
-    map[key].count++;
+    counts[key].count++;
   });
 
-  const goals = Object.values(map)
+  const goals = Object.values(counts)
     .sort((a, b) => b.count - a.count)
     .slice(0, 6);
 
@@ -669,15 +675,12 @@ function renderBrowseByGoal(normalized) {
     <div
       onclick="location.href='Categories.html?goal=${encodeURIComponent(g.label)}'"
       class="cursor-pointer group bg-gray-800/60 border border-gray-700
-             hover:bg-gray-700/60 transition rounded-2xl p-8
-             flex flex-col items-center text-center
+             hover:bg-gray-700/60 transition rounded-2xl p-8 text-center
              shadow-md hover:shadow-xl duration-200">
 
-      <div class="w-16 h-16 rounded-full bg-blue-500/10
-                  flex items-center justify-center mb-4
-                  group-hover:bg-blue-500/20 transition">
-        <i data-feather="target"
-           class="w-8 h-8 text-blue-400"></i>
+      <div class="w-16 h-16 mx-auto mb-4 bg-blue-500/10 rounded-full
+                  flex items-center justify-center group-hover:bg-blue-500/20">
+        <i data-feather="target" class="w-8 h-8 text-blue-400"></i>
       </div>
 
       <h3 class="font-semibold text-lg group-hover:text-blue-300">
@@ -690,7 +693,9 @@ function renderBrowseByGoal(normalized) {
     </div>
   `).join("");
 
-  if (window.feather) feather.replace();
+  if (window.feather) {
+    try { feather.replace(); } catch {}
+  }
 }
 
   /* ================= TOP TOOLS ================= */
