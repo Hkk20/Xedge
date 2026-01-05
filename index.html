@@ -636,63 +636,66 @@
   }
 
   /* ================= BROWSE BY GOAL ================= */
-  function renderBrowseByGoal(normalized) {
-    const grid =
-      document.getElementById("browse-theme-grid") ||
-      document.getElementById("browse-category-grid");
+ function renderBrowseByGoal(normalized) {
+  const grid =
+    document.getElementById("browse-theme-grid") ||
+    document.getElementById("browse-category-grid");
 
-    if (!grid || !Array.isArray(normalized)) return;
+  if (!grid || !Array.isArray(normalized)) return;
 
-    const counts = {};
+  const counts = {};
 
-    normalized.forEach(t => {
-      if (!t.goal) return;
+  normalized.forEach(t => {
+    if (!t.goal) return;
 
-      const cleanGoal = t.goal.replace(/\s+/g, " ").trim();
-      if (!cleanGoal) return;
+    // ✅ handle commas, newlines, extra spaces
+    String(t.goal)
+      .split(/[,|\n]/)
+      .map(g => g.replace(/\s+/g, " ").trim())
+      .filter(Boolean)
+      .forEach(goal => {
+        const key = goal.toLowerCase();
+        if (!counts[key]) {
+          counts[key] = { label: goal, count: 0 };
+        }
+        counts[key].count++;
+      });
+  });
 
-      const key = cleanGoal.toLowerCase();
+  const goals = Object.values(counts)
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 6);
 
-      if (!counts[key]) {
-        counts[key] = { label: cleanGoal, count: 0 };
-      }
-      counts[key].count++;
-    });
-
-    const goals = Object.values(counts)
-      .sort((a, b) => b.count - a.count)
-      .slice(0, 6);
-
-    if (!goals.length) {
-      grid.innerHTML =
-        `<div class="col-span-full text-gray-400 text-center">No goals yet</div>`;
-      return;
-    }
-
-    grid.innerHTML = goals.map(g => `
-      <div
-        onclick="location.href='Categories.html?goal=${encodeURIComponent(g.label)}'"
-        class="cursor-pointer group bg-gray-800/60 border border-gray-700
-               hover:bg-gray-700/60 transition rounded-2xl p-8 text-center
-               shadow-md hover:shadow-xl duration-200">
-
-        <div class="w-16 h-16 mx-auto mb-4 bg-blue-500/10 rounded-full
-                    flex items-center justify-center group-hover:bg-blue-500/20">
-          <i data-feather="target" class="w-8 h-8 text-blue-400"></i>
-        </div>
-
-        <h3 class="font-semibold text-lg group-hover:text-blue-300">
-          ${g.label}
-        </h3>
-
-        <p class="text-gray-400 text-sm mt-1">
-          ${g.count} Tools
-        </p>
-      </div>
-    `).join("");
-
-    if (window.feather) feather.replace();
+  if (!goals.length) {
+    grid.innerHTML =
+      `<div class="col-span-full text-gray-400 text-center">No goals yet</div>`;
+    return;
   }
+
+  grid.innerHTML = goals.map(g => `
+    <div
+      onclick="location.href='Categories.html?goal=${encodeURIComponent(g.label)}'"
+      class="cursor-pointer group bg-gray-800/60 border border-gray-700
+             hover:bg-gray-700/60 transition rounded-2xl p-8 text-center
+             shadow-md hover:shadow-xl duration-200">
+
+      <div class="w-16 h-16 mx-auto mb-4 bg-blue-500/10 rounded-full
+                  flex items-center justify-center group-hover:bg-blue-500/20">
+        <i data-feather="target" class="w-8 h-8 text-blue-400"></i>
+      </div>
+
+      <h3 class="font-semibold text-lg group-hover:text-blue-300">
+        ${g.label}
+      </h3>
+
+      <p class="text-gray-400 text-sm mt-1">
+        ${g.count} Tools
+      </p>
+    </div>
+  `).join("");
+
+  if (window.feather) feather.replace();
+}
 
   /* ================= TOP TOOLS ================= */
   function renderTopTools(normalized) {
