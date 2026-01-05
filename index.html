@@ -609,7 +609,9 @@
         localStorage.setItem(CACHE_KEY, JSON.stringify(data));
         return data;
       }
-    } catch {}
+    } catch (e) {
+      console.warn("Fetch failed, using cache", e);
+    }
 
     return safeParse(localStorage.getItem(CACHE_KEY)) || [];
   }
@@ -632,64 +634,65 @@
 
     imgs.forEach(i => obs.observe(i));
   }
-/*browse by goal */
-function renderBrowseByGoal(normalized) {
-  const grid =
-    document.getElementById("browse-theme-grid") ||
-    document.getElementById("browse-category-grid");
 
-  if (!grid || !Array.isArray(normalized)) return;
+  /* ================= BROWSE BY GOAL ================= */
+  function renderBrowseByGoal(normalized) {
+    const grid =
+      document.getElementById("browse-theme-grid") ||
+      document.getElementById("browse-category-grid");
 
-  const counts = {};
+    if (!grid || !Array.isArray(normalized)) return;
 
-  normalized.forEach(t => {
-    if (!t.goal) return;
+    const counts = {};
 
-    const cleanGoal = t.goal.replace(/\s+/g, " ").trim();
-    if (!cleanGoal) return;
+    normalized.forEach(t => {
+      if (!t.goal) return;
 
-    const key = cleanGoal.toLowerCase();
+      const cleanGoal = t.goal.replace(/\s+/g, " ").trim();
+      if (!cleanGoal) return;
 
-    if (!counts[key]) {
-      counts[key] = { label: cleanGoal, count: 0 };
+      const key = cleanGoal.toLowerCase();
+
+      if (!counts[key]) {
+        counts[key] = { label: cleanGoal, count: 0 };
+      }
+      counts[key].count++;
+    });
+
+    const goals = Object.values(counts)
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 6);
+
+    if (!goals.length) {
+      grid.innerHTML =
+        `<div class="col-span-full text-gray-400 text-center">No goals yet</div>`;
+      return;
     }
-    counts[key].count++;
-  });
 
-  const goals = Object.values(counts)
-    .sort((a, b) => b.count - a.count)
-    .slice(0, 6);
+    grid.innerHTML = goals.map(g => `
+      <div
+        onclick="location.href='Categories.html?goal=${encodeURIComponent(g.label)}'"
+        class="cursor-pointer group bg-gray-800/60 border border-gray-700
+               hover:bg-gray-700/60 transition rounded-2xl p-8 text-center
+               shadow-md hover:shadow-xl duration-200">
 
-  if (!goals.length) {
-    grid.innerHTML =
-      `<div class="col-span-full text-gray-400 text-center">No goals yet</div>`;
-    return;
-  }
+        <div class="w-16 h-16 mx-auto mb-4 bg-blue-500/10 rounded-full
+                    flex items-center justify-center group-hover:bg-blue-500/20">
+          <i data-feather="target" class="w-8 h-8 text-blue-400"></i>
+        </div>
 
-  grid.innerHTML = goals.map(g => `
-    <div
-      onclick="location.href='Categories.html?goal=${encodeURIComponent(g.label)}'"
-      class="cursor-pointer group bg-gray-800/60 border border-gray-700
-             hover:bg-gray-700/60 transition rounded-2xl p-8 text-center
-             shadow-md hover:shadow-xl duration-200">
+        <h3 class="font-semibold text-lg group-hover:text-blue-300">
+          ${g.label}
+        </h3>
 
-      <div class="w-16 h-16 mx-auto mb-4 bg-blue-500/10 rounded-full
-                  flex items-center justify-center group-hover:bg-blue-500/20">
-        <i data-feather="target" class="w-8 h-8 text-blue-400"></i>
+        <p class="text-gray-400 text-sm mt-1">
+          ${g.count} Tools
+        </p>
       </div>
+    `).join("");
 
-      <h3 class="font-semibold text-lg group-hover:text-blue-300">
-        ${g.label}
-      </h3>
-
-      <p class="text-gray-400 text-sm mt-1">
-        ${g.count} Tools
-      </p>
-    </div>
-  `).join("");
-
-  if (window.feather) feather.replace();
-}
+    if (window.feather) feather.replace();
+  }
 
   /* ================= TOP TOOLS ================= */
   function renderTopTools(normalized) {
@@ -745,8 +748,9 @@ function renderBrowseByGoal(normalized) {
       logo: d.logo_url || d.logo || "",
       link: d.link || "#"
     }));
-   window.__NORMALIZED_TOOLS__ = normalized;
 
+    // Debug access (intentional)
+    window.__NORMALIZED_TOOLS__ = normalized;
 
     renderBrowseByGoal(normalized);
     renderTopTools(normalized);
@@ -754,8 +758,9 @@ function renderBrowseByGoal(normalized) {
 
   /* ================= INIT ================= */
   document.addEventListener("DOMContentLoaded", renderHome);
-// at the very end of the IIFE
-window.__debugFetchTools = fetchTools;
+
+  // Debug helper
+  window.__debugFetchTools = fetchTools;
 
 })();
 </script>
