@@ -633,41 +633,36 @@
     imgs.forEach(i => obs.observe(i));
   }
 
-  /* ================= BROWSE BY GOAL ================= */
+ /* ================= BROWSE BY GOAL ================= */
 function renderBrowseByGoal(normalized) {
   const grid =
     document.getElementById("browse-theme-grid") ||
     document.getElementById("browse-category-grid");
 
-  if (!grid || !Array.isArray(normalized)) {
-    console.warn("BrowseByGoal: grid or data missing");
-    return;
-  }
+  if (!grid || !Array.isArray(normalized)) return;
 
-  const counts = {};
+  const map = {};
 
   normalized.forEach(t => {
-    const goal = (t.goal || "").trim();
-    if (!goal) return;
+    const raw = (t.goal || "").trim();
+    if (!raw) return;
 
-    const key = goal.toLowerCase();
-
-    if (!counts[key]) {
-      counts[key] = { label: goal, count: 0 };
+    const key = raw.toLowerCase();
+    if (!map[key]) {
+      map[key] = { label: raw, count: 0 };
     }
-    counts[key].count++;
+    map[key].count++;
   });
 
-  const goals = Object.values(counts)
-    .sort((a, b) => b.count - a.count) // most popular first
+  const goals = Object.values(map)
+    .sort((a, b) => b.count - a.count)
     .slice(0, 6);
 
   if (!goals.length) {
     grid.innerHTML = `
-      <div class="col-span-full text-center text-gray-400">
+      <div class="col-span-full text-gray-400 text-center">
         No goals yet
-      </div>
-    `;
+      </div>`;
     return;
   }
 
@@ -682,7 +677,8 @@ function renderBrowseByGoal(normalized) {
       <div class="w-16 h-16 rounded-full bg-blue-500/10
                   flex items-center justify-center mb-4
                   group-hover:bg-blue-500/20 transition">
-        <i data-feather="target" class="w-8 h-8 text-blue-400"></i>
+        <i data-feather="target"
+           class="w-8 h-8 text-blue-400"></i>
       </div>
 
       <h3 class="font-semibold text-lg group-hover:text-blue-300">
@@ -695,8 +691,11 @@ function renderBrowseByGoal(normalized) {
     </div>
   `).join("");
 
-  if (window.feather) feather.replace();
+  if (window.feather) {
+    try { feather.replace(); } catch {}
+  }
 }
+
 
   /* ================= TOP TOOLS ================= */
   function renderTopTools(normalized) {
