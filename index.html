@@ -747,6 +747,8 @@ function renderBrowseByGoal(normalized) {
       logo: d.logo_url || d.logo || "",
       link: d.link || "#"
     }));
+   window.__NORMALIZED_TOOLS__ = normalized;
+
 
     renderBrowseByGoal(normalized);
     renderTopTools(normalized);
