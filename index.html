@@ -632,8 +632,7 @@
 
     imgs.forEach(i => obs.observe(i));
   }
-
- /* ================= BROWSE BY GOAL ================= */
+/*browse by goal */
 function renderBrowseByGoal(normalized) {
   const grid =
     document.getElementById("browse-theme-grid") ||
@@ -691,11 +690,8 @@ function renderBrowseByGoal(normalized) {
     </div>
   `).join("");
 
-  if (window.feather) {
-    try { feather.replace(); } catch {}
-  }
+  if (window.feather) feather.replace();
 }
-
 
   /* ================= TOP TOOLS ================= */
   function renderTopTools(normalized) {
