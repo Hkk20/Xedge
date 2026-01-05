@@ -436,69 +436,6 @@
 
   </div>
 </section>
-<script>
-async function renderBrowseGoals() {
-  const grid =
-    document.getElementById("browse-theme-grid") ||
-    document.getElementById("browse-category-grid");
-
-  if (!grid || typeof getTools !== "function") return;
-
-  const tools = await getTools();
-
-  const goalMap = {};
-
-  tools.forEach(t => {
-    if (!t.goal) return;
-
-    const goal = t.goal.trim();
-    if (!goal) return;
-
-    const key = goal.toLowerCase();
-
-    if (!goalMap[key]) {
-      goalMap[key] = { label: goal, count: 0 };
-    }
-    goalMap[key].count++;
-  });
-
-  const goals = Object.values(goalMap)
-    .sort((a, b) => b.count - a.count)
-    .slice(0, 6);
-
-  if (!goals.length) {
-    grid.innerHTML = `<p class="text-gray-400 text-center">No goals found.</p>`;
-    return;
-  }
-
-  grid.innerHTML = goals.map(g => `
-    <div
-      onclick="location.href='Categories.html?goal=${encodeURIComponent(g.label)}'"
-      class="cursor-pointer group bg-gray-800/60 border border-gray-700
-             hover:bg-gray-700/60 transition rounded-2xl p-8
-             flex flex-col items-center text-center
-             shadow-md hover:shadow-xl duration-200">
-
-      <div class="w-16 h-16 rounded-full bg-blue-500/10 flex items-center justify-center mb-4
-                  group-hover:bg-blue-500/20 transition">
-        <i data-feather="target" class="w-8 h-8 text-blue-400"></i>
-      </div>
-
-      <h3 class="font-semibold text-lg group-hover:text-blue-300">
-        ${g.label}
-      </h3>
-
-      <p class="text-gray-400 text-sm mt-1">
-        ${g.count} Tools
-      </p>
-    </div>
-  `).join("");
-
-  if (window.feather) feather.replace();
-}
-
-document.addEventListener("DOMContentLoaded", renderBrowseGoals);
-</script>
 
 
 
@@ -697,48 +634,69 @@ document.addEventListener("DOMContentLoaded", renderBrowseGoals);
   }
 
   /* ================= BROWSE BY GOAL ================= */
-  function renderBrowseByGoal(normalized) {
-    const grid =
-      document.getElementById("browse-theme-grid") ||
-      document.getElementById("browse-category-grid");
+function renderBrowseByGoal(normalized) {
+  const grid =
+    document.getElementById("browse-theme-grid") ||
+    document.getElementById("browse-category-grid");
 
-    if (!grid || !Array.isArray(normalized)) return;
-
-    const counts = {};
-
-    normalized.forEach(t => {
-      const goal = (t.goal || "").trim();
-      if (!goal) return;
-
-      const key = goal.toLowerCase();
-      if (!counts[key]) {
-        counts[key] = { label: goal, count: 0 };
-      }
-      counts[key].count++;
-    });
-
-    const goals = Object.values(counts).slice(0, 6);
-
-    grid.innerHTML = goals.length
-      ? goals.map(g => `
-        <div
-          onclick="location.href='Categories.html?goal=${encodeURIComponent(g.label)}'"
-          class="cursor-pointer group bg-gray-800/60 border border-gray-700
-                 hover:bg-gray-700/60 transition rounded-2xl p-8 text-center">
-
-          <div class="w-16 h-16 mx-auto mb-4 bg-blue-500/10 rounded-full
-                      flex items-center justify-center">
-            <i data-feather="target"></i>
-          </div>
-
-          <h3 class="font-semibold">${g.label}</h3>
-          <p class="text-gray-400 text-sm">${g.count} Tools</p>
-        </div>
-      `).join("")
-      : `<div class="text-gray-400 text-center col-span-full">No goals yet</div>`;
-
-    if (window.feather) feather.replace();
+  if (!grid || !Array.isArray(normalized)) {
+    console.warn("BrowseByGoal: grid or data missing");
+    return;
   }
+
+  const counts = {};
+
+  normalized.forEach(t => {
+    const goal = (t.goal || "").trim();
+    if (!goal) return;
+
+    const key = goal.toLowerCase();
+
+    if (!counts[key]) {
+      counts[key] = { label: goal, count: 0 };
+    }
+    counts[key].count++;
+  });
+
+  const goals = Object.values(counts)
+    .sort((a, b) => b.count - a.count) // most popular first
+    .slice(0, 6);
+
+  if (!goals.length) {
+    grid.innerHTML = `
+      <div class="col-span-full text-center text-gray-400">
+        No goals yet
+      </div>
+    `;
+    return;
+  }
+
+  grid.innerHTML = goals.map(g => `
+    <div
+      onclick="location.href='Categories.html?goal=${encodeURIComponent(g.label)}'"
+      class="cursor-pointer group bg-gray-800/60 border border-gray-700
+             hover:bg-gray-700/60 transition rounded-2xl p-8
+             flex flex-col items-center text-center
+             shadow-md hover:shadow-xl duration-200">
+
+      <div class="w-16 h-16 rounded-full bg-blue-500/10
+                  flex items-center justify-center mb-4
+                  group-hover:bg-blue-500/20 transition">
+        <i data-feather="target" class="w-8 h-8 text-blue-400"></i>
+      </div>
+
+      <h3 class="font-semibold text-lg group-hover:text-blue-300">
+        ${g.label}
+      </h3>
+
+      <p class="text-gray-400 text-sm mt-1">
+        ${g.count} Tools
+      </p>
+    </div>
+  `).join("");
+
+  if (window.feather) feather.replace();
+}
 
   /* ================= TOP TOOLS ================= */
   function renderTopTools(normalized) {
