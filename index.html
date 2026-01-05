@@ -759,6 +759,8 @@ function renderBrowseByGoal(normalized) {
 
   /* ================= INIT ================= */
   document.addEventListener("DOMContentLoaded", renderHome);
+// at the very end of the IIFE
+window.__debugFetchTools = fetchTools;
 
 })();
 </script>
