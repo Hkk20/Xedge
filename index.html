@@ -649,6 +649,7 @@ function renderBrowseByGoal(normalized) {
     if (!cleanGoal) return;
 
     const key = cleanGoal.toLowerCase();
+
     if (!counts[key]) {
       counts[key] = { label: cleanGoal, count: 0 };
     }
@@ -689,7 +690,6 @@ function renderBrowseByGoal(normalized) {
 
   if (window.feather) feather.replace();
 }
-
 
   /* ================= TOP TOOLS ================= */
   function renderTopTools(normalized) {
