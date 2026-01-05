@@ -638,21 +638,17 @@ function renderBrowseByGoal(normalized) {
     document.getElementById("browse-theme-grid") ||
     document.getElementById("browse-category-grid");
 
-  if (!grid || !Array.isArray(normalized)) {
-    console.warn("Browse by Goal: grid or data missing");
-    return;
-  }
+  if (!grid || !Array.isArray(normalized)) return;
 
   const counts = {};
 
   normalized.forEach(t => {
-    if (!t || typeof t.goal !== "string") return;
+    if (!t.goal) return;
 
     const cleanGoal = t.goal.replace(/\s+/g, " ").trim();
     if (!cleanGoal) return;
 
     const key = cleanGoal.toLowerCase();
-
     if (!counts[key]) {
       counts[key] = { label: cleanGoal, count: 0 };
     }
@@ -664,10 +660,8 @@ function renderBrowseByGoal(normalized) {
     .slice(0, 6);
 
   if (!goals.length) {
-    grid.innerHTML = `
-      <div class="col-span-full text-gray-400 text-center">
-        No goals yet
-      </div>`;
+    grid.innerHTML =
+      `<div class="col-span-full text-gray-400 text-center">No goals yet</div>`;
     return;
   }
 
@@ -693,10 +687,9 @@ function renderBrowseByGoal(normalized) {
     </div>
   `).join("");
 
-  if (window.feather) {
-    try { feather.replace(); } catch {}
-  }
+  if (window.feather) feather.replace();
 }
+
 
   /* ================= TOP TOOLS ================= */
   function renderTopTools(normalized) {
