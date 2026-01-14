@@ -3,7 +3,7 @@
    ✔ Pros/cons parser fixed
    ✔ Related tools working perfectly
    ✔ Fully compatible with your previous HTML + Explore + Categories
-*/
+*/ 
 
 
 /* ===== CONFIG ===== */
