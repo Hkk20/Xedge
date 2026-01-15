@@ -750,15 +750,14 @@
       const tools = await fetchTools();
       console.log("📋 Tools fetched:", tools.length);
 
-      const normalized = tools.map(d => ({
-        name: d.name || d.title || "",
-        short: d.short_description || d.short || d.summary || "",
-        category: d.category || "",
-        goal: d.goal || d.goals || d.use_case || "",
-        logo: d.logo_url || d.logo || "",
-        link: d.link || "#"
-      }));
-
+     const normalized = tools.map(d => ({
+  name: d.name || d.title || "",
+  short: d.short_description || d.short || d.summary || "",  // ✅ Fixed
+  category: d.category || "",
+  goal: d.goal || d.goals || d.use_case || "",
+  logo: d.Logo_url || d.logo || "",  // ✅ Fixed
+  link: d.Link || d.link || "#"  // ✅ Already working
+}));
       window.__NORMALIZED_TOOLS__ = normalized;
       console.log("🎯 Normalized:", normalized.length, "items");
 
