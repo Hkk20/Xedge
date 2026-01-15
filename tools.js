@@ -8,7 +8,7 @@
 
 /* ===== CONFIG ===== */
 const XE = {
-  SHEET_URL: "https://script.google.com/macros/s/AKfycbxtvPEeiqcLgXv7WmTPScxBuLIo-YYVNtmWnPMW_fAi5U2-Ww7wHUfups7wcGlW7uQt/exec",
+  SHEET_URL: "https://script.google.com/macros/s/AKfycbxXs2ajlwcddAMVEMY5NAMns_ooeEAHSYwDk84nnD6cU2hLjx_k5HKOgFLm-EX_ASSv/exec",
   CACHE_KEY: "xedge_tools_v1",
   SELECTED_KEY: "xedge_selected_tool",
   IMAGE_HINT: "?auto=compress&format=webp&w=600",
