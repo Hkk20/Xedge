@@ -574,7 +574,7 @@
   const PRIORITY = [
     "chat gpt",
     "runway ml",
-    "notion ai",
+    "notion ai", 
     "leonardo ai",
     "github copilot",
     "mid journey",
@@ -595,13 +595,18 @@
 
   /* ================= FETCH ================= */
   async function fetchTools(force = false) {
+    console.log("🚀 fetchTools called, force:", force);
+    
     if (!force) {
       const cached = safeParse(localStorage.getItem(CACHE_KEY));
       if (Array.isArray(cached) && cached.length) return cached;
     }
 
     try {
-      const res = await fetch(SHEET_URL + "?t=" + Date.now(), { 
+      const url = SHEET_URL + "?t=" + Date.now();
+      console.log("🌐 Fetching:", url);
+      
+      const res = await fetch(url, { 
         method: 'GET',
         mode: 'cors',
         cache: "no-store" 
@@ -610,17 +615,21 @@
       if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
       
       const data = await res.json();
+      console.log("📊 Data received:", data.length, "items");
+      
       if (Array.isArray(data)) {
         localStorage.setItem(CACHE_KEY, JSON.stringify(data));
         return data;
       }
     } catch (e) {
-      console.warn("Fetch failed, using cache", e);
+      console.error("💥 Fetch failed:", e);
     }
 
     return safeParse(localStorage.getItem(CACHE_KEY)) || [];
   }
 
+  /* ================= ALL YOUR OTHER FUNCTIONS ================ */
+  // ... [keep all your existing render functions] ...
   /* ================= LAZY IMAGES ================= */
   function lazyLoadContainerImages(root) {
     if (!root) return;
@@ -733,10 +742,13 @@
     if (window.feather) feather.replace();
   }
 
-  /* ================= HOME ================= */
+/* ================= HOME ================= */
   async function renderHome() {
+    console.log("🏠 renderHome started");
+    
     try {
       const tools = await fetchTools();
+      console.log("📋 Tools fetched:", tools.length);
 
       const normalized = tools.map(d => ({
         name: d.name || d.title || "",
@@ -748,18 +760,30 @@
       }));
 
       window.__NORMALIZED_TOOLS__ = normalized;
+      console.log("🎯 Normalized:", normalized.length, "items");
 
       renderBrowseByGoal(normalized);
       renderTopTools(normalized);
+      
+      console.log("✅ renderHome completed");
     } catch (error) {
-      console.error("Error rendering home:", error);
+      console.error("💥 renderHome error:", error);
     }
   }
 
-  /* ================= INIT ================= */
-  document.addEventListener("DOMContentLoaded", renderHome);
+  /* ================= CRITICAL FIX: ADD EVENT LISTENER ================= */
+  console.log("📜 Script loading...");
+  
+  // Wait for DOM to be ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', renderHome);
+  } else {
+    // DOM is already ready
+    renderHome();
+  }
+  
   window.__debugFetchTools = fetchTools;
-
+  console.log("✅ Script initialized");
 })();</script>
 
 <script>
