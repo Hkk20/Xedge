@@ -3,23 +3,21 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>X Edge — Theme</title>
-
+  <title>X Edge — Goal Tools</title>
   <link rel="icon" href="xedge-logo.png">
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
 <body class="bg-gray-950 text-white">
 
-<!-- NAV (reuse your nav) -->
+<!-- NAV -->
 <nav class="bg-gray-900/80 border-b border-gray-800 fixed w-full z-50">
   <div class="max-w-6xl mx-auto px-6 py-3 flex justify-between items-center">
     <a href="index.html" class="flex items-center gap-3">
       <img src="xedge-logo.png" class="w-8 h-8 bg-white p-1 rounded">
       <span class="font-bold">X Edge</span>
     </a>
-    <button onclick="history.back()"
-      class="px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg">
+    <button onclick="history.back()" class="px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg">
       ← Back
     </button>
   </div>
@@ -29,131 +27,100 @@
 
   <!-- HEADER -->
   <div class="mb-10">
-    <h1 id="theme-title" class="text-4xl font-bold mb-3"></h1>
-    <p id="theme-desc" class="text-gray-400 max-w-2xl"></p>
+    <h1 id="goal-title" class="text-4xl font-bold mb-3"></h1>
+    <p id="goal-desc" class="text-gray-400 max-w-2xl"></p>
   </div>
 
-  <!-- PROCESS EXPLANATION -->
-  <section id="theme-process"
-    class="bg-gray-800/40 border border-gray-700 rounded-xl p-6 mb-12">
-  </section>
-
-  <!-- TOOLS BY CATEGORY -->
-  <section id="theme-tools" class="space-y-12"></section>
+  <!-- TOOLS GRID -->
+  <section id="goal-tools" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"></section>
 
 </main>
 
 <script src="tools.js"></script>
 
 <script>
-const THEME_EXPLANATIONS = {
-  "create your website": `
-    <h2 class="text-2xl font-bold mb-2">How this works</h2>
-    <p class="text-gray-300">
-      To create a website, you typically combine design tools, copywriting tools,
-      AI assistants, and sometimes chatbots. These tools work together to design,
-      write, build, and optimize your site.
-    </p>
-  `,
-  "be an influencer": `
-    <h2 class="text-2xl font-bold mb-2">How this works</h2>
-    <p class="text-gray-300">
-      Influencers use content creation, editing, caption writing, analytics,
-      and growth tools together to consistently publish and grow an audience.
-    </p>
-  `
+// Goal explanations
+const GOAL_EXPLANATIONS = {
+  "create your website": "Build and launch your perfect website with these AI-powered tools for design, content, and development.",
+  "be an influencer": "Grow your personal brand and audience with content creation, scheduling, and analytics tools.",
+  "grow a business": "Scale your business with marketing automation, customer management, and productivity tools.",
+  "automate work": "Streamline repetitive tasks and boost productivity with workflow automation tools.",
+  "create content": "Generate engaging content, videos, graphics, and copy with creative AI tools.",
+  "learn faster": "Accelerate your learning with AI tutors, study aids, and educational platforms.",
+  "build with ai": "Develop AI applications and integrate machine learning into your projects."
 };
 
-function normalize(s) {
-  return String(s || "").toLowerCase().trim();
-}
-
-async function renderThemePage() {
+async function renderGoalPage() {
   const params = new URLSearchParams(location.search);
-  const themeRaw = params.get("theme");
-  if (!themeRaw) return;
+  const goalRaw = params.get("theme");
+  if (!goalRaw) return;
 
-  const theme = normalize(themeRaw);
+  const goal = goalRaw.toLowerCase().trim();
 
-  document.getElementById("theme-title").textContent = themeRaw;
-  document.getElementById("theme-desc").textContent =
-    "Tools curated to help you achieve this goal.";
+  // Set header
+  document.getElementById("goal-title").textContent = goalRaw;
+  document.getElementById("goal-desc").textContent = 
+    GOAL_EXPLANATIONS[goal] || `Tools to help you ${goalRaw.toLowerCase()}.`;
 
-  document.getElementById("theme-process").innerHTML =
-    THEME_EXPLANATIONS[theme] || `
-      <h2 class="text-2xl font-bold mb-2">How this works</h2>
-      <p class="text-gray-300">
-        These tools are commonly used together to achieve this goal efficiently.
-      </p>
-    `;
-
-  const tools = await getTools();
-
-  // Filter by theme
-  const themedTools = tools.filter(t =>
-    (t.themes || "")
-      .toLowerCase()
-      .split(",")
-      .map(x => x.trim())
-      .includes(theme)
-  );
-
-  // Group by category
-  const groups = {};
-  themedTools.forEach(t => {
-    const cat = t.category || "Other";
-    (groups[cat] ||= []).push(t);
+  // Get tools and filter by goal
+  const tools = await window.__debugFetchTools(); // Use your existing fetch function
+  
+  // Filter tools that have this goal (handling the space issue)
+  const goalTools = tools.filter(t => {
+    const toolGoal = (t.goal || t['goal '] || "").toLowerCase().trim();
+    return toolGoal === goal;
   });
 
-  const container = document.getElementById("theme-tools");
+  console.log(`Found ${goalTools.length} tools for goal: ${goalRaw}`);
 
-  Object.entries(groups).forEach(([category, tools]) => {
-    const main = tools.slice(0, 3);
-    const alternatives = tools.slice(3);
+  const container = document.getElementById("goal-tools");
 
-    container.innerHTML += `
-      <div>
-        <h2 class="text-2xl font-bold mb-4">${category}</h2>
-
-        <div class="grid md:grid-cols-3 gap-4 mb-4">
-          ${main.map(t => toolCard(t)).join("")}
-        </div>
-
-        ${
-          alternatives.length
-            ? `
-              <details class="mt-2">
-                <summary class="cursor-pointer text-blue-400">
-                  View alternatives
-                </summary>
-                <div class="grid md:grid-cols-3 gap-4 mt-4">
-                  ${alternatives.map(t => toolCard(t)).join("")}
-                </div>
-              </details>
-            `
-            : ""
-        }
+  if (goalTools.length === 0) {
+    container.innerHTML = `
+      <div class="col-span-full text-center py-12">
+        <i data-feather="info" class="w-16 h-16 text-gray-400 mx-auto mb-4"></i>
+        <h3 class="text-xl font-semibold text-gray-300 mb-2">No tools found for "${goalRaw}" yet</h3>
+        <p class="text-gray-500">Check back soon - we're adding new tools daily!</p>
       </div>
     `;
-  });
+    return;
+  }
+
+  // Render tool cards
+  container.innerHTML = goalTools.map(tool => createToolCard(tool)).join('');
+  
+  // Replace feather icons if loaded
+  if (window.feather) feather.replace();
 }
 
-function toolCard(t) {
-  const logo = t.logo_url ||
-    `https://dummyimage.com/200x200/1e293b/ffffff&text=${encodeURIComponent(t.name)}`;
+function createToolCard(tool) {
+  const logo = tool.Logo_url || 
+    `https://dummyimage.com/200x200/1e293b/ffffff&text=${encodeURIComponent(tool.name)}`;
 
   return `
-    <a href="tool.html?tool=${encodeURIComponent(t.name)}"
-       class="bg-gray-800/40 border border-gray-700 rounded-xl p-4
-              hover:bg-gray-800 transition">
-      <img src="${logo}" class="w-14 h-14 rounded mb-3 object-cover">
-      <h3 class="font-semibold">${t.name}</h3>
-      <p class="text-sm text-gray-400">${t.short_description || ""}</p>
+    <a href="tool.html?tool=${encodeURIComponent(tool.name)}" 
+       class="bg-gray-800/40 border border-gray-700 rounded-xl p-6 
+              hover:bg-gray-800/60 hover:border-gray-600 transition-all duration-200
+              hover:scale-105 hover:shadow-xl">
+      <div class="flex items-start gap-4">
+        <img src="${logo}" 
+             class="w-12 h-12 rounded-lg object-cover flex-shrink-0" 
+             alt="${tool.name} logo">
+        <div class="flex-1">
+          <h3 class="font-bold text-lg mb-1">${tool.name}</h3>
+          <p class="text-gray-400 text-sm line-clamp-3">${tool.short_description || ''}</p>
+          <div class="mt-3 flex items-center justify-between">
+            <span class="text-xs bg-gray-700 px-2 py-1 rounded">${tool.category || 'Other'}</span>
+            <span class="text-blue-400 text-sm">View →</span>
+          </div>
+        </div>
+      </div>
     </a>
   `;
 }
 
-document.addEventListener("DOMContentLoaded", renderThemePage);
+// Initialize when DOM is ready
+document.addEventListener("DOMContentLoaded", renderGoalPage);
 </script>
 
 </body>
