@@ -649,118 +649,137 @@
 
     imgs.forEach(i => obs.observe(i));
   }
-/* ================= TOP TOOLS ================= */
-function renderTopTools(normalized) {
-  const scroller = document.getElementById("top-tools-wrapper");
-  if (!scroller) return;
+check this i think i aint found it yet 
+ function renderBrowseByGoal(normalized) {
+  const grid = document.getElementById("browse-theme-grid") || 
+               document.getElementById("browse-category-grid");
 
-  const skeleton = document.getElementById("top-tools-skel");
-  if (skeleton) skeleton.remove();
+  if (!grid || !Array.isArray(normalized)) return;
 
-  const pt = normalized
-    .filter(t => normalize(t.name) && PRIORITY.includes(normalize(t.name)))
-    .slice(0, 8);
+  const counts = {};
+  
+  normalized.forEach(t => {
+    if (!t.goal) return;
+    
+    String(t.goal)
+      .split(/[,|\n]/)
+      .map(g => g.replace(/\s+/g, " ").trim())
+      .filter(Boolean)
+      .forEach(goal => {
+        const key = goal.toLowerCase();
+        if (!counts[key]) {
+          counts[key] = { label: goal, count: 0 };
+        }
+        counts[key].count++;
+      });
+  });
 
-  const list = pt.length ? pt : normalized.slice(0, 6);
+  const goals = Object.values(counts)
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 6);
 
-  scroller.innerHTML = list.map(t => `
-    <div class="min-w-[260px] snap-start bg-gray-800/60 border border-gray-700 rounded-2xl p-6 text-center">
-      <img data-src="${t.logo || makePlaceholder(t.name,160,160)}"
-           class="w-20 h-20 object-contain mb-4 rounded-lg" />
-      <h3 class="text-xl font-semibold mb-1">${t.name}</h3>
-      <p class="text-gray-400 text-sm mb-4">${(t.short || "").slice(0,80)}</p>
-      <a href="tool.html?tool=${encodeURIComponent(t.name)}"
-         class="bg-blue-600 px-4 py-2 rounded-full text-sm">
-        View Tool →
-      </a>
+  if (!goals.length) {
+    grid.innerHTML = `<div class="col-span-full text-gray-400 text-center">No goals yet</div>`;
+    return;
+  }
+
+  // Mobile-optimized HTML with proper touch events
+  grid.innerHTML = goals.map(g => `
+    <div class="cursor-pointer group bg-gray-800/60 border border-gray-700
+               hover:bg-gray-700/60 transition rounded-2xl p-8 text-center
+               shadow-md hover:shadow-xl duration-200
+               touch-manipulation" 
+         data-goal="${encodeURIComponent(g.label)}"
+         role="button"
+         tabindex="0"
+         aria-label="${g.label} - ${g.count} tools">
+      
+      <div class="w-16 h-16 mx-auto mb-4 bg-blue-500/10 rounded-full
+                  flex items-center justify-center group-hover:bg-blue-500/20">
+        <i data-feather="target" class="w-8 h-8 text-blue-400"></i>
+      </div>
+      
+      <h3 class="font-semibold text-lg group-hover:text-blue-300">${g.label}</h3>
+      <p class="text-gray-400 text-sm mt-1">${g.count} Tools</p>
     </div>
   `).join("");
 
-  lazyLoadContainerImages(scroller);
-
-  const left = document.getElementById("scroll-left");
-  const right = document.getElementById("scroll-right");
-
-  if (left && right) {
-    left.classList.remove("hidden");
-    right.classList.remove("hidden");
-    right.onclick = () => scroller.scrollBy({ left: 350, behavior: "smooth" });
-    left.onclick = () => scroller.scrollBy({ left: -350, behavior: "smooth" });
-  }
-
+  // Add mobile-friendly event listeners
+  addGoalCardEvents();
+  
   if (window.feather) feather.replace();
 }
 
-/* ================= HOME ================= */
-async function renderHome() {
-  try {
-    const tools = await fetchTools();
-
-    const normalized = tools.map(d => ({
-      name: d.name || d.title || "",
-      short: d.short_description || d.short || d.summary || "",  // ✅ Fixed
-      category: d.category || "",
-      goal: d.goal || d.goals || d.use_case || "",
-      logo: d.Logo_url || d.logo || "",  // ✅ Fixed
-      link: d.Link || d.link || "#"  // ✅ Already working
-    }));
-
-    window.__NORMALIZED_TOOLS__ = normalized;
-
-    renderBrowseByGoal(normalized);
-    renderTopTools(normalized);
-    
-  } catch (error) {
-    console.error("💥 renderHome error:", error);
-  }
-}
-
-/* ================= CRITICAL FIX: ADD EVENT LISTENER ================= */
-// Wait for DOM to be ready
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', renderHome);
-} else {
-  // DOM is already ready
-  renderHome();
-}
-
-window.__debugFetchTools = fetchTools;
-
-// MOBILE TOUCH FIX - Add this right after the main script
-(function() {
-  function addMobileCardEvents() {
-    const cards = document.querySelectorAll('#browse-theme-grid > div, #browse-category-grid > div');
-    
-    cards.forEach(card => {
-      // Make cards touch-friendly
-      card.style.touchAction = 'manipulation';
-      card.style.userSelect = 'none';
-      card.style.webkitUserSelect = 'none';
-      card.style.webkitTouchCallout = 'none';
-      
-      // Simple touch/click handler
-      const handleCardClick = (e) => {
-        // Find the goal from the card's content or onclick attribute
-        const goalText = card.querySelector('h3')?.textContent || '';
-        if (goalText) {
-          window.location.href = `themes.html?goal=${encodeURIComponent(goalText)}`;
-        }
-      };
-      
-      // Add click handler
-      card.addEventListener('click', handleCardClick);
-      
-      // Add touch handler for better mobile response
-      card.addEventListener('touchend', (e) => {
-        e.preventDefault();
-        handleCardClick(e);
-      });
-    });
-  }
+function addGoalCardEvents() {
+  const cards = document.querySelectorAll('[data-goal]');
   
-  // Call after rendering
-  setTimeout(addMobileCardEvents, 500);
-})();
+  cards.forEach(card => {
+    // Handle both click and touch
+    const handleActivation = (e) => {
+      e.preventDefault();
+      const goal = card.getAttribute('data-goal');
+      window.location.href = `Themes.html?goal=${goal}`;
+    };
+    
+    // Mouse events
+    card.addEventListener('click', handleActivation);
+
+ 
+    
+    // Touch events for mobile
+    card.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      card.style.transform = 'scale(0.98)';
+      card.style.opacity = '0.9';
+    });
+    
+    card.addEventListener('touchend', (e) => {
+      e.preventDefault();
+      card.style.transform = 'scale(1)';
+      card.style.opacity = '1';
+      handleActivation(e);
+    });
+    
+    // Keyboard accessibility
+    card.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        handleActivation(e);
+      }
+    });
+    
+    // Prevent text selection on mobile
+    card.style.userSelect = 'none';
+    card.style.webkitUserSelect = 'none';
+    card.style.webkitTouchCallout = 'none';
+  });
+}
+ // Add this to your main page
+window.addEventListener('load', () => {
+  const isMobile = window.innerWidth <= 768;
+  if (isMobile) {
+    console.log('📱 Mobile detected, testing goal cards...');
+    
+    setTimeout(() => {
+      const cards = document.querySelectorAll('#browse-theme-grid > div');
+      console.log(`📱 Found ${cards.length} goal cards`);
+      
+      // Test first card
+      if (cards[0]) {
+        console.log('📱 First card data-goal:', cards[0].getAttribute('data-goal'));
+        
+        // Add visual indicator
+        cards[0].style.border = '2px solid red';
+        cards[0].style.background = 'yellow';
+        
+        setTimeout(() => {
+          cards[0].style.border = '';
+          cards[0].style.background = '';
+        }, 3000);
+      }
+    }, 1000);
+  }
+});
   /* ================= TOP TOOLS ================= */
   function renderTopTools(normalized) {
     const scroller = document.getElementById("top-tools-wrapper");
