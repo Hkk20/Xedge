@@ -564,7 +564,7 @@
        
   </div>
       
-        <script>
+       <script>
 (function () {
   "use strict";
 
@@ -596,8 +596,6 @@
 
   /* ================= FETCH ================= */
   async function fetchTools(force = false) {
-    
-    
     if (!force) {
       const cached = safeParse(localStorage.getItem(CACHE_KEY));
       if (Array.isArray(cached) && cached.length) return cached;
@@ -605,7 +603,6 @@
 
     try {
       const url = SHEET_URL + "?t=" + Date.now();
- 
       
       const res = await fetch(url, { 
         method: 'GET',
@@ -629,8 +626,6 @@
     return safeParse(localStorage.getItem(CACHE_KEY)) || [];
   }
 
-  /* ================= ALL YOUR OTHER FUNCTIONS ================ */
-  // ... [keep all your existing render functions] ...
   /* ================= LAZY IMAGES ================= */
   function lazyLoadContainerImages(root) {
     if (!root) return;
@@ -650,145 +645,56 @@
     imgs.forEach(i => obs.observe(i));
   }
 
- function renderBrowseByGoal(normalized) {
-  const grid = document.getElementById("browse-theme-grid") || 
-               document.getElementById("browse-category-grid");
+  function renderBrowseByGoal(normalized) {
+    const grid = document.getElementById("browse-theme-grid") || 
+                 document.getElementById("browse-category-grid");
 
-  if (!grid || !Array.isArray(normalized)) return;
+    if (!grid || !Array.isArray(normalized)) return;
 
-  const counts = {};
-  
-  normalized.forEach(t => {
-    if (!t.goal) return;
+    const counts = {};
     
-    String(t.goal)
-      .split(/[,|\n]/)
-      .map(g => g.replace(/\s+/g, " ").trim())
-      .filter(Boolean)
-      .forEach(goal => {
-        const key = goal.toLowerCase();
-        if (!counts[key]) {
-          counts[key] = { label: goal, count: 0 };
-        }
-        counts[key].count++;
-      });
-  });
-
-  const goals = Object.values(counts)
-    .sort((a, b) => b.count - a.count)
-    .slice(0, 6);
-
-  if (!goals.length) {
-    grid.innerHTML = `<div class="col-span-full text-gray-400 text-center">No goals yet</div>`;
-    return;
-  }
-
-  // Mobile-optimized HTML with proper touch events
-  grid.innerHTML = goals.map(g => `
-    <div class="cursor-pointer group bg-gray-800/60 border border-gray-700
-               hover:bg-gray-700/60 transition rounded-2xl p-8 text-center
-               shadow-md hover:shadow-xl duration-200
-               touch-manipulation" 
-         data-goal="${encodeURIComponent(g.label)}"
-         role="button"
-         tabindex="0"
-         aria-label="${g.label} - ${g.count} tools">
+    normalized.forEach(t => {
+      if (!t.goal) return;
       
-      <div class="w-16 h-16 mx-auto mb-4 bg-blue-500/10 rounded-full
-                  flex items-center justify-center group-hover:bg-blue-500/20">
-        <i data-feather="target" class="w-8 h-8 text-blue-400"></i>
-      </div>
-      
-      <h3 class="font-semibold text-lg group-hover:text-blue-300">${g.label}</h3>
-      <p class="text-gray-400 text-sm mt-1">${g.count} Tools</p>
-    </div>
-  `).join("");
-
-  // Add mobile-friendly event listeners
-  function addGoalCardEvents() {
-  const cards = document.querySelectorAll('[data-goal]');
-  
-  cards.forEach(card => {
-    // Make cards touch-friendly but scrollable
-    card.style.touchAction = 'manipulation';
-    card.style.userSelect = 'none';
-    
-    // Track touch movement
-    let touchStartX = 0;
-    let touchStartY = 0;
-    let moved = false;
-    
-    // Touch start - NO preventDefault (allows scrolling)
-    card.addEventListener('touchstart', (e) => {
-      touchStartX = e.touches[0].clientX;
-      touchStartY = e.touches[0].clientY;
-      moved = false;
-      
-      // Visual feedback
-      card.style.transform = 'scale(0.98)';
-      card.style.opacity = '0.9';
-    }, { passive: true });
-    
-    // Touch move - track movement (NO preventDefault)
-    card.addEventListener('touchmove', (e) => {
-      const touchEndX = e.touches[0].clientX;
-      const touchEndY = e.touches[0].clientY;
-      
-      // If moved more than 10 pixels, it's a scroll
-      if (Math.abs(touchEndX - touchStartX) > 10 || Math.abs(touchEndY - touchStartY) > 10) {
-        moved = true;
-      }
-    }, { passive: true });
-    
-    // Touch end - NO preventDefault (allows scrolling)
-    card.addEventListener('touchend', (e) => {
-      card.style.transform = 'scale(1)';
-      card.style.opacity = '1';
-      
-      // Only redirect if no significant movement (not a scroll)
-      if (!moved) {
-        const goalText = card.querySelector('h3')?.textContent || '';
-        if (goalText) {
-          window.location.href = `themes.html?goal=${encodeURIComponent(goalText)}`;
-        }
-      }
-    }, { passive: true });
-    
-    // Click for desktop
-    card.addEventListener('click', (e) => {
-      const goalText = card.querySelector('h3')?.textContent || '';
-      if (goalText) {
-        window.location.href = `themes.html?goal=${encodeURIComponent(goalText)}`;
-      }
+      String(t.goal)
+        .split(/[,|\n]/)
+        .map(g => g.replace(/\s+/g, " ").trim())
+        .filter(Boolean)
+        .forEach(goal => {
+          const key = goal.toLowerCase();
+          if (!counts[key]) {
+            counts[key] = { label: goal, count: 0 };
+          }
+          counts[key].count++;
+        });
     });
-  });
-}
- // Add this to your main page
-window.addEventListener('load', () => {
-  const isMobile = window.innerWidth <= 768;
-  if (isMobile) {
-    console.log('📱 Mobile detected, testing goal cards...');
-    
-    setTimeout(() => {
-      const cards = document.querySelectorAll('#browse-theme-grid > div');
-      console.log(`📱 Found ${cards.length} goal cards`);
-      
-      // Test first card
-      if (cards[0]) {
-        console.log('📱 First card data-goal:', cards[0].getAttribute('data-goal'));
-        
-        // Add visual indicator
-        cards[0].style.border = '2px solid red';
-        cards[0].style.background = 'yellow';
-        
-        setTimeout(() => {
-          cards[0].style.border = '';
-          cards[0].style.background = '';
-        }, 3000);
-      }
-    }, 1000);
+
+    const goals = Object.values(counts)
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 6);
+
+    if (!goals.length) {
+      grid.innerHTML = `<div class="col-span-full text-gray-400 text-center">No goals yet</div>`;
+      return;
+    }
+
+    grid.innerHTML = goals.map(g => `
+      <div onclick="location.href='themes.html?goal=${encodeURIComponent(g.label)}'"
+           class="cursor-pointer group bg-gray-800/60 border border-gray-700
+                  hover:bg-gray-700/60 transition rounded-2xl p-8 text-center
+                  shadow-md hover:shadow-xl duration-200">
+        <div class="w-16 h-16 mx-auto mb-4 bg-blue-500/10 rounded-full
+                    flex items-center justify-center group-hover:bg-blue-500/20">
+          <i data-feather="target" class="w-8 h-8 text-blue-400"></i>
+        </div>
+        <h3 class="font-semibold text-lg group-hover:text-blue-300">${g.label}</h3>
+        <p class="text-gray-400 text-sm mt-1">${g.count} Tools</p>
+      </div>
+    `).join("");
+
+    if (window.feather) feather.replace();
   }
-});
+
   /* ================= TOP TOOLS ================= */
   function renderTopTools(normalized) {
     const scroller = document.getElementById("top-tools-wrapper");
@@ -831,37 +737,31 @@ window.addEventListener('load', () => {
     if (window.feather) feather.replace();
   }
 
-/* ================= HOME ================= */
+  /* ================= HOME ================= */
   async function renderHome() {
-   
-    
     try {
       const tools = await fetchTools();
-     
 
-     const normalized = tools.map(d => ({
-  name: d.name || d.title || "",
-  short: d.short_description || d.short || d.summary || "",  // ✅ Fixed
-  category: d.category || "",
-  goal: d.goal || d.goals || d.use_case || "",
-  logo: d.Logo_url || d.logo || "",  // ✅ Fixed
-  link: d.Link || d.link || "#"  // ✅ Already working
-}));
+      const normalized = tools.map(d => ({
+        name: d.name || d.title || "",
+        short: d.short_description || d.short || d.summary || "",
+        category: d.category || "",
+        goal: d.goal || d.goals || d.use_case || "",
+        logo: d.Logo_url || d.logo || "",
+        link: d.Link || d.link || "#"
+      }));
+
       window.__NORMALIZED_TOOLS__ = normalized;
-   
 
       renderBrowseByGoal(normalized);
       renderTopTools(normalized);
       
-     
     } catch (error) {
       console.error("💥 renderHome error:", error);
     }
   }
 
   /* ================= CRITICAL FIX: ADD EVENT LISTENER ================= */
- 
-  
   // Wait for DOM to be ready
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', renderHome);
@@ -872,9 +772,8 @@ window.addEventListener('load', () => {
   
   window.__debugFetchTools = fetchTools;
 
-}()});
-        </script>
-
+})();
+</script>
      
 <script>
   // -------------------------------
