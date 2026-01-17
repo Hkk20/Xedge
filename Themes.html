@@ -42,8 +42,6 @@
 </main>
 
 <script>
-console.log("🚨 THEMES.HTML SCRIPT STARTED");
-
 // Configuration
 const SHEET_URL = "https://script.google.com/macros/s/AKfycbxXs2ajlwcddAMVEMY5NAMns_ooeEAHSYwDk84nnD6cU2hLjx_k5HKOgFLm-EX_ASSv/exec";
 const CACHE_KEY = "xedge_tools_cache_v1";
@@ -54,18 +52,13 @@ const safeParse = v => {
 };
 
 async function fetchTools(force = false) {
-  console.log("🚨 fetchTools called, force:", force);
-  
   if (!force) {
     const cached = safeParse(localStorage.getItem(CACHE_KEY));
     if (Array.isArray(cached) && cached.length) return cached;
   }
 
   try {
-    const url = SHEET_URL + "?t=" + Date.now();
-    console.log("🚨 Fetching from:", url);
-    
-    const res = await fetch(url, { 
+    const res = await fetch(SHEET_URL + "?t=" + Date.now(), { 
       method: 'GET',
       mode: 'cors',
       cache: "no-store" 
@@ -74,14 +67,12 @@ async function fetchTools(force = false) {
     if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
     
     const data = await res.json();
-    console.log("🚨 Data received:", data.length, "items");
-    
     if (Array.isArray(data)) {
       localStorage.setItem(CACHE_KEY, JSON.stringify(data));
       return data;
     }
   } catch (e) {
-    console.error("🚨 Fetch failed:", e);
+    console.error("Fetch failed:", e);
   }
 
   return safeParse(localStorage.getItem(CACHE_KEY)) || [];
@@ -99,18 +90,15 @@ const GOAL_EXPLANATIONS = {
 };
 
 async function renderGoalPage() {
-  console.log("🚨 renderGoalPage started");
-  
   const params = new URLSearchParams(location.search);
   const goalRaw = params.get("goal") || params.get("theme");
   
   if (!goalRaw) {
-    console.error("🚨 No goal/theme parameter found");
     document.getElementById("goal-title").textContent = "No Goal Selected";
     document.getElementById("goal-desc").textContent = "Please select a goal from the main page.";
     document.getElementById("goal-tools").innerHTML = `
       <div class="col-span-full text-center py-12">
-        <i data-feather="alert-circle" class="w-16 h-16 text-yellow-400 mx-auto mb-4"></i>
+        <i data-feather="info" class="w-16 h-16 text-yellow-400 mx-auto mb-4"></i>
         <h3 class="text-xl font-semibold text-gray-300 mb-2">No goal selected</h3>
         <a href="index.html" class="text-blue-400 hover:text-blue-300">← Go back and choose a goal</a>
       </div>
@@ -119,7 +107,6 @@ async function renderGoalPage() {
   }
 
   const goal = goalRaw.toLowerCase().trim();
-  console.log("🚨 Processing goal:", goal);
 
   // Set header
   document.getElementById("goal-title").textContent = goalRaw;
@@ -128,17 +115,13 @@ async function renderGoalPage() {
 
   try {
     // Get tools and filter by goal
-    console.log("🚨 Fetching tools...");
     const tools = await fetchTools(true);
-    console.log("🚨 Total tools fetched:", tools.length);
-
+    
     // Filter tools that have this goal (handling the space issue)
     const goalTools = tools.filter(t => {
       const toolGoal = (t.goal || t['goal '] || "").toLowerCase().trim();
       return toolGoal === goal;
     });
-
-    console.log("🚨 Tools found for this goal:", goalTools.length);
 
     const container = document.getElementById("goal-tools");
 
@@ -155,10 +138,9 @@ async function renderGoalPage() {
 
     // Render tool cards
     container.innerHTML = goalTools.map(tool => createToolCard(tool)).join('');
-    console.log("🚨 Tools rendered successfully");
 
   } catch (error) {
-    console.error("🚨 renderGoalPage error:", error);
+    console.error("Error loading tools:", error);
     document.getElementById("goal-tools").innerHTML = 
       `<div class="col-span-full text-center py-12">
         <i data-feather="alert-triangle" class="w-16 h-16 text-red-400 mx-auto mb-4"></i>
@@ -195,10 +177,7 @@ function createToolCard(tool) {
 }
 
 // Initialize when DOM is ready
-document.addEventListener("DOMContentLoaded", function() {
-  console.log("🚨 DOMContentLoaded - calling renderGoalPage");
-  renderGoalPage();
-});
+document.addEventListener("DOMContentLoaded", renderGoalPage);
 </script>
 
 </body>
