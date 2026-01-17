@@ -39,6 +39,24 @@
 <script src="tools.js"></script>
 
 <script>
+  console.log("🚨 THEMES.HTML SCRIPT STARTED");
+
+// Global error catcher
+window.addEventListener('error', function(e) {
+  console.error("🚨 GLOBAL ERROR:", e.error);
+  console.error("🚨 ERROR MESSAGE:", e.message);
+  console.error("🚨 ERROR STACK:", e.error.stack);
+});
+
+// Emergency fallback
+document.addEventListener('DOMContentLoaded', function() {
+  console.log("🚨 DOMContentLoaded fired");
+  document.body.innerHTML = '<div style="padding: 20px; background: red; color: white;"><h1>DEBUG MODE</h1><p id="debug-info">Loading...</p></div>';
+  
+  setTimeout(() => {
+    document.getElementById('debug-info').textContent = 'Check console for errors';
+  }, 1000);
+});
 // Goal explanations
 const GOAL_EXPLANATIONS = {
   "create your website": "Build and launch your perfect website with these AI-powered tools for design, content, and development.",
