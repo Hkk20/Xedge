@@ -39,24 +39,8 @@
 <script src="tools.js"></script>
 
 <script>
-  console.log("🚨 THEMES.HTML SCRIPT STARTED");
+console.log("🚨 THEMES.HTML SCRIPT STARTED");
 
-// Global error catcher
-window.addEventListener('error', function(e) {
-  console.error("🚨 GLOBAL ERROR:", e.error);
-  console.error("🚨 ERROR MESSAGE:", e.message);
-  console.error("🚨 ERROR STACK:", e.error.stack);
-});
-
-// Emergency fallback
-document.addEventListener('DOMContentLoaded', function() {
-  console.log("🚨 DOMContentLoaded fired");
-  document.body.innerHTML = '<div style="padding: 20px; background: red; color: white;"><h1>DEBUG MODE</h1><p id="debug-info">Loading...</p></div>';
-  
-  setTimeout(() => {
-    document.getElementById('debug-info').textContent = 'Check console for errors';
-  }, 1000);
-});
 // Goal explanations
 const GOAL_EXPLANATIONS = {
   "create your website": "Build and launch your perfect website with these AI-powered tools for design, content, and development.",
@@ -69,46 +53,62 @@ const GOAL_EXPLANATIONS = {
 };
 
 async function renderGoalPage() {
+  console.log("🚨 renderGoalPage started");
+  
   const params = new URLSearchParams(location.search);
-const themeRaw = params.get("goal") || params.get("theme");
-  if (!goalRaw) return;
+  const goalRaw = params.get("goal") || params.get("theme"); // ✅ FIXED VARIABLE NAME
+  
+  if (!goalRaw) {
+    console.error("🚨 No goal/theme parameter found");
+    document.getElementById("goal-title").textContent = "No Goal Selected";
+    document.getElementById("goal-desc").textContent = "Please select a goal from the main page.";
+    return;
+  }
 
   const goal = goalRaw.toLowerCase().trim();
+  console.log("🚨 Processing goal:", goal);
 
   // Set header
   document.getElementById("goal-title").textContent = goalRaw;
   document.getElementById("goal-desc").textContent = 
     GOAL_EXPLANATIONS[goal] || `Tools to help you ${goalRaw.toLowerCase()}.`;
 
-  // Get tools and filter by goal
-  const tools = await window.__debugFetchTools(); // Use your existing fetch function
-  
-  // Filter tools that have this goal (handling the space issue)
-  const goalTools = tools.filter(t => {
-    const toolGoal = (t.goal || t['goal '] || "").toLowerCase().trim();
-    return toolGoal === goal;
-  });
+  try {
+    // Get tools and filter by goal
+    console.log("🚨 Fetching tools...");
+    const tools = await window.__debugFetchTools(true);
+    console.log("🚨 Total tools fetched:", tools.length);
 
-  console.log(`Found ${goalTools.length} tools for goal: ${goalRaw}`);
+    // Filter tools that have this goal (handling the space issue)
+    const goalTools = tools.filter(t => {
+      const toolGoal = (t.goal || t['goal '] || "").toLowerCase().trim();
+      return toolGoal === goal;
+    });
 
-  const container = document.getElementById("goal-tools");
+    console.log("🚨 Tools found for this goal:", goalTools.length);
 
-  if (goalTools.length === 0) {
-    container.innerHTML = `
-      <div class="col-span-full text-center py-12">
-        <i data-feather="info" class="w-16 h-16 text-gray-400 mx-auto mb-4"></i>
-        <h3 class="text-xl font-semibold text-gray-300 mb-2">No tools found for "${goalRaw}" yet</h3>
-        <p class="text-gray-500">Check back soon - we're adding new tools daily!</p>
-      </div>
-    `;
-    return;
+    const container = document.getElementById("goal-tools");
+
+    if (goalTools.length === 0) {
+      container.innerHTML = `
+        <div class="col-span-full text-center py-12">
+          <i data-feather="info" class="w-16 h-16 text-gray-400 mx-auto mb-4"></i>
+          <h3 class="text-xl font-semibold text-gray-300 mb-2">No tools found for "${goalRaw}"</h3>
+          <p class="text-gray-500">Check back soon - we're adding new tools daily!</p>
+        </div>
+      `;
+      return;
+    }
+
+    // Render tool cards
+    container.innerHTML = goalTools.map(tool => createToolCard(tool)).join('');
+    console.log("🚨 Tools rendered successfully");
+
+  } catch (error) {
+    console.error("🚨 renderGoalPage error:", error);
+    document.getElementById("goal-tools").innerHTML = 
+      `<div class="text-red-500">Error loading tools: ${error.message}</div>`;
   }
-
-  // Render tool cards
-  container.innerHTML = goalTools.map(tool => createToolCard(tool)).join('');
-  
-  // Replace feather icons if loaded
-  if (window.feather) feather.replace();
 }
 
 function createToolCard(tool) {
@@ -138,7 +138,10 @@ function createToolCard(tool) {
 }
 
 // Initialize when DOM is ready
-document.addEventListener("DOMContentLoaded", renderGoalPage);
+document.addEventListener("DOMContentLoaded", function() {
+  console.log("🚨 DOMContentLoaded - calling renderGoalPage");
+  renderGoalPage();
+});
 </script>
 
 </body>
