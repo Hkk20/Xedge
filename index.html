@@ -705,53 +705,62 @@
   `).join("");
 
   // Add mobile-friendly event listeners
-  addGoalCardEvents();
-  
-  if (window.feather) feather.replace();
-}
-
-function addGoalCardEvents() {
+  function addGoalCardEvents() {
   const cards = document.querySelectorAll('[data-goal]');
   
   cards.forEach(card => {
-    // Handle both click and touch
-    const handleActivation = (e) => {
-      e.preventDefault();
-      const goal = card.getAttribute('data-goal');
-      window.location.href = `Themes.html?goal=${goal}`;
-    };
+    // Make cards touch-friendly but scrollable
+    card.style.touchAction = 'manipulation';
+    card.style.userSelect = 'none';
     
-    // Mouse events
-    card.addEventListener('click', handleActivation);
-
- 
+    // Track touch movement
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let moved = false;
     
-    // Touch events for mobile
+    // Touch start - NO preventDefault (allows scrolling)
     card.addEventListener('touchstart', (e) => {
-      e.preventDefault();
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+      moved = false;
+      
+      // Visual feedback
       card.style.transform = 'scale(0.98)';
       card.style.opacity = '0.9';
-    });
+    }, { passive: true });
     
+    // Touch move - track movement (NO preventDefault)
+    card.addEventListener('touchmove', (e) => {
+      const touchEndX = e.touches[0].clientX;
+      const touchEndY = e.touches[0].clientY;
+      
+      // If moved more than 10 pixels, it's a scroll
+      if (Math.abs(touchEndX - touchStartX) > 10 || Math.abs(touchEndY - touchStartY) > 10) {
+        moved = true;
+      }
+    }, { passive: true });
+    
+    // Touch end - NO preventDefault (allows scrolling)
     card.addEventListener('touchend', (e) => {
-      e.preventDefault();
       card.style.transform = 'scale(1)';
       card.style.opacity = '1';
-      handleActivation(e);
-    });
+      
+      // Only redirect if no significant movement (not a scroll)
+      if (!moved) {
+        const goalText = card.querySelector('h3')?.textContent || '';
+        if (goalText) {
+          window.location.href = `themes.html?goal=${encodeURIComponent(goalText)}`;
+        }
+      }
+    }, { passive: true });
     
-    // Keyboard accessibility
-    card.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        handleActivation(e);
+    // Click for desktop
+    card.addEventListener('click', (e) => {
+      const goalText = card.querySelector('h3')?.textContent || '';
+      if (goalText) {
+        window.location.href = `themes.html?goal=${encodeURIComponent(goalText)}`;
       }
     });
-    
-    // Prevent text selection on mobile
-    card.style.userSelect = 'none';
-    card.style.webkitUserSelect = 'none';
-    card.style.webkitTouchCallout = 'none';
   });
 }
  // Add this to your main page
