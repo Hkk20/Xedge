@@ -595,7 +595,7 @@
 
   /* ================= FETCH ================= */
   async function fetchTools(force = false) {
-    console.log("🚀 fetchTools called, force:", force);
+    
     
     if (!force) {
       const cached = safeParse(localStorage.getItem(CACHE_KEY));
@@ -604,7 +604,7 @@
 
     try {
       const url = SHEET_URL + "?t=" + Date.now();
-      console.log("🌐 Fetching:", url);
+ 
       
       const res = await fetch(url, { 
         method: 'GET',
@@ -744,11 +744,11 @@
 
 /* ================= HOME ================= */
   async function renderHome() {
-    console.log("🏠 renderHome started");
+   
     
     try {
       const tools = await fetchTools();
-      console.log("📋 Tools fetched:", tools.length);
+     
 
      const normalized = tools.map(d => ({
   name: d.name || d.title || "",
@@ -759,19 +759,19 @@
   link: d.Link || d.link || "#"  // ✅ Already working
 }));
       window.__NORMALIZED_TOOLS__ = normalized;
-      console.log("🎯 Normalized:", normalized.length, "items");
+   
 
       renderBrowseByGoal(normalized);
       renderTopTools(normalized);
       
-      console.log("✅ renderHome completed");
+     
     } catch (error) {
       console.error("💥 renderHome error:", error);
     }
   }
 
   /* ================= CRITICAL FIX: ADD EVENT LISTENER ================= */
-  console.log("📜 Script loading...");
+ 
   
   // Wait for DOM to be ready
   if (document.readyState === 'loading') {
@@ -782,7 +782,7 @@
   }
   
   window.__debugFetchTools = fetchTools;
-  console.log("✅ Script initialized");
+
 })();</script>
 
 <script>
