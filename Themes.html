@@ -32,14 +32,60 @@
   </div>
 
   <!-- TOOLS GRID -->
-  <section id="goal-tools" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"></section>
+  <section id="goal-tools" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="col-span-full text-center py-12">
+      <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-400"></div>
+      <p class="mt-4 text-gray-400">Loading tools...</p>
+    </div>
+  </section>
 
 </main>
 
-<script src="tools.js"></script>
-
 <script>
 console.log("🚨 THEMES.HTML SCRIPT STARTED");
+
+// Configuration
+const SHEET_URL = "https://script.google.com/macros/s/AKfycbxXs2ajlwcddAMVEMY5NAMns_ooeEAHSYwDk84nnD6cU2hLjx_k5HKOgFLm-EX_ASSv/exec";
+const CACHE_KEY = "xedge_tools_cache_v1";
+
+// Utility functions
+const safeParse = v => {
+  try { return JSON.parse(v); } catch { return null; }
+};
+
+async function fetchTools(force = false) {
+  console.log("🚨 fetchTools called, force:", force);
+  
+  if (!force) {
+    const cached = safeParse(localStorage.getItem(CACHE_KEY));
+    if (Array.isArray(cached) && cached.length) return cached;
+  }
+
+  try {
+    const url = SHEET_URL + "?t=" + Date.now();
+    console.log("🚨 Fetching from:", url);
+    
+    const res = await fetch(url, { 
+      method: 'GET',
+      mode: 'cors',
+      cache: "no-store" 
+    });
+    
+    if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+    
+    const data = await res.json();
+    console.log("🚨 Data received:", data.length, "items");
+    
+    if (Array.isArray(data)) {
+      localStorage.setItem(CACHE_KEY, JSON.stringify(data));
+      return data;
+    }
+  } catch (e) {
+    console.error("🚨 Fetch failed:", e);
+  }
+
+  return safeParse(localStorage.getItem(CACHE_KEY)) || [];
+}
 
 // Goal explanations
 const GOAL_EXPLANATIONS = {
@@ -56,12 +102,19 @@ async function renderGoalPage() {
   console.log("🚨 renderGoalPage started");
   
   const params = new URLSearchParams(location.search);
-  const goalRaw = params.get("goal") || params.get("theme"); // ✅ FIXED VARIABLE NAME
+  const goalRaw = params.get("goal") || params.get("theme");
   
   if (!goalRaw) {
     console.error("🚨 No goal/theme parameter found");
     document.getElementById("goal-title").textContent = "No Goal Selected";
     document.getElementById("goal-desc").textContent = "Please select a goal from the main page.";
+    document.getElementById("goal-tools").innerHTML = `
+      <div class="col-span-full text-center py-12">
+        <i data-feather="alert-circle" class="w-16 h-16 text-yellow-400 mx-auto mb-4"></i>
+        <h3 class="text-xl font-semibold text-gray-300 mb-2">No goal selected</h3>
+        <a href="index.html" class="text-blue-400 hover:text-blue-300">← Go back and choose a goal</a>
+      </div>
+    `;
     return;
   }
 
@@ -76,7 +129,7 @@ async function renderGoalPage() {
   try {
     // Get tools and filter by goal
     console.log("🚨 Fetching tools...");
-    const tools = await window.__debugFetchTools(true);
+    const tools = await fetchTools(true);
     console.log("🚨 Total tools fetched:", tools.length);
 
     // Filter tools that have this goal (handling the space issue)
@@ -107,7 +160,11 @@ async function renderGoalPage() {
   } catch (error) {
     console.error("🚨 renderGoalPage error:", error);
     document.getElementById("goal-tools").innerHTML = 
-      `<div class="text-red-500">Error loading tools: ${error.message}</div>`;
+      `<div class="col-span-full text-center py-12">
+        <i data-feather="alert-triangle" class="w-16 h-16 text-red-400 mx-auto mb-4"></i>
+        <h3 class="text-xl font-semibold text-gray-300 mb-2">Error loading tools</h3>
+        <p class="text-gray-500">${error.message}</p>
+      </div>`;
   }
 }
 
