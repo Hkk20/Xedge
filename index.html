@@ -563,111 +563,7 @@
 
        
   </div>
-       <script>
-       
-// MOBILE EMERGENCY DEBUG
-console.log("🚨 MOBILE DEBUG STARTED");
-
-// Mobile detection
-const isMobile = window.innerWidth <= 768;
-const isTouchDevice = 'ontouchstart' in window;
-console.log("📱 Device info:", { width: window.innerWidth, mobile: isMobile, touch: isTouchDevice });
-
-// Override renderBrowseByGoal with debug version
-const originalRender = window.renderBrowseByGoal;
-
-window.renderBrowseByGoal = function(normalized) {
-  console.log("🚨 DEBUG renderBrowseByGoal called");
-  console.log("🚨 Input normalized:", normalized);
-  console.log("🚨 Input length:", normalized?.length);
-
-  const grid = document.getElementById("browse-theme-grid") || document.getElementById("browse-category-grid");
-  console.log("🚨 Grid element:", grid);
-  console.log("🚨 Grid innerHTML before:", grid?.innerHTML);
-
-  if (!grid || !Array.isArray(normalized)) {
-    console.log("🚨 MISSING GRID OR NORMALIZED DATA");
-    return;
-  }
-
-  // Process goals with detailed logging
-  const counts = {};
-  console.log("🚨 Starting goal processing...");
-
-  normalized.forEach((t, index) => {
-    console.log(`🚨 Tool ${index}:`, { name: t.name, goal: t.goal, hasGoal: !!t.goal });
-    
-    if (!t.goal) {
-      console.log(`🚨 Tool ${index} skipped - no goal`);
-      return;
-    }
-
-    const goals = String(t.goal).split(/[,|\n]/).map(g => g.replace(/\s+/g, " ").trim()).filter(Boolean);
-    console.log(`🚨 Tool ${index} goals found:`, goals);
-
-    goals.forEach(goal => {
-      const key = goal.toLowerCase();
-      if (!counts[key]) {
-        counts[key] = { label: goal, count: 0 };
-      }
-      counts[key].count++;
-      console.log(`🚨 Added goal: ${goal} (key: ${key})`);
-    });
-  });
-
-  console.log("🚨 Final counts object:", counts);
-  console.log("🚨 Number of unique goals:", Object.keys(counts).length);
-
-  const goals = Object.values(counts).sort((a, b) => b.count - a.count).slice(0, 6);
-  console.log("🚨 Final goals array:", goals);
-  console.log("🚨 Goals to display:", goals.length);
-
-  if (!goals.length) {
-    console.log("🚨 NO GOALS FOUND - SHOWING EMPTY MESSAGE");
-    grid.innerHTML = '<div class="col-span-full text-red-500 text-center bg-yellow-100 p-4">DEBUG: No goals found</div>';
-    return;
-  }
-
-  // Render with debug info
-  console.log("🚨 Rendering goals...");
-  grid.innerHTML = goals.map((g, index) => `
-    <div class="bg-blue-100 border-2 border-blue-500 p-4 m-2 debug-goal-card"
-         style="border: 2px solid red !important; background: yellow !important;"
-         data-goal="${g.label}">
-      <h3 style="color: black !important;">DEBUG: ${g.label}</h3>
-      <p style="color: black !important;">${g.count} tools</p>
-      <small style="color: black !important;">Card ${index + 1}</small>
-    </div>
-  `).join("");
-
-  console.log("🚨 Render completed");
-};
-
-// Force execution after delay
-setTimeout(() => {
-  console.log("🚨 Forcing renderBrowseByGoal execution...");
-  if (window.__NORMALIZED_TOOLS__) {
-    console.log("🚨 Found normalized tools, forcing render...");
-    window.renderBrowseByGoal(window.__NORMALIZED_TOOLS__);
-  } else {
-    console.log("🚨 No normalized tools found, checking again...");
-    setTimeout(() => {
-      if (window.__NORMALIZED_TOOLS__) {
-        window.renderBrowseByGoal(window.__NORMALIZED_TOOLS__);
-      }
-    }, 2000);
-  }
-}, 1500);
-
-// Visual mobile indicator
-if (isMobile) {
-  document.body.style.border = '5px solid red';
-  const indicator = document.createElement('div');
-  indicator.style.cssText = 'position: fixed; top: 10px; left: 10px; background: yellow; color: black; padding: 10px; z-index: 9999; font-size: 12px;';
-  indicator.textContent = '📱 MOBILE DEBUG MODE';
-  document.body.appendChild(indicator);
-}
-</script>
+      
         <script>
 (function () {
   "use strict";
@@ -1170,6 +1066,85 @@ window.addEventListener('load', () => {
     // Visual mobile indicators
     document.body.style.border = '5px solid red';
     mobileLog("Mobile debug active - look for green goal cards");
+  }
+})();
+</script>
+       <script>
+// MOBILE GOAL DEBUG - Add this after your main script
+(function() {
+  const isMobile = window.innerWidth <= 768;
+  
+  if (isMobile) {
+    console.log("📱 MOBILE GOAL DEBUG ACTIVE");
+    
+    // Create mobile debug overlay
+    const debugOverlay = document.createElement('div');
+    debugOverlay.style.cssText = `
+      position: fixed; 
+      top: 10px; 
+      left: 10px; 
+      background: yellow; 
+      color: black; 
+      padding: 8px; 
+      z-index: 9999; 
+      font-size: 11px;
+      max-width: 300px;
+      max-height: 150px;
+      overflow-y: auto;
+      border: 2px solid red;
+    `;
+    document.body.appendChild(debugOverlay);
+    
+    function mobileLog(message) {
+      const div = document.createElement('div');
+      div.textContent = message;
+      debugOverlay.appendChild(div);
+      console.log("📱 " + message);
+    }
+    
+    // Hook into renderBrowseByGoal
+    const originalRenderBrowseByGoal = window.renderBrowseByGoal;
+    
+    window.renderBrowseByGoal = function(normalized) {
+      mobileLog("=== GOAL DEBUG START ===");
+      mobileLog("Input tools: " + normalized.length);
+      
+      if (normalized[0]) {
+        mobileLog("Tool 0 goal: " + JSON.stringify(normalized[0].goal));
+        mobileLog("Tool 0 goal type: " + typeof normalized[0].goal);
+      }
+      
+      // Process first 3 tools with detailed logging
+      const counts = {};
+      let totalGoals = 0;
+      
+      for (let i = 0; i < Math.min(3, normalized.length); i++) {
+        const tool = normalized[i];
+        mobileLog(`Tool ${i}: ${tool.name}`);
+        
+        if (!tool.goal) {
+          mobileLog(`  ❌ No goal`);
+          continue;
+        }
+        
+        mobileLog(`  ✅ Goal: "${tool.goal}"`);
+        const goals = String(tool.goal).split(/[,|\n]/).map(g => g.trim()).filter(Boolean);
+        mobileLog(`  → Goals found: ${goals.length} | ${JSON.stringify(goals)}`);
+        
+        goals.forEach(goal => {
+          const key = goal.toLowerCase();
+          counts[key] = counts[key] || { label: goal, count: 0 };
+          counts[key].count++;
+          totalGoals++;
+        });
+      }
+      
+      mobileLog(`Final: ${Object.keys(counts).length} unique goals`);
+      mobileLog(`Total instances: ${totalGoals}`);
+      
+      // Continue with normal processing
+      originalRenderBrowseByGoal(normalized);
+    };
   }
 })();
 </script>
