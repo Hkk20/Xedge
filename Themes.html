@@ -70,7 +70,7 @@ const GOAL_EXPLANATIONS = {
 
 async function renderGoalPage() {
   const params = new URLSearchParams(location.search);
-  const goalRaw = params.get("theme");
+const themeRaw = params.get("goal") || params.get("theme");
   if (!goalRaw) return;
 
   const goal = goalRaw.toLowerCase().trim();
