@@ -645,147 +645,65 @@
     imgs.forEach(i => obs.observe(i));
   }
 
-  function renderBrowseByGoal(normalized) {
-    const grid = document.getElementById("browse-theme-grid") || 
-                 document.getElementById("browse-category-grid");
+ function renderBrowseByGoal(normalized) {
+  const grid = document.getElementById("browse-theme-grid") || 
+               document.getElementById("browse-category-grid");
 
-    if (!grid || !Array.isArray(normalized)) return;
+  if (!grid || !Array.isArray(normalized)) return;
 
-    const counts = {};
+  const counts = {};
     
-    normalized.forEach(t => {
-      if (!t.goal) return;
-      
-      String(t.goal)
-        .split(/[,|\n]/)
-        .map(g => g.replace(/\s+/g, " ").trim())
-        .filter(Boolean)
-        .forEach(goal => {
-          const key = goal.toLowerCase();
-          if (!counts[key]) {
-            counts[key] = { label: goal, count: 0 };
-          }
-          counts[key].count++;
-        });
-    });
-  // CHATGPT GOAL DEBUG - Add this inside your renderBrowseByGoal function
-console.log("🔍 CHATGPT SPECIFIC DEBUG");
-
-// Find ChatGPT specifically
-const chatgptTool = normalized.find(tool => tool.name.toLowerCase().includes('chatgpt'));
-if (chatgptTool) {
-  console.log("🎯 CHATGPT FOUND:", {
-    name: chatgptTool.name,
-    goal: chatgptTool.goal,
-    goalType: typeof chatgptTool.goal,
-    hasGoal: !!chatgptTool.goal
-  });
-  
-  if (chatgptTool.goal) {
-    const chatgptGoals = String(chatgptTool.goal).split(/[,|\n]/).map(g => g.trim()).filter(Boolean);
-    console.log("🎯 CHATGPT GOALS:", chatgptGoals);
-  }
-} else {
-  console.log("❌ CHATGPT NOT FOUND in normalized data");
-}
-
-// Check ALL tools that have multiple goals
-console.log("🔍 MULTI-GOAL TOOLS:");
-normalized.forEach((tool, index) => {
-  if (!tool.goal) return;
-  
-  const goals = String(tool.goal).split(/[,|\n]/).map(g => g.trim()).filter(Boolean);
-  if (goals.length > 1) {
-    console.log(`Multi-goal tool ${index}:`, {
-      name: tool.name,
-      goals: goals,
-      goalCount: goals.length
-    });
-  }
-});
-
-// Check the exact goal matching process
-console.log("🔍 GOAL MATCHING PROCESS:");
-normalized.forEach((tool, index) => {
-  if (tool.name.toLowerCase().includes('chatgpt')) {
-    console.log(`\n=== PROCESSING CHATGPT (Tool ${index}) ===`);
-    console.log("Input goal:", tool.goal);
+  normalized.forEach(t => {
+    if (!t.goal) return;
     
-    if (!tool.goal) {
-      console.log("❌ ChatGPT has no goal field");
-      return;
-    }
-    
-    const goals = String(tool.goal).split(/[,|\n]/).map(g => g.trim()).filter(Boolean);
-    console.log("Goals found:", goals);
-    
-    goals.forEach(goal => {
-      console.log(`Processing goal: "${goal}"`);
-      const key = goal.toLowerCase();
-      console.log(`Goal key: "${key}"`);
-      
-      if (!counts[key]) {
-        counts[key] = { label: goal, count: 0 };
-        console.log(`Created new goal category: "${key}"`);
-      }
-      counts[key].count++;
-      console.log(`Incremented count for "${key}" to ${counts[key].count}`);
-    });
-  }
-});
-
-    const goals = Object.values(counts)
-      .sort((a, b) => b.count - a.count)
-      .slice(0, 6);
-
-    if (!goals.length) {
-      grid.innerHTML = `<div class="col-span-full text-gray-400 text-center">No goals yet</div>`;
-      return;
-    }
-    
- // Check raw data from Google Sheets
-setTimeout(() => {
-  console.log("🔍 RAW GOOGLE SHEETS DATA CHECK:");
-  if (window.__NORMALIZED_TOOLS__) {
-    window.__NORMALIZED_TOOLS__.slice(0, 3).forEach((tool, index) => {
-      console.log(`Raw Tool ${index}:`, {
-        name: tool.name,
-        goal: tool.goal,
-        logo_url: tool.Logo_url,
-        allKeys: Object.keys(tool)
+    String(t.goal)
+      .split(/[,|\n]/)
+      .map(g => g.replace(/\s+/g, " ").trim())
+      .filter(Boolean)
+      .forEach(goal => {
+        const key = goal.toLowerCase();
+        if (!counts[key]) {
+          counts[key] = { label: goal, count: 0 };
+        }
+        counts[key].count++;
       });
-    });
-  }
-}, 2000);
+  });
 
-  // In your renderBrowseByGoal function:
-grid.innerHTML = goals.map(g => `
-  <div onclick="location.href='Themes.html?goal=${encodeURIComponent(g.label)}'"
-       class="cursor-pointer group bg-gray-800/60 border border-gray-700
-              hover:bg-gray-700/60 transition rounded-2xl p-8 text-center
-              shadow-md hover:shadow-xl duration-200">
-    
-   
-<div class="w-16 h-16 mx-auto mb-4 bg-blue-500/10 rounded-full
-            flex items-center justify-center group-hover:bg-blue-500/20
-            overflow-hidden">
-  <img data-src="${g.logo_url || makePlaceholder(g.label,160,160)}"
-       src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Crect width='100%25' height='100%25' fill='%23f3f4f6'/%3E%3C/svg%3E"
-       alt="${g.label} logo"
-       class="w-full h-full object-cover lazy-logo
-              transition-opacity duration-300 opacity-0
-              group-hover:opacity-100" />
-</div>
-    
-    <h3 class="font-semibold text-lg group-hover:text-blue-300">${g.label}</h3>
-    <p class="text-gray-400 text-sm mt-1">${g.count} Tools</p>
-  </div>
-`).join("");
+  const goals = Object.values(counts)
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 6);
 
-    if (window.feather) feather.replace();
+  if (!goals.length) {
+    grid.innerHTML = `<div class="col-span-full text-gray-400 text-center">No goals yet</div>`;
+    return;
   }
 
+  // Clean production version with lazy loading logos
+  grid.innerHTML = goals.map(g => `
+    <div onclick="location.href='themes.html?goal=${encodeURIComponent(g.label)}'"
+         class="cursor-pointer group bg-gray-800/60 border border-gray-700
+                hover:bg-gray-700/60 transition rounded-2xl p-8 text-center
+                shadow-md hover:shadow-xl duration-200">
+      
+      <!-- Lazy loading logo container -->
+      <div class="w-16 h-16 mx-auto mb-4 bg-blue-500/10 rounded-full
+                  flex items-center justify-center group-hover:bg-blue-500/20
+                  overflow-hidden">
+        <img data-src="${g.Logo_url || makePlaceholder(g.label,160,160)}"
+             src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Crect width='100%25' height='100%25' fill='%23f3f4f6'/%3E%3C/svg%3E"
+             alt="${g.label} logo"
+             class="w-full h-full object-cover lazy-logo
+                    transition-opacity duration-300 opacity-0
+                    group-hover:opacity-100" />
+      </div>
+      
+      <h3 class="font-semibold text-lg group-hover:text-blue-300">${g.label}</h3>
+      <p class="text-gray-400 text-sm mt-1">${g.count} Tools</p>
+    </div>
+  `).join("");
 
+  if (window.feather) feather.replace();
+}
   /* ================= TOP TOOLS ================= */
   function renderTopTools(normalized) {
     const scroller = document.getElementById("top-tools-wrapper");
