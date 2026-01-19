@@ -668,34 +668,71 @@
           counts[key].count++;
         });
     });
-   // GOAL DEBUG - Add this to see exactly what's happening
-console.log("🔍 GOAL DEBUG START");
-console.log("First 5 tools from normalized data:");
-normalized.slice(0, 5).forEach((tool, index) => {
-  console.log(`Tool ${index}:`, {
-    name: tool.name,
-    goal: tool.goal,
-    goalType: typeof tool.goal,
-    goalLength: tool.goal?.length,
-    goalValue: JSON.stringify(tool.goal)
+  // CHATGPT GOAL DEBUG - Add this inside your renderBrowseByGoal function
+console.log("🔍 CHATGPT SPECIFIC DEBUG");
+
+// Find ChatGPT specifically
+const chatgptTool = normalized.find(tool => tool.name.toLowerCase().includes('chatgpt'));
+if (chatgptTool) {
+  console.log("🎯 CHATGPT FOUND:", {
+    name: chatgptTool.name,
+    goal: chatgptTool.goal,
+    goalType: typeof chatgptTool.goal,
+    hasGoal: !!chatgptTool.goal
   });
   
-  if (tool.goal) {
-    const goals = String(tool.goal).split(/[,|\n]/).map(g => g.trim()).filter(Boolean);
-    console.log(`Tool ${index} GOALS FOUND:`, goals);
+  if (chatgptTool.goal) {
+    const chatgptGoals = String(chatgptTool.goal).split(/[,|\n]/).map(g => g.trim()).filter(Boolean);
+    console.log("🎯 CHATGPT GOALS:", chatgptGoals);
+  }
+} else {
+  console.log("❌ CHATGPT NOT FOUND in normalized data");
+}
+
+// Check ALL tools that have multiple goals
+console.log("🔍 MULTI-GOAL TOOLS:");
+normalized.forEach((tool, index) => {
+  if (!tool.goal) return;
+  
+  const goals = String(tool.goal).split(/[,|\n]/).map(g => g.trim()).filter(Boolean);
+  if (goals.length > 1) {
+    console.log(`Multi-goal tool ${index}:`, {
+      name: tool.name,
+      goals: goals,
+      goalCount: goals.length
+    });
   }
 });
 
-// Test the exact splitting logic
-console.log("🔍 Testing goal splitting logic:");
-if (normalized[0] && normalized[0].goal) {
-  const testGoal = normalized[0].goal;
-  console.log("Original goal:", testGoal);
-  console.log("After String():", String(testGoal));
-  console.log("After split():", String(testGoal).split(/[,|\n]/));
-  console.log("After map/trim:", String(testGoal).split(/[,|\n]/).map(g => g.trim()));
-  console.log("After filter:", String(testGoal).split(/[,|\n]/).map(g => g.trim()).filter(Boolean));
-}
+// Check the exact goal matching process
+console.log("🔍 GOAL MATCHING PROCESS:");
+normalized.forEach((tool, index) => {
+  if (tool.name.toLowerCase().includes('chatgpt')) {
+    console.log(`\n=== PROCESSING CHATGPT (Tool ${index}) ===`);
+    console.log("Input goal:", tool.goal);
+    
+    if (!tool.goal) {
+      console.log("❌ ChatGPT has no goal field");
+      return;
+    }
+    
+    const goals = String(tool.goal).split(/[,|\n]/).map(g => g.trim()).filter(Boolean);
+    console.log("Goals found:", goals);
+    
+    goals.forEach(goal => {
+      console.log(`Processing goal: "${goal}"`);
+      const key = goal.toLowerCase();
+      console.log(`Goal key: "${key}"`);
+      
+      if (!counts[key]) {
+        counts[key] = { label: goal, count: 0 };
+        console.log(`Created new goal category: "${key}"`);
+      }
+      counts[key].count++;
+      console.log(`Incremented count for "${key}" to ${counts[key].count}`);
+    });
+  }
+});
 
     const goals = Object.values(counts)
       .sort((a, b) => b.count - a.count)
