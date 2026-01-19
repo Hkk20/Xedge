@@ -645,7 +645,7 @@
     imgs.forEach(i => obs.observe(i));
   }
 
- function renderBrowseByGoal(normalized) {
+function renderBrowseByGoal(normalized) {
   const grid = document.getElementById("browse-theme-grid") || 
                document.getElementById("browse-category-grid");
 
@@ -656,6 +656,7 @@
   normalized.forEach(t => {
     if (!t.goal) return;
     
+    // This handles both single and multiple goals perfectly
     String(t.goal)
       .split(/[,|\n]/)
       .map(g => g.replace(/\s+/g, " ").trim())
@@ -678,14 +679,14 @@
     return;
   }
 
-  // Clean production version with lazy loading logos
+  // Clean version with lazy loading logos
   grid.innerHTML = goals.map(g => `
-    <div onclick="location.href='Themes.html?goal=${encodeURIComponent(g.label)}'"
+    <div onclick="location.href='themes.html?goal=${encodeURIComponent(g.label)}'"
          class="cursor-pointer group bg-gray-800/60 border border-gray-700
                 hover:bg-gray-700/60 transition rounded-2xl p-8 text-center
                 shadow-md hover:shadow-xl duration-200">
       
-      <!-- Lazy loading logo container -->
+      <!-- Lazy loading logo -->
       <div class="w-16 h-16 mx-auto mb-4 bg-blue-500/10 rounded-full
                   flex items-center justify-center group-hover:bg-blue-500/20
                   overflow-hidden">
