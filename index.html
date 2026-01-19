@@ -745,6 +745,16 @@ function renderBrowseByGoal(normalized) {
       </div>
     `;
   }).join("");
+ // Add this right after your tool analysis loop:
+console.log("\n🔍 CHECKING ACTUAL TOOL PROPERTIES:");
+if (normalized.length > 0) {
+  const firstTool = normalized[0];
+  console.log("First tool object keys:", Object.keys(firstTool));
+  console.log("First tool ALL properties:");
+  Object.entries(firstTool).forEach(([key, value]) => {
+    console.log(`  ${key}: "${value}" (${typeof value})`);
+  });
+}
 
   if (window.feather) feather.replace();
   
