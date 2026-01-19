@@ -704,6 +704,48 @@ grid.innerHTML = goals.map(g => `
 
     if (window.feather) feather.replace();
   }
+ // GOAL DEBUG - Add this to see exactly what's happening
+console.log("🔍 GOAL DEBUG START");
+console.log("First 5 tools from normalized data:");
+normalized.slice(0, 5).forEach((tool, index) => {
+  console.log(`Tool ${index}:`, {
+    name: tool.name,
+    goal: tool.goal,
+    goalType: typeof tool.goal,
+    goalLength: tool.goal?.length,
+    goalValue: JSON.stringify(tool.goal)
+  });
+  
+  if (tool.goal) {
+    const goals = String(tool.goal).split(/[,|\n]/).map(g => g.trim()).filter(Boolean);
+    console.log(`Tool ${index} GOALS FOUND:`, goals);
+  }
+});
+
+// Test the exact splitting logic
+console.log("🔍 Testing goal splitting logic:");
+if (normalized[0] && normalized[0].goal) {
+  const testGoal = normalized[0].goal;
+  console.log("Original goal:", testGoal);
+  console.log("After String():", String(testGoal));
+  console.log("After split():", String(testGoal).split(/[,|\n]/));
+  console.log("After map/trim:", String(testGoal).split(/[,|\n]/).map(g => g.trim()));
+  console.log("After filter:", String(testGoal).split(/[,|\n]/).map(g => g.trim()).filter(Boolean));
+}
+ // Check raw data from Google Sheets
+setTimeout(() => {
+  console.log("🔍 RAW GOOGLE SHEETS DATA CHECK:");
+  if (window.__NORMALIZED_TOOLS__) {
+    window.__NORMALIZED_TOOLS__.slice(0, 3).forEach((tool, index) => {
+      console.log(`Raw Tool ${index}:`, {
+        name: tool.name,
+        goal: tool.goal,
+        logo_url: tool.Logo_url,
+        allKeys: Object.keys(tool)
+      });
+    });
+  }
+}, 2000);
 
   /* ================= TOP TOOLS ================= */
   function renderTopTools(normalized) {
