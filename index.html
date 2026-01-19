@@ -644,13 +644,11 @@
 
     imgs.forEach(i => obs.observe(i));
   }
-
 function renderBrowseByGoal(normalized) {
   console.log("🔍 ULTRA DEBUG - Finding Missing Tools");
   console.log("Input normalized:", normalized);
   console.log("Input length:", normalized?.length);
 
-  // Step 1: Check input data
   if (!normalized || !Array.isArray(normalized)) {
     console.log("❌ INVALID INPUT");
     return;
@@ -666,25 +664,61 @@ function renderBrowseByGoal(normalized) {
 
   console.log("✅ Grid found:", grid);
 
-  // Step 2: Detailed tool analysis - FIXED COLUMN NAMES
+  // FIXED: Use correct property names based on your actual data
   console.log("\n🔍 DETAILED TOOL ANALYSIS:");
   normalized.forEach((tool, index) => {
     console.log(`\n=== TOOL ${index} ===`);
     console.log("Tool object:", tool);
     console.log("Tool name:", tool.name);
-    console.log("Tool goal:", tool.goal)
-    console.log("Tool logo:", tool.logo_url);           // ✅ FIXED: logo_url (lowercase)
-    console.log("Tool short:", tool.short_description); // ✅ FIXED: short_description
+    console.log("Tool goal:", tool.goal);
+    console.log("Tool logo:", tool.Logo);        // ✅ Your data uses 'Logo'
+    console.log("Tool short:", tool.short);      // ✅ Your data uses 'short'
     console.log("Tool category:", tool.category);
-    console.log("Tool link:", tool.link);               // ✅ FIXED: link (lowercase)
+    console.log("Tool link:", tool.link);
   });
 
-  // ... rest of your goal processing code stays the same ...
+  // Process goals
+  console.log("\n🔍 PROCESSING GOALS:");
+  const counts = {};
+  let totalGoalsProcessed = 0;
+  
+  normalized.forEach((tool, index) => {
+    if (!tool.goal) {
+      console.log(`Tool ${index} (${tool.name}): SKIPPED - no goal`);
+      return;
+    }
+    
+    const goalString = String(tool.goal);
+    const splitGoals = goalString.split(/[,|\n]/);
+    const trimmedGoals = splitGoals.map(g => g.trim());
+    const filteredGoals = trimmedGoals.filter(Boolean);
+    
+    filteredGoals.forEach((goal) => {
+      const key = goal.toLowerCase();
+      if (!counts[key]) {
+        counts[key] = { label: goal, count: 0 };
+      }
+      counts[key].count++;
+      totalGoalsProcessed++;
+    });
+  });
 
-  // Step 5: Render with CORRECT column mapping
-  console.log("\n🔍 RENDERING GOALS:");
+  // FIXED: Define goals properly before using it
+  const goals = Object.values(counts)
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 6);
+
+  console.log("\n🔍 FINAL GOALS:");
+  console.log("Goals to display:", goals.length);
+
+  if (!goals.length) {
+    console.log("❌ NO GOALS TO DISPLAY");
+    grid.innerHTML = `<div class="col-span-full text-red-500 text-center bg-yellow-100 p-4">DEBUG: No goals found</div>`;
+    return;
+  }
+
+  // FIXED: Proper rendering with your actual data structure
   grid.innerHTML = goals.map((g, index) => {
-    // Get tools for this goal with proper data mapping
     const toolsInGoal = normalized.filter(t => {
       if (!t.goal) return false;
       const goals = String(t.goal).split(/[,|\n]/).map(g => g.trim()).filter(Boolean);
@@ -698,7 +732,6 @@ function renderBrowseByGoal(normalized) {
                   hover:bg-gray-700/60 transition rounded-2xl p-8 text-center
                   shadow-md hover:shadow-xl duration-200">
         
-        <!-- Debug info -->
         <div style="color: black !important; font-size: 10px;">
           DEBUG: ${g.label} - ${g.count} tools
         </div>
@@ -706,7 +739,6 @@ function renderBrowseByGoal(normalized) {
         <h3 style="color: black !important;">${g.label}</h3>
         <p style="color: black !important;">${g.count} tools</p>
         
-        <!-- Show first few tool names for debugging -->
         <div style="color: black !important; font-size: 8px; margin-top: 5px;">
           ${toolsInGoal.slice(0, 3).map(t => t.name).join(', ')}${toolsInGoal.length > 3 ? '...' : ''}
         </div>
