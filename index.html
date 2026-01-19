@@ -645,72 +645,24 @@
     imgs.forEach(i => obs.observe(i));
   }
 function renderBrowseByGoal(normalized) {
-  console.log("🔍 ULTRA DEBUG - Finding Missing Tools");
-  console.log("Input normalized:", normalized);
-  console.log("Input length:", normalized?.length);
-
-  if (!normalized || !Array.isArray(normalized)) {
-    console.log("❌ INVALID INPUT");
-    return;
-  }
+  if (!normalized || !Array.isArray(normalized)) return;
 
   const grid = document.getElementById("browse-theme-grid") || 
                document.getElementById("browse-category-grid");
+  if (!grid) return;
 
-  if (!grid) {
-    console.log("❌ GRID NOT FOUND");
-    return;
-  }
-
-  console.log("✅ Grid found:", grid);
-
-  // FIXED: Use correct property names based on your actual data
-  console.log("\n🔍 DETAILED TOOL ANALYSIS:");
-  normalized.forEach((tool, index) => {
-    console.log(`\n=== TOOL ${index} ===`);
-    console.log("Tool object:", tool);
-    console.log("Tool name:", tool.name);
-    console.log("Tool goal:", tool.goal);
-    console.log("Tool logo:", tool.logo);              // ✅ FIXED: Your data uses 'logo'
-    console.log("Tool short:", tool.short);             // ✅ FIXED: Your data uses 'short'
-    console.log("Tool category:", tool.category);
-    console.log("Tool link:", tool.link);
-  });
-
-  // PROPERTY VERIFICATION - Add this check
-  console.log("\n🔍 CHECKING ACTUAL TOOL PROPERTIES:");
-  if (normalized.length > 0) {
-    const firstTool = normalized[0];
-    console.log("First tool object keys:", Object.keys(firstTool));
-    console.log("First tool ALL properties:");
-    Object.entries(firstTool).forEach(([key, value]) => {
-      console.log(`  ${key}: "${value}" (${typeof value})`);
-    });
-  }
-
-  // Process goals
-  console.log("\n🔍 PROCESSING GOALS:");
   const counts = {};
-  let totalGoalsProcessed = 0;
   
-  normalized.forEach((tool, index) => {
-    if (!tool.goal) {
-      console.log(`Tool ${index} (${tool.name}): SKIPPED - no goal`);
-      return;
-    }
+  normalized.forEach(tool => {
+    if (!tool.goal) return;
     
     const goalString = String(tool.goal);
-    const splitGoals = goalString.split(/[,|\n]/);
-    const trimmedGoals = splitGoals.map(g => g.trim());
-    const filteredGoals = trimmedGoals.filter(Boolean);
+    const goals = goalString.split(/[,|\n]/).map(g => g.trim()).filter(Boolean);
     
-    filteredGoals.forEach((goal) => {
+    goals.forEach(goal => {
       const key = goal.toLowerCase();
-      if (!counts[key]) {
-        counts[key] = { label: goal, count: 0 };
-      }
+      if (!counts[key]) counts[key] = { label: goal, count: 0 };
       counts[key].count++;
-      totalGoalsProcessed++;
     });
   });
 
@@ -718,17 +670,12 @@ function renderBrowseByGoal(normalized) {
     .sort((a, b) => b.count - a.count)
     .slice(0, 6);
 
-  console.log("\n🔍 FINAL GOALS:");
-  console.log("Goals to display:", goals.length);
-
   if (!goals.length) {
-    console.log("❌ NO GOALS TO DISPLAY");
-    grid.innerHTML = `<div class="col-span-full text-red-500 text-center bg-yellow-100 p-4">DEBUG: No goals found</div>`;
+    grid.innerHTML = `<div class="col-span-full text-center py-12 text-gray-400">No goals found</div>`;
     return;
   }
 
-  // RENDER GOAL CARDS
-  grid.innerHTML = goals.map((g, index) => {
+  grid.innerHTML = goals.map(g => {
     const toolsInGoal = normalized.filter(t => {
       if (!t.goal) return false;
       const goals = String(t.goal).split(/[,|\n]/).map(g => g.trim()).filter(Boolean);
@@ -736,29 +683,17 @@ function renderBrowseByGoal(normalized) {
     });
 
     return `
-      <div style="border: 2px solid green !important; background: lightgreen !important;"
-           onclick="location.href='themes.html?goal=${encodeURIComponent(g.label)}'"
+      <div onclick="location.href='themes.html?goal=${encodeURIComponent(g.label)}'"
            class="cursor-pointer group bg-gray-800/60 border border-gray-700
                   hover:bg-gray-700/60 transition rounded-2xl p-8 text-center
                   shadow-md hover:shadow-xl duration-200">
-        
-        <div style="color: black !important; font-size: 10px;">
-          DEBUG: ${g.label} - ${g.count} tools
-        </div>
-        
-        <h3 style="color: black !important;">${g.label}</h3>
-        <p style="color: black !important;">${g.count} tools</p>
-        
-        <div style="color: black !important; font-size: 8px; margin-top: 5px;">
-          ${toolsInGoal.slice(0, 3).map(t => t.name).join(', ')}${toolsInGoal.length > 3 ? '...' : ''}
-        </div>
+        <h3 class="text-white font-bold text-lg mb-2">${g.label}</h3>
+        <p class="text-gray-300 text-sm">${g.count} tools</p>
       </div>
     `;
   }).join("");
 
   if (window.feather) feather.replace();
-  
-  console.log("✅ renderBrowseByGoal COMPLETED");
 }
   /* ================= TOP TOOLS ================= */
   function renderTopTools(normalized) {
