@@ -646,138 +646,64 @@
   }
 
 function renderBrowseByGoal(normalized) {
-  console.log("🔍 ULTRA DEBUG - renderBrowseByGoal STARTED");
-  console.log("Input normalized:", normalized);
-  console.log("Input length:", normalized?.length);
-
-  // Step 1: Check input data
-  if (!normalized || !Array.isArray(normalized)) {
-    console.log("❌ INVALID INPUT");
-    return;
-  }
-
   const grid = document.getElementById("browse-theme-grid") || 
                document.getElementById("browse-category-grid");
 
-  if (!grid) {
-    console.log("❌ GRID NOT FOUND");
-    return;
-  }
+  if (!grid || !Array.isArray(normalized)) return;
 
-  console.log("✅ Grid found:", grid);
-
-  // Step 2: Check each tool individually
-  console.log("🔍 CHECKING EACH TOOL:");
-  normalized.forEach((tool, index) => {
-    console.log(`\n=== TOOL ${index} ===`);
-    console.log("Tool object:", tool);
-    console.log("Tool name:", tool.name);
-    console.log("Tool goal:", tool.goal);
-    console.log("Tool goal type:", typeof tool.goal);
-    console.log("Tool has goal:", !!tool.goal);
-    
-    if (tool.goal) {
-      const goals = String(tool.goal).split(/[,|\n]/).map(g => g.trim()).filter(Boolean);
-      console.log("Goals found:", goals);
-      console.log("Goal count:", goals.length);
-    }
-  });
-
-  // Step 3: Process goals with detailed logging
-  console.log("\n🔍 PROCESSING GOALS:");
   const counts = {};
-  let totalGoalsProcessed = 0;
-  
-  normalized.forEach((tool, index) => {
-    if (!tool.goal) {
-      console.log(`Tool ${index} (${tool.name}): SKIPPED - no goal`);
-      return;
-    }
     
-    console.log(`\n=== PROCESSING Tool ${index}: ${tool.name} ===`);
-    const originalGoal = tool.goal;
-    console.log("Original goal:", originalGoal);
+  normalized.forEach(t => {
+    if (!t.goal) return;
     
-    const goalString = String(originalGoal);
-    console.log("After String():", goalString);
-    
-    const splitGoals = goalString.split(/[,|\n]/);
-    console.log("After split():", splitGoals);
-    
-    const trimmedGoals = splitGoals.map(g => g.trim());
-    console.log("After trim():", trimmedGoals);
-    
-    const filteredGoals = trimmedGoals.filter(Boolean);
-    console.log("After filter():", filteredGoals);
-    
-    if (filteredGoals.length === 0) {
-      console.log(`Tool ${index}: NO VALID GOALS after filtering`);
-      return;
-    }
-    
-    console.log(`Tool ${index}: Processing ${filteredGoals.length} goals`);
-    
-    filteredGoals.forEach((goal, goalIndex) => {
-      console.log(`  Processing goal ${goalIndex}: "${goal}"`);
-      
-      const key = goal.toLowerCase();
-      console.log(`  → Goal key: "${key}"`);
-      
-      if (!counts[key]) {
-        counts[key] = { label: goal, count: 0 };
-        console.log(`  → Created new category: "${key}"`);
-      }
-      
-      counts[key].count++;
-      totalGoalsProcessed++;
-      console.log(`  → Incremented count for "${key}" to ${counts[key].count}`);
-    });
+    // This handles both single and multiple goals perfectly
+    String(t.goal)
+      .split(/[,|\n]/)
+      .map(g => g.replace(/\s+/g, " ").trim())
+      .filter(Boolean)
+      .forEach(goal => {
+        const key = goal.toLowerCase();
+        if (!counts[key]) {
+          counts[key] = { label: goal, count: 0 };
+        }
+        counts[key].count++;
+      });
   });
 
-  console.log("\n🔍 FINAL RESULTS:");
-  console.log("Total goals processed:", totalGoalsProcessed);
-  console.log("Unique goal categories:", Object.keys(counts).length);
-  console.log("Final goal categories:", Object.keys(counts));
-
-  // Step 4: Create final goals array
   const goals = Object.values(counts)
     .sort((a, b) => b.count - a.count)
     .slice(0, 6);
 
-  console.log("\n🔍 FINAL GOALS:");
-  console.log("Goals to display:", goals.length);
-  goals.forEach((g, index) => {
-    console.log(`Goal ${index}:`, g);
-  });
-
   if (!goals.length) {
-    console.log("❌ NO GOALS TO DISPLAY");
-    grid.innerHTML = `<div class="col-span-full text-red-500 text-center bg-yellow-100 p-4">DEBUG: No goals found</div>`;
+    grid.innerHTML = `<div class="col-span-full text-gray-400 text-center">No goals yet</div>`;
     return;
   }
 
-  // Step 5: Render with debug info
-  console.log("\n🔍 RENDERING GOALS:");
-  grid.innerHTML = goals.map((g, index) => `
-    <div style="border: 2px solid green !important; background: lightgreen !important;"
-         onclick="location.href='themes.html?goal=${encodeURIComponent(g.label)}'"
+  // Clean version with lazy loading logos
+  grid.innerHTML = goals.map(g => `
+    <div onclick="location.href='themes.html?goal=${encodeURIComponent(g.label)}'"
          class="cursor-pointer group bg-gray-800/60 border border-gray-700
                 hover:bg-gray-700/60 transition rounded-2xl p-8 text-center
                 shadow-md hover:shadow-xl duration-200">
       
-      <!-- Debug info -->
-      <div style="color: black !important; font-size: 10px;">
-        DEBUG GOAL ${index}: "${g.label}"
+      <!-- Lazy loading logo -->
+      <div class="w-16 h-16 mx-auto mb-4 bg-blue-500/10 rounded-full
+                  flex items-center justify-center group-hover:bg-blue-500/20
+                  overflow-hidden">
+        <img data-src="${g.Logo_url || makePlaceholder(g.label,160,160)}"
+             src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Crect width='100%25' height='100%25' fill='%23f3f4f6'/%3E%3C/svg%3E"
+             alt="${g.label} logo"
+             class="w-full h-full object-cover lazy-logo
+                    transition-opacity duration-300 opacity-0
+                    group-hover:opacity-100" />
       </div>
       
-      <h3 style="color: black !important;">${g.label}</h3>
-      <p style="color: black !important;">${g.count} Tools</p>
+      <h3 class="font-semibold text-lg group-hover:text-blue-300">${g.label}</h3>
+      <p class="text-gray-400 text-sm mt-1">${g.count} Tools</p>
     </div>
   `).join("");
 
   if (window.feather) feather.replace();
-  
-  console.log("✅ renderBrowseByGoal COMPLETED");
 }
   /* ================= TOP TOOLS ================= */
   function renderTopTools(normalized) {
