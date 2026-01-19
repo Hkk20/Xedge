@@ -671,11 +671,22 @@ function renderBrowseByGoal(normalized) {
     console.log("Tool object:", tool);
     console.log("Tool name:", tool.name);
     console.log("Tool goal:", tool.goal);
-    console.log("Tool logo:", tool.logo_url);        // ✅ Your data uses 'Logo'
-    console.log("Tool short:", tool.short);      // ✅ Your data uses 'short'
+    console.log("Tool logo:", tool.logo);              // ✅ FIXED: Your data uses 'logo'
+    console.log("Tool short:", tool.short);             // ✅ FIXED: Your data uses 'short'
     console.log("Tool category:", tool.category);
     console.log("Tool link:", tool.link);
   });
+
+  // PROPERTY VERIFICATION - Add this check
+  console.log("\n🔍 CHECKING ACTUAL TOOL PROPERTIES:");
+  if (normalized.length > 0) {
+    const firstTool = normalized[0];
+    console.log("First tool object keys:", Object.keys(firstTool));
+    console.log("First tool ALL properties:");
+    Object.entries(firstTool).forEach(([key, value]) => {
+      console.log(`  ${key}: "${value}" (${typeof value})`);
+    });
+  }
 
   // Process goals
   console.log("\n🔍 PROCESSING GOALS:");
@@ -703,7 +714,6 @@ function renderBrowseByGoal(normalized) {
     });
   });
 
-  // FIXED: Define goals properly before using it
   const goals = Object.values(counts)
     .sort((a, b) => b.count - a.count)
     .slice(0, 6);
@@ -717,7 +727,7 @@ function renderBrowseByGoal(normalized) {
     return;
   }
 
-  // FIXED: Proper rendering with your actual data structure
+  // RENDER GOAL CARDS
   grid.innerHTML = goals.map((g, index) => {
     const toolsInGoal = normalized.filter(t => {
       if (!t.goal) return false;
@@ -745,16 +755,6 @@ function renderBrowseByGoal(normalized) {
       </div>
     `;
   }).join("");
- // Add this right after your tool analysis loop:
-console.log("\n🔍 CHECKING ACTUAL TOOL PROPERTIES:");
-if (normalized.length > 0) {
-  const firstTool = normalized[0];
-  console.log("First tool object keys:", Object.keys(firstTool));
-  console.log("First tool ALL properties:");
-  Object.entries(firstTool).forEach(([key, value]) => {
-    console.log(`  ${key}: "${value}" (${typeof value})`);
-  });
-}
 
   if (window.feather) feather.replace();
   
