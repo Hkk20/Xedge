@@ -813,7 +813,7 @@ const normalized = tools.map(d => ({
   short: d.short_description || d.short || d.summary || "",
   category: d.category || "",
   goal: d.goal || d.goals || d.use_case || "",
-  logo: d.logo_url || d.logo || "", // ✅ This maps your logo_url column
+  logo: d.Logo_url || d.logo || "", // ✅ This maps your logo_url column
   link: d.Link || d.link || "#"
 }));
       window.__NORMALIZED_TOOLS__ = normalized;
