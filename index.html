@@ -776,7 +776,7 @@ if (normalized.length > 0) {
 
     scroller.innerHTML = list.map(t => `
       <div class="min-w-[260px] snap-start bg-gray-800/60 border border-gray-700 rounded-2xl p-6 text-center">
-        <img data-src="${t.logo_url|| makePlaceholder(t.name,160,160)}"
+        <img data-src="${t.logo|| makePlaceholder(t.name,160,160)}"
              class="w-20 h-20 object-contain mb-4 rounded-lg" />
         <h3 class="text-xl font-semibold mb-1">${t.name}</h3>
         <p class="text-gray-400 text-sm mb-4">${(t.short || "").slice(0,80)}</p>
@@ -813,7 +813,7 @@ const normalized = tools.map(d => ({
   short: d.short_description || d.short || d.summary || "",
   category: d.category || "",
   goal: d.goal || d.goals || d.use_case || "",
-  logo: d.Logo_url || d.logo || "", // ✅ This maps your logo_url column
+  logo: d.logo_url || d.logo || "", // ✅ This maps your logo_url column
   link: d.Link || d.link || "#"
 }));
       window.__NORMALIZED_TOOLS__ = normalized;
