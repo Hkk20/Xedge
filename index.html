@@ -661,8 +661,9 @@ function renderBrowseByGoal(normalized) {
     
     goals.forEach(goal => {
       const key = goal.toLowerCase();
-      if (!counts[key]) counts[key] = { label: goal, count: 0 };
+      if (!counts[key]) counts[key] = { label: goal, count: 0, tools: [] };
       counts[key].count++;
+      counts[key].tools.push(tool);
     });
   });
 
@@ -675,20 +676,59 @@ function renderBrowseByGoal(normalized) {
     return;
   }
 
+  // Goal-to-icon mapping based on your featured categories
+  const goalIcons = {
+    "create your website": "globe",
+    "be an influencer": "users", 
+    "grow a business": "trending-up",
+    "automate work": "zap",
+    "create content": "pen-tool",
+    "learn faster": "book-open"
+  };
+
   grid.innerHTML = goals.map(g => {
-    const toolsInGoal = normalized.filter(t => {
-      if (!t.goal) return false;
-      const goals = String(t.goal).split(/[,|\n]/).map(g => g.trim()).filter(Boolean);
-      return goals.includes(g.label);
-    });
+    // Get first tool's logo as representative logo
+    const representativeLogo = g.tools[0]?.logo || 
+      `https://dummyimage.com/200x200/1e293b/ffffff&text=${encodeURIComponent(g.label.substring(0, 2).toUpperCase())}`;
+
+    const icon = goalIcons[g.label.toLowerCase()] || "star";
 
     return `
       <div onclick="location.href='themes.html?goal=${encodeURIComponent(g.label)}'"
            class="cursor-pointer group bg-gray-800/60 border border-gray-700
-                  hover:bg-gray-700/60 transition rounded-2xl p-8 text-center
+                  hover:bg-gray-700/60 transition rounded-2xl p-6 text-center
                   shadow-md hover:shadow-xl duration-200">
+        
+        <!-- Logo Section (like featured categories) -->
+        <div class="flex justify-center mb-4">
+          <div class="w-16 h-16 bg-gradient-to-br from-blue-600 to-purple-600 
+                      rounded-xl flex items-center justify-center
+                      group-hover:from-blue-500 group-hover:to-purple-500">
+            <i data-feather="${icon}" class="w-8 h-8 text-white"></i>
+          </div>
+        </div>
+        
+        <!-- Goal Title -->
         <h3 class="text-white font-bold text-lg mb-2">${g.label}</h3>
-        <p class="text-gray-300 text-sm">${g.count} tools</p>
+        
+        <!-- Tool Count -->
+        <p class="text-gray-300 text-sm mb-3">${g.count} tools</p>
+        
+        <!-- Preview Tools -->
+        <div class="flex justify-center -space-x-2 mb-3">
+          ${g.tools.slice(0, 3).map((tool, i) => `
+            <img src="${tool.logo || `https://dummyimage.com/40x40/374151/ffffff&text=${tool.name.substring(0, 1).toUpperCase()}`}" 
+                 class="w-8 h-8 rounded-full border-2 border-gray-700 object-cover"
+                 alt="${tool.name}"
+                 style="z-index: ${3-i}">
+          `).join('')}
+          ${g.tools.length > 3 ? `
+            <div class="w-8 h-8 rounded-full bg-gray-700 border-2 border-gray-700 
+                        flex items-center justify-center text-xs text-gray-300">
+              +${g.tools.length - 3}
+            </div>
+          ` : ''}
+        </div>
       </div>
     `;
   }).join("");
