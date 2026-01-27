@@ -59,9 +59,6 @@ function setupProfileDropdown() {
   });
 }
 
-// ===========================
-// AUTH STATE (SINGLE SOURCE)
-// ===========================
 auth.onAuthStateChanged((user) => {
   currentUser = user;
 
@@ -69,22 +66,9 @@ auth.onAuthStateChanged((user) => {
   const heroBtn = document.getElementById("hero-signin-btn");
   const reviewForm = document.getElementById("review-form");
 
-  // 👇 KEEP your existing UI logic here
-  // nav, buttons, form visibility, etc.
-
   // ===========================
-  // FIRESTORE (SAFE LOCATION)
+  // NAV + AUTH UI
   // ===========================
-  getDocs(collection(db, "reviews"))
-    .then(snapshot => {
-      // render reviews / pros & cons
-    })
-    .catch(err => {
-      console.warn("Reviews unavailable:", err.code);
-    });
-});
-
-  // ---- NAV ----
   if (nav) {
     if (user) {
       if (heroBtn) heroBtn.classList.add("hidden");
@@ -129,29 +113,21 @@ auth.onAuthStateChanged((user) => {
     }
   }
 
+  // ===========================
+  // REVIEW FORM VISIBILITY
+  // ===========================
   if (reviewForm) {
-    user ? reviewForm.classList.remove("hidden")
-         : reviewForm.classList.add("hidden");
+    user
+      ? reviewForm.classList.remove("hidden")
+      : reviewForm.classList.add("hidden");
   }
 
+  // ===========================
+  // REVIEWS (AUTH SAFE)
+  // ===========================
+  loadReviews();
   checkIfUserReviewed();
-
-
-// ===========================
-// CHECK IF USER ALREADY REVIEWED
-// ===========================
-function checkIfUserReviewed() {
-  if (!currentUser || !toolId) return;
-
-  const form = document.getElementById("review-form");
-  const reviewId = `${toolId}_${currentUser.uid}`;
-
-  db.collection("reviews").doc(reviewId).get().then(doc => {
-    if (doc.exists && form) {
-      form.classList.add("hidden");
-    }
-  });
-}
+});
 
 // ===========================
 // SUBMIT REVIEW
