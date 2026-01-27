@@ -1,5 +1,5 @@
 // ===========================
-// FIREBASE INIT (SAFE)
+// FIREBASE INIT (v8 SAFE)
 // ===========================
 const firebaseConfig = {
   apiKey: "AIzaSyBo9cfhTj2W7ikpdrqz6wAtSBisBo78OAc",
@@ -41,7 +41,7 @@ function logoutUser() {
 }
 
 // ===========================
-// PROFILE DROPDOWN (CLICK ONLY)
+// PROFILE DROPDOWN
 // ===========================
 function setupProfileDropdown() {
   const profile = document.getElementById("nav-profile");
@@ -59,6 +59,9 @@ function setupProfileDropdown() {
   });
 }
 
+// ===========================
+// AUTH STATE (ONLY PLACE USER IS USED)
+// ===========================
 auth.onAuthStateChanged((user) => {
   currentUser = user;
 
@@ -66,9 +69,7 @@ auth.onAuthStateChanged((user) => {
   const heroBtn = document.getElementById("hero-signin-btn");
   const reviewForm = document.getElementById("review-form");
 
-  // ===========================
-  // NAV + AUTH UI
-  // ===========================
+  // ---------- NAV ----------
   if (nav) {
     if (user) {
       if (heroBtn) heroBtn.classList.add("hidden");
@@ -93,6 +94,7 @@ auth.onAuthStateChanged((user) => {
 
       setTimeout(setupProfileDropdown, 50);
 
+      // Safe user write
       db.collection("users").doc(user.uid).set({
         name: user.displayName,
         email: user.email,
@@ -113,21 +115,33 @@ auth.onAuthStateChanged((user) => {
     }
   }
 
-  // ===========================
-  // REVIEW FORM VISIBILITY
-  // ===========================
+  // ---------- REVIEW FORM ----------
   if (reviewForm) {
     user
       ? reviewForm.classList.remove("hidden")
       : reviewForm.classList.add("hidden");
   }
 
-  // ===========================
-  // REVIEWS (AUTH SAFE)
-  // ===========================
+  // ---------- SAFE LOADS ----------
   loadReviews();
   checkIfUserReviewed();
 });
+
+// ===========================
+// CHECK IF USER REVIEWED
+// ===========================
+function checkIfUserReviewed() {
+  if (!currentUser || !toolId) return;
+
+  const form = document.getElementById("review-form");
+  const reviewId = `${toolId}_${currentUser.uid}`;
+
+  db.collection("reviews").doc(reviewId).get()
+    .then(doc => {
+      if (doc.exists && form) form.classList.add("hidden");
+    })
+    .catch(() => {});
+}
 
 // ===========================
 // SUBMIT REVIEW
@@ -143,30 +157,25 @@ function submitReview() {
   if (!text) return alert("Write a review first.");
 
   const reviewId = `${toolId}_${currentUser.uid}`;
-  const ref = db.collection("reviews").doc(reviewId);
 
-  ref.get().then(doc => {
-    const isNew = !doc.exists;
-
-    ref.set({
-      toolId,
-      userId: currentUser.uid,
-      userName: currentUser.displayName,
-      userPhoto: currentUser.photoURL,
-      rating,
-      reviewText: text,
-      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-      ...(isNew && { createdAt: firebase.firestore.FieldValue.serverTimestamp() })
-    }, { merge: true }).then(() => {
-      document.getElementById("review-text").value = "";
-      document.getElementById("review-form")?.classList.add("hidden");
-      loadReviews();
-    });
+  db.collection("reviews").doc(reviewId).set({
+    toolId,
+    userId: currentUser.uid,
+    userName: currentUser.displayName,
+    userPhoto: currentUser.photoURL,
+    rating,
+    reviewText: text,
+    updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  }, { merge: true }).then(() => {
+    document.getElementById("review-text").value = "";
+    document.getElementById("review-form")?.classList.add("hidden");
+    loadReviews();
   });
 }
 
 // ===========================
-// LOAD REVIEWS + AVG RATING
+// LOAD REVIEWS (CRASH SAFE)
 // ===========================
 function loadReviews() {
   if (!toolId) return;
@@ -187,7 +196,8 @@ function loadReviews() {
     .get()
     .then(snapshot => {
       if (snapshot.empty) {
-        loadAdminRating();
+        avgEl.textContent = "—";
+        countEl.textContent = "No reviews yet";
         return;
       }
 
@@ -212,43 +222,8 @@ function loadReviews() {
 
       avgEl.textContent = `${(total / count).toFixed(1)} ★`;
       countEl.textContent = `${count} reviews`;
+    })
+    .catch(err => {
+      console.warn("Reviews unavailable:", err.code);
     });
 }
-
-// ===========================
-// ADMIN RATING FALLBACK
-// ===========================
-function loadAdminRating() {
-  const avgEl = document.getElementById("avg-rating");
-  const countEl = document.getElementById("rating-count");
-
-  db.collection("tools").doc(toolId).get().then(doc => {
-    if (doc.exists && doc.data().adminRating) {
-      avgEl.textContent = `${doc.data().adminRating} ★`;
-      countEl.textContent = "Admin rating";
-    } else {
-      avgEl.textContent = "—";
-      countEl.textContent = "No reviews yet";
-    }
-  });
-}
-
-// ===========================
-// AMAZON-STYLE TOGGLE
-// ===========================
-document.getElementById("toggle-reviews-btn")?.addEventListener("click", () => {
-  const wrap = document.getElementById("reviews-wrapper");
-  const text = document.getElementById("toggle-text");
-  const arrow = document.getElementById("toggle-arrow");
-
-  wrap.classList.toggle("hidden");
-  const open = !wrap.classList.contains("hidden");
-
-  text.textContent = open ? "Hide reviews" : "View all reviews";
-  arrow.textContent = open ? "▲" : "▼";
-});
-
-// ===========================
-// AUTO LOAD
-// ===========================
-document.addEventListener("DOMContentLoaded", loadReviews);
