@@ -83,56 +83,75 @@ function findToolByName(list, rawName) {
     null
   );
 }
+console.log("=== DEBUGGING ABOUT SECTION ===");
+console.log("Tool data:", window.__CURRENT_TOOL_DATA__);
+console.log("Pros data:", window.__TOOL_PROS__);
+console.log("Cons data:", window.__TOOL_CONS__);
+console.log("About section exists:", document.getElementById("about-tool-section") !== null);
+console.log("Features UL exists:", document.getElementById("about-features") !== null);
+console.log("BestFor UL exists:", document.getElementById("about-bestfor") !== null);
+console.log("Standout P exists:", document.getElementById("about-standout") !== null);
 
-
-/* ===== ABOUT SECTION - BULLETPROOF ===== */
 function renderAbout() {
+  console.log("renderAbout() called");
+  
   const aboutSection = document.getElementById("about-tool-section");
-  if (!aboutSection) return;
+  if (!aboutSection) {
+    console.log("About section not found");
+    return;
+  }
 
-  // Get data from global variables (set by main rendering)
   const pros = window.__TOOL_PROS__ || [];
-  const cons = window.__TOOL_CONS__ || [];
   const toolData = window.__CURRENT_TOOL_DATA__;
-
-  if (!toolData) return;
+  
+  console.log("Has pros:", pros.length);
+  console.log("Has tool data:", !!toolData);
 
   let hasContent = false;
 
-  // Key Features (using first 4 pros)
+  // Key Features
   if (pros.length > 0) {
     const ul = document.getElementById("about-features");
     if (ul) {
       ul.innerHTML = pros.slice(0, 4).map(f => `<li>✓ ${escapeHtml(f)}</li>`).join("");
       hasContent = true;
+      console.log("Features rendered");
+    } else {
+      console.log("Features UL not found");
     }
   }
 
-  // Best For (using category)
-  if (toolData.category) {
+  // Best For
+  if (toolData?.category) {
     const ul = document.getElementById("about-bestfor");
     if (ul) {
-      ul.innerHTML = `
-        <li>${escapeHtml(toolData.category)} professionals</li>
-        <li>Teams working with ${escapeHtml(toolData.category)}</li>
-        <li>Beginners in ${escapeHtml(toolData.category)}</li>
-        <li>Students and educators</li>
-      `;
+      ul.innerHTML = `<li>${escapeHtml(toolData.category)} professionals</li>
+                      <li>Teams in ${escapeHtml(toolData.category)}</li>
+                      <li>Students and beginners</li>`;
       hasContent = true;
+      console.log("Best for rendered");
+    } else {
+      console.log("BestFor UL not found");
     }
   }
 
-  // Why It Stands Out (using short description)
-  if (toolData.short_description) {
+  // Standout
+  if (toolData?.short_description) {
     const p = document.getElementById("about-standout");
     if (p) {
       p.textContent = toolData.short_description;
       hasContent = true;
+      console.log("Standout rendered");
+    } else {
+      console.log("Standout P not found");
     }
   }
 
   if (hasContent) {
     aboutSection.classList.remove("hidden");
+    console.log("About section revealed");
+  } else {
+    console.log("No content to show");
   }
 }
 
