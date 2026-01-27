@@ -85,43 +85,39 @@ function findToolByName(list, rawName) {
 }
 
 
-/* ===== ABOUT SECTION RENDERING ===== */
+/* ===== ABOUT SECTION - BULLETPROOF ===== */
 function renderAbout() {
   const aboutSection = document.getElementById("about-tool-section");
   if (!aboutSection) return;
 
+  // Get data from global variables (set by main rendering)
+  const pros = window.__TOOL_PROS__ || [];
+  const cons = window.__TOOL_CONS__ || [];
   const toolData = window.__CURRENT_TOOL_DATA__;
+
   if (!toolData) return;
 
   let hasContent = false;
 
-  // Key Features (using pros as features)
-  if (toolData.pros_raw) {
-    const features = toolData.pros_raw
-      .split(/[,;\n]/)
-      .map(f => f.trim())
-      .filter(Boolean)
-      .slice(0, 4);
-
+  // Key Features (using first 4 pros)
+  if (pros.length > 0) {
     const ul = document.getElementById("about-features");
-    if (ul && features.length) {
-      ul.innerHTML = features.map(f => `<li>✓ ${escapeHtml(f)}</li>`).join("");
+    if (ul) {
+      ul.innerHTML = pros.slice(0, 4).map(f => `<li>✓ ${escapeHtml(f)}</li>`).join("");
       hasContent = true;
     }
   }
 
   // Best For (using category)
   if (toolData.category) {
-    const bestFor = [
-      `${toolData.category} professionals`,
-      `Teams working with ${toolData.category}`,
-      `Beginners in ${toolData.category}`,
-      "Students and educators"
-    ];
-
     const ul = document.getElementById("about-bestfor");
     if (ul) {
-      ul.innerHTML = bestFor.map(b => `<li>${escapeHtml(b)}</li>`).join("");
+      ul.innerHTML = `
+        <li>${escapeHtml(toolData.category)} professionals</li>
+        <li>Teams working with ${escapeHtml(toolData.category)}</li>
+        <li>Beginners in ${escapeHtml(toolData.category)}</li>
+        <li>Students and educators</li>
+      `;
       hasContent = true;
     }
   }
@@ -139,15 +135,6 @@ function renderAbout() {
     aboutSection.classList.remove("hidden");
   }
 }
-
-/* ===== MAIN FIX - Add to renderToolDetailsPageHydrate ===== */
-// Find this line in your existing code:
-window.__TOOL_PROS__ = merged.pros;
-window.__TOOL_CONS__ = merged.cons;
-
-// ADD THESE LINES RIGHT AFTER:
-window.__CURRENT_TOOL_DATA__ = tool;
-renderAbout(); // Call the About renderer
 
 /* ===== PLACEHOLDER LOGO ===== */
 function placeholderLogo(name) {
@@ -334,16 +321,12 @@ async function renderToolDetailsPageHydrate() {
     }
   };
 
-  /* ===== GLOBAL ACCESS (MOBILE TOGGLE SAFE) ===== */
-  window.__TOOL_PROS__ = merged.pros;
-  window.__TOOL_CONS__ = merged.cons;
-   // After you set window.__TOOL_PROS__ and window.__TOOL_CONS__
-// Store the full tool data for About section
-window.__CURRENT_TOOL_DATA__ = tool;
-
-// Add these calls:
-renderProsCons();      // Your existing function
-renderAbout();         // NEW: Render About section
+/* ===== GLOBAL ACCESS (MOBILE TOGGLE SAFE) ===== */
+window.__TOOL_PROS__ = merged.pros;
+window.__TOOL_CONS__ = merged.cons;
+window.__CURRENT_TOOL_DATA__ = tool;  // ← ADD THIS LINE
+renderProsCons();                     // ← EXISTING LINE
+renderAbout();                        // ← ADD THIS LINE
 
 /* ===== ABOUT SECTION RENDERING ===== */
 function renderAbout() {
