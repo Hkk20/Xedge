@@ -355,6 +355,7 @@ async function renderToolDetailsPageHydrate() {
   /* ===== GLOBAL ACCESS (MOBILE TOGGLE SAFE) ===== */
   window.__TOOL_PROS__ = merged.pros;
   window.__TOOL_CONS__ = merged.cons;
+renderProsCons();
 
   /* ===== RENDER ===== */
   renderPhase0Instant(tool);
