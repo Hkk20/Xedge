@@ -249,13 +249,15 @@ function renderPhase2(tool, merged, toolsList) {
 
 
   /* Related Tools */
-  const related = toolsList
-    .filter(
-      t =>
-        normalizeKey(t.category) === normalizeKey(tool.category) &&
-        normalizeKey(t.name) !== normalizeKey(tool.name)
-    )
-    .slice(0, 4);
+ const related = tools
+  .filter(
+    t =>
+      normalizeKey(t.category || "") === normalizeKey(tool.category || "") &&
+      normalizeKey(t.name) !== normalizeKey(tool.name)
+  )
+  .slice(0, 4);
+
+    
 
   const relatedHTML = related.length
     ? `
@@ -289,23 +291,28 @@ box.innerHTML = `
 
   lazyLoadImgs(box);
 }
-
-/* Lazy loading */
+/*lazy images*/
 function lazyLoadImgs(root) {
   const imgs = root.querySelectorAll("img[data-src]");
-  const obs = new IntersectionObserver(
-    (entries, o) => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          const img = e.target;
-          img.src = img.dataset.src;
-          img.removeAttribute("data-src");
-          o.unobserve(img);
-        }
-      });
-    },
-    { rootMargin: "300px" }
-  );
+  if (!("IntersectionObserver" in window)) {
+    imgs.forEach(img => {
+      img.src = img.dataset.src;
+      img.removeAttribute("data-src");
+    });
+    return;
+  }
+
+  const obs = new IntersectionObserver((entries, o) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const img = e.target;
+        img.src = img.dataset.src;
+        img.removeAttribute("data-src");
+        o.unobserve(img);
+      }
+    });
+  }, { rootMargin: "300px" });
+
   imgs.forEach(i => obs.observe(i));
 }
 
