@@ -102,81 +102,80 @@ function goBack() {
     Loading tool...
   </div>
 
-  <!-- Tool Content -->
-  <div id="tool-container" class="hidden">
+ <!-- ================= TOOL CONTENT ================= -->
+<div id="tool-container" class="hidden">
 
-    <!-- ================= HERO ================= -->
-    <div class="bg-gray-800/40 border border-gray-700 rounded-xl p-6 mb-10 flex gap-6">
-      <img id="tool-logo" class="w-24 h-24 rounded-lg object-cover bg-gray-900" />
+  <!-- ================= HERO ================= -->
+  <div class="bg-gray-800/40 border border-gray-700 rounded-xl p-6 mb-10 flex gap-6">
+    <img id="tool-logo" class="w-24 h-24 rounded-lg object-cover bg-gray-900" />
 
-      <div class="flex-1">
-        <h1 id="tool-name" class="text-3xl font-bold"></h1>
-        <p id="tool-cat" class="text-blue-400 font-medium mt-1"></p>
-        <p id="tool-short" class="text-gray-300 mt-3"></p>
+    <div class="flex-1">
+      <h1 id="tool-name" class="text-3xl font-bold"></h1>
+      <p id="tool-cat" class="text-blue-400 font-medium mt-1"></p>
+      <p id="tool-short" class="text-gray-300 mt-3"></p>
 
-        <a id="visit-btn" target="_blank"
-           class="inline-block mt-4 bg-gradient-to-r from-blue-500 to-blue-600
-                  px-5 py-2 rounded-full font-medium">
-          Visit Tool
-        </a>
+      <a id="visit-btn" target="_blank"
+         class="inline-block mt-4 bg-gradient-to-r from-blue-500 to-blue-600
+                px-5 py-2 rounded-full font-medium">
+        Visit Tool
+      </a>
+    </div>
+  </div>
+
+  <!-- ================= REVIEWS ================= -->
+  <section class="mb-14">
+
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-2xl font-bold">User Reviews</h2>
+
+      <div class="text-right">
+        <div id="avg-rating" class="text-yellow-400 text-xl font-bold">—</div>
+        <div id="rating-count" class="text-sm text-gray-400">No reviews yet</div>
       </div>
     </div>
 
-    <!-- ================= REVIEWS ================= -->
-    <section class="mb-14">
+    <div id="review-form"
+         class="hidden mb-6 bg-gray-800 border border-gray-700 rounded-xl p-4">
+      <label class="block mb-2 text-sm text-gray-300">Your Rating</label>
+      <select id="review-rating"
+        class="w-full bg-gray-900 border border-gray-700 rounded-lg p-2 mb-3">
+        <option value="5">★★★★★ (5)</option>
+        <option value="4">★★★★☆ (4)</option>
+        <option value="3">★★★☆☆ (3)</option>
+        <option value="2">★★☆☆☆ (2)</option>
+        <option value="1">★☆☆☆☆ (1)</option>
+      </select>
 
-      <div class="flex justify-between items-center mb-4">
-        <h2 class="text-2xl font-bold">User Reviews</h2>
+      <label class="block mb-2 text-sm text-gray-300">Your Review</label>
+      <textarea id="review-text"
+        class="w-full bg-gray-900 border border-gray-700 rounded-lg p-3"
+        rows="4"
+        placeholder="Write your experience with this tool..."></textarea>
 
-        <div class="text-right">
-          <div id="avg-rating" class="text-yellow-400 text-xl font-bold">—</div>
-          <div id="rating-count" class="text-sm text-gray-400">No reviews yet</div>
-        </div>
-      </div>
-
-      <div id="review-form"
-           class="hidden mb-6 bg-gray-800 border border-gray-700 rounded-xl p-4">
-        <label class="block mb-2 text-sm text-gray-300">Your Rating</label>
-        <select id="review-rating"
-          class="w-full bg-gray-900 border border-gray-700 rounded-lg p-2 mb-3">
-          <option value="5">★★★★★ (5)</option>
-          <option value="4">★★★★☆ (4)</option>
-          <option value="3">★★★☆☆ (3)</option>
-          <option value="2">★★☆☆☆ (2)</option>
-          <option value="1">★☆☆☆☆ (1)</option>
-        </select>
-
-        <label class="block mb-2 text-sm text-gray-300">Your Review</label>
-        <textarea id="review-text"
-          class="w-full bg-gray-900 border border-gray-700 rounded-lg p-3"
-          rows="4"
-          placeholder="Write your experience with this tool..."></textarea>
-
-        <button onclick="submitReview()"
-          class="mt-3 bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg">
-          Submit Review
-        </button>
-      </div>
-
-      <button id="toggle-reviews-btn"
-        class="flex items-center gap-2 text-blue-400 hover:text-blue-300 font-medium mb-4">
-        <span id="toggle-text">View all reviews</span>
-        <span id="toggle-arrow">▼</span>
+      <button onclick="submitReview()"
+        class="mt-3 bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg">
+        Submit Review
       </button>
+    </div>
 
-      <div id="reviews-wrapper" class="hidden space-y-4">
-        <div id="reviews-list"></div>
-      </div>
-    </section>
+    <button id="toggle-reviews-btn"
+      class="flex items-center gap-2 text-blue-400 hover:text-blue-300 font-medium mb-4">
+      <span id="toggle-text">View all reviews</span>
+      <span id="toggle-arrow">▼</span>
+    </button>
+
+    <div id="reviews-wrapper" class="hidden space-y-4">
+      <div id="reviews-list"></div>
+    </div>
+  </section>
+
   <!-- ================= ABOUT TOOL ================= -->
-<section id="about-tool-section"
-  class="about-tool hidden mt-10 px-6 pb-6">
-  <div class="max-w-7xl mx-auto">
+  <section id="about-tool-section"
+    class="hidden mt-14">
 
     <h2 class="text-2xl font-bold mb-6">About this tool</h2>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-
       <div class="bg-gray-800/40 border border-gray-700 rounded-xl p-6">
         <h3 class="text-lg font-semibold mb-3">Key Features</h3>
         <ul id="about-features" class="space-y-2 text-gray-200"></ul>
@@ -191,56 +190,55 @@ function goBack() {
         <h3 class="text-lg font-semibold mb-3">Why It Stands Out</h3>
         <p id="about-standout" class="text-gray-300"></p>
       </div>
-
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- ================= PROS / CONS ================= -->
-<section class="mb-14">
+  <!-- ================= PROS / CONS ================= -->
+  <section class="mb-14 mt-14">
 
-  <!-- Mobile Toggle -->
-  <div class="md:hidden flex gap-2 mb-4">
-    <button id="btn-pros"
-      onclick="showPros()"
-      class="flex-1 py-2 rounded-lg font-semibold bg-blue-600 text-white">
-      Pros
-    </button>
-    <button id="btn-cons"
-      onclick="showCons()"
-      class="flex-1 py-2 rounded-lg font-semibold bg-gray-800 text-gray-300">
-      Cons
-    </button>
-  </div>
-
-  <div class="grid md:grid-cols-2 gap-6">
-
-    <!-- PROS -->
-    <div id="pros-box"
-      class="bg-gray-800/40 border border-gray-700 rounded-xl p-6">
-      <h3 class="text-xl font-bold mb-4">Pros</h3>
-      <ul class="space-y-3 text-gray-200">
-        <li>✔ Fully integrated in Notion</li>
-        <li>✔ Great for students and teams</li>
-        <li>✔ Easy to use</li>
-        <li>✔ Saves huge time</li>
-      </ul>
+    <!-- Mobile Toggle -->
+    <div class="md:hidden flex gap-2 mb-4">
+      <button id="btn-pros"
+        onclick="showPros()"
+        class="flex-1 py-2 rounded-lg font-semibold bg-blue-600 text-white">
+        Pros
+      </button>
+      <button id="btn-cons"
+        onclick="showCons()"
+        class="flex-1 py-2 rounded-lg font-semibold bg-gray-800 text-gray-300">
+        Cons
+      </button>
     </div>
 
-    <!-- CONS -->
-    <div id="cons-box"
-      class="hidden md:block bg-gray-800/40 border border-gray-700 rounded-xl p-6">
-      <h3 class="text-xl font-bold mb-4">Cons</h3>
-      <ul class="space-y-3 text-gray-200">
-        <li>✖ Not free</li>
-        <li>✖ Limited outside Notion</li>
-        <li>✖ Advanced use cases limited</li>
-      </ul>
-    </div>
+    <div class="grid md:grid-cols-2 gap-6">
 
-  </div>
-  </div>
-</section>
+      <!-- PROS -->
+      <div id="pros-box"
+        class="bg-gray-800/40 border border-gray-700 rounded-xl p-6">
+        <h3 class="text-xl font-bold mb-4">Pros</h3>
+        <ul class="space-y-3 text-gray-200"></ul>
+      </div>
+
+      <!-- CONS -->
+      <div id="cons-box"
+        class="hidden bg-gray-800/40 border border-gray-700 rounded-xl p-6 md:block">
+        <h3 class="text-xl font-bold mb-4">Cons</h3>
+        <ul class="space-y-3 text-gray-200"></ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= PHASE 1 ================= -->
+  <div id="xe-phase1"
+    class="bg-gray-800/30 border border-gray-700 p-6 rounded-xl mb-10"></div>
+
+  <!-- ================= PHASE 2 (Screenshots + Related Tools) ================= -->
+  <div id="xe-phase2"
+    class="bg-gray-800/30 border border-gray-700 p-6 rounded-xl mb-10"></div>
+
+</div>
+
 
 <!-- ================= SCRIPTS ================= -->
 <script src="tools.js"></script>
