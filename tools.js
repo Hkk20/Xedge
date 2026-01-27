@@ -224,6 +224,7 @@ function renderPhase1(merged) {
 /* ===== PHASE 2 ===== */
 function renderPhase2(tool, merged, toolsList) {
   const box = document.getElementById("xe-phase2");
+  if (!box) return;
 
   /* Screenshots */
   const shots = merged.screenshots.length
@@ -235,62 +236,53 @@ function renderPhase2(tool, merged, toolsList) {
 
   const screenshotHTML = `
     <div class="grid grid-cols-2 gap-4 mb-6">
-      ${shots
-        .map(
-          s => `
+      ${shots.map(s => `
         <div class="overflow-hidden rounded-xl border border-gray-700 bg-gray-900 h-56">
           <img data-src="${s}" class="w-full h-full object-cover" />
-        </div>`
-        )
-        .join("")}
+        </div>
+      `).join("")}
     </div>
   `;
 
-
-
-  /* Related Tools */
- const related = tools
-  .filter(
-    t =>
-      normalizeKey(t.category || "") === normalizeKey(tool.category || "") &&
-      normalizeKey(t.name) !== normalizeKey(tool.name)
-  )
-  .slice(0, 4);
-
-    
+  /* ===== RELATED TOOLS (FIXED) ===== */
+  const related = toolsList
+    .filter(
+      t =>
+        normalizeKey(t.category || "") === normalizeKey(tool.category || "") &&
+        normalizeKey(t.name) !== normalizeKey(tool.name)
+    )
+    .slice(0, 4);
 
   const relatedHTML = related.length
     ? `
       <h3 class="text-xl font-semibold mb-3">Related Tools</h3>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        ${related
-          .map(r => {
-            const logo = r.logo_url || placeholderLogo(r.name);
-            return `
-              <a href="tool.html?tool=${encodeURIComponent(
-                r.name
-              )}" class="flex items-center gap-3 p-3 bg-gray-800/40 border border-gray-700 rounded-lg hover:bg-gray-800 transition">
-                <img data-src="${logo}" class="w-12 h-12 rounded-md object-cover" />
-                <div class="flex-1">
-                  <div class="font-medium">${escapeHtml(r.name)}</div>
-                  <div class="text-gray-400 text-sm">${escapeHtml(r.category)}</div>
-                </div>
-                <span class="text-gray-400">→</span>
-              </a>`;
-          })
-          .join("")}
+        ${related.map(r => {
+          const logo = r.logo_url || placeholderLogo(r.name);
+          return `
+            <a href="tool.html?tool=${encodeURIComponent(r.name)}"
+               class="flex items-center gap-3 p-3 bg-gray-800/40 border border-gray-700 rounded-lg hover:bg-gray-800 transition">
+              <img data-src="${logo}" class="w-12 h-12 rounded-md object-cover" />
+              <div class="flex-1">
+                <div class="font-medium">${escapeHtml(r.name)}</div>
+                <div class="text-gray-400 text-sm">${escapeHtml(r.category)}</div>
+              </div>
+              <span class="text-gray-400">→</span>
+            </a>`;
+        }).join("")}
       </div>
     `
     : `<p class="text-gray-400">No related tools.</p>`;
 
   /* Final render */
-box.innerHTML = `
-  ${screenshotHTML}
-  ${relatedHTML}
-`;
+  box.innerHTML = `
+    ${screenshotHTML}
+    ${relatedHTML}
+  `;
 
   lazyLoadImgs(box);
 }
+
 /*lazy images*/
 function lazyLoadImgs(root) {
   const imgs = root.querySelectorAll("img[data-src]");
