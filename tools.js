@@ -85,87 +85,69 @@ function findToolByName(list, rawName) {
 }
 
 
-// ===============================
-// About Tool Section Injection
-// SAFE / ISOLATED / NON-BREAKING
-// ===============================
-
-(function () {
-  const API_URL =
-    "https://script.google.com/macros/s/AKfycbxXs2ajlwcddAMVEMY5NAMns_ooeEAHSYwDk84nnD6cU2hLjx_k5HKOgFLm-EX_ASSv/exec";
-
-  // Read tool identifier from URL
-  const params = new URLSearchParams(window.location.search);
-  const toolId = params.get("tool"); // ?tool=midjourney
-
-  if (!toolId) return;
-
-  // HARD SAFETY: if About section doesn't exist, exit
+/* ===== ABOUT SECTION RENDERING ===== */
+function renderAbout() {
   const aboutSection = document.getElementById("about-tool-section");
   if (!aboutSection) return;
 
-  fetch(API_URL)
-    .then(res => res.json())
-    .then(tools => {
-      if (!Array.isArray(tools)) return;
+  const toolData = window.__CURRENT_TOOL_DATA__;
+  if (!toolData) return;
 
-      // Match tool safely (isolated variable)
-      const aboutTool = tools.find(t =>
-        String(t.tool || "").toLowerCase().trim() ===
-        toolId.toLowerCase().trim()
-      );
+  let hasContent = false;
 
-      if (!aboutTool) return;
+  // Key Features (using pros as features)
+  if (toolData.pros_raw) {
+    const features = toolData.pros_raw
+      .split(/[,;\n]/)
+      .map(f => f.trim())
+      .filter(Boolean)
+      .slice(0, 4);
 
-      let hasContent = false;
+    const ul = document.getElementById("about-features");
+    if (ul && features.length) {
+      ul.innerHTML = features.map(f => `<li>✓ ${escapeHtml(f)}</li>`).join("");
+      hasContent = true;
+    }
+  }
 
-      // ---------- Key Features ----------
-      if (aboutTool.key_features) {
-        const aboutFeatures = aboutTool.key_features
-          .split(";")
-          .map(f => f.trim())
-          .filter(Boolean);
+  // Best For (using category)
+  if (toolData.category) {
+    const bestFor = [
+      `${toolData.category} professionals`,
+      `Teams working with ${toolData.category}`,
+      `Beginners in ${toolData.category}`,
+      "Students and educators"
+    ];
 
-        const ul = document.getElementById("about-features");
-        if (ul && aboutFeatures.length) {
-          ul.innerHTML = aboutFeatures.map(f => `<li>${f}</li>`).join("");
-          hasContent = true;
-        }
-      }
+    const ul = document.getElementById("about-bestfor");
+    if (ul) {
+      ul.innerHTML = bestFor.map(b => `<li>${escapeHtml(b)}</li>`).join("");
+      hasContent = true;
+    }
+  }
 
-      // ---------- Best For ----------
-      if (aboutTool.best_for) {
-        const aboutBestFor = aboutTool.best_for
-          .split(";")
-          .map(b => b.trim())
-          .filter(Boolean);
+  // Why It Stands Out (using short description)
+  if (toolData.short_description) {
+    const p = document.getElementById("about-standout");
+    if (p) {
+      p.textContent = toolData.short_description;
+      hasContent = true;
+    }
+  }
 
-        const ul = document.getElementById("about-bestfor");
-        if (ul && aboutBestFor.length) {
-          ul.innerHTML = aboutBestFor.map(b => `<li>${b}</li>`).join("");
-          hasContent = true;
-        }
-      }
+  if (hasContent) {
+    aboutSection.classList.remove("hidden");
+  }
+}
 
-      // ---------- Standout ----------
-      if (aboutTool.standout) {
-        const p = document.getElementById("about-standout");
-        if (p) {
-          p.textContent = aboutTool.standout;
-          hasContent = true;
-        }
-      }
+/* ===== MAIN FIX - Add to renderToolDetailsPageHydrate ===== */
+// Find this line in your existing code:
+window.__TOOL_PROS__ = merged.pros;
+window.__TOOL_CONS__ = merged.cons;
 
-      // ---------- Reveal Section ----------
-      if (hasContent) {
-        aboutSection.classList.remove("hidden");
-      }
-    })
-    .catch(() => {
-      // Silent failure by design
-    });
-})();
-
+// ADD THESE LINES RIGHT AFTER:
+window.__CURRENT_TOOL_DATA__ = tool;
+renderAbout(); // Call the About renderer
 
 /* ===== PLACEHOLDER LOGO ===== */
 function placeholderLogo(name) {
