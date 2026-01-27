@@ -92,6 +92,7 @@ console.log("Features UL exists:", document.getElementById("about-features") !==
 console.log("BestFor UL exists:", document.getElementById("about-bestfor") !== null);
 console.log("Standout P exists:", document.getElementById("about-standout") !== null);
 
+/* ===== ABOUT SECTION - TIMING FIXED ===== */
 function renderAbout() {
   console.log("renderAbout() called");
   
@@ -101,59 +102,69 @@ function renderAbout() {
     return;
   }
 
-  const pros = window.__TOOL_PROS__ || [];
-  const toolData = window.__CURRENT_TOOL_DATA__;
-  
-  console.log("Has pros:", pros.length);
-  console.log("Has tool data:", !!toolData);
+  // Wait for data to be available
+  const checkData = () => {
+    const pros = window.__TOOL_PROS__ || [];
+    const toolData = window.__CURRENT_TOOL_DATA__;
+    
+    console.log("Checking data:", { hasPros: pros.length, hasToolData: !!toolData });
 
-  let hasContent = false;
-
-  // Key Features
-  if (pros.length > 0) {
-    const ul = document.getElementById("about-features");
-    if (ul) {
-      ul.innerHTML = pros.slice(0, 4).map(f => `<li>✓ ${escapeHtml(f)}</li>`).join("");
-      hasContent = true;
-      console.log("Features rendered");
-    } else {
-      console.log("Features UL not found");
+    if (!toolData && pros.length === 0) {
+      console.log("No data available yet, retrying...");
+      setTimeout(checkData, 100);
+      return;
     }
-  }
 
-  // Best For
-  if (toolData?.category) {
-    const ul = document.getElementById("about-bestfor");
-    if (ul) {
-      ul.innerHTML = `<li>${escapeHtml(toolData.category)} professionals</li>
-                      <li>Teams in ${escapeHtml(toolData.category)}</li>
-                      <li>Students and beginners</li>`;
-      hasContent = true;
-      console.log("Best for rendered");
-    } else {
-      console.log("BestFor UL not found");
+    // We have data, proceed with rendering
+    let hasContent = false;
+
+    // Key Features (using pros)
+    if (pros.length > 0) {
+      const ul = document.getElementById("about-features");
+      if (ul) {
+        ul.innerHTML = pros.slice(0, 4).map(f => `<li>✓ ${escapeHtml(f)}</li>`).join("");
+        hasContent = true;
+        console.log("Features rendered");
+      }
     }
-  }
 
-  // Standout
-  if (toolData?.short_description) {
-    const p = document.getElementById("about-standout");
-    if (p) {
-      p.textContent = toolData.short_description;
-      hasContent = true;
-      console.log("Standout rendered");
-    } else {
-      console.log("Standout P not found");
+    // Best For (using category)
+    if (toolData?.category) {
+      const ul = document.getElementById("about-bestfor");
+      if (ul) {
+        ul.innerHTML = `<li>${escapeHtml(toolData.category)} professionals</li>
+                        <li>Teams in ${escapeHtml(toolData.category)}</li>
+                        <li>Students and beginners</li>`;
+        hasContent = true;
+        console.log("Best for rendered");
+      }
     }
-  }
 
-  if (hasContent) {
-    aboutSection.classList.remove("hidden");
-    console.log("About section revealed");
-  } else {
-    console.log("No content to show");
-  }
+    // Standout (using short description)
+    if (toolData?.short_description) {
+      const p = document.getElementById("about-standout");
+      if (p) {
+        p.textContent = toolData.short_description;
+        hasContent = true;
+        console.log("Standout rendered");
+      }
+    }
+
+    if (hasContent) {
+      aboutSection.classList.remove("hidden");
+      console.log("About section revealed!");
+    }
+  };
+
+  // Start checking for data
+  checkData();
 }
+
+/* ===== MODIFIED PLACEMENT - SAFER TIMING ===== */
+// In your main function, change this:
+setTimeout(() => {
+  renderAbout(); // This gives time for data to be set
+}, 500); // 500ms delay to ensure data is ready
 
 /* ===== PLACEHOLDER LOGO ===== */
 function placeholderLogo(name) {
