@@ -417,4 +417,26 @@ function renderProsCons() {
       .join("");
   }
 }
+(function () {
+  const btn = document.getElementById("toggle-reviews-btn");
+  const wrap = document.getElementById("reviews-wrapper");
+  const text = document.getElementById("toggle-text");
+  const arrow = document.getElementById("toggle-arrow");
+
+  if (!btn || !wrap || !text || !arrow) return;
+
+  btn.addEventListener("click", () => {
+    const isHidden = wrap.classList.contains("hidden");
+
+    wrap.classList.toggle("hidden");
+
+    if (isHidden) {
+      text.textContent = "Hide reviews";
+      arrow.textContent = "▲";
+    } else {
+      text.textContent = "View all reviews";
+      arrow.textContent = "▼";
+    }
+  });
+})();
 
