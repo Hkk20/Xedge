@@ -29,6 +29,42 @@
 </head>
 
 <body>
+  <style>
+    .hidden {
+  display: none;
+}
+
+.about-card {
+  background: rgba(15, 23, 42, 0.7);
+  border-radius: 16px;
+  padding: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.about-card h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #f1f5f9;
+}
+
+.about-card ul {
+  padding-left: 16px;
+  font-size: 0.9rem;
+  color: #cbd5f5;
+}
+
+.about-card ul li {
+  margin-bottom: 6px;
+}
+
+.about-card p {
+  font-size: 0.9rem;
+  color: #cbd5f5;
+  line-height: 1.5;
+}
+
+  </style>
 
 <!-- ================= NAV ================= -->
 <nav class="bg-gray-900/80 border-b border-gray-800 fixed top-0 left-0 right-0 z-50">
@@ -132,6 +168,33 @@ function goBack() {
         <div id="reviews-list"></div>
       </div>
     </section>
+    <!-- About Tool (Injected Later) -->
+<section id="about-tool-section" class="about-tool hidden mt-10 px-6 pb-6">
+  <div class="max-w-7xl mx-auto">
+
+    <h2 class="section-title mb-6">About this tool</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+      <div class="about-card">
+        <h3>Key Features</h3>
+        <ul id="about-features"></ul>
+      </div>
+
+      <div class="about-card">
+        <h3>Best For</h3>
+        <ul id="about-bestfor"></ul>
+      </div>
+
+      <div class="about-card">
+        <h3>Why It Stands Out</h3>
+        <p id="about-standout"></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
 
     <!-- ================= PROS / CONS (FIXED) ================= -->
     <section class="mb-14">
