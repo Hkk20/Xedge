@@ -69,6 +69,21 @@ auth.onAuthStateChanged((user) => {
   const heroBtn = document.getElementById("hero-signin-btn");
   const reviewForm = document.getElementById("review-form");
 
+  // 👇 KEEP your existing UI logic here
+  // nav, buttons, form visibility, etc.
+
+  // ===========================
+  // FIRESTORE (SAFE LOCATION)
+  // ===========================
+  getDocs(collection(db, "reviews"))
+    .then(snapshot => {
+      // render reviews / pros & cons
+    })
+    .catch(err => {
+      console.warn("Reviews unavailable:", err.code);
+    });
+});
+
   // ---- NAV ----
   if (nav) {
     if (user) {
