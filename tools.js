@@ -83,6 +83,86 @@ function findToolByName(list, rawName) {
     null
   );
 }
+// ===============================
+// About Tool Section Injection
+// Safe, additive, non-breaking
+// ===============================
+
+(function () {
+  const API_URL = "https://script.google.com/macros/s/AKfycbxXs2ajlwcddAMVEMY5NAMns_ooeEAHSYwDk84nnD6cU2hLjx_k5HKOgFLm-EX_ASSv/exec";
+
+  // Read tool identifier from URL
+  const params = new URLSearchParams(window.location.search);
+  const toolId = params.get("tool"); // example: ?tool=midjourney
+
+  if (!toolId) return;
+
+  fetch(API_URL)
+    .then(res => res.json())
+    .then(tools => {
+      if (!Array.isArray(tools)) return;
+
+      // Match tool (case-insensitive)
+      const tool = tools.find(t =>
+        String(t.tool || "").toLowerCase().trim() === toolId.toLowerCase().trim()
+      );
+
+      if (!tool) return;
+
+      let hasContent = false;
+
+      // Key Features
+      if (tool.key_features) {
+        const features = tool.key_features
+          .split(";")
+          .map(f => f.trim())
+          .filter(Boolean);
+
+        if (features.length) {
+          const ul = document.getElementById("about-features");
+          if (ul) {
+            ul.innerHTML = features.map(f => `<li>${f}</li>`).join("");
+            hasContent = true;
+          }
+        }
+      }
+
+      // Best For
+      if (tool.best_for) {
+        const bestFor = tool.best_for
+          .split(";")
+          .map(b => b.trim())
+          .filter(Boolean);
+
+        if (bestFor.length) {
+          const ul = document.getElementById("about-bestfor");
+          if (ul) {
+            ul.innerHTML = bestFor.map(b => `<li>${b}</li>`).join("");
+            hasContent = true;
+          }
+        }
+      }
+
+      // Standout
+      if (tool.standout) {
+        const p = document.getElementById("about-standout");
+        if (p) {
+          p.textContent = tool.standout;
+          hasContent = true;
+        }
+      }
+
+      // Reveal section if any content exists
+      if (hasContent) {
+        const section = document.getElementById("about-tool-section");
+        if (section) section.classList.remove("hidden");
+      }
+    })
+    .catch(() => {
+      // Silent failure by design
+    });
+})();
+
 
 /* ===== PLACEHOLDER LOGO ===== */
 function placeholderLogo(name) {
