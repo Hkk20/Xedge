@@ -384,4 +384,21 @@ window.getTools = getTools;
 window.findToolByName = findToolByName;
 window.renderToolDetailsPageHydrate = renderToolDetailsPageHydrate;
 window.storeSelectedTool = t => safeSet(XE.SELECTED_KEY, t);
+/*pros and cons */
+function renderProsCons() {
+  const prosUl = document.querySelector("#pros-box ul");
+  const consUl = document.querySelector("#cons-box ul");
+
+  if (prosUl && Array.isArray(window.__TOOL_PROS__)) {
+    prosUl.innerHTML = window.__TOOL_PROS__
+      .map(p => `<li>✔ ${escapeHtml(p)}</li>`)
+      .join("");
+  }
+
+  if (consUl && Array.isArray(window.__TOOL_CONS__)) {
+    consUl.innerHTML = window.__TOOL_CONS__
+      .map(c => `<li>✖ ${escapeHtml(c)}</li>`)
+      .join("");
+  }
+}
 
