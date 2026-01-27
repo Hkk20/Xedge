@@ -83,79 +83,82 @@ function findToolByName(list, rawName) {
     null
   );
 }
+
+
 // ===============================
 // About Tool Section Injection
-// Safe, additive, non-breaking
+// SAFE / ISOLATED / NON-BREAKING
 // ===============================
 
 (function () {
-  const API_URL = "https://script.google.com/macros/s/AKfycbxXs2ajlwcddAMVEMY5NAMns_ooeEAHSYwDk84nnD6cU2hLjx_k5HKOgFLm-EX_ASSv/exec";
+  const API_URL =
+    "https://script.google.com/macros/s/AKfycbxXs2ajlwcddAMVEMY5NAMns_ooeEAHSYwDk84nnD6cU2hLjx_k5HKOgFLm-EX_ASSv/exec";
 
   // Read tool identifier from URL
   const params = new URLSearchParams(window.location.search);
-  const toolId = params.get("tool"); // example: ?tool=midjourney
+  const toolId = params.get("tool"); // ?tool=midjourney
 
   if (!toolId) return;
+
+  // HARD SAFETY: if About section doesn't exist, exit
+  const aboutSection = document.getElementById("about-tool-section");
+  if (!aboutSection) return;
 
   fetch(API_URL)
     .then(res => res.json())
     .then(tools => {
       if (!Array.isArray(tools)) return;
 
-      // Match tool (case-insensitive)
-      const tool = tools.find(t =>
-        String(t.tool || "").toLowerCase().trim() === toolId.toLowerCase().trim()
+      // Match tool safely (isolated variable)
+      const aboutTool = tools.find(t =>
+        String(t.tool || "").toLowerCase().trim() ===
+        toolId.toLowerCase().trim()
       );
 
-      if (!tool) return;
+      if (!aboutTool) return;
 
       let hasContent = false;
 
-      // Key Features
-      if (tool.key_features) {
-        const features = tool.key_features
+      // ---------- Key Features ----------
+      if (aboutTool.key_features) {
+        const aboutFeatures = aboutTool.key_features
           .split(";")
           .map(f => f.trim())
           .filter(Boolean);
 
-        if (features.length) {
-          const ul = document.getElementById("about-features");
-          if (ul) {
-            ul.innerHTML = features.map(f => `<li>${f}</li>`).join("");
-            hasContent = true;
-          }
-        }
-      }
-
-      // Best For
-      if (tool.best_for) {
-        const bestFor = tool.best_for
-          .split(";")
-          .map(b => b.trim())
-          .filter(Boolean);
-
-        if (bestFor.length) {
-          const ul = document.getElementById("about-bestfor");
-          if (ul) {
-            ul.innerHTML = bestFor.map(b => `<li>${b}</li>`).join("");
-            hasContent = true;
-          }
-        }
-      }
-
-      // Standout
-      if (tool.standout) {
-        const p = document.getElementById("about-standout");
-        if (p) {
-          p.textContent = tool.standout;
+        const ul = document.getElementById("about-features");
+        if (ul && aboutFeatures.length) {
+          ul.innerHTML = aboutFeatures.map(f => `<li>${f}</li>`).join("");
           hasContent = true;
         }
       }
 
-      // Reveal section if any content exists
+      // ---------- Best For ----------
+      if (aboutTool.best_for) {
+        const aboutBestFor = aboutTool.best_for
+          .split(";")
+          .map(b => b.trim())
+          .filter(Boolean);
+
+        const ul = document.getElementById("about-bestfor");
+        if (ul && aboutBestFor.length) {
+          ul.innerHTML = aboutBestFor.map(b => `<li>${b}</li>`).join("");
+          hasContent = true;
+        }
+      }
+
+      // ---------- Standout ----------
+      if (aboutTool.standout) {
+        const p = document.getElementById("about-standout");
+        if (p) {
+          p.textContent = aboutTool.standout;
+          hasContent = true;
+        }
+      }
+
+      // ---------- Reveal Section ----------
       if (hasContent) {
-        const section = document.getElementById("about-tool-section");
-        if (section) section.classList.remove("hidden");
+        aboutSection.classList.remove("hidden");
       }
     })
     .catch(() => {
