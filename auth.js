@@ -135,7 +135,7 @@ auth.onAuthStateChanged((user) => {
   }
 
   checkIfUserReviewed();
-});
+
 
 // ===========================
 // CHECK IF USER ALREADY REVIEWED
