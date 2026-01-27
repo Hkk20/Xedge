@@ -6,7 +6,7 @@
 */ 
 
 
-/* ===== CONFIG ===== */
+/* ===== CONFIG ===== */   
 const XE = {
   SHEET_URL: "https://script.google.com/macros/s/AKfycbxXs2ajlwcddAMVEMY5NAMns_ooeEAHSYwDk84nnD6cU2hLjx_k5HKOgFLm-EX_ASSv/exec",
   CACHE_KEY: "xedge_tools_v1",
@@ -355,8 +355,28 @@ async function renderToolDetailsPageHydrate() {
   /* ===== GLOBAL ACCESS (MOBILE TOGGLE SAFE) ===== */
   window.__TOOL_PROS__ = merged.pros;
   window.__TOOL_CONS__ = merged.cons;
-renderProsCons();
+   // After you set window.__TOOL_PROS__ and window.__TOOL_CONS__
+// Store the full tool data for About section
+window.__CURRENT_TOOL_DATA__ = tool;
 
+// Add these calls:
+renderProsCons();      // Your existing function
+renderAbout();         // NEW: Render About section
+
+/* ===== ABOUT SECTION RENDERING ===== */
+function renderAbout() {
+  const aboutBox = document.getElementById("about-box");
+  const aboutContent = document.getElementById("about-content");
+  
+  if (!aboutBox || !aboutContent) return;
+  
+  // Check if we have About data from the Google Sheet
+  const toolData = window.__CURRENT_TOOL_DATA__; // We'll need to store this
+  if (toolData && toolData.about) {
+    aboutContent.innerHTML = escapeHtml(toolData.about);
+    aboutBox.classList.remove("hidden");
+  }
+}
   /* ===== RENDER ===== */
   renderPhase0Instant(tool);
 
