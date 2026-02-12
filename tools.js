@@ -130,16 +130,24 @@ function renderAbout() {
         console.log("Features rendered");
       }
     }
-    
-    // CONS - FIXED
-    if (cons.length > 0) {
-      const ul = document.getElementById("about-cons");
-      if (ul) {
-        ul.innerHTML = cons.slice(0, 4).map(c => `<li>✗ ${escapeHtml(c)}</li>`).join("");
-        hasContent = true;
-        console.log("Cons rendered");
-      }
-    }
+   console.log("Checking cons:", { consLength: cons.length, consData: cons });
+
+if (cons.length > 0) {
+  const ul = document.getElementById("about-cons");
+  console.log("Cons UL element:", ul);
+  
+  if (ul) {
+    const html = cons.slice(0, 4).map(c => `<li>✗ ${escapeHtml(c)}</li>`).join("");
+    console.log("Cons HTML to insert:", html);
+    ul.innerHTML = html;
+    hasContent = true;
+    console.log("Cons rendered successfully");
+  } else {
+    console.log("ERROR: about-cons element NOT FOUND");
+  }
+} else {
+  console.log("No cons to render (array empty)");
+}
 
     // Best For
     if (toolData?.category) {
