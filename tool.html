@@ -169,29 +169,31 @@ function goBack() {
     </div>
   </section>
 
-  <!-- ================= ABOUT TOOL ================= -->
-  <section id="about-tool-section"
-    class="hidden mt-14">
-
-    <h2 class="text-2xl font-bold mb-6">About this tool</h2>
-
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <div class="bg-gray-800/40 border border-gray-700 rounded-xl p-6">
-        <h3 class="text-lg font-semibold mb-3">Key Features</h3>
-        <ul id="about-features" class="space-y-2 text-gray-200"></ul>
-      </div>
-
-      <div class="bg-gray-800/40 border border-gray-700 rounded-xl p-6">
-        <h3 class="text-lg font-semibold mb-3">Best For</h3>
-        <ul id="about-bestfor" class="space-y-2 text-gray-200"></ul>
-      </div>
-
-      <div class="bg-gray-800/40 border border-gray-700 rounded-xl p-6">
-        <h3 class="text-lg font-semibold mb-3">Why It Stands Out</h3>
-        <p id="about-standout" class="text-gray-300"></p>
-      </div>
+ <!-- ABOUT SECTION (separate) -->
+<section id="about-tool-section" class="hidden mt-14">
+  <h2 class="text-2xl font-bold mb-6">About this tool</h2>
+  
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <!-- Key Features -->
+    <div class="bg-gray-800/40 border border-gray-700 rounded-xl p-6">
+      <h3 class="text-lg font-semibold mb-3">Key Features</h3>
+      <ul id="about-features" class="space-y-2 text-gray-200"></ul>
     </div>
-  </section>
+
+    <!-- Best For -->
+    <div class="bg-gray-800/40 border border-gray-700 rounded-xl p-6">
+      <h3 class="text-lg font-semibold mb-3">Best For</h3>
+      <ul id="about-bestfor" class="space-y-2 text-gray-200"></ul>
+    </div>
+
+    <!-- Standout -->
+    <div class="bg-gray-800/40 border border-gray-700 rounded-xl p-6">
+      <h3 class="text-lg font-semibold mb-3">Why It Stands Out</h3>
+      <p id="about-standout" class="text-gray-300"></p>
+    </div>
+  </div>
+</section>
+
 
   <!-- ================= PROS / CONS ================= -->
   <section class="mb-14 mt-14">
@@ -212,19 +214,27 @@ function goBack() {
 
     <div class="grid md:grid-cols-2 gap-6">
 
-      <!-- PROS -->
-      <div id="pros-box"
-        class="bg-gray-800/40 border border-gray-700 rounded-xl p-6">
-        <h3 class="text-xl font-bold mb-4">Pros</h3>
-        <ul class="space-y-3 text-gray-200"></ul>
-      </div>
+<!-- PROS/CONS SECTION (separate from About) -->
+<section class="mb-14 mt-14">
+  <div class="md:hidden flex gap-2 mb-4">
+    <button id="btn-pros" onclick="showPros()" class="...">Pros</button>
+    <button id="btn-cons" onclick="showCons()" class="...">Cons</button>
+  </div>
 
-      <!-- CONS -->
-      <div id="cons-box"
-        class="hidden bg-gray-800/40 border border-gray-700 rounded-xl p-6 md:block">
-        <h3 class="text-xl font-bold mb-4">Cons</h3>
-        <ul class="space-y-3 text-gray-200"></ul>
-      </div>
+  <div class="grid md:grid-cols-2 gap-6">
+    <!-- PROS -->
+    <div id="pros-box" class="bg-gray-800/40 border border-gray-700 rounded-xl p-6">
+      <h3 class="text-xl font-bold mb-4">Pros</h3>
+      <ul class="space-y-3 text-gray-200"></ul>
+    </div>
+
+    <!-- CONS -->
+    <div id="cons-box" class="hidden bg-gray-800/40 border border-gray-700 rounded-xl p-6 md:block">
+      <h3 class="text-xl font-bold mb-4">Cons</h3>
+      <ul class="space-y-3 text-gray-200"></ul>
+    </div>
+  </div>
+</section>
 
     </div>
   </section>
