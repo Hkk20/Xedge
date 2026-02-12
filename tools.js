@@ -193,44 +193,44 @@ function renderAbout() {
 
   checkData();
 }
-/*-- rendering pros and cons --*/
+rendering pros and cons --/
 function renderProsCons() {
-     console.log("=== renderProsCons() STARTED ===");
-  console.log("Cons data:", window.__TOOL_CONS__);
-  
-  const consUl = document.querySelector("#cons-box ul");
-  console.log("Cons UL found:", !!consUl);
-  console.log("renderProsCons() called");
-  
-  const prosUl = document.querySelector("#pros-box ul");
-  
-  // Render PROS
-  if (prosUl) {
-    const pros = window.__TOOL_PROS__ || [];
-    if (pros.length > 0) {
-      prosUl.innerHTML = pros
-        .map(p => `<li>✔ ${escapeHtml(p)}</li>`)
-        .join("");
-      console.log("Pros rendered:", pros.length);
-    } else {
-      prosUl.innerHTML = "<li>No pros listed</li>";
-      console.log("Pros: empty");
-    }
-  }
+console.log("=== renderProsCons() STARTED ===");
+console.log("Cons data:", window.TOOL_CONS);
 
-  // Render CONS
-  if (consUl) {
-    const cons = window.__TOOL_CONS__ || [];
-    if (cons.length > 0) {
-      consUl.innerHTML = cons
-        .map(c => `<li>✖ ${escapeHtml(c)}</li>`)
-        .join("");
-      console.log("Cons rendered:", cons.length);
-    } else {
-      consUl.innerHTML = "<li>No cons listed</li>";
-      console.log("Cons: empty");
-    }
-  }
+const consUl = document.querySelector("#cons-box ul");
+console.log("Cons UL found:", !!consUl);
+console.log("renderProsCons() called");
+
+const prosUl = document.querySelector("#pros-box ul");
+
+// Render PROS
+if (prosUl) {
+const pros = window.TOOL_PROS || [];
+if (pros.length > 0) {
+prosUl.innerHTML = pros
+.map(p => <li>✔ ${escapeHtml(p)}</li>)
+.join("");
+console.log("Pros rendered:", pros.length);
+} else {
+prosUl.innerHTML = "<li>No pros listed</li>";
+console.log("Pros: empty");
+}
+}
+
+// Render CONS
+if (consUl) {
+const cons = window.TOOL_CONS || [];
+if (cons.length > 0) {
+consUl.innerHTML = cons
+.map(c => <li>✖ ${escapeHtml(c)}</li>)
+.join("");
+console.log("Cons rendered:", cons.length);
+} else {
+consUl.innerHTML = "<li>No cons listed</li>";
+console.log("Cons: empty");
+}
+}
 }
 /* ===== PLACEHOLDER LOGO ===== */
 function placeholderLogo(name) {
