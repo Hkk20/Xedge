@@ -128,6 +128,15 @@ function renderAbout() {
         console.log("Features rendered");
       }
     }
+     if(cons.length > 0){
+        const ul = document.getElementById("about-cons");
+        if (ul) {
+           ul.innerHTML = cons.slice(0, 4).map(f => `<li>✓  ${escapeHTML(f)}</li>`.join("");
+           hascontent = true;
+           console.log("Fatures rendered");
+        }
+     }
+     
 
     // Best For (using category)
     if (toolData?.category) {
