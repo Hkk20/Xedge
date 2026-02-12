@@ -242,6 +242,30 @@ function goBack() {
 
 <!-- ================= SCRIPTS ================= -->
 <script src="tools.js"></script>
+  <script src ="auth.js"></script>
+  <script>
+document.addEventListener("DOMContentLoaded", () => {
+  if (typeof renderToolDetailsPageHydrate === "function") {
+    renderToolDetailsPageHydrate();
+  }
+  feather.replace();
+});
+    
+  function showPros() {
+    document.getElementById("pros-box").classList.remove("hidden");
+    document.getElementById("cons-box").classList.add("hidden");
+    document.getElementById("btn-pros").className = "flex-1 py-2 rounded-lg font-semibold bg-blue-600 text-white";
+    document.getElementById("btn-cons").className = "flex-1 py-2 rounded-lg font-semibold bg-gray-800 text-gray-300";
+  }
+
+  function showCons() {
+    document.getElementById("cons-box").classList.remove("hidden");
+    document.getElementById("pros-box").classList.add("hidden");
+    document.getElementById("btn-cons").className = "flex-1 py-2 rounded-lg font-semibold bg-blue-600 text-white";
+    document.getElementById("btn-pros").className = "flex-1 py-2 rounded-lg font-semibold bg-gray-800 text-gray-300";
+  }
+
+</script>
 
 
 
