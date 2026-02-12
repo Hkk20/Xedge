@@ -193,6 +193,7 @@ function renderAbout() {
 
   checkData();
 }
+/*-- rendering pros and cons --*/
 function renderProsCons() {
      console.log("=== renderProsCons() STARTED ===");
   console.log("Cons data:", window.__TOOL_CONS__);
@@ -425,7 +426,14 @@ window.__CURRENT_TOOL_DATA__ = {
   short_description: merged.short_description
 };
 
+
 renderProsCons();
+renderAbout();
+   
+console.log("About to call renderProsCons");
+console.log("merged.cons:", merged.cons);
+renderProsCons();
+console.log("Finished renderProsCons");
 renderAbout();
 
   /* ===== RENDER ===== */
