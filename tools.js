@@ -179,6 +179,37 @@ if (cons.length > 0) {
 
   checkData();
 }
+function renderProsCons() {
+  console.log("=== renderProsCons() called ===");
+  console.log("__TOOL_PROS__:", window.__TOOL_PROS__);
+  console.log("__TOOL_CONS__:", window.__TOOL_CONS__);
+  
+  const prosUl = document.querySelector("#pros-box ul");
+  const consUl = document.querySelector("#cons-box ul");
+  
+  console.log("prosUl found:", !!prosUl);
+  console.log("consUl found:", !!consUl);
+
+  if (prosUl && Array.isArray(window.__TOOL_PROS__)) {
+    prosUl.innerHTML = window.__TOOL_PROS__
+      .map(p => `<li>✔ ${escapeHtml(p)}</li>`)
+      .join("");
+    console.log("Pros rendered:", window.__TOOL_PROS__.length);
+  }
+
+  if (consUl && Array.isArray(window.__TOOL_CONS__)) {
+    consUl.innerHTML = window.__TOOL_CONS__
+      .map(c => `<li>✖ ${escapeHtml(c)}</li>`)
+      .join("");
+    console.log("Cons rendered:", window.__TOOL_CONS__.length);
+  } else {
+    console.log("Cons NOT rendered:", {
+      hasUl: !!consUl,
+      isArray: Array.isArray(window.__TOOL_CONS__),
+      consData: window.__TOOL_CONS__
+    });
+  }
+}
 
 
 /* ===== PLACEHOLDER LOGO ===== */
