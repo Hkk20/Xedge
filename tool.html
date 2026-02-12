@@ -195,30 +195,19 @@ function goBack() {
 </section>
 
 
-  <!-- ================= PROS / CONS ================= -->
-  <section class="mb-14 mt-14">
-
-    <!-- Mobile Toggle -->
-    <div class="md:hidden flex gap-2 mb-4">
-      <button id="btn-pros"
-        onclick="showPros()"
-        class="flex-1 py-2 rounded-lg font-semibold bg-blue-600 text-white">
-        Pros
-      </button>
-      <button id="btn-cons"
-        onclick="showCons()"
-        class="flex-1 py-2 rounded-lg font-semibold bg-gray-800 text-gray-300">
-        Cons
-      </button>
-    </div>
-
-    <div class="grid md:grid-cols-2 gap-6">
-
-<!-- PROS/CONS SECTION (separate from About) -->
+<!-- ================= PROS / CONS ================= -->
 <section class="mb-14 mt-14">
+
+  <!-- Mobile Toggle -->
   <div class="md:hidden flex gap-2 mb-4">
-    <button id="btn-pros" onclick="showPros()" class="...">Pros</button>
-    <button id="btn-cons" onclick="showCons()" class="...">Cons</button>
+    <button id="btn-pros" onclick="showPros()" 
+      class="flex-1 py-2 rounded-lg font-semibold bg-blue-600 text-white">
+      Pros
+    </button>
+    <button id="btn-cons" onclick="showCons()" 
+      class="flex-1 py-2 rounded-lg font-semibold bg-gray-800 text-gray-300">
+      Cons
+    </button>
   </div>
 
   <div class="grid md:grid-cols-2 gap-6">
@@ -228,16 +217,14 @@ function goBack() {
       <ul class="space-y-3 text-gray-200"></ul>
     </div>
 
-    <!-- CONS -->
-    <div id="cons-box" class="hidden bg-gray-800/40 border border-gray-700 rounded-xl p-6 ">
+    <!-- CONS - hidden on mobile, visible on desktop -->
+    <div id="cons-box" class="hidden md:block bg-gray-800/40 border border-gray-700 rounded-xl p-6">
       <h3 class="text-xl font-bold mb-4">Cons</h3>
       <ul class="space-y-3 text-gray-200"></ul>
     </div>
   </div>
-</section>
 
-    </div>
-  </section>
+</section>
 
   <!-- ================= PHASE 1 ================= -->
   <div id="xe-phase1"
