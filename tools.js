@@ -400,7 +400,15 @@ const merged = {
   key_features: (tool.key_features_raw || "").split(/[,;\n]/).map(v => v.trim()).filter(Boolean),
   best_for: (tool.best_for_raw || "").split(/[,;\n]/).map(v => v.trim()).filter(Boolean),
   standout: tool.standout_raw || "",
-  short_description: tool.short_description || ""
+  short_description: tool.short_description || "",
+  
+  // ADD THESE BACK:
+  screenshots: parseScreenshots(tool.screenshots_raw),
+  pricing: {
+    free: tool.pricing_free || "",
+    plus: tool.pricing_plus || "",
+    team: tool.pricing_team || ""
+  }
 };
 /*-- global variables --*/
 window.__TOOL_PROS__ = merged.pros;
