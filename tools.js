@@ -104,7 +104,7 @@ function renderAbout() {
 
   // Wait for data to be available
   const checkData = () => {
-     const cons = window.__TOOL_cons__ || [];
+     const cons = window.__TOOL_CONS__ || [];
     const pros = window.__TOOL_PROS__ || [];
     const toolData = window.__CURRENT_TOOL_DATA__;
     
