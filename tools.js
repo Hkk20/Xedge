@@ -209,11 +209,11 @@ if (prosUl) {
 const pros = window.TOOL_PROS || [];
 if (pros.length > 0) {
 prosUl.innerHTML = pros
-.map(p => <li>✔ ${escapeHtml(p)}</li>)
+.map(p => `<li>✔ ${escapeHtml(p)}</li>`)
 .join("");
 console.log("Pros rendered:", pros.length);
 } else {
-prosUl.innerHTML = "<li>No pros listed</li>";
+prosUl.innerHTML = `<li>No pros listed</li>`;
 console.log("Pros: empty");
 }
 }
@@ -223,11 +223,11 @@ if (consUl) {
 const cons = window.TOOL_CONS || [];
 if (cons.length > 0) {
 consUl.innerHTML = cons
-.map(c => <li>✖ ${escapeHtml(c)}</li>)
+.map(c => `<li>✖ ${escapeHtml(c)}</li>`)
 .join("");
 console.log("Cons rendered:", cons.length);
 } else {
-consUl.innerHTML = "<li>No cons listed</li>";
+consUl.innerHTML = `<li>No cons listed</li>`;
 console.log("Cons: empty");
 }
 }
