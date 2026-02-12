@@ -50,20 +50,23 @@ async function getTools(force = false) {
     const res = await fetch(XE.SHEET_URL + "?t=" + Date.now(), { cache: "no-store" });
     const raw = await res.json();
 
-    const tools = raw.map(d => ({
-      name: d.name || d.title || "Unknown",
-      category: d.category || "",
-      short_description: d.short_description || d.short || "",
-      long_description: d.long_description || d.description || "",
-      logo_url: d.logo_url || d.logo || "",
-      link: d.link || "#",
-      pros_raw: d.pros || "",
-      cons_raw: d.cons || "",
-      screenshots_raw: d.screenshots || "",
-      pricing_free: d.pricing_free || "",
-      pricing_plus: d.pricing_plus || "",
-      pricing_team: d.pricing_team || ""
-    }));
+   const tools = raw.map(d => ({
+  name: d.name || d.title || "Unknown",
+  category: d.category || "",
+  short_description: d.short_description || d.short || "",
+  long_description: d.long_description || d.description || "",
+  logo_url: d.logo_url || d.logo || "",
+  link: d.link || "#",
+  pros_raw: d.pros || "",
+  cons_raw: d.cons || "",
+  key_features_raw: d.key_features || "",      // NEW
+  best_for_raw: d.best_for || "",              // NEW
+  standout_raw: d.standout || "",              // NEW
+  screenshots_raw: d.screenshots || "",
+  pricing_free: d.pricing_free || "",
+  pricing_plus: d.pricing_plus || "",
+  pricing_team: d.pricing_team || ""
+}));
 
     safeSet(XE.CACHE_KEY, tools);
     return tools;
@@ -92,7 +95,7 @@ console.log("Features UL exists:", document.getElementById("about-features") !==
 console.log("BestFor UL exists:", document.getElementById("about-bestfor") !== null);
 console.log("Standout P exists:", document.getElementById("about-standout") !== null);
 
-/* ===== ABOUT SECTION - TIMING FIXED ===== */
+/* ===== ABOUT SECTION - SHOW ALL COLUMNS ===== */
 function renderAbout() {
   console.log("renderAbout() called");
   
@@ -103,115 +106,127 @@ function renderAbout() {
   }
 
   const checkData = () => {
-    const cons = window.__TOOL_CONS__ || [];
-    const pros = window.__TOOL_PROS__ || [];
+    // Get all data from globals
+    const keyFeatures = window.__TOOL_KEY_FEATURES__ || [];
+    const bestFor = window.__TOOL_BEST_FOR__ || [];
+    const standout = window.__TOOL_STANDOUT__ || "";
     const toolData = window.__CURRENT_TOOL_DATA__;
     
-    console.log("Checking data:", { 
-      hasPros: pros.length, 
-      hasCons: cons.length,
-      hasToolData: !!toolData 
+    console.log("About data:", { 
+      keyFeatures: keyFeatures.length, 
+      bestFor: bestFor.length, 
+      hasStandout: !!standout,
+      hasShortDesc: !!toolData?.short_description
     });
 
-    if (!toolData && pros.length === 0 && cons.length === 0) {
-      console.log("No data available yet, retrying...");
+    if (!toolData) {
+      console.log("No tool data yet, retrying...");
       setTimeout(checkData, 100);
       return;
     }
 
-    let hasContent = false;
+    let hasAnyContent = false;
 
-    // Key Features (PROS)
-    if (pros.length > 0) {
-      const ul = document.getElementById("about-features");
-      if (ul) {
-        ul.innerHTML = pros.slice(0, 4).map(f => `<li>✓ ${escapeHtml(f)}</li>`).join("");
-        hasContent = true;
-        console.log("Features rendered");
-      }
-    }
-   console.log("Checking cons:", { consLength: cons.length, consData: cons });
-
-if (cons.length > 0) {
-  const ul = document.getElementById("about-cons");
-  console.log("Cons UL element:", ul);
-  
-  if (ul) {
-    const html = cons.slice(0, 4).map(c => `<li>✗ ${escapeHtml(c)}</li>`).join("");
-    console.log("Cons HTML to insert:", html);
-    ul.innerHTML = html;
-    hasContent = true;
-    console.log("Cons rendered successfully");
-  } else {
-    console.log("ERROR: about-cons element NOT FOUND");
-  }
-} else {
-  console.log("No cons to render (array empty)");
-}
-
-    // Best For
-    if (toolData?.category) {
-      const ul = document.getElementById("about-bestfor");
-      if (ul) {
-        ul.innerHTML = `<li>${escapeHtml(toolData.category)} professionals</li>
-                        <li>Teams in ${escapeHtml(toolData.category)}</li>
-                        <li>Students and beginners</li>`;
-        hasContent = true;
-        console.log("Best for rendered");
+    // --- KEY FEATURES (from key_features column) ---
+    const featuresUl = document.getElementById("about-features");
+    if (featuresUl) {
+      if (keyFeatures.length > 0) {
+        featuresUl.innerHTML = keyFeatures
+          .slice(0, 4)
+          .map(f => `<li>✓ ${escapeHtml(f)}</li>`)
+          .join("");
+        hasAnyContent = true;
+        console.log("Key features rendered:", keyFeatures.length);
+      } else {
+        featuresUl.innerHTML = ""; // Empty if no data
+        console.log("Key features: empty");
       }
     }
 
-    // Standout
-    if (toolData?.short_description) {
-      const p = document.getElementById("about-standout");
-      if (p) {
-        p.textContent = toolData.short_description;
-        hasContent = true;
+    // --- BEST FOR (from best_for column) ---
+    const bestForUl = document.getElementById("about-bestfor");
+    if (bestForUl) {
+      if (bestFor.length > 0) {
+        bestForUl.innerHTML = bestFor
+          .slice(0, 3)
+          .map(b => `<li>${escapeHtml(b)}</li>`)
+          .join("");
+        hasAnyContent = true;
+        console.log("Best for rendered:", bestFor.length);
+      } else if (toolData.category) {
+        // Fallback to category if best_for is empty
+        bestForUl.innerHTML = `
+          <li>${escapeHtml(toolData.category)} professionals</li>
+          <li>Teams in ${escapeHtml(toolData.category)}</li>
+          <li>Students and beginners</li>
+        `;
+        hasAnyContent = true;
+        console.log("Best for rendered (from category)");
+      } else {
+        bestForUl.innerHTML = "";
+        console.log("Best for: empty");
+      }
+    }
+
+    // --- STANDOUT (from standout column) ---
+    const standoutP = document.getElementById("about-standout");
+    if (standoutP) {
+      if (standout) {
+        standoutP.textContent = standout;
+        hasAnyContent = true;
         console.log("Standout rendered");
+      } else if (toolData.short_description) {
+        // Fallback to short_description if standout is empty
+        standoutP.textContent = toolData.short_description;
+        hasAnyContent = true;
+        console.log("Standout rendered (from short_description)");
+      } else {
+        standoutP.textContent = "";
+        console.log("Standout: empty");
       }
     }
 
-    if (hasContent) {
-      aboutSection.classList.remove("hidden");
-      console.log("About section revealed!");
-    }
+    // Always show about section (even if empty columns)
+    aboutSection.classList.remove("hidden");
+    console.log("About section revealed!");
   };
 
   checkData();
 }
 function renderProsCons() {
-  console.log("=== renderProsCons() called ===");
-  console.log("__TOOL_PROS__:", window.__TOOL_PROS__);
-  console.log("__TOOL_CONS__:", window.__TOOL_CONS__);
+  console.log("renderProsCons() called");
   
   const prosUl = document.querySelector("#pros-box ul");
   const consUl = document.querySelector("#cons-box ul");
-  
-  console.log("prosUl found:", !!prosUl);
-  console.log("consUl found:", !!consUl);
 
-  if (prosUl && Array.isArray(window.__TOOL_PROS__)) {
-    prosUl.innerHTML = window.__TOOL_PROS__
-      .map(p => `<li>✔ ${escapeHtml(p)}</li>`)
-      .join("");
-    console.log("Pros rendered:", window.__TOOL_PROS__.length);
+  // Render PROS
+  if (prosUl) {
+    const pros = window.__TOOL_PROS__ || [];
+    if (pros.length > 0) {
+      prosUl.innerHTML = pros
+        .map(p => `<li>✔ ${escapeHtml(p)}</li>`)
+        .join("");
+      console.log("Pros rendered:", pros.length);
+    } else {
+      prosUl.innerHTML = "<li>No pros listed</li>";
+      console.log("Pros: empty");
+    }
   }
 
-  if (consUl && Array.isArray(window.__TOOL_CONS__)) {
-    consUl.innerHTML = window.__TOOL_CONS__
-      .map(c => `<li>✖ ${escapeHtml(c)}</li>`)
-      .join("");
-    console.log("Cons rendered:", window.__TOOL_CONS__.length);
-  } else {
-    console.log("Cons NOT rendered:", {
-      hasUl: !!consUl,
-      isArray: Array.isArray(window.__TOOL_CONS__),
-      consData: window.__TOOL_CONS__
-    });
+  // Render CONS
+  if (consUl) {
+    const cons = window.__TOOL_CONS__ || [];
+    if (cons.length > 0) {
+      consUl.innerHTML = cons
+        .map(c => `<li>✖ ${escapeHtml(c)}</li>`)
+        .join("");
+      console.log("Cons rendered:", cons.length);
+    } else {
+      consUl.innerHTML = "<li>No cons listed</li>";
+      console.log("Cons: empty");
+    }
   }
 }
-
-
 /* ===== PLACEHOLDER LOGO ===== */
 function placeholderLogo(name) {
   return `https://dummyimage.com/320x320/${XE.PLACEHOLDER_BG}/ffffff&text=${encodeURIComponent(
@@ -378,32 +393,28 @@ async function renderToolDetailsPageHydrate() {
     return;
   }
 
-  /* ===== PARSE TOOL DATA ===== */
-  const merged = {
-    long_description: tool.long_description || "",
-    pros: (tool.pros_raw || "")
-      .split(/[,;\n]/)
-      .map(v => v.trim())
-      .filter(Boolean),
-    cons: (tool.cons_raw || "")
-      .split(/[,;\n]/)
-      .map(v => v.trim())
-      .filter(Boolean),
-    screenshots: parseScreenshots(tool.screenshots_raw),
-    pricing: {
-      free: tool.pricing_free || "",
-      plus: tool.pricing_plus || "",
-      team: tool.pricing_team || ""
-    }
-  };
-
-/* ===== GLOBAL ACCESS (MOBILE TOGGLE SAFE) ===== */
+const merged = {
+  long_description: tool.long_description || "",
+  pros: (tool.pros_raw || "").split(/[,;\n]/).map(v => v.trim()).filter(Boolean),
+  cons: (tool.cons_raw || "").split(/[,;\n]/).map(v => v.trim()).filter(Boolean),
+  key_features: (tool.key_features_raw || "").split(/[,;\n]/).map(v => v.trim()).filter(Boolean),
+  best_for: (tool.best_for_raw || "").split(/[,;\n]/).map(v => v.trim()).filter(Boolean),
+  standout: tool.standout_raw || "",
+  short_description: tool.short_description || ""
+};
+/*-- global variables --*/
 window.__TOOL_PROS__ = merged.pros;
 window.__TOOL_CONS__ = merged.cons;
-window.__CURRENT_TOOL_DATA__ = tool;  // ← ADD THIS LINE
-renderProsCons();                     // ← EXISTING LINE
-renderAbout();                        // ← ADD THIS LINE
+window.__TOOL_KEY_FEATURES__ = merged.key_features;  // NEW
+window.__TOOL_BEST_FOR__ = merged.best_for;          // NEW
+window.__TOOL_STANDOUT__ = merged.standout;          // NEW
+window.__CURRENT_TOOL_DATA__ = {
+  ...tool,
+  short_description: merged.short_description
+};
 
+renderProsCons();
+renderAbout();
 
   /* ===== RENDER ===== */
   renderPhase0Instant(tool);
