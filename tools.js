@@ -194,6 +194,11 @@ function renderAbout() {
   checkData();
 }
 function renderProsCons() {
+     console.log("=== renderProsCons() STARTED ===");
+  console.log("Cons data:", window.__TOOL_CONS__);
+  
+  const consUl = document.querySelector("#cons-box ul");
+  console.log("Cons UL found:", !!consUl);
   console.log("renderProsCons() called");
   
   const prosUl = document.querySelector("#pros-box ul");
