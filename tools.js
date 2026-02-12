@@ -108,7 +108,7 @@ function renderAbout() {
     const pros = window.__TOOL_PROS__ || [];
     const toolData = window.__CURRENT_TOOL_DATA__;
     
-    console.log("Checking data:", { hasPros: pros.length, hasToolData: !!toolData });
+    console.log("Checking data:", { hasPros: pros.length, hasCons: cons.length,hasToolData: !!toolData });
 
     if (!toolData && pros.length === 0) {
       console.log("No data available yet, retrying...");
