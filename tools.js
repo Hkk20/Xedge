@@ -102,24 +102,26 @@ function renderAbout() {
     return;
   }
 
-  // Wait for data to be available
   const checkData = () => {
-     const cons = window.__TOOL_CONS__ || [];
+    const cons = window.__TOOL_CONS__ || [];
     const pros = window.__TOOL_PROS__ || [];
     const toolData = window.__CURRENT_TOOL_DATA__;
     
-    console.log("Checking data:", { hasPros: pros.length, hasCons: cons.length,hasToolData: !!toolData });
+    console.log("Checking data:", { 
+      hasPros: pros.length, 
+      hasCons: cons.length,
+      hasToolData: !!toolData 
+    });
 
-    if (!toolData && pros.length === 0) {
+    if (!toolData && pros.length === 0 && cons.length === 0) {
       console.log("No data available yet, retrying...");
       setTimeout(checkData, 100);
       return;
     }
 
-    // We have data, proceed with rendering
     let hasContent = false;
 
-    // Key Features (using pros)
+    // Key Features (PROS)
     if (pros.length > 0) {
       const ul = document.getElementById("about-features");
       if (ul) {
@@ -128,17 +130,18 @@ function renderAbout() {
         console.log("Features rendered");
       }
     }
-     if(cons.length > 0){
-        const ul = document.getElementById("about-cons");
-        if (ul) {
-           ul.innerHTML = cons.slice(0, 4).map(f => `<li>✓  ${escapeHTML(f)}</li>`).join("");
-           hascontent = true;
-           console.log("Fatures rendered");
-        }
-     }
-     
+    
+    // CONS - FIXED
+    if (cons.length > 0) {
+      const ul = document.getElementById("about-cons");
+      if (ul) {
+        ul.innerHTML = cons.slice(0, 4).map(c => `<li>✗ ${escapeHtml(c)}</li>`).join("");
+        hasContent = true;
+        console.log("Cons rendered");
+      }
+    }
 
-    // Best For (using category)
+    // Best For
     if (toolData?.category) {
       const ul = document.getElementById("about-bestfor");
       if (ul) {
@@ -150,7 +153,7 @@ function renderAbout() {
       }
     }
 
-    // Standout (using short description)
+    // Standout
     if (toolData?.short_description) {
       const p = document.getElementById("about-standout");
       if (p) {
@@ -166,15 +169,9 @@ function renderAbout() {
     }
   };
 
-  // Start checking for data
   checkData();
 }
 
-/* ===== MODIFIED PLACEMENT - SAFER TIMING ===== */
-// In your main function, change this:
-setTimeout(() => {
-  renderAbout(); // This gives time for data to be set
-}, 500); // 500ms delay to ensure data is ready
 
 /* ===== PLACEHOLDER LOGO ===== */
 function placeholderLogo(name) {
@@ -368,20 +365,7 @@ window.__CURRENT_TOOL_DATA__ = tool;  // ← ADD THIS LINE
 renderProsCons();                     // ← EXISTING LINE
 renderAbout();                        // ← ADD THIS LINE
 
-/* ===== ABOUT SECTION RENDERING ===== */
-function renderAbout() {
-  const aboutBox = document.getElementById("about-box");
-  const aboutContent = document.getElementById("about-content");
-  
-  if (!aboutBox || !aboutContent) return;
-  
-  // Check if we have About data from the Google Sheet
-  const toolData = window.__CURRENT_TOOL_DATA__; // We'll need to store this
-  if (toolData && toolData.about) {
-    aboutContent.innerHTML = escapeHtml(toolData.about);
-    aboutBox.classList.remove("hidden");
-  }
-}
+
   /* ===== RENDER ===== */
   renderPhase0Instant(tool);
 
