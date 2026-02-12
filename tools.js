@@ -202,8 +202,7 @@ function renderProsCons() {
   console.log("renderProsCons() called");
   
   const prosUl = document.querySelector("#pros-box ul");
-  const consUl = document.querySelector("#cons-box ul");
-
+  
   // Render PROS
   if (prosUl) {
     const pros = window.__TOOL_PROS__ || [];
