@@ -193,7 +193,7 @@ function renderAbout() {
 
   checkData();
 }
-rendering pros and cons --/
+/* -- rendering pros and cons --*/
 function renderProsCons() {
 console.log("=== renderProsCons() STARTED ===");
 console.log("Cons data:", window.TOOL_CONS);
