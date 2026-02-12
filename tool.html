@@ -194,44 +194,29 @@ function goBack() {
   </div>
 </section>
 
-
 <!-- ================= PROS / CONS ================= -->
 <section class="mb-14 mt-14">
   <!-- Mobile Toggle -->
-  <div class="md:hidden flex gap-2 mb-6">
-    <button 
-      id="btn-pros" 
-      onclick="showSection('pros')"
-      class="flex-1 py-3 px-4 rounded-lg font-semibold text-white bg-blue-600 hover:bg-blue-700 transition-colors"
-    >
+  <div class="md:hidden flex gap-2 mb-4">
+    <button id="btn-pros" onclick="showPros()"
+      class="flex-1 py-2 rounded-lg font-semibold bg-blue-600 text-white">
       Pros
     </button>
-    <button 
-      id="btn-cons" 
-      onclick="showSection('cons')"
-      class="flex-1 py-3 px-4 rounded-lg font-semibold text-gray-300 bg-gray-800 hover:bg-gray-900 transition-colors"
-    >
+    <button id="btn-cons" onclick="showCons()"
+      class="flex-1 py-2 rounded-lg font-semibold bg-gray-800 text-gray-300">
       Cons
     </button>
   </div>
-
-  <!-- Grid with both columns -->
   <div class="grid md:grid-cols-2 gap-6">
     <!-- PROS -->
     <div id="pros-box" class="bg-gray-800/40 border border-gray-700 rounded-xl p-6">
-      <h3 class="text-xl font-bold mb-4 text-blue-400">Pros</h3>
-      <ul id="pros-list" class="space-y-3 text-gray-200">
-        <!-- These will be filled dynamically for each tool -->
-        <!-- Example: you will replace/add <li> here via JS or server -->
-      </ul>
+      <h3 class="text-xl font-bold mb-4">Pros</h3>
+      <ul class="space-y-3 text-gray-200"></ul>
     </div>
-
-    <!-- CONS -->
+    <!-- CONS - hidden on mobile, visible on desktop -->
     <div id="cons-box" class="hidden md:block bg-gray-800/40 border border-gray-700 rounded-xl p-6">
-      <h3 class="text-xl font-bold mb-4 text-red-400">Cons</h3>
-      <ul id="cons-list" class="space-y-3 text-gray-200">
-        <!-- These will be filled dynamically for each tool -->
-      </ul>
+      <h3 class="text-xl font-bold mb-4">Cons</h3>
+      <ul class="space-y-3 text-gray-200"></ul>
     </div>
   </div>
 </section>
