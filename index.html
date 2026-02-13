@@ -41,6 +41,20 @@
 
   
     <style>
+     /* Force page to full width */
+body {
+  overflow-x: hidden;
+  width: 100%;
+}
+
+/* Ensure mobile menu is hidden by default */
+.mobile-menu {
+  transform: translateX(110%) !important;
+}
+
+.mobile-menu.open {
+  transform: translateX(0) !important;
+}
 
 /* HF accurate category card sizing */
 .featured-cat {
