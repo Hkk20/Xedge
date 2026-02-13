@@ -73,6 +73,11 @@ html, body {
 .mobile-menu.open {
   transform: translateX(0);   /* slide in */
 }
+ #top-tools-wrapper {
+  width: 100%;
+  max-width: 100%;
+}
+
 
 
 /* Nav backdrop */
@@ -472,7 +477,10 @@ nav {
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
             </button>
 
-            <div id="top-tools-wrapper" class="flex overflow-x-auto gap-6 pb-4 snap-x snap-mandatory scroll-smooth scrollbar-none touch-pan-x">
+          <div class="relative overflow-hidden">
+  <div id="top-tools-wrapper"
+       class="flex gap-6 pb-4 snap-x snap-mandatory scroll-smooth overflow-x-auto scrollbar-none touch-pan-x">
+
               <!-- injected -->
               <div id="top-tools-skel" class="flex gap-4">
                 <div class="min-w-[260px] bg-gray-800/50 rounded-2xl p-6 skeleton"></div>
