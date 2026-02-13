@@ -41,21 +41,7 @@
 
   
     <style>
-     /* Force page to full width */
-body {
-  overflow-x: hidden;
-  width: 100%;
-}
-
-/* Ensure mobile menu is hidden by default */
-.mobile-menu {
-  transform: translateX(110%) !important;
-}
-
-.mobile-menu.open {
-  transform: translateX(0) !important;
-}
-
+     
 /* HF accurate category card sizing */
 .featured-cat {
   width: 240px;
@@ -211,23 +197,26 @@ body {
     .page-top { position: relative; z-index: 10; }
     nav { z-index: 60; }
 
-    /* mobile menu slide-from-right */
     .mobile-menu {
-      position: fixed;
-      top: 0;
-      right: 0;
-      height: 100vh;
-      width: 84%;
-      max-width: 380px;
-      background: rgba(6,8,12,0.98);
-      transform: translateX(110%);
-      transition: transform 260ms cubic-bezier(.2,.9,.2,1);
-      box-shadow: -20px 0 40px rgba(2,6,23,0.6);
-      z-index: 70;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-    }
-    .mobile-menu.open { transform: translateX(0); }
+  position: fixed;
+  top: 0;
+  /* Remove 'right: 0' - use left instead */
+  left: 100%;  /* Start off-screen to the right */
+  height: 100vh;
+  width: 84%;
+  max-width: 380px;
+  background: rgba(6,8,12,0.98);
+  transform: translateX(0);  /* Reset transform */
+  transition: left 260ms cubic-bezier(.2,.9,.2,1);
+  box-shadow: -20px 0 40px rgba(2,6,23,0.6);
+  z-index: 70;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.mobile-menu.open {
+  left: 16%;  /* Slide in from right (100% - 84% = 16%) */
+}}
 
     /* keep nav visible */
     .nav-backdrop {
