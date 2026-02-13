@@ -272,41 +272,39 @@
 <!-- AUTH AREA (place this EXACTLY as it is) -->
 <div id="auth-area" class="relative ml-4 flex items-center"></div>
 
+<!-- Mobile hamburger -->
+<button id="mobile-menu-toggle" aria-label="Open menu" class="md:hidden p-2">
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+  </svg>
+</button>
 
+<!-- mobile slide menu (right) -->
+<div id="nav-backdrop" class="nav-backdrop" aria-hidden="true"></div>
 
-            <!-- Mobile hamburger -->
-            <button id="mobile-menu-toggle" aria-label="Open menu" class="md:hidden p-2">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-200" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
-            </button>
-          </div>
+<!-- REMOVED aria-hidden="true" from here -->
+<aside id="mobileMenu" class="mobile-menu" aria-label="Mobile menu">
+  <div class="p-6">
+    <div class="flex items-center justify-between mb-6">
+      <div class="flex items-center gap-3">
+        <img src="xedge-logo.png" alt="logo" class="w-8 h-8"/>
+        <div>
+          <div class="font-bold text-lg">XEDGE</div>
+          <div class="text-xs text-gray-400">AI tools discovery</div>
         </div>
-      </nav>
+      </div>
+      <button id="mobileClose" aria-label="Close menu" class="text-xl">✕</button>
+    </div>
 
-      <!-- mobile slide menu (right) -->
-      <div id="nav-backdrop" class="nav-backdrop" aria-hidden="true"></div>
-      <aside id="mobileMenu" class="mobile-menu" aria-hidden="true" aria-label="Mobile menu">
-        <div class="p-6">
-          <div class="flex items-center justify-between mb-6">
-            <div class="flex items-center gap-3">
-              <img src="xedge-logo.png" alt="logo" class="w-8 h-8"/>
-              <div>
-                <div class="font-bold text-lg">XEDGE</div>
-                <div class="text-xs text-gray-400">AI tools discovery</div>
-              </div>
-            </div>
-            <button id="mobileClose" aria-label="Close menu" class="text-xl">✕</button>
-          </div>
-
-          <nav class="flex flex-col gap-3">
-            <a href="index.html" class="py-2 px-2 rounded hover:bg-gray-800">Home</a>
-            <a href="Explore.html" class="py-2 px-2 rounded hover:bg-gray-800">Explore</a>
-            <a href="Categories.html" class="py-2 px-2 rounded hover:bg-gray-800">Categories</a>
-            <a href="About.html" class="py-2 px-2 rounded hover:bg-gray-800">About</a>
-            <a href="Join.html" class="py-2 px-2 rounded bg-blue-600 text-center mt-4">Join Beta</a>
-          </nav>
-        </div>
-      </aside>
-    </header>
+    <nav class="flex flex-col gap-3">
+      <a href="index.html" class="py-2 px-2 rounded hover:bg-gray-800">Home</a>
+      <a href="Explore.html" class="py-2 px-2 rounded hover:bg-gray-800">Explore</a>
+      <a href="Categories.html" class="py-2 px-2 rounded hover:bg-gray-800">Categories</a>
+      <a href="About.html" class="py-2 px-2 rounded hover:bg-gray-800">About</a>
+      <a href="Join.html" class="py-2 px-2 rounded bg-blue-600 text-center mt-4">Join Beta</a>
+    </nav>
+  </div>
+</aside>
 
     <!-- MAIN -->
    <main class="pt-28">
@@ -826,17 +824,35 @@ const normalized = tools.map(d => ({
 
 })();
 </script>
-       <script>
-// Mobile menu toggle
+     <script>
 document.addEventListener("DOMContentLoaded", () => {
   const toggle = document.getElementById("mobile-menu-toggle");
-  const menu = document.querySelector(".mobile-menu");
+  const closeBtn = document.getElementById("mobileClose");
+  const menu = document.getElementById("mobileMenu");
   
-  if (toggle && menu) {
-    toggle.addEventListener("click", () => {
-      menu.classList.toggle("open");
-    });
+  function openMenu() {
+    menu.classList.add("open");
+    menu.removeAttribute("aria-hidden");  // Remove when open
+    document.body.style.overflow = "hidden";  // Prevent background scroll
   }
+  
+  function closeMenu() {
+    menu.classList.remove("open");
+    menu.setAttribute("aria-hidden", "true");  // Add when closed
+    document.body.style.overflow = "";
+  }
+  
+  if (toggle) toggle.addEventListener("click", openMenu);
+  if (closeBtn) closeBtn.addEventListener("click", closeMenu);
+  
+  // Close when clicking outside
+  document.addEventListener("click", (e) => {
+    if (menu?.classList.contains("open") && 
+        !menu.contains(e.target) && 
+        !toggle?.contains(e.target)) {
+      closeMenu();
+    }
+  });
 });
 </script>
      
