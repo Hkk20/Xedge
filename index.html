@@ -836,33 +836,7 @@ const normalized = tools.map(d => ({
 
 })();
 </script>
-     <script>
-document.addEventListener("DOMContentLoaded", () => {
-  const toggle = document.getElementById("mobile-menu-toggle");
-  const closeBtn = document.getElementById("mobileClose");
-  const menu = document.getElementById("mobileMenu");
-  const backdrop = document.getElementById("nav-backdrop");
-  
-  function openMenu() {
-    menu.classList.add("open");
-    backdrop.classList.add("open");
-    document.body.style.overflow = "hidden";
-  }
-  
-  function closeMenu() {
-    menu.classList.remove("open");
-    backdrop.classList.remove("open");
-    document.body.style.overflow = "";
-  }
-  
-  if (toggle) toggle.addEventListener("click", openMenu);
-  if (closeBtn) closeBtn.addEventListener("click", closeMenu);
-  if (backdrop) backdrop.addEventListener("click", closeMenu);
-});
-</script>
-       <script>
-document.getElementById("mobileMenu").classList.remove("open");
-</script>
+    
      
 <script>
   // -------------------------------
