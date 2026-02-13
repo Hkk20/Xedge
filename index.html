@@ -41,7 +41,16 @@
 
   
     <style>
-     
+     /* Force everything left */
+body > * {
+  margin-left: 0 !important;
+  left: 0 !important;
+}
+
+/* Hide mobile menu completely */
+#mobileMenu:not(.open) {
+  display: none !important;
+}
 /* HF accurate category card sizing */
 .featured-cat {
   width: 240px;
