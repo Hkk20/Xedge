@@ -1,0 +1,109 @@
+<!doctypehtml>
+<html lan = "en">
+<head>
+  <!-- Firebase v8 -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>X Edge — Tool Details</title>
+
+  <link rel="icon" href="xedge-logo.png">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+  <style>
+    .scrollbar-none::-webkit-scrollbar { display: none; }
+    .scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
+
+    .xe-card { 
+      background: rgba(31,41,55,0.45);
+      border: 1px solid rgba(55,65,81,0.6);
+      padding: 0.9rem;
+      border-radius: 12px;
+      transition: 0.12s;
+    }
+
+    .xe-thumb img {
+      width: 64px;
+      height: 64px;
+      border-radius: 8px;
+      object-fit: cover;
+    }
+
+    .skeleton {
+      height: 90px;
+      background: linear-gradient(90deg, rgba(55,65,81,.2), rgba(71,85,105,.15));
+      animation: pulse 1.2s infinite;
+      border-radius: 10px;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 1 }
+      50% { opacity: .6 }
+      100% { opacity: 1 }
+    }
+  </style>
+</head>
+<body class="bg-gray-900 text-white">
+
+ <!-- NAV -->
+<nav class="bg-gray-900/80 fixed w-full z-30 border-b border-gray-800">
+  <div class="max-w-6xl mx-auto px-6 py-3 flex justify-between items-center">
+
+    <!-- LOGO -->
+    <a href="index.html" class="flex items-center gap-3">
+      <img src="xedge-logo.png" class="w-8 h-8" alt="X Edge Logo">
+      <span class="font-bold">X Edge</span>
+    </a>
+
+    <!-- RIGHT SIDE -->
+    <div class="flex items-center gap-3">
+
+      <!-- JOIN BETA (DESKTOP ONLY) -->
+      <a href="Join.html"
+         class="hidden md:inline-block bg-gradient-to-r from-blue-500 to-blue-600 px-3 py-1 rounded">
+        Join Beta
+      </a>
+
+      <!-- AUTH (DESKTOP ONLY) -->
+      <div id="auth-area" class="hidden md:flex items-center"></div>
+
+      <!-- BACK BUTTON (MOBILE ONLY) -->
+      <button
+        onclick="goBack()"
+        class="md:hidden px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg
+               text-gray-300 hover:bg-gray-700 hover:text-white transition
+               flex items-center gap-2">
+        ← Back
+      </button>
+
+    </div>
+
+  </div>
+</nav>
+
+
+<script>
+function goBack() {
+  if (document.referrer) {
+    history.back();
+  } else {
+    window.location.href = "Categories.html";
+  }
+}
+</script>
+
+    </div>
+   
+  </nav>
+<main class = "pt-24 px-6 max-w-7xl mx-auto pb-24">
+  <h1 class = "text-4xl font-bold mb-6">explore all the free tools available </h1>
+  <!-- serach activation -->
+ < input
+   id = "tool-search"
+   type = "text"
+   placeholder = "search tools ...."
+    class="w-full mb-6 p-3 rounded-xl bg-gray-800 border border-gray-700 focus:border-blue-500 outline-none"
+    />
