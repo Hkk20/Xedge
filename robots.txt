@@ -1,4 +1,4 @@
+User-agent: *
+Allow: /
 
-user-agent :*
-allow : /
-sitemap = https://xedge.tech/sitemap.xml
+Sitemap: https://xedge.tech/sitemap.xml
