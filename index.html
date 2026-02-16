@@ -28,14 +28,22 @@
  <meta name = "twitter:description" content = "Discover the top AI tools of 2025. XEdge is your gateway to the world of Artificial Intelligence — from image creators to business automation AIs"/>
  <meta name = "twitter:image " content = "https://raw.githubusercontent.com/Hkk20/Xedge/main/xedge-logo.png"/>
  <!--for googlw analytics-->
- <script src= "analytics.js" defer></script>
+ <script src= "analytics.js" ></script>
  
  
   <!-- Tailwind CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+ <script>
+  tailwind.config = {
+    purge: {
+      enabled: true,
+      content: ['./*.html']
+    }
+  }
+</script>
 
   <!-- Feather icons -->
-  <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
 
   <!-- Vanta (deferred init) -->
   <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js" defer></script>
@@ -932,16 +940,8 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 </script>
-         <!-- Initialize deferred scripts -->
-  <script>
-    // Wait for page to load, then init Feather icons
-    window.addEventListener('load', function() {
-      if (typeof feather !== 'undefined') {
-        feather.replace();
-      }
-    });
-  </script>
-</body>
+         
+
         <!-- Firebase v8 (works with script tag, non-modular) -->
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
