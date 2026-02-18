@@ -65,12 +65,12 @@
 const SHEET_URL = "https://script.google.com/macros/s/AKfycbxXs2ajlwcddAMVEMY5NAMns_ooeEAHSYwDk84nnD6cU2hLjx_k5HKOgFLm-EX_ASSv/exec";
 const CACHE_KEY = "xedge_tools_cache_v1";
 
-
+ let allGoalTools = [];
 // Utility functions
 const safeParse = v => {
   try { return JSON.parse(v); } catch { return null; }
 };
-    let allGoalTools = [];
+   
 
 async function fetchTools(force = false) {
   if (!force) {
@@ -196,7 +196,7 @@ function displayFilteredTools(tools){
 
     const container = document.getElementById("goal-tools");
 
-    if (GoalTools.length === 0) {
+    if (allGoalTools.length === 0) {
       container.innerHTML = `
         <div class="col-span-full text-center py-12">
           <i data-feather="info" class="w-16 h-16 text-gray-400 mx-auto mb-4"></i>
@@ -208,7 +208,7 @@ function displayFilteredTools(tools){
     }
 
     // Render tool cards
-    container.innerHTML = GoalTools.map(tool => createToolCard(tool)).join('');
+    container.innerHTML = allGoalTools.map(tool => createToolCard(tool)).join('');
 
   } catch (error) {
     console.error("Error loading tools:", error);
