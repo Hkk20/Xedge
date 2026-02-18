@@ -196,7 +196,7 @@ function displayFilteredTools(tools){
 
     const container = document.getElementById("goal-tools");
 
-    if (goalTools.length === 0) {
+    if (GoalTools.length === 0) {
       container.innerHTML = `
         <div class="col-span-full text-center py-12">
           <i data-feather="info" class="w-16 h-16 text-gray-400 mx-auto mb-4"></i>
@@ -208,7 +208,7 @@ function displayFilteredTools(tools){
     }
 
     // Render tool cards
-    container.innerHTML = goalTools.map(tool => createToolCard(tool)).join('');
+    container.innerHTML = GoalTools.map(tool => createToolCard(tool)).join('');
 
   } catch (error) {
     console.error("Error loading tools:", error);
