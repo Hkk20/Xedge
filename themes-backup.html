@@ -167,8 +167,8 @@ searchInput.addEventListener('input', (e) => {
       ?allGoalTools
         : allGoalTools.filter(tool =>{
           const nameMatch = tool.name?.toLowerCase().includes(term);
-           const descmatch = tool.short?.toLowercase().includes(term) ||
-                              tool.decription?.toLowercase().includes(term);
+           const descmatch = tool.short?.toLowerCase().includes(term) ||
+                              tool.description?.toLowerCase().includes(term);
           const categorymatch = tool.category?.toLowerCase().includes(term);
           return nameMatch || descmatch || categorymatch;
         });
@@ -183,7 +183,7 @@ searchInput.addEventListener('input', (e) => {
 }
           
 function displayFilteredTools(tools){
-  const container =getElementById("goal-tools");
+  const container =document.getElementById("goal-tools");
   if (tools.length === 0 ) {
     container.innerHTML = `
     <div class = "col-span-full  text-center py-12">
@@ -195,7 +195,7 @@ function displayFilteredTools(tools){
     </div>
     `;
   } else{
-    conatiner.innerhtml = tool.maps(tool => createtoolcard(tool)).join('');
+    container.innerHTML = tools.maps(tool => createToolCard(tool)).join('');
   }
 }
 
