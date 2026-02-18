@@ -150,7 +150,21 @@ async function renderGoalPage() {
       const filtered = term === ''
       ?allGoalTools
         : allGoalatools.filter(Tool =>{
-          const nameMatch = tool.name?.toLowerCase();.includes(term);
+          const nameMatch = tool.name?.toLowerCase().includes(term);
+           const descmatch = tool.short?.toLowercase().includes(terms) ||
+                              tool.decription?.toLowercase().includes(terms);
+          const categorymatch = tool.category?.toLowerCase().includes(terms);
+          return nameMatch || descmatch || categorymatch;
+        });
+      displayFilteredTools(filtered);
+      const countEl = document.getElementById('search-count');
+  if (term !== '') {
+    countEl.textContent = `${filtered.length} found`;
+    countEl.classList.remove('hidden');
+  } else {
+    countEl.classList.add('hidden');
+  }
+}
           
         
 
