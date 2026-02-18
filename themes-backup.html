@@ -126,6 +126,10 @@ async function renderGoalPage() {
     `;
     return;
   }
+  const searchInput = document.getElementById('tool-search');
+searchInput.addEventListener('input', (e) => {
+  filterTools(e.target.value);
+});
 
   const goal = goalRaw.toLowerCase().trim();
 
@@ -166,7 +170,22 @@ async function renderGoalPage() {
   }
 }
           
-        
+function displayFilteredTools(tools){
+  const container = getElementbyById("goal-tools");
+  if (tool.length === 0 ) {
+    conatiner.innerHTML = `
+    <div class = "col-span-full  text-center py-12">
+    <h3 class = "text-xl font-semibold text-gray-300 mb-2>No Tools found  </h3>
+    < p class = "text-gray-500 mb-4" >try a different search item </p>
+    <button onclick = "clearsearch()" class = "px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-sm">
+    clear search
+    </button>
+    </div>
+    `;
+  } else{
+    conatiner.innerhtml = tool.maps(tool => createtoolcard(tool)).join('');
+  }
+}
 
     const container = document.getElementById("goal-tools");
 
