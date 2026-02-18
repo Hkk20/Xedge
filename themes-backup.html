@@ -241,7 +241,7 @@ async function renderGoalPage() {
 }
 
 function createToolCard(tool) {
-  const logo = tool.logo || 
+  const logo = tool.logo_url || 
     `https://dummyimage.com/200x200/1e293b/ffffff&text=${encodeURIComponent(tool.name.substring(0, 2).toUpperCase())}`;
 
   return `
