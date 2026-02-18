@@ -30,6 +30,26 @@
     <h1 id="goal-title" class="text-4xl font-bold mb-3"></h1>
     <p id="goal-desc" class="text-gray-400 max-w-2xl"></p>
   </div>
+  <!-- search option -->
+<div class="relative max-w-2xl mb-8">
+  
+  <!-- Search icon - positioned on left -->
+  <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+  </svg>
+  
+  <!-- Input field -->
+  <input
+    type="text"
+    id="tool-search"
+    placeholder="Search tools for your goal..."
+    class="w-full bg-gray-800/50 border border-gray-700 rounded-xl px-5 py-4 pl-12 text-white placeholder-gray-500 focus:outline-none focus:border-blue-500"
+  >
+  
+  <!-- Result counter - positioned on right, hidden by default -->
+  <span id="search-count" class="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-gray-500 hidden"></span>
+  
+</div>
 
   <!-- TOOLS GRID -->
   <section id="goal-tools" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -45,10 +65,12 @@
 const SHEET_URL = "https://script.google.com/macros/s/AKfycbxXs2ajlwcddAMVEMY5NAMns_ooeEAHSYwDk84nnD6cU2hLjx_k5HKOgFLm-EX_ASSv/exec";
 const CACHE_KEY = "xedge_tools_cache_v1";
 
+
 // Utility functions
 const safeParse = v => {
   try { return JSON.parse(v); } catch { return null; }
 };
+    let allGoalTools = [];
 
 async function fetchTools(force = false) {
   if (!force) {
@@ -122,6 +144,15 @@ async function renderGoalPage() {
       const toolGoals = String(t.goal).split(/[,|\n]/).map(g => g.trim().toLowerCase()).filter(Boolean);
       return toolGoals.includes(goal);
     });
+    allGoalTools = goaltools;
+    function filterTools(searchterm) {
+      const term = searchterm.toLowerCase().trim()
+      const filtered = term === ''
+      ?allGoalTools
+        : allGoalatools.filter(Tool =>{
+          const nameMatch = tool.name?.toLowerCase();.includes(term);
+          
+        
 
     const container = document.getElementById("goal-tools");
 
