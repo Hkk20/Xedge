@@ -165,7 +165,7 @@ searchInput.addEventListener('input', (e) => {
       const term = searchterm.toLowerCase().trim()
       const filtered = term === ''
       ?allGoalTools
-        : allGoaltools.filter(tool =>{
+        : allGoalTools.filter(tool =>{
           const nameMatch = tool.name?.toLowerCase().includes(term);
            const descmatch = tool.short?.toLowercase().includes(terms) ||
                               tool.decription?.toLowercase().includes(terms);
@@ -183,7 +183,7 @@ searchInput.addEventListener('input', (e) => {
 }
           
 function displayFilteredTools(tools){
-  const container = getElementbyById("goal-tools");
+  const container = getElementById("goal-tools");
   if (tool.length === 0 ) {
     conatiner.innerHTML = `
     <div class = "col-span-full  text-center py-12">
