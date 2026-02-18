@@ -131,6 +131,13 @@ searchInput.addEventListener('input', (e) => {
   filterTools(e.target.value);
 });
 
+  function clearSearch() {
+  const searchInput = document.getElementById('tool-search');
+  searchInput.value = '';
+  filterTools('');
+  searchInput.focus();
+}
+
   const goal = goalRaw.toLowerCase().trim();
 
   // Set header
@@ -143,7 +150,7 @@ searchInput.addEventListener('input', (e) => {
     const tools = await fetchTools(true);
     
     // FIXED: Proper goal matching for multiple goals per tool
-    const goalTools = tools.filter(t => {
+    const goaltools = tools.filter(t => {
       if (!t.goal) return false;
       const toolGoals = String(t.goal).split(/[,|\n]/).map(g => g.trim().toLowerCase()).filter(Boolean);
       return toolGoals.includes(goal);
