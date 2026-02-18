@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>X Edge — Goal Tools</title>
+  <link rel="icon" href="xedge-logo.png">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-950 text-white">
+
+<!-- NAV -->
+<nav class="bg-gray-900/80 border-b border-gray-800 fixed w-full z-50">
+  <div class="max-w-6xl mx-auto px-6 py-3 flex justify-between items-center">
+    <a href="index.html" class="flex items-center gap-3">
+      <img src="xedge-logo.png" class="w-8 h-8 bg-white p-1 rounded">
+      <span class="font-bold">X Edge</span>
+    </a>
+    <button onclick="history.back()" class="px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg">
+      ← Back
+    </button>
+  </div>
+</nav>
+
+<main class="pt-28 max-w-6xl mx-auto px-6">
+
+  <!-- HEADER -->
+  <div class="mb-10">
+    <h1 id="goal-title" class="text-4xl font-bold mb-3"></h1>
+    <p id="goal-desc" class="text-gray-400 max-w-2xl"></p>
+  </div>
+
+  <!-- TOOLS GRID -->
+  <section id="goal-tools" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="col-span-full text-center py-12">
+      <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-400"></div>
+      <p class="mt-4 text-gray-400">Loading tools...</p>
+    </div>
+  </section>
+
+</main>
+<script>
+// Configuration
+const SHEET_URL = "https://script.google.com/macros/s/AKfycbxXs2ajlwcddAMVEMY5NAMns_ooeEAHSYwDk84nnD6cU2hLjx_k5HKOgFLm-EX_ASSv/exec";
+const CACHE_KEY = "xedge_tools_cache_v1";
+
+// Utility functions
+const safeParse = v => {
+  try { return JSON.parse(v); } catch { return null; }
+};
+
+async function fetchTools(force = false) {
+  if (!force) {
+    const cached = safeParse(localStorage.getItem(CACHE_KEY));
+    if (Array.isArray(cached) && cached.length) return cached;
+  }
+
+  try {
+    const res = await fetch(SHEET_URL + "?t=" + Date.now(), { 
+      method: 'GET',
+      mode: 'cors',
+      cache: "no-store" 
+    });
+    
+    if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+    
+    const data = await res.json();
+    if (Array.isArray(data)) {
+      localStorage.setItem(CACHE_KEY, JSON.stringify(data));
+      return data;
+    }
+  } catch (e) {
+    console.error("Fetch failed:", e);
+  }
+
+  return safeParse(localStorage.getItem(CACHE_KEY)) || [];
+}
+
+// Goal explanations
+const GOAL_EXPLANATIONS = {
+  "create your website": "Build and launch your perfect website with these AI-powered tools for design, content, and development.",
+  "be an influencer": "Grow your personal brand and audience with content creation, scheduling, and analytics tools.",
+  "grow a business": "Scale your business with marketing automation, customer management, and productivity tools.",
+  "automate work": "Streamline repetitive tasks and boost productivity with workflow automation tools.",
+  "create content": "Generate engaging content, videos, graphics, and copy with creative AI tools.",
+  "learn faster": "Accelerate your learning with AI tutors, study aids, and educational platforms.",
+  "build with ai": "Develop AI applications and integrate machine learning into your projects."
+};
+
+async function renderGoalPage() {
+  const params = new URLSearchParams(location.search);
+  const goalRaw = params.get("goal") || params.get("theme");
+  
+  if (!goalRaw) {
+    document.getElementById("goal-title").textContent = "No Goal Selected";
+    document.getElementById("goal-desc").textContent = "Please select a goal from the main page.";
+    document.getElementById("goal-tools").innerHTML = `
+      <div class="col-span-full text-center py-12">
+        <i data-feather="info" class="w-16 h-16 text-yellow-400 mx-auto mb-4"></i>
+        <h3 class="text-xl font-semibold text-gray-300 mb-2">No goal selected</h3>
+        <a href="index.html" class="text-blue-400 hover:text-blue-300">← Go back and choose a goal</a>
+      </div>
+    `;
+    return;
+  }
+
+  const goal = goalRaw.toLowerCase().trim();
+
+  // Set header
+  document.getElementById("goal-title").textContent = goalRaw;
+  document.getElementById("goal-desc").textContent = 
+    GOAL_EXPLANATIONS[goal] || `Tools to help you ${goalRaw.toLowerCase()}.`;
+
+  try {
+    // Get tools and filter by goal
+    const tools = await fetchTools(true);
+    
+    // FIXED: Proper goal matching for multiple goals per tool
+    const goalTools = tools.filter(t => {
+      if (!t.goal) return false;
+      const toolGoals = String(t.goal).split(/[,|\n]/).map(g => g.trim().toLowerCase()).filter(Boolean);
+      return toolGoals.includes(goal);
+    });
+
+    const container = document.getElementById("goal-tools");
+
+    if (goalTools.length === 0) {
+      container.innerHTML = `
+        <div class="col-span-full text-center py-12">
+          <i data-feather="info" class="w-16 h-16 text-gray-400 mx-auto mb-4"></i>
+          <h3 class="text-xl font-semibold text-gray-300 mb-2">No tools found for "${goalRaw}"</h3>
+          <p class="text-gray-500">Check back soon - we're adding new tools daily!</p>
+        </div>
+      `;
+      return;
+    }
+
+    // Render tool cards
+    container.innerHTML = goalTools.map(tool => createToolCard(tool)).join('');
+
+  } catch (error) {
+    console.error("Error loading tools:", error);
+    document.getElementById("goal-tools").innerHTML = 
+      `<div class="col-span-full text-center py-12">
+        <i data-feather="alert-triangle" class="w-16 h-16 text-red-400 mx-auto mb-4"></i>
+        <h3 class="text-xl font-semibold text-gray-300 mb-2">Error loading tools</h3>
+        <p class="text-gray-500">${error.message}</p>
+      </div>`;
+  }
+}
+
+function createToolCard(tool) {
+  // FIXED: Use correct property names from your data
+  const logo = tool.logo || 
+    `https://dummyimage.com/200x200/1e293b/ffffff&text=${encodeURIComponent(tool.name.substring(0, 2).toUpperCase())}`;
+
+  return `
+    <a href="tool.html?tool=${encodeURIComponent(tool.name)}" 
+       class="bg-gray-800/40 border border-gray-700 rounded-xl p-6 
+              hover:bg-gray-800/60 hover:border-gray-600 transition-all duration-200
+              hover:scale-105 hover:shadow-xl">
+      <div class="flex items-start gap-4">
+        <img src="${logo}" 
+             class="w-12 h-12 rounded-lg object-cover flex-shrink-0" 
+             alt="${tool.name} logo"
+             onerror="this.src='https://dummyimage.com/200x200/1e293b/ffffff&text=${encodeURIComponent(tool.name.substring(0, 2).toUpperCase())}'">
+        <div class="flex-1">
+          <h3 class="font-bold text-lg mb-1">${tool.name}</h3>
+          <p class="text-gray-400 text-sm line-clamp-3">${tool.short || ''}</p>
+          <div class="mt-3 flex items-center justify-between">
+            <span class="text-xs bg-gray-700 px-2 py-1 rounded">${tool.category || 'Other'}</span>
+            <span class="text-blue-400 text-sm">View →</span>
+          </div>
+        </div>
+      </div>
+    </a>
+  `;
+}
+
+// Initialize when DOM is ready
+document.addEventListener("DOMContentLoaded", renderGoalPage);
+</script>
+</body>
+</html>
