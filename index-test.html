@@ -1056,6 +1056,19 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
+        function searchTools(query) {
+  const matches = allTools.filter(...);
+  
+  // Track this search
+  if (typeof gtag !== 'undefined') {
+    gtag('event', 'search', {
+      search_term: query,
+      results_count: matches.length
+    });
+  }
+  
+  showResults(matches);
+}
        </script>
       
         <!-- Firebase v8 (works with script tag, non-modular) -->
