@@ -398,27 +398,27 @@ nav {
       <p class="text-2xl text-gray-300 max-w-4xl mx-auto mb-12 leading-relaxed">
         Discover, Compare, and Access the smartest AI tools — handpicked and curated for maximum impact.
       </p>
-     <div class="relative max-w-10xl mx-auto mb-8 group">
+    <div class="relative w-full max-w-4xl mx-auto mb-8 group">
   <!-- Blue glow -->
-  <div class="absolute -inset-1 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-full blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
+  <div class="absolute -inset-1 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-full blur opacity-25"></div>
   
   <!-- Search -->
-  <div class="relative">
+  <div class="relative flex items-center bg-gray-900 rounded-full border border-gray-700 px-8 py-5">
+    <svg class="w-6 h-6 text-gray-500 mr-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+    </svg>
+    
     <input 
       type="text" 
       id="global-search"
       placeholder="Search AI tools..."
-      class="w-full bg-gray-900 border border-gray-700 rounded-full px-10 py-5 pl-16 text-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500"
+      class="flex-1 bg-transparent text-white text-lg placeholder-gray-500 focus:outline-none"
     >
-    <svg class="absolute left-5 top-1/2 -translate-y-1/2 w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-    </svg>
   </div>
   
   <!-- Results -->
-  <div id="search-results" class="absolute w-full bg-gray-800 border border-gray-700 rounded-xl mt-2 hidden z-50 max-h-80 overflow-y-auto"></div>
+  <div id="search-results" class="absolute w-full bg-gray-800 border border-gray-700 rounded-xl mt-2 hidden z-50"></div>
 </div>
-
       <!-- BIG BUTTONS -->
       <div class="flex flex-col sm:flex-row justify-center gap-6">
         <a 
