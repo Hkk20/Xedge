@@ -398,7 +398,7 @@ nav {
       <p class="text-2xl text-gray-300 max-w-4xl mx-auto mb-12 leading-relaxed">
         Discover, Compare, and Access the smartest AI tools — handpicked and curated for maximum impact.
       </p>
-     <div class="relative max-w-2xl mx-auto mb-8 group">
+     <div class="relative max-w-6xl mx-auto mb-8 group">
   <!-- Blue glow -->
   <div class="absolute -inset-1 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-full blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
   
@@ -954,14 +954,45 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 </script>
-<script>
+       <script>
 let allTools = [];
 
+// Fetch tools (reuse from themes.html)
+async function fetchTools(force = false) {
+  const SHEET_URL = "https://script.google.com/macros/s/AKfycbxXs2ajlwcddAMVEMY5NAMns_ooeEAHSYwDk84nnD6cU2hLjx_k5HKOgFLm-EX_ASSv/exec";
+  const CACHE_KEY = "xedge_tools_cache_v1";
+  
+  const safeParse = v => {
+    try { return JSON.parse(v); } catch { return null; }
+  };
+  
+  if (!force) {
+    const cached = safeParse(localStorage.getItem(CACHE_KEY));
+    if (Array.isArray(cached) && cached.length) return cached;
+  }
+
+  try {
+    const res = await fetch(SHEET_URL + "?t=" + Date.now());
+    const data = await res.json();
+    if (Array.isArray(data)) {
+      localStorage.setItem(CACHE_KEY, JSON.stringify(data));
+      return data;
+    }
+  } catch (e) {
+    console.error("Fetch failed:", e);
+  }
+
+  return safeParse(localStorage.getItem(CACHE_KEY)) || [];
+}
+
+// Load tools
 async function loadTools() {
   allTools = await fetchTools();
   console.log('Loaded tools:', allTools.length);
-}  
- function searchTools(query) {
+}
+
+// Search
+function searchTools(query) {
   const term = query.toLowerCase().trim();
   
   if (term === '') {
@@ -972,11 +1003,13 @@ async function loadTools() {
   const matches = allTools.filter(tool => 
     tool.name?.toLowerCase().includes(term) ||
     tool.short?.toLowerCase().includes(term)
-  ).slice(0, 5); // Limit to 5 results
+  ).slice(0, 5);
   
   showResults(matches);
 }
- function showResults(tools) {
+
+// Show results
+function showResults(tools) {
   const container = document.getElementById('search-results');
   
   if (tools.length === 0) {
@@ -984,11 +1017,11 @@ async function loadTools() {
   } else {
     container.innerHTML = tools.map(tool => `
       <a href="tool.html?tool=${encodeURIComponent(tool.name)}" 
-         class="block p-3 hover:bg-gray-700 flex items-center gap-3">
-        <img src="${tool.logo}" class="w-8 h-8 rounded">
+         class="block p-3 hover:bg-gray-700 flex items-center gap-3 border-b border-gray-700 last:border-0">
+        <img src="${tool.logo || 'xedge-logo.png'}" class="w-8 h-8 rounded object-cover" onerror="this.src='xedge-logo.png'">
         <div>
-          <div class="font-medium">${tool.name}</div>
-          <div class="text-sm text-gray-400">${tool.short}</div>
+          <div class="font-medium text-white">${tool.name}</div>
+          <div class="text-sm text-gray-400 truncate">${tool.short || ''}</div>
         </div>
       </a>
     `).join('');
@@ -996,23 +1029,30 @@ async function loadTools() {
   
   container.classList.remove('hidden');
 }
- const searchInput = document.getElementById('global-search');
 
-searchInput.addEventListener('input', (e) => {
-  searchTools(e.target.value);
-});
+// Hide results
+function hideResults() {
+  document.getElementById('search-results').classList.add('hidden');
+}
 
-// Hide dropdown when clicking outside
-document.addEventListener('click', (e) => {
-  if (!e.target.closest('#global-search')) {
-    hideResults();
-  }
+// Initialize
+document.addEventListener('DOMContentLoaded', () => {
+  loadTools();
+  
+  const searchInput = document.getElementById('global-search');
+  
+  searchInput.addEventListener('input', (e) => {
+    searchTools(e.target.value);
+  });
+  
+  // Hide when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.group')) {
+      hideResults();
+    }
+  });
 });
-  // Load tools when page loads
-loadTools().then(() => {
-  console.log('Tools ready for search');
-});
-</script>
+       </script>
       
         <!-- Firebase v8 (works with script tag, non-modular) -->
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
