@@ -1056,10 +1056,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
-        function searchTools(query) {
-  const matches = allTools.filter(...);
+     function searchTools(query) {
+  const term = query.toLowerCase().trim();
   
-  // Track this search
+  if (term === '') {
+    hideResults();
+    return;
+  }
+  
+  const matches = allTools.filter(tool => 
+    tool.name?.toLowerCase().includes(term) ||
+    tool.short?.toLowerCase().includes(term)
+  ).slice(0, 5);
+  
+  // Track this search (only if GA loaded)
   if (typeof gtag !== 'undefined') {
     gtag('event', 'search', {
       search_term: query,
