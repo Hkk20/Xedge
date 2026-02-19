@@ -1008,7 +1008,12 @@ document.addEventListener('click', (e) => {
     hideResults();
   }
 });
+  // Load tools when page loads
+loadTools().then(() => {
+  console.log('Tools ready for search');
+});
 </script>
+      
         <!-- Firebase v8 (works with script tag, non-modular) -->
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
