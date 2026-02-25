@@ -1079,36 +1079,8 @@ document.addEventListener('DOMContentLoaded', () => {
   
   showResults(matches);
 }
-        function doGet(e) {
-  const action = e.parameter.action;
-  
-  if (action === 'getStacks') {
-    return getStacks();
-  }
-  // ... existing code
-}
-
-function getStacks() {
-  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Stacks');
-  const data = sheet.getDataRange().getValues();
-  const headers = data[0];
-  
-  const stacks = [];
-  for (let i = 1; i < data.length; i++) {
-    const row = data[i];
-    if (row[12] !== true && row[12] !== 'TRUE') continue; // Skip inactive
-    
-    const stack = {};
-    headers.forEach((header, index) => {
-      stack[header] = row[index];
-    });
-    stacks.push(stack);
-  }
-  
-  return ContentService.createTextOutput(JSON.stringify(stacks))
-    .setMimeType(ContentService.MimeType.JSON);
-}
-       </script>
+       
+    </script>
       
         <!-- Firebase v8 (works with script tag, non-modular) -->
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
