@@ -174,11 +174,11 @@
 
 <script>
 // Configuration
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwSVKrA_rQVrQk0E5nueIP2X_eayeB_ArBpQf4mgr-uoR2JGV0_kzcVss8aN9tEXUB4zg/exec'; // Replace with your URL
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwSVKrA_rQVrQk0E5nueIP2X_eayeB_ArBpQf4mgr-uoR2JGV0_kzcVss8aN9tEXUB4zg/exec';
 const CACHE_KEY = 'xedge_stacks_cache';
-const CACHE_DURATION = 1000 * 60 * 30; // 30 minutes
+const CACHE_DURATION = 1000 * 60 * 30;
 
-// Goal name mapping (for display)
+// Goal name mapping
 const GOAL_NAMES = {
   'make-money': 'Make Money',
   'start-business': 'Start a Business',
@@ -195,7 +195,6 @@ let currentGoalFilter = null;
 
 // Initialize
 document.addEventListener('DOMContentLoaded', async () => {
-  // Check for goal filter from home page
   const urlParams = new URLSearchParams(window.location.search);
   const goalFromUrl = urlParams.get('goal');
   const goalFromStorage = sessionStorage.getItem('selectedGoal');
@@ -206,10 +205,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     sessionStorage.removeItem('selectedGoal');
   }
   
-  // Load stacks
   await loadStacks();
   
-  // Apply filter if exists
   if (currentGoalFilter) {
     applyGoalFilter(currentGoalFilter);
   } else {
@@ -219,7 +216,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 // Load stacks from Google Sheets
 async function loadStacks() {
-  // Try cache first
   const cached = getCachedStacks();
   if (cached) {
     allStacks = cached;
@@ -229,71 +225,53 @@ async function loadStacks() {
   try {
     const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=getStacks`);
     const data = await response.json();
-     console.log('Type of data:', typeof data);
-    console.log('Is array:', Array.isArray(data));
-    console.log('Data:', data);
-   if (Array.isArray(data)) {
-      allStacks = data;
-      console.log('Stacks loaded:', allStacks.length);
-      console.log('First stack:', allStacks[0]);
+    
+    if (Array.isArray(data)) {
+      // Parse all stacks immediately
+      allStacks = data.map(stack => ({
+        ...stack,
+        goals: parseGoals(stack.goals),
+        roadmap: parseRoadmap(stack.roadmap),
+        tools: parseTools(stack.tools)
+      }));
+      
+      cacheStacks(allStacks);
     } else {
-      console.error('Data is not array:', data);
+      console.error('Invalid data:', data);
       allStacks = [];
     }
-    
-    cacheStacks(allStacks);
-    
   } catch (error) {
     console.error('Failed to load stacks:', error);
     allStacks = [];
   }
 }
 
-// Parse stack data from Google Sheets format
-function parseStackFromSheet(row) {
-  return {
-    id: row.id || row[0],
-    title: row.title || row[1],
-    goals: parseGoals(row.goals || row[2]),
-    description: row.description || row[3],
-    difficulty: row.difficulty || row[4],
-    timeToGoal: row.timeToGoal || row[5] || row[6], // Adjust index as needed
-    totalCost: row.totalCost || row[7] || row[8],
-    revenuePotential: row.revenuePotential || row[8] || row[9],
-    roadmap: parseRoadmap(row.roadmap || row[9] || row[10]),
-    tools: parseTools(row.tools || row[10] || row[11]),
-    active: (row.active || row[11] || row[12]) === 'TRUE' || true
-  };
-}
-
-// Parse goals (handles single or multiple)
+// Parse goals string to array
 function parseGoals(goalsString) {
-  if (!goalsString || goalsString === 'undefined' || goalsString === '') {
-    return [];
-  }
+  if (!goalsString || typeof goalsString !== 'string') return [];
   return goalsString.split(',').map(g => g.trim()).filter(g => g);
 }
 
-// Parse roadmap (pipe-separated)
+// Parse roadmap string to array
 function parseRoadmap(roadmapString) {
-  if (!roadmapString) return [];
-  return roadmapString.split('|').map(step => step.trim()).filter(step => step);
+  if (!roadmapString || typeof roadmapString !== 'string') return [];
+  return roadmapString.split('|').map(r => r.trim()).filter(r => r);
 }
 
-// Parse tools (semicolon-separated tools, pipe-separated fields)
+// Parse tools string to array of objects
 function parseTools(toolsString) {
-  if (!toolsString) return [];
+  if (!toolsString || typeof toolsString !== 'string') return [];
   
   return toolsString.split(';').map(toolStr => {
     const parts = toolStr.split('|').map(p => p.trim());
     return {
-      name: parts[0] || 'Unknown Tool',
+      name: parts[0] || '',
       domain: parts[1] || '',
       purpose: parts[2] || '',
       cost: parts[3] || '',
       url: parts[4] || `https://${parts[1] || ''}`
     };
-  }).filter(t => t.name !== 'Unknown Tool');
+  }).filter(t => t.name);
 }
 
 // Cache helpers
@@ -316,11 +294,10 @@ function cacheStacks(data) {
   }));
 }
 
-// Apply goal filter from home page
+// Apply goal filter
 function applyGoalFilter(goalId) {
   currentGoalFilter = goalId;
   
-  // Update UI
   const goalName = GOAL_NAMES[goalId] || goalId;
   document.getElementById('activeGoalName').textContent = goalName;
   document.getElementById('goalIndicator').classList.remove('hidden');
@@ -328,29 +305,22 @@ function applyGoalFilter(goalId) {
   document.getElementById('pageTitle').textContent = `${goalName} Stacks`;
   document.getElementById('pageSubtitle').textContent = `Best tool combinations to ${goalName.toLowerCase()}`;
   
-  // function getGoalsArray(stack) {
-  if (!stack.goals) return [];
-  return typeof stack.goals === 'string' 
-    ? stack.goals.split(',').map(g => g.trim()) 
-    : stack.goals;
+  const filtered = allStacks.filter(stack => 
+    stack.goals && stack.goals.includes(goalId)
+  );
+  
+  renderStacks(filtered);
 }
-
-// Then use:
-const filtered = allStacks.filter(stack => 
-  getGoalsArray(stack).includes(goalId)
-);
 
 // Clear goal filter
 function clearGoalFilter() {
   currentGoalFilter = null;
   
-  // Reset UI
   document.getElementById('goalIndicator').classList.add('hidden');
   document.getElementById('clearFilterBtn').classList.add('hidden');
   document.getElementById('pageTitle').textContent = 'Goal Stacks';
   document.getElementById('pageSubtitle').textContent = 'Curated tool combinations to achieve specific goals faster';
   
-  // Clear URL
   if (window.history.replaceState) {
     window.history.replaceState({}, document.title, window.location.pathname);
   }
@@ -372,10 +342,8 @@ function renderStacks(stacksToRender) {
   emptyState.classList.add('hidden');
   
   container.innerHTML = stacksToRender.map(stack => {
-    // Skip if no goals (safety check)
-    if (!stack.goals || stack.goals.length === 0) {
-      return '';
-    }
+    // Skip if no goals
+    if (!stack.goals || stack.goals.length === 0) return '';
     
     return `
       <div class="stack-card rounded-2xl p-8" data-id="${stack.id}">
@@ -392,15 +360,15 @@ function renderStacks(stacksToRender) {
               </span>
             </div>
             
-          <!-- Goals badges -->
-<div class="flex flex-wrap gap-2 mb-3">
-  ${(typeof stack.goals === 'string' ? stack.goals.split(',') : stack.goals || []).map(goal => `
-    <span class="goal-badge px-2 py-1 rounded text-xs cursor-pointer hover:bg-blue-500/20 transition" 
-          onclick="applyGoalFilter('${goal.trim()}')">
-      ${GOAL_NAMES[goal.trim()] || goal.trim()}
-    </span>
-  `).join('')}
-</div>
+            <!-- Goals badges -->
+            <div class="flex flex-wrap gap-2 mb-3">
+              ${stack.goals.map(goal => `
+                <span class="goal-badge px-2 py-1 rounded text-xs cursor-pointer hover:bg-blue-500/20 transition" 
+                      onclick="applyGoalFilter('${goal}')">
+                  ${GOAL_NAMES[goal] || goal}
+                </span>
+              `).join('')}
+            </div>
             
             <p class="text-gray-400 max-w-2xl">${stack.description}</p>
           </div>
@@ -437,7 +405,7 @@ function renderStacks(stacksToRender) {
         <div class="mb-8">
           <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4">Stack Components</h3>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            ${(stack.tools || []).map(tool => `
+            ${stack.tools.map(tool => `
               <a href="${tool.url}" target="_blank" rel="noopener" 
                  class="tool-item p-4 rounded-lg hover:bg-gray-700 transition group"
                  onclick="trackToolClick('${tool.name}', '${stack.id}')">
@@ -462,7 +430,7 @@ function renderStacks(stacksToRender) {
         <div class="bg-gray-900/50 rounded-xl p-6 border border-gray-800 mb-6">
           <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4">Implementation Roadmap</h3>
           <div class="space-y-3">
-            ${(stack.roadmap || []).map((step, index) => `
+            ${stack.roadmap.map((step, index) => `
               <div class="flex items-start gap-4">
                 <span class="flex-shrink-0 w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-bold">
                   ${index + 1}
@@ -503,12 +471,10 @@ function filterStacks() {
   
   let filtered = allStacks;
   
-  // Apply goal filter if active
   if (currentGoalFilter) {
     filtered = filtered.filter(s => s.goals && s.goals.includes(currentGoalFilter));
   }
   
-  // Apply search
   if (searchTerm) {
     filtered = filtered.filter(s => 
       (s.title && s.title.toLowerCase().includes(searchTerm)) ||
@@ -565,16 +531,9 @@ async function handleSubmit(e) {
   }
 }
 
-// Track tool clicks (for affiliates)
+// Track tool clicks
 function trackToolClick(toolName, stackId) {
-  // Log for analytics
   console.log('Tool click:', toolName, stackId);
-}
-
-// Notification helper
-function showNotification(message, type) {
-  // Simple alert for now, replace with toast if needed
-  alert(message);
 }
 
 // Close modal on outside click
