@@ -1,0 +1,582 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Xedge— Goal Stacks</title>
+  <link rel="icon" href="xedge-logo.png">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .title{
+      color: white;
+      font-size: 40px;
+      font-family: Arial, Helvetica, sans-serif;
+      font-weight: bold;
+      margin-top: 5px;
+    }
+    .stack-card {
+      background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+      border: 1px solid #374151;
+      transition: all 0.3s ease;
+    }
+    .stack-card:hover {
+      border-color: #60a5fa;
+      transform: translateY(-4px);
+      box-shadow: 0 10px 40px rgba(96, 165, 250, 0.1);
+    }
+    .tool-item {
+      background: rgba(55, 65, 81, 0.5);
+      border-left: 3px solid #60a5fa;
+    }
+    .price-tag {
+      background: linear-gradient(90deg, #059669 0%, #047857 100%);
+    }
+    .revenue-tag {
+      background: linear-gradient(90deg, #d97706 0%, #b45309 100%);
+    }
+    .difficulty-easy { color: #34d399; }
+    .difficulty-medium { color: #fbbf24; }
+    .difficulty-hard { color: #f87171; }
+    .logo-img {
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
+      background: white;
+      border-radius: 8px;
+      padding: 4px;
+    }
+    .modal-overlay {
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(4px);
+    }
+    .modal-content {
+      background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+      border: 1px solid #374151;
+    }
+    .goal-badge {
+      background: rgba(96, 165, 250, 0.1);
+      border: 1px solid rgba(96, 165, 250, 0.3);
+      color: #60a5fa;
+    }
+  </style>
+</head>
+
+<body class="bg-gray-950 text-white">
+
+<!-- NAV -->
+<nav class="bg-gray-900/80 border-b border-gray-800 fixed w-full z-50">
+  <div class="max-w-6xl mx-auto px-6 py-3 flex justify-between items-center">
+    <a href="index.html" class="flex items-center gap-3">
+      <img src="xedge-logo.png" class="w-8 h-8 bg-white p-1 rounded">
+      <span class="font-bold">Xedge</span>
+    </a>
+    <div class="flex items-center gap-3">
+      <button onclick="clearGoalFilter()" id="clearFilterBtn" class="hidden px-4 py-2 bg-blue-600/20 border border-blue-500/30 text-blue-400 rounded-lg text-sm hover:bg-blue-600/30 transition">
+        Clear Filter
+      </button>
+      <button onclick="history.back()" class="px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg hover:bg-gray-700 transition">
+        ← Back
+      </button>
+    </div>
+  </div>
+</nav>
+
+<main class="pt-28 max-w-6xl mx-auto px-6 pb-20">
+  
+  <!-- Header -->
+  <div class="mb-12">
+    <h1 class="title mb-4" id="pageTitle">Goal Stacks</h1>
+    <p class="text-gray-400 text-lg" id="pageSubtitle">Curated tool combinations to achieve specific goals faster</p>
+    
+    <!-- Active Goal Indicator -->
+    <div id="goalIndicator" class="hidden mt-4 flex items-center gap-2">
+      <span class="text-gray-400">Showing stacks for:</span>
+      <span id="activeGoalName" class="goal-badge px-3 py-1 rounded-full text-sm font-semibold"></span>
+    </div>
+  </div>
+
+  <!-- Search/Filter -->
+  <div class="mb-10">
+    <input 
+      type="text" 
+      id="stackSearch" 
+      placeholder="Search stacks (e.g., 'content', 'startup', 'freelance')..." 
+      class="w-full max-w-2xl px-6 py-4 bg-gray-900 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-blue-500"
+      oninput="filterStacks()"
+    >
+  </div>
+
+  <!-- Stacks Container -->
+  <div id="stacksContainer" class="space-y-8">
+    <!-- Stacks rendered here -->
+  </div>
+
+  <!-- Empty State -->
+  <div id="emptyState" class="hidden text-center py-20">
+    <div class="text-6xl mb-4">🔍</div>
+    <h3 class="text-xl font-bold text-white mb-2">No stacks found</h3>
+    <p class="text-gray-400 mb-6">Try adjusting your search or filter</p>
+    <button onclick="clearGoalFilter()" class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition">
+      View All Stacks
+    </button>
+  </div>
+
+</main>
+
+<!-- Email Capture Modal -->
+<div id="emailModal" class="fixed inset-0 modal-overlay hidden z-50 flex items-center justify-center p-4">
+  <div class="modal-content rounded-2xl p-8 max-w-md w-full relative">
+    <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
+    
+    <div class="text-center mb-6">
+      <div class="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl">📋</div>
+      <h3 id="modalTitle" class="text-2xl font-bold mb-2">Get Your Execution Plan</h3>
+      <p class="text-gray-400 text-sm">Step-by-step guide + weekly AI tool updates</p>
+    </div>
+
+    <form id="emailForm" onsubmit="handleSubmit(event)">
+      <input type="hidden" id="selectedStackId">
+      
+      <div class="mb-4">
+        <input 
+          type="email" 
+          id="emailInput" 
+          required 
+          placeholder="you@example.com"
+          class="w-full px-4 py-3 bg-gray-950 border border-gray-700 rounded-lg text-white focus:border-blue-500 focus:outline-none"
+        >
+      </div>
+
+      <div class="mb-6">
+        <select id="stageInput" class="w-full px-4 py-3 bg-gray-950 border border-gray-700 rounded-lg text-white focus:border-blue-500">
+          <option value="beginner">Starting from $0</option>
+          <option value="growing">Making $1K-10K</option>
+          <option value="scaling">Scaling $10K+</option>
+        </select>
+      </div>
+
+      <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition flex items-center justify-center gap-2">
+        <span>Send Me The Plan</span>
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+      </button>
+      
+      <p class="text-xs text-gray-500 text-center mt-4">Join 2,000+ builders. Unsubscribe anytime.</p>
+    </form>
+
+    <div id="successState" class="hidden text-center">
+      <div class="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl">✅</div>
+      <h3 class="text-xl font-bold mb-2">Check your inbox!</h3>
+      <p class="text-gray-400 mb-4">Your detailed execution plan is on its way.</p>
+      <button onclick="closeModal()" class="text-blue-400 hover:underline">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// Configuration
+const GOOGLE_SCRIPT_URL = 'YOUR_GOOGLE_SCRIPT_URL'; // Replace with your URL
+const CACHE_KEY = 'xedge_stacks_cache';
+const CACHE_DURATION = 1000 * 60 * 30; // 30 minutes
+
+// Goal name mapping (for display)
+const GOAL_NAMES = {
+  'make-money': 'Make Money',
+  'start-business': 'Start a Business',
+  'create-content': 'Create Content',
+  'grow-audience': 'Grow Audience',
+  'save-time': 'Save Time',
+  'build-product': 'Build Product',
+  'learn-ai': 'Learn AI'
+};
+
+// State
+let allStacks = [];
+let currentGoalFilter = null;
+
+// Initialize
+document.addEventListener('DOMContentLoaded', async () => {
+  // Check for goal filter from home page
+  const urlParams = new URLSearchParams(window.location.search);
+  const goalFromUrl = urlParams.get('goal');
+  const goalFromStorage = sessionStorage.getItem('selectedGoal');
+  
+  currentGoalFilter = goalFromUrl || goalFromStorage;
+  
+  if (goalFromStorage) {
+    sessionStorage.removeItem('selectedGoal');
+  }
+  
+  // Load stacks
+  await loadStacks();
+  
+  // Apply filter if exists
+  if (currentGoalFilter) {
+    applyGoalFilter(currentGoalFilter);
+  } else {
+    renderStacks(allStacks);
+  }
+});
+
+// Load stacks from Google Sheets
+async function loadStacks() {
+  // Try cache first
+  const cached = getCachedStacks();
+  if (cached) {
+    allStacks = cached;
+    return;
+  }
+  
+  try {
+    const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=getStacks`);
+    const data = await response.json();
+    
+    if (Array.isArray(data)) {
+      // Parse the data
+      allStacks = data.map(parseStackFromSheet);
+      cacheStacks(allStacks);
+    } else {
+      throw new Error('Invalid data format');
+    }
+  } catch (error) {
+    console.error('Failed to load stacks:', error);
+    showNotification('Failed to load stacks. Please refresh.', 'error');
+  }
+}
+
+// Parse stack data from Google Sheets format
+function parseStackFromSheet(row) {
+  return {
+    id: row.id || row[0],
+    title: row.title || row[1],
+    goals: parseGoals(row.goals || row[2]),
+    description: row.description || row[3],
+    difficulty: row.difficulty || row[4],
+    timeToGoal: row.timeToGoal || row[5] || row[6], // Adjust index as needed
+    totalCost: row.totalCost || row[7] || row[8],
+    revenuePotential: row.revenuePotential || row[8] || row[9],
+    roadmap: parseRoadmap(row.roadmap || row[9] || row[10]),
+    tools: parseTools(row.tools || row[10] || row[11]),
+    active: (row.active || row[11] || row[12]) === 'TRUE' || true
+  };
+}
+
+// Parse goals (handles single or multiple)
+function parseGoals(goalsString) {
+  if (!goalsString || goalsString === 'undefined' || goalsString === '') {
+    return [];
+  }
+  return goalsString.split(',').map(g => g.trim()).filter(g => g);
+}
+
+// Parse roadmap (pipe-separated)
+function parseRoadmap(roadmapString) {
+  if (!roadmapString) return [];
+  return roadmapString.split('|').map(step => step.trim()).filter(step => step);
+}
+
+// Parse tools (semicolon-separated tools, pipe-separated fields)
+function parseTools(toolsString) {
+  if (!toolsString) return [];
+  
+  return toolsString.split(';').map(toolStr => {
+    const parts = toolStr.split('|').map(p => p.trim());
+    return {
+      name: parts[0] || 'Unknown Tool',
+      domain: parts[1] || '',
+      purpose: parts[2] || '',
+      cost: parts[3] || '',
+      url: parts[4] || `https://${parts[1] || ''}`
+    };
+  }).filter(t => t.name !== 'Unknown Tool');
+}
+
+// Cache helpers
+function getCachedStacks() {
+  const cached = localStorage.getItem(CACHE_KEY);
+  if (!cached) return null;
+  
+  const { data, timestamp } = JSON.parse(cached);
+  if (Date.now() - timestamp > CACHE_DURATION) {
+    localStorage.removeItem(CACHE_KEY);
+    return null;
+  }
+  return data;
+}
+
+function cacheStacks(data) {
+  localStorage.setItem(CACHE_KEY, JSON.stringify({
+    data,
+    timestamp: Date.now()
+  }));
+}
+
+// Apply goal filter from home page
+function applyGoalFilter(goalId) {
+  currentGoalFilter = goalId;
+  
+  // Update UI
+  const goalName = GOAL_NAMES[goalId] || goalId;
+  document.getElementById('activeGoalName').textContent = goalName;
+  document.getElementById('goalIndicator').classList.remove('hidden');
+  document.getElementById('clearFilterBtn').classList.remove('hidden');
+  document.getElementById('pageTitle').textContent = `${goalName} Stacks`;
+  document.getElementById('pageSubtitle').textContent = `Best tool combinations to ${goalName.toLowerCase()}`;
+  
+  // Filter and render
+  const filtered = allStacks.filter(stack => 
+    stack.goals && stack.goals.includes(goalId)
+  );
+  
+  renderStacks(filtered);
+}
+
+// Clear goal filter
+function clearGoalFilter() {
+  currentGoalFilter = null;
+  
+  // Reset UI
+  document.getElementById('goalIndicator').classList.add('hidden');
+  document.getElementById('clearFilterBtn').classList.add('hidden');
+  document.getElementById('pageTitle').textContent = 'Goal Stacks';
+  document.getElementById('pageSubtitle').textContent = 'Curated tool combinations to achieve specific goals faster';
+  
+  // Clear URL
+  if (window.history.replaceState) {
+    window.history.replaceState({}, document.title, window.location.pathname);
+  }
+  
+  renderStacks(allStacks);
+}
+
+// Render stacks
+function renderStacks(stacksToRender) {
+  const container = document.getElementById('stacksContainer');
+  const emptyState = document.getElementById('emptyState');
+  
+  if (!stacksToRender || stacksToRender.length === 0) {
+    container.innerHTML = '';
+    emptyState.classList.remove('hidden');
+    return;
+  }
+  
+  emptyState.classList.add('hidden');
+  
+  container.innerHTML = stacksToRender.map(stack => {
+    // Skip if no goals (safety check)
+    if (!stack.goals || stack.goals.length === 0) {
+      return '';
+    }
+    
+    return `
+      <div class="stack-card rounded-2xl p-8" data-id="${stack.id}">
+        
+        <!-- Header -->
+        <div class="flex flex-col lg:flex-row lg:items-start justify-between mb-6 gap-6">
+          
+          <!-- Left: Title & Description -->
+          <div class="flex-1 min-w-0">
+            <div class="flex flex-wrap items-center gap-3 mb-3">
+              <h2 class="text-2xl font-bold text-white">${stack.title}</h2>
+              <span class="px-3 py-1 rounded-full text-xs font-semibold ${getDifficultyClass(stack.difficulty)} bg-gray-800 border border-gray-700">
+                ${(stack.difficulty || 'medium').toUpperCase()}
+              </span>
+            </div>
+            
+            <!-- Goals badges -->
+            <div class="flex flex-wrap gap-2 mb-3">
+              ${stack.goals.map(goal => `
+                <span class="goal-badge px-2 py-1 rounded text-xs cursor-pointer hover:bg-blue-500/20 transition" 
+                      onclick="applyGoalFilter('${goal}')">
+                  ${GOAL_NAMES[goal] || goal}
+                </span>
+              `).join('')}
+            </div>
+            
+            <p class="text-gray-400 max-w-2xl">${stack.description}</p>
+          </div>
+          
+          <!-- Right: Stats -->
+          <div class="flex flex-col gap-3 w-full lg:w-auto lg:min-w-[240px]">
+            
+            <!-- Cost -->
+            <div class="flex items-center justify-between lg:justify-end gap-3">
+              <span class="text-gray-500 text-xs uppercase tracking-wider whitespace-nowrap">Est. Cost</span>
+              <span class="price-tag px-3 py-1.5 rounded-lg text-sm font-bold text-white whitespace-nowrap">
+                ${stack.totalCost || 'Variable'}
+              </span>
+            </div>
+            
+            <!-- Revenue Potential -->
+            <div class="flex items-center justify-between lg:justify-end gap-3">
+              <span class="text-gray-500 text-xs uppercase tracking-wider whitespace-nowrap">Revenue Potential</span>
+              <span class="revenue-tag px-3 py-1.5 rounded-lg text-sm font-bold text-white whitespace-nowrap">
+                ${stack.revenuePotential || 'High'}
+              </span>
+            </div>
+            
+            <!-- Timeline -->
+            <div class="flex items-center justify-between lg:justify-end gap-3">
+              <span class="text-gray-500 text-xs uppercase tracking-wider whitespace-nowrap">Timeline</span>
+              <span class="text-gray-300 text-sm font-medium whitespace-nowrap">⏱️ ${stack.timeToGoal || 'Flexible'}</span>
+            </div>
+            
+          </div>
+        </div>
+        
+        <!-- Tools Grid -->
+        <div class="mb-8">
+          <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4">Stack Components</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            ${(stack.tools || []).map(tool => `
+              <a href="${tool.url}" target="_blank" rel="noopener" 
+                 class="tool-item p-4 rounded-lg hover:bg-gray-700 transition group"
+                 onclick="trackToolClick('${tool.name}', '${stack.id}')">
+                <div class="flex items-start gap-3">
+                  <img src="https://www.google.com/s2/favicons?domain=${tool.domain}&sz=128" 
+                       alt="${tool.name}" 
+                       class="logo-img flex-shrink-0"
+                       onerror="this.src='xedge-logo.png'"
+                       loading="lazy">
+                  <div class="flex-1 min-w-0">
+                    <h4 class="font-semibold text-white group-hover:text-blue-400 transition truncate">${tool.name}</h4>
+                    <p class="text-sm text-gray-400 mt-1 line-clamp-2">${tool.purpose}</p>
+                    <span class="text-xs text-green-400 mt-2 inline-block">${tool.cost}</span>
+                  </div>
+                </div>
+              </a>
+            `).join('')}
+          </div>
+        </div>
+        
+        <!-- Roadmap -->
+        <div class="bg-gray-900/50 rounded-xl p-6 border border-gray-800 mb-6">
+          <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4">Implementation Roadmap</h3>
+          <div class="space-y-3">
+            ${(stack.roadmap || []).map((step, index) => `
+              <div class="flex items-start gap-4">
+                <span class="flex-shrink-0 w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-bold">
+                  ${index + 1}
+                </span>
+                <p class="text-gray-300 pt-1">${step}</p>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+        
+        <!-- CTA -->
+        <div class="flex flex-col sm:flex-row gap-4 justify-between items-center pt-4 border-t border-gray-800">
+          <p class="text-gray-500 text-sm">Get the complete execution checklist + weekly updates</p>
+          <button onclick="openModal('${stack.id}')" 
+                  class="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold rounded-xl transition transform hover:scale-105 flex items-center justify-center gap-2 shadow-lg shadow-blue-500/25">
+            <span>Get Detailed Plan</span>
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+        
+      </div>
+    `;
+  }).join('');
+}
+
+function getDifficultyClass(difficulty) {
+  const classes = {
+    easy: 'difficulty-easy',
+    medium: 'difficulty-medium',
+    hard: 'difficulty-hard'
+  };
+  return classes[difficulty] || 'text-gray-400';
+}
+
+// Search filter
+function filterStacks() {
+  const searchTerm = document.getElementById('stackSearch').value.toLowerCase();
+  
+  let filtered = allStacks;
+  
+  // Apply goal filter if active
+  if (currentGoalFilter) {
+    filtered = filtered.filter(s => s.goals && s.goals.includes(currentGoalFilter));
+  }
+  
+  // Apply search
+  if (searchTerm) {
+    filtered = filtered.filter(s => 
+      (s.title && s.title.toLowerCase().includes(searchTerm)) ||
+      (s.description && s.description.toLowerCase().includes(searchTerm)) ||
+      (s.tools && s.tools.some(t => t.name.toLowerCase().includes(searchTerm)))
+    );
+  }
+  
+  renderStacks(filtered);
+}
+
+// Modal functions
+function openModal(stackId) {
+  const stack = allStacks.find(s => s.id === stackId);
+  if (!stack) return;
+  
+  document.getElementById('modalTitle').textContent = `Get Your ${stack.title} Plan`;
+  document.getElementById('selectedStackId').value = stackId;
+  document.getElementById('emailModal').classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('emailModal').classList.add('hidden');
+  document.getElementById('emailForm').classList.remove('hidden');
+  document.getElementById('successState').classList.add('hidden');
+  document.getElementById('emailForm').reset();
+  document.body.style.overflow = '';
+}
+
+// Email submit
+async function handleSubmit(e) {
+  e.preventDefault();
+  
+  const data = {
+    email: document.getElementById('emailInput').value,
+    stackId: document.getElementById('selectedStackId').value,
+    stage: document.getElementById('stageInput').value,
+    timestamp: new Date().toISOString(),
+    source: 'stack_page',
+    goalFilter: currentGoalFilter
+  };
+  
+  try {
+    await fetch(GOOGLE_SCRIPT_URL, {
+      method: 'POST',
+      body: JSON.stringify(data)
+    });
+    
+    document.getElementById('emailForm').classList.add('hidden');
+    document.getElementById('successState').classList.remove('hidden');
+  } catch (error) {
+    alert('Failed to submit. Please try again.');
+  }
+}
+
+// Track tool clicks (for affiliates)
+function trackToolClick(toolName, stackId) {
+  // Log for analytics
+  console.log('Tool click:', toolName, stackId);
+}
+
+// Notification helper
+function showNotification(message, type) {
+  // Simple alert for now, replace with toast if needed
+  alert(message);
+}
+
+// Close modal on outside click
+document.getElementById('emailModal').addEventListener('click', (e) => {
+  if (e.target.id === 'emailModal') closeModal();
+});
+
+// Close on Escape
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeModal();
+});
+</script>
+
+</body>
+</html>
