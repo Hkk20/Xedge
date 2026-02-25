@@ -232,7 +232,8 @@ async function loadStacks() {
     
     if (Array.isArray(data)) {
       // Parse the data
-     const data = await response.json();
+     // OLD (wrong)
+const data = await response.json();
 allStacks = data;
     } else {
       throw new Error('Invalid data format');
