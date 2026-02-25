@@ -232,17 +232,20 @@ async function loadStacks() {
      console.log('Type of data:', typeof data);
     console.log('Is array:', Array.isArray(data));
     console.log('Data:', data);
-    if (Array.isArray(data)) {
-      // Parse the data
-     // OLD (wrong)
-const data = await response.json();
-allStacks = data;
+   if (Array.isArray(data)) {
+      allStacks = data;
+      console.log('Stacks loaded:', allStacks.length);
+      console.log('First stack:', allStacks[0]);
     } else {
-      throw new Error('Invalid data format');
+      console.error('Data is not array:', data);
+      allStacks = [];
     }
+    
+    cacheStacks(allStacks);
+    
   } catch (error) {
     console.error('Failed to load stacks:', error);
-    showNotification('Failed to load stacks. Please refresh.', 'error');
+    allStacks = [];
   }
 }
 
