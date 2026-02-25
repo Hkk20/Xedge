@@ -229,7 +229,9 @@ async function loadStacks() {
   try {
     const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=getStacks`);
     const data = await response.json();
-    
+     console.log('Type of data:', typeof data);
+    console.log('Is array:', Array.isArray(data));
+    console.log('Data:', data);
     if (Array.isArray(data)) {
       // Parse the data
      // OLD (wrong)
