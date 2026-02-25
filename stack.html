@@ -232,8 +232,8 @@ async function loadStacks() {
     
     if (Array.isArray(data)) {
       // Parse the data
-      allStacks = data.map(parseStackFromSheet);
-      cacheStacks(allStacks);
+     const data = await response.json();
+allStacks = data;
     } else {
       throw new Error('Invalid data format');
     }
