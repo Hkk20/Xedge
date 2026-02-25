@@ -534,7 +534,7 @@ nav {
 
     <div class="flex items-center justify-between mb-6">
       <h2 class="text-2xl font-bold">Browse by Goal</h2>
-      <a href="themes.html"
+      <a href="stack.html"
          class="text-blue-400 hover:text-blue-300 flex items-center gap-1">
         View All <i data-feather="chevron-right"></i>
       </a>
@@ -805,7 +805,7 @@ function renderBrowseByGoal(normalized) {
     const icon = goalIcons[g.label.toLowerCase()] || "star";
 
     return `
-      <div onclick="location.href='themes.html?goal=${encodeURIComponent(g.label)}'"
+      <div onclick="location.href='stack.html?goal=${encodeURIComponent(g.label)}'"
            class="cursor-pointer group bg-gray-800/60 border border-gray-700
                   hover:bg-gray-700/60 transition rounded-2xl p-6 text-center
                   shadow-md hover:shadow-xl duration-200">
@@ -1078,6 +1078,35 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   
   showResults(matches);
+}
+        function doGet(e) {
+  const action = e.parameter.action;
+  
+  if (action === 'getStacks') {
+    return getStacks();
+  }
+  // ... existing code
+}
+
+function getStacks() {
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Stacks');
+  const data = sheet.getDataRange().getValues();
+  const headers = data[0];
+  
+  const stacks = [];
+  for (let i = 1; i < data.length; i++) {
+    const row = data[i];
+    if (row[12] !== true && row[12] !== 'TRUE') continue; // Skip inactive
+    
+    const stack = {};
+    headers.forEach((header, index) => {
+      stack[header] = row[index];
+    });
+    stacks.push(stack);
+  }
+  
+  return ContentService.createTextOutput(JSON.stringify(stacks))
+    .setMimeType(ContentService.MimeType.JSON);
 }
        </script>
       
