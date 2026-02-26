@@ -760,46 +760,77 @@ function renderBrowseByGoal() {
                document.getElementById("browse-category-grid");
   if (!grid) return;
 
-  // Hardcoded 6 goals - exactly what you want
   const goals = [
-   { 
-    id: 'make-money', 
-    label: 'Make Money', 
-    logos: ['chat.openai.com', 'stripe.com', 'notion.so'],
-    color: 'from-green-600 to-emerald-600'
-  },
-    { id: 'start-business', label: 'Start a Business', icon: 'rocket', color: 'from-blue-600 to-indigo-600' },
-    { id: 'create-content', label: 'Create Content', icon: 'pen-tool', color: 'from-purple-600 to-pink-600' },
-    { id: 'grow-audience', label: 'Grow Audience', icon: 'users', color: 'from-orange-600 to-red-600' },
-    { id: 'save-time', label: 'Save Time', icon: 'zap', color: 'from-yellow-600 to-amber-600' },
-    { id: 'learn-ai', label: 'Learn AI', icon: 'cpu', color: 'from-cyan-600 to-blue-600' }
+    { 
+      id: 'make-money', 
+      label: 'Make Money', 
+      logos: ['chat.openai.com', 'stripe.com', 'notion.so'],
+      color: 'from-green-600 to-emerald-600'
+    },
+    { 
+      id: 'start-business', 
+      label: 'Start a Business', 
+      logos: ['vercel.com', 'supabase.com', 'figma.com'],
+      color: 'from-blue-600 to-indigo-600'
+    },
+    { 
+      id: 'create-content', 
+      label: 'Create Content', 
+      logos: ['claude.ai', 'midjourney.com', 'descript.com'],
+      color: 'from-purple-600 to-pink-600'
+    },
+    { 
+      id: 'grow-audience', 
+      label: 'Grow Audience', 
+      logos: ['buffer.com', 'typefully.com', 'gumroad.com'],
+      color: 'from-orange-600 to-red-600'
+    },
+    { 
+      id: 'save-time', 
+      label: 'Save Time', 
+      logos: ['make.com', 'zapier.com', 'n8n.io'],
+      color: 'from-yellow-600 to-amber-600'
+    },
+    { 
+      id: 'learn-ai', 
+      label: 'Learn AI', 
+      logos: ['chat.openai.com', 'claude.ai', 'perplexity.ai'],
+      color: 'from-cyan-600 to-blue-600'
+    }
   ];
 
-  grid.innerHTML = goals.map(g => `
-    <div onclick="location.href='stack.html?goal=${g.id}'"
-         class="cursor-pointer group bg-gray-800/60 border border-gray-700
-                hover:bg-gray-700/60 transition rounded-2xl p-6 text-center
-                shadow-md hover:shadow-xl duration-200">
-      
-      <!-- Icon -->
-      <div class="flex justify-center mb-4">
-        <div class="w-16 h-16 bg-gradient-to-br ${g.color} 
-                    rounded-xl flex items-center justify-center
-                    group-hover:scale-110 transition-transform">
-          <i data-feather="${g.icon}" class="w-8 h-8 text-white"></i>
-        </div>
-      </div>
-      
-      <!-- Title -->
-      <h3 class="text-white font-bold text-lg mb-2">${g.label}</h3>
-      
-      <!-- Subtitle -->
-      <p class="text-gray-400 text-sm">Best stacks for ${g.label.toLowerCase()}</p>
-    </div>
-  `).join('');
+  grid.innerHTML = goals.map(g => {
+    // Build logos HTML safely
+    const logosHtml = g.logos && Array.isArray(g.logos) 
+      ? g.logos.map((domain, i) => `
+          <img src="https://www.google.com/s2/favicons?domain=${domain}&sz=64" 
+               class="w-10 h-10 rounded-full border-2 border-gray-800 bg-white p-1 relative"
+               style="z-index: ${3-i}"
+               onerror="this.style.display='none'">
+        `).join('')
+      : '';
 
-  if (window.feather) feather.replace();
+    return `
+      <div onclick="location.href='stack.html?goal=${g.id}'"
+           class="cursor-pointer group bg-gray-800/60 border border-gray-700
+                  hover:bg-gray-700/60 transition rounded-2xl p-6 text-center
+                  shadow-md hover:shadow-xl duration-200">
+        
+        <!-- Logos -->
+        <div class="flex justify-center -space-x-3 mb-4">
+          ${logosHtml}
+        </div>
+        
+        <!-- Title -->
+        <h3 class="text-white font-bold text-lg mb-2">${g.label}</h3>
+        
+        <!-- Subtitle -->
+        <p class="text-gray-400 text-sm">Best stacks for ${g.label.toLowerCase()}</p>
+      </div>
+    `;
+  }).join('');
 }
+
   /* ================= TOP TOOLS ================= */
   function renderTopTools(normalized) {
     const scroller = document.getElementById("top-tools-wrapper");
