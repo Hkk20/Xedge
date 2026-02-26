@@ -295,35 +295,37 @@ function cacheStacks(data) {
 }
 
 function applyGoalFilter(goalId) {
-  console.log('Filter called with:', goalId);
-  console.log('allStacks:', allStacks.length);
-  console.log('First stack:', allStacks[0]);
+  // Convert display name to ID format
+  const displayToId = {
+    'Create Content': 'create-content',
+    'Make Money': 'make-money',
+    'Start a Business': 'start-business',
+    'Grow Audience': 'grow-audience',
+    'Save Time': 'save-time',
+    'Build Product': 'build-product',
+    'Learn AI': 'learn-ai'
+  };
   
-  currentGoalFilter = goalId;
+  const actualGoalId = displayToId[goalId] || goalId;
+  currentGoalFilter = actualGoalId;
   
-  const goalName = GOAL_NAMES[goalId] || goalId;
+  console.log('Filtering for:', actualGoalId);
+  
+  const goalName = GOAL_NAMES[actualGoalId] || actualGoalId;
   document.getElementById('activeGoalName').textContent = goalName;
   document.getElementById('goalIndicator').classList.remove('hidden');
   document.getElementById('clearFilterBtn').classList.remove('hidden');
   document.getElementById('pageTitle').textContent = `${goalName} Stacks`;
   document.getElementById('pageSubtitle').textContent = `Best tool combinations to ${goalName.toLowerCase()}`;
   
-  // Safety check
-  if (!allStacks || allStacks.length === 0) {
-    console.error('No stacks loaded!');
-    return;
-  }
+  const filtered = allStacks.filter(stack => 
+    stack.goals && stack.goals.includes(actualGoalId)
+  );
   
-  const filtered = allStacks.filter(stack => {
-    console.log('Checking stack:', stack.id, 'goals:', stack.goals);
-    return stack.goals && stack.goals.includes(goalId);
-  });
-  
-  console.log('Filtered:', filtered.length);
+  console.log('Found:', filtered.length, 'stacks');
   
   renderStacks(filtered);
 }
-
 // Clear goal filter
 function clearGoalFilter() {
   currentGoalFilter = null;
