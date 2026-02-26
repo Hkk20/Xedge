@@ -762,7 +762,12 @@ function renderBrowseByGoal() {
 
   // Hardcoded 6 goals - exactly what you want
   const goals = [
-    { id: 'make-money', label: 'Make Money', icon: 'dollar-sign', color: 'from-green-600 to-emerald-600' },
+   { 
+    id: 'make-money', 
+    label: 'Make Money', 
+    logos: ['chat.openai.com', 'stripe.com', 'notion.so'],
+    color: 'from-green-600 to-emerald-600'
+  },
     { id: 'start-business', label: 'Start a Business', icon: 'rocket', color: 'from-blue-600 to-indigo-600' },
     { id: 'create-content', label: 'Create Content', icon: 'pen-tool', color: 'from-purple-600 to-pink-600' },
     { id: 'grow-audience', label: 'Grow Audience', icon: 'users', color: 'from-orange-600 to-red-600' },
