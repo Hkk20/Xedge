@@ -294,8 +294,11 @@ function cacheStacks(data) {
   }));
 }
 
-// Apply goal filter
 function applyGoalFilter(goalId) {
+  console.log('Filter called with:', goalId);
+  console.log('allStacks:', allStacks.length);
+  console.log('First stack:', allStacks[0]);
+  
   currentGoalFilter = goalId;
   
   const goalName = GOAL_NAMES[goalId] || goalId;
@@ -305,9 +308,18 @@ function applyGoalFilter(goalId) {
   document.getElementById('pageTitle').textContent = `${goalName} Stacks`;
   document.getElementById('pageSubtitle').textContent = `Best tool combinations to ${goalName.toLowerCase()}`;
   
-  const filtered = allStacks.filter(stack => 
-    stack.goals && stack.goals.includes(goalId)
-  );
+  // Safety check
+  if (!allStacks || allStacks.length === 0) {
+    console.error('No stacks loaded!');
+    return;
+  }
+  
+  const filtered = allStacks.filter(stack => {
+    console.log('Checking stack:', stack.id, 'goals:', stack.goals);
+    return stack.goals && stack.goals.includes(goalId);
+  });
+  
+  console.log('Filtered:', filtered.length);
   
   renderStacks(filtered);
 }
