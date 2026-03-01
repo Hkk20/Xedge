@@ -7,6 +7,15 @@
   <link rel="icon" href="xedge-logo.png">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
+    @keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
     .title{
       color: white;
       font-size: 40px;
@@ -82,11 +91,34 @@
 </nav>
 
 <main class="pt-28 max-w-6xl mx-auto px-6 pb-20">
+   <!-- Loading Spinner -->
+  <div id="loading" class="flex flex-col items-center justify-center py-20">
+    <div class="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mb-4"></div>
+    <p class="text-gray-400 text-lg">Loading stacks...</p>
+  </div>
+
+  <!-- Stacks Container (hidden initially) -->
+  <div id="stacksContainer" class="hidden space-y-8">
+    <!-- Stacks render here -->
+  </div>
+
+  <!-- Empty State (hidden initially) -->
+  <div id="emptyState" class="hidden text-center py-20">
+    <div class="text-6xl mb-4">🔍</div>
+    <h3 class="text-xl font-bold text-white mb-2">No stacks found</h3>
+    <p class="text-gray-400 mb-6">Try adjusting your search or filter</p>
+    <button onclick="clearGoalFilter()" class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition">
+      View All Stacks
+    </button>
+  </div>
   
   <!-- Header -->
   <div class="mb-12">
     <h1 class="title mb-4" id="pageTitle">Goal Stacks</h1>
     <p class="text-gray-400 text-lg" id="pageSubtitle">Curated tool combinations to achieve specific goals faster</p>
+    <main class="container pt-24">
+
+ 
     
     <!-- Active Goal Indicator -->
     <div id="goalIndicator" class="hidden mt-4 flex items-center gap-2">
@@ -214,20 +246,31 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 });
 
-// Load stacks from Google Sheets
 async function loadStacks() {
+  const loading = document.getElementById('loading');
+  const container = document.getElementById('stacksContainer');
+  const emptyState = document.getElementById('emptyState');
+  
+  // Show loading
+  loading.classList.remove('hidden');
+  container.classList.add('hidden');
+  emptyState.classList.add('hidden');
+  
+  // Try cache first
   const cached = getCachedStacks();
   if (cached) {
     allStacks = cached;
+    loading.classList.add('hidden');
+    container.classList.remove('hidden');
     return;
   }
   
+  // Fetch from API
   try {
     const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=getStacks`);
     const data = await response.json();
     
     if (Array.isArray(data)) {
-      // Parse all stacks immediately
       allStacks = data.map(stack => ({
         ...stack,
         goals: parseGoals(stack.goals),
@@ -237,15 +280,17 @@ async function loadStacks() {
       
       cacheStacks(allStacks);
     } else {
-      console.error('Invalid data:', data);
       allStacks = [];
     }
   } catch (error) {
     console.error('Failed to load stacks:', error);
     allStacks = [];
   }
+  
+  // Hide loading, show content
+  loading.classList.add('hidden');
+  container.classList.remove('hidden');
 }
-
 // Parse goals string to array
 function parseGoals(goalsString) {
   if (!goalsString || typeof goalsString !== 'string') return [];
