@@ -18433,7 +18433,7 @@ else x([])
 }
 
 ),g.jsx("span",{
-  "code-path":"src/sections/Hero.tsx:80:13",className:"text-sm text-blue-300",children:"Discover 1000+ AI Tools"
+  "code-path":"src/sections/Hero.tsx:80:13",className:"text-sm text-blue-300",children:"Discover 150+ AI Tools"
 }
 
 )]
@@ -18684,15 +18684,15 @@ else x([])
 }
 
 ,className:"flex flex-wrap items-center justify-center gap-8 mt-16",children:[{
-  value:"1000+",label:"AI Tools"
+  value:"150+",label:"AI Tools"
 }
 
 ,{
-  value:"50+",label:"Categories"
+  value:"20+",label:"Categories"
 }
 
 ,{
-  value:"10K+",label:"Users"
+  value:"200+",label:"Users"
 }
 
 ].map((L,Y)=>g.jsxs(G.div,{
@@ -19036,7 +19036,7 @@ const cy=[{
 }
 
 ,className:"text-center mt-12",children:g.jsxs(G.a,{
-  "code-path":"src/sections/Categories.tsx:174:11",href:"#explore",className:"inline-flex items-center gap-2 px-6 py-3 rounded-full border border-gray-700 text-gray-300 hover:text-white hover:border-blue-500/50 hover:bg-blue-500/5 transition-all",whileHover:{
+  "code-path":"src/sections/Categories.tsx:174:11",href:"/explore.html",className:"inline-flex items-center gap-2 px-6 py-3 rounded-full border border-gray-700 text-gray-300 hover:text-white hover:border-blue-500/50 hover:bg-blue-500/5 transition-all",whileHover:{
   scale:1.05
 }
 
