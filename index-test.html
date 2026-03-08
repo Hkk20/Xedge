@@ -178,6 +178,15 @@ nav {
   box-shadow:0 10px 30px rgba(0,0,0,0.3);
   z-index:9999;
 }
+  #chatbot-container{
+position: fixed;
+bottom: 20px;
+right: 20px;
+width: 380px;
+height: 520px;
+display: none;
+z-index: 9999;
+}
 /* ==============================
    MOBILE FIX (PREVENT OVERLAP)
    ============================== */
@@ -1240,11 +1249,17 @@ document.addEventListener("DOMContentLoaded", () => {
 <!-- XEdge AI Assistant Button -->
 <div id="xedge-ai-button">⚡</div>
 
+<div id="chatbot-container"></div>
+
 <script>
+const bot = document.getElementById("chatbot-container");
+
 document.getElementById("xedge-ai-button").onclick = function () {
-  window.location.href = "/chatbot/?open=true";
+  bot.style.display = "block";
 };
 </script>
+
+<script type="module" src="/chatbot/assets/index-nTGRdhMc.js"></script>
 
 
 
