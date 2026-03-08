@@ -310,6 +310,24 @@ nav {
   transform: scale(1.08);
   box-shadow: 0 0 25px rgba(37, 99, 235, 0.9);
 }
+  /* Floating AI bot button */
+#bot-button{
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg,#6c63ff,#8a2be2);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:26px;
+  color:white;
+  cursor:pointer;
+  box-shadow:0 10px 30px rgba(0,0,0,0.3);
+  z-index:9999;
+}
 
     /* Theme + small tweaks */
     :root { --max-width: 1200px; }
@@ -1266,6 +1284,8 @@ document.addEventListener("DOMContentLoaded", () => {
     <iframe src="/chatbot/" frameborder="0"></iframe>
   </div>
 </div>
+       <!-- AI Bot Button -->
+<div id="bot-button">⚡</div>
 <script>
  const botBtn = document.getElementById("ai-bot-toggle");
 const botFrame = document.getElementById("ai-bot-frame");
@@ -1276,6 +1296,9 @@ botBtn.onclick = () => {
   }else{
     botFrame.style.display = "block";
   }
+};
+ document.getElementById("bot-button").onclick = () => {
+  window.location.href = "/chatbot/";
 };
 </script>       
 
