@@ -161,15 +161,14 @@ nav {
   height: 42px;
 }
 
-/* floating icon */
-#xedge-bot-icon{
-  position:fixed;
-  bottom:25px;
-  right:25px;
-  width:60px;
-  height:60px;
-  border-radius:50%;
-  background:linear-gradient(135deg,#6c63ff,#8a2be2);
+#xedge-ai-button{
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg,#6c63ff,#8a2be2);
   display:flex;
   align-items:center;
   justify-content:center;
@@ -179,32 +178,6 @@ nav {
   box-shadow:0 10px 30px rgba(0,0,0,0.3);
   z-index:9999;
 }
-
-/* popup container */
-#xedge-bot-popup{
-  position:fixed;
-  bottom:95px;
-  right:25px;
-  width:380px;
-  height:520px;
-  display:none;
-  border-radius:16px;
-  overflow:hidden;
-  box-shadow:0 20px 60px rgba(0,0,0,0.4);
-  z-index:9999;
-}
-
-/* iframe that loads /chatbot/ */
-#xedge-bot-frame{
-  width:1000px;     /* larger so we can crop */
-  height:800px;
-  border:none;
-  transform:scale(.38);       /* zoom out */
-  transform-origin:top right; /* anchor crop */
-  margin-top:-110px;          /* adjust to hide page UI */
-  margin-left:-610px;         /* adjust to hide hero/header */
-}
-
 /* ==============================
    MOBILE FIX (PREVENT OVERLAP)
    ============================== */
@@ -1264,22 +1237,14 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
 
-<!-- XEdge Bot -->
-<div id="xedge-bot-icon">⚡</div>
+<!-- XEdge AI Assistant Button -->
+<div id="xedge-ai-button">⚡</div>
 
-<div id="xedge-bot-popup">
-  <iframe src="/chatbot/" id="xedge-bot-frame"></iframe>
-</div>
-       <script>
-const botIcon = document.getElementById("xedge-bot-icon");
-const botPopup = document.getElementById("xedge-bot-popup");
-
-botIcon.onclick = () => {
-  botPopup.style.display =
-    botPopup.style.display === "block" ? "none" : "block";
+<script>
+document.getElementById("xedge-ai-button").onclick = function () {
+  window.location.href = "/chatbot/?open=true";
 };
-      </script>
-
+</script>
 
 
 
