@@ -588,7 +588,7 @@ async function handleSubmit(e) {
   try {
 
     // SEND TO YOUR CLOUDFLARE WORKER
-    const response = await fetch("https://YOUR-WORKER-URL.workers.dev/api/stack-lead", {
+    const response = await fetch("stacks-automation.kumarharsha980.workers.dev", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
