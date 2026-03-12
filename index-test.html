@@ -160,41 +160,30 @@ nav {
   width: 42px;
   height: 42px;
 }
-
 #xedge-ai-button{
   position: fixed;
-  bottom: 25px;
-  right: 25px;
-  width: 60px;
-  height: 60px;
+  bottom: 24px;
+  right: 24px;
+  width: 56px;
+  height: 56px;
   border-radius: 50%;
-  background: linear-gradient(135deg,#6c63ff,#8a2be2);
+  background: linear-gradient(135deg,#2563eb,#7c3aed);
+  color: white;
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:26px;
-  color:white;
+  font-size:22px;
   cursor:pointer;
-  box-shadow:0 10px 30px rgba(0,0,0,0.3);
   z-index:9999;
+  box-shadow:0 8px 24px rgba(0,0,0,0.25);
 }
-  #chatbot-container{
-position: fixed;
-bottom: 20px;
-right: 20px;
-width: 380px;
-height: 520px;
-display: none;
-z-index: 9999;
-}
-  #root{
-position: fixed;
-bottom: 20px;
-right: 20px;
-width: 380px;
-height: 520px;
-display: none;
-z-index: 9999;
+
+#root{
+  position: fixed;
+  bottom: 90px;
+  right: 24px;
+  z-index:9998;
+  display:none;
 }
 /* ==============================
    MOBILE FIX (PREVENT OVERLAP)
@@ -1254,22 +1243,32 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 </script>
-
-<!-- XEdge AI Assistant Button -->
 <div id="xedge-ai-button">⚡</div>
-
 <div id="root"></div>
 
 <script>
+const button = document.getElementById("xedge-ai-button");
 const bot = document.getElementById("root");
 
-document.getElementById("xedge-ai-button").onclick = function () {
-  bot.style.display = "block";
-};
+let chatOpen = false;
+
+button.addEventListener("click", () => {
+
+  chatOpen = !chatOpen;
+
+  if(chatOpen){
+    bot.style.display = "block";
+  }else{
+    bot.style.display = "none";
+  }
+
+  // ensure page scrolling never gets locked
+  document.body.style.overflow = "";
+});
 </script>
 
+<!-- Load chatbot -->
 <script type="module" src="/chatbot/assets/index-DOdIsJde.js"></script>
-
 
 
 </body>
