@@ -1258,22 +1258,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
 <!-- Load chatbot -->
 <script type="module" src="/chatbot/assets/index-DOdIsJde.js"></script>
-       <div id="xedge-ai-button">⚡</div>
+       <div id="xedge-launcher">⚡</div>
 <script>
 window.addEventListener("load", () => {
 
   const launcher = document.getElementById("xedge-launcher");
   const chat = document.getElementById("root");
 
-  launcher.addEventListener("click", () => {
+  if(!launcher || !chat){
+    console.error("Launcher or chat root missing");
+    return;
+  }
+
+  launcher.onclick = () => {
 
     if(chat.style.display === "none" || chat.style.display === ""){
       chat.style.display = "block";
-    } else {
+    }else{
       chat.style.display = "none";
     }
 
-  });
+  };
 
 });
 </script>
