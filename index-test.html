@@ -161,30 +161,33 @@ nav {
   height: 42px;
 }
 
-#xedge-ai-button{
+#xedge-launcher{
   position: fixed;
   bottom: 24px;
   right: 24px;
-  width: 56px;
-  height: 56px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
   background: linear-gradient(135deg,#2563eb,#7c3aed);
   color:white;
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:22px;
+  font-size:24px;
   cursor:pointer;
-  z-index:2147483647; /* ensures nothing covers it */
-  box-shadow:0 10px 25px rgba(0,0,0,0.3);
+  z-index:2147483647;
 }
 
 #root{
   position: fixed;
-  bottom: 90px;
+  bottom: 100px;
   right: 24px;
   z-index:2147483646;
   display:none;
+}
+
+#root button{
+  display:none !important;
 }
 /* ==============================
    MOBILE FIX (PREVENT OVERLAP)
@@ -1256,45 +1259,21 @@ document.addEventListener("DOMContentLoaded", () => {
 <!-- Load chatbot -->
 <script type="module" src="/chatbot/assets/index-DOdIsJde.js"></script>
        <div id="xedge-ai-button">⚡</div>
-
 <script>
 window.addEventListener("load", () => {
 
-  const custom = document.getElementById("xedge-ai-button");
+  const launcher = document.getElementById("xedge-launcher");
+  const chat = document.getElementById("root");
 
-  custom.addEventListener("click", () => {
+  launcher.addEventListener("click", () => {
 
-    const launcher = document.querySelector("#root button");
-
-    if(launcher){
-      launcher.click();
+    if(chat.style.display === "none" || chat.style.display === ""){
+      chat.style.display = "block";
+    } else {
+      chat.style.display = "none";
     }
 
   });
-
-});
-</script>
-
-       <script>
-window.addEventListener("load", () => {
-
-  function waitForLauncher(){
-    const btn = document.querySelector("#root button");
-
-    if(!btn){
-      setTimeout(waitForLauncher, 200);
-      return;
-    }
-
-    console.log("Chatbot launcher ready");
-
-    // Ensure button works
-    btn.style.pointerEvents = "auto";
-    btn.style.zIndex = "2147483647";
-
-  }
-
-  waitForLauncher();
 
 });
 </script>
