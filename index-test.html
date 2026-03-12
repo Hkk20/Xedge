@@ -1255,6 +1255,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
 <!-- Load chatbot -->
 <script type="module" src="/chatbot/assets/index-DOdIsJde.js"></script>
+       <div id="xedge-ai-button">⚡</div>
+
+<script>
+window.addEventListener("load", () => {
+
+  const custom = document.getElementById("xedge-ai-button");
+
+  custom.addEventListener("click", () => {
+
+    const launcher = document.querySelector("#root button");
+
+    if(launcher){
+      launcher.click();
+    }
+
+  });
+
+});
+</script>
 
 
 
