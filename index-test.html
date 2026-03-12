@@ -1275,6 +1275,30 @@ window.addEventListener("load", () => {
 });
 </script>
 
+       <script>
+window.addEventListener("load", () => {
+
+  function waitForLauncher(){
+    const btn = document.querySelector("#root button");
+
+    if(!btn){
+      setTimeout(waitForLauncher, 200);
+      return;
+    }
+
+    console.log("Chatbot launcher ready");
+
+    // Ensure button works
+    btn.style.pointerEvents = "auto";
+    btn.style.zIndex = "2147483647";
+
+  }
+
+  waitForLauncher();
+
+});
+</script>
+
 
 
 </body>
