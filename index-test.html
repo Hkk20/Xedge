@@ -160,6 +160,7 @@ nav {
   width: 42px;
   height: 42px;
 }
+
 #xedge-ai-button{
   position: fixed;
   bottom: 24px;
@@ -168,21 +169,21 @@ nav {
   height: 56px;
   border-radius: 50%;
   background: linear-gradient(135deg,#2563eb,#7c3aed);
-  color: white;
+  color:white;
   display:flex;
   align-items:center;
   justify-content:center;
   font-size:22px;
   cursor:pointer;
-  z-index:9999;
-  box-shadow:0 8px 24px rgba(0,0,0,0.25);
+  z-index:2147483647; /* ensures nothing covers it */
+  box-shadow:0 10px 25px rgba(0,0,0,0.3);
 }
 
 #root{
   position: fixed;
   bottom: 90px;
   right: 24px;
-  z-index:9998;
+  z-index:2147483646;
   display:none;
 }
 /* ==============================
@@ -1242,25 +1243,38 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
-</script> 
+</script>
+
+
+
+       
 <div id="xedge-ai-button">⚡</div>
+
+<!-- Chatbot container -->
 <div id="root"></div>
 
+<!-- Load chatbot -->
+<script type="module" src="/chatbot/assets/index-DOdIsJde.js"></script>
+
 <script>
-document.addEventListener("DOMContentLoaded", () => {
+window.addEventListener("load", function(){
 
   const button = document.getElementById("xedge-ai-button");
   const bot = document.getElementById("root");
 
-  if(!button || !bot) return;
+  if(!button || !bot){
+    console.error("Button or bot not found");
+    return;
+  }
 
+  // ensure bot starts hidden
   bot.style.display = "none";
 
-  button.addEventListener("click", () => {
+  button.addEventListener("click", function(){
 
     if(bot.style.display === "none"){
       bot.style.display = "block";
-    } else {
+    }else{
       bot.style.display = "none";
     }
 
