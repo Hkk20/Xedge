@@ -1248,22 +1248,24 @@ document.addEventListener("DOMContentLoaded", () => {
 <script type="module" src="/chatbot/assets/index-DOdIsJde.js"></script>
 
 <script>
-window.addEventListener("DOMContentLoaded", function(){
+document.addEventListener("DOMContentLoaded", function () {
 
   const button = document.getElementById("xedge-ai-button");
   const bot = document.getElementById("root");
 
-  button.addEventListener("click", function(){
+  if (!button || !bot) return;
 
-    if(bot.style.display === "block"){
+  button.onclick = function () {
+
+    if (bot.style.display === "block") {
       bot.style.display = "none";
     } else {
       bot.style.display = "block";
     }
 
-    // ensure scrolling works
     document.body.style.overflow = "";
-  });
+
+  };
 
 });
 </script>
