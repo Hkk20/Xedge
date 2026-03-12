@@ -1242,33 +1242,31 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
-</script>
 <div id="xedge-ai-button">⚡</div>
 <div id="root"></div>
 
+<script type="module" src="/chatbot/assets/index-DOdIsJde.js"></script>
+
 <script>
-const button = document.getElementById("xedge-ai-button");
-const bot = document.getElementById("root");
+window.addEventListener("DOMContentLoaded", function(){
 
-let chatOpen = false;
+  const button = document.getElementById("xedge-ai-button");
+  const bot = document.getElementById("root");
 
-button.addEventListener("click", () => {
+  button.addEventListener("click", function(){
 
-  chatOpen = !chatOpen;
+    if(bot.style.display === "block"){
+      bot.style.display = "none";
+    } else {
+      bot.style.display = "block";
+    }
 
-  if(chatOpen){
-    bot.style.display = "block";
-  }else{
-    bot.style.display = "none";
-  }
+    // ensure scrolling works
+    document.body.style.overflow = "";
+  });
 
-  // ensure page scrolling never gets locked
-  document.body.style.overflow = "";
 });
 </script>
-
-<!-- Load chatbot -->
-<script type="module" src="/chatbot/assets/index-DOdIsJde.js"></script>
 
 
 </body>
