@@ -161,7 +161,7 @@ nav {
   height: 42px;
 }
 
-#xedge-launcher{
+#xedge-ai-button{
   position: fixed;
   bottom: 24px;
   right: 24px;
@@ -175,19 +175,7 @@ nav {
   justify-content:center;
   font-size:24px;
   cursor:pointer;
-  z-index:2147483647;
-}
-
-#root{
-  position: fixed;
-  bottom: 100px;
-  right: 24px;
-  z-index:2147483646;
-  display:none;
-}
-
-#root button{
-  display:none !important;
+  z-index:999999;
 }
 /* ==============================
    MOBILE FIX (PREVENT OVERLAP)
@@ -1253,34 +1241,18 @@ document.addEventListener("DOMContentLoaded", () => {
        
 
 
-<!-- Chatbot container -->
+<div id="xedge-ai-button">⚡</div>
+
 <div id="root"></div>
 
-<!-- Load chatbot -->
 <script type="module" src="/chatbot/assets/index-DOdIsJde.js"></script>
-       <div id="xedge-launcher">⚡</div>
+
 <script>
-window.addEventListener("load", () => {
+const bot = document.getElementById("root");
 
-  const launcher = document.getElementById("xedge-launcher");
-  const chat = document.getElementById("root");
-
-  if(!launcher || !chat){
-    console.error("Launcher or chat root missing");
-    return;
-  }
-
-  launcher.onclick = () => {
-
-    if(chat.style.display === "none" || chat.style.display === ""){
-      chat.style.display = "block";
-    }else{
-      chat.style.display = "none";
-    }
-
-  };
-
-});
+document.getElementById("xedge-ai-button").onclick = function () {
+  bot.style.display = "block";
+};
 </script>
 
 
