@@ -1248,7 +1248,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
        
-<div id="xedge-ai-button">⚡</div>
+
 
 <!-- Chatbot container -->
 <div id="root"></div>
@@ -1256,32 +1256,7 @@ document.addEventListener("DOMContentLoaded", () => {
 <!-- Load chatbot -->
 <script type="module" src="/chatbot/assets/index-DOdIsJde.js"></script>
 
-<script>
-window.addEventListener("load", function(){
 
-  const button = document.getElementById("xedge-ai-button");
-  const bot = document.getElementById("root");
-
-  if(!button || !bot){
-    console.error("Button or bot not found");
-    return;
-  }
-
-  // ensure bot starts hidden
-  bot.style.display = "none";
-
-  button.addEventListener("click", function(){
-
-    if(bot.style.display === "none"){
-      bot.style.display = "block";
-    }else{
-      bot.style.display = "none";
-    }
-
-  });
-
-});
-</script>
 
 </body>
 </html>
