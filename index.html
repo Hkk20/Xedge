@@ -637,9 +637,18 @@ nav {
         <div class="max-w-[1200px] mx-auto bg-gradient-to-br from-gray-800 to-gray-900 border border-gray-700 rounded-2xl p-8">
           <h3 class="text-2xl font-bold mb-3">Join the Edge</h3>
           <p class="text-gray-300 mb-6">Get the latest AI tools weekly.</p>
-          <form action="https://weathered-cake-1046.kumarharsha980.workers.dev/" method="POST" class="flex flex-col sm:flex-row gap-3">
-            <input name="email" type="email" placeholder="Your email" required class="flex-1 bg-gray-700 border border-gray-600 px-4 py-3 rounded-full" />
-            <button class="bg-gradient-to-r from-blue-500 to-blue-600 px-6 py-3 rounded-full">Subscribe</button>
+          <form id="newsletter-form" class="flex flex-col sm:flex-row gap-3">
+  <input name="email" type="email" placeholder="Your email" required
+    class="flex-1 bg-gray-700 border border-gray-600 px-4 py-3 rounded-full" />
+
+  <button class="bg-gradient-to-r from-blue-500 to-blue-600 px-6 py-3 rounded-full">
+    Subscribe
+  </button>
+</form>
+
+<p id="newsletter-success" class="text-green-400 mt-3 hidden">
+  ✅ Thanks for joining X-Edge! Check your inbox.
+</p>
           </form>
         </div>
       </section>
@@ -1109,6 +1118,31 @@ document.addEventListener('DOMContentLoaded', () => {
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
  <meta name="google-site-verification" content="AaE3t0dMHxUJ0ibWWmvyv8PN07Y3No95wPsK6tLhkKc" />
+       <script>
+const form = document.getElementById("newsletter-form");
+const successMsg = document.getElementById("newsletter-success");
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const formData = new FormData(form);
+
+  const response = await fetch(
+    "https://weathered-cake-1046.kumarharsha980.workers.dev/",
+    {
+      method: "POST",
+      body: formData
+    }
+  );
+
+  if (response.ok) {
+    form.reset();
+    successMsg.classList.remove("hidden");
+  } else {
+    alert("Something went wrong. Please try again.");
+  }
+});
+</script>
        
     
      
