@@ -160,22 +160,37 @@ nav {
   width: 42px;
   height: 42px;
 }
-
 #xedge-ai-button{
   position: fixed;
-  bottom: 24px;
-  right: 24px;
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  background: linear-gradient(135deg,#2563eb,#7c3aed);
-  color:white;
+
+  bottom: 28px;
+  right: 28px;
+
+  width: 72px;
+  height: 72px;
+
+  font-size: 30px;
+
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:24px;
+
+  border-radius:50%;
+
+  background: linear-gradient(135deg,#3b82f6,#8b5cf6);
+
+  color:white;
   cursor:pointer;
-  z-index:999999;
+
+  z-index:99999;
+
+  box-shadow:0 10px 30px rgba(0,0,0,0.3);
+
+  transition:all .25s ease;
+}
+
+#xedge-ai-button:hover{
+  transform:scale(1.12);
 }
   #root button div.absolute {
   pointer-events: none;
