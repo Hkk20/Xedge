@@ -1251,11 +1251,21 @@ document.addEventListener("DOMContentLoaded", () => {
 <script type="module" src="/chatbot/assets/index-DOdIsJde.js"></script>
 
 <script>
-const bot = document.getElementById("root");
+document.addEventListener("DOMContentLoaded", () => {
 
-document.getElementById("xedge-ai-button").onclick = function () {
-  bot.style.display = "block";
-};
+  const customButton = document.getElementById("xedge-ai-button");
+
+  customButton.addEventListener("click", () => {
+
+    const chatbotButton = document.querySelector("#root button");
+
+    if(chatbotButton){
+      chatbotButton.click();
+    }
+
+  });
+
+});
 </script>
 
 
