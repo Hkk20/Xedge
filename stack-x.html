@@ -313,19 +313,20 @@ function parseRoadmap(roadmapString) {
 // Parse tools string to array of objects
 function parseTools(toolsString) {
   if (!toolsString || typeof toolsString !== 'string') return [];
-  
+
   return toolsString.split(';').map(toolStr => {
-    const parts = toolStr.split('|').map(p => p.trim());
+    const parts = toolStr.split('|').map(p => p.trim().replace(/\\/g, ''));
+
     return {
-  name: (parts[0] || '').replace(/\\/g, ''),
-  domain: parts[1] || '',
-  purpose: parts[2] || '',
-  cost: parts[3] || '',
-  url: parts[4] || `https://${parts[1] || ''}`
-};
+      name: parts[0] || '',
+      domain: parts[1] || '',
+      purpose: parts[2] || '',
+      cost: parts[3] || '',
+      url: parts[4] || `https://${parts[1] || ''}`
+    };
+
   }).filter(t => t.name);
 }
-
 // Cache helpers
 function getCachedStacks() {
   const cached = localStorage.getItem(CACHE_KEY);
