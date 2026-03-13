@@ -43,9 +43,9 @@ Join Beta
 
 <div id="auth-area"></div>
 
-<button
+<button 
 id="backBtn"
-class="px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg
+class="px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg 
 text-gray-300 hover:bg-gray-700 hover:text-white transition flex items-center gap-2">
 ← Back
 </button>
@@ -181,21 +181,24 @@ View Details →
 
 
 /* SAFE BACK BUTTON */
+document.getElementById("backBtn").addEventListener("click", () => {
 
-const backBtn = document.getElementById("backBtn");
+  const ref = document.referrer;
 
-if(backBtn){
-backBtn.addEventListener("click", () => {
+  if (!ref) {
+    window.location.href = "Categories.html";
+    return;
+  }
 
-if(document.referrer &&
-document.referrer.includes(window.location.hostname)){
-history.back();
-}else{
-window.location.href = "Categories.html";
-}
+  const sameSite = ref.includes(window.location.hostname);
+
+  if (sameSite) {
+    history.back();
+  } else {
+    window.location.href = "Categories.html";
+  }
 
 });
-}
 
 </script>
 
