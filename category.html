@@ -1,155 +1,204 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>X Edge – Category</title>
 
-  <script src="https://cdn.tailwindcss.com"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>X Edge – Category</title>
 
-  <!-- Firebase -->
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
 
-  <style>
-    .scrollbar-none::-webkit-scrollbar { display: none; }
-    .scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
-  </style>
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+<style>
+.scrollbar-none::-webkit-scrollbar { display:none }
+.scrollbar-none { -ms-overflow-style:none; scrollbar-width:none }
+</style>
+
 </head>
 
 <body class="bg-gray-900 text-white">
 
-<!-- ================= NAVBAR ================= -->
+<!-- NAVBAR -->
 <nav class="bg-gray-900/80 backdrop-blur-sm fixed w-full z-30 border-b border-gray-800">
-  <div class="max-w-6xl mx-auto px-6 py-3 flex justify-between items-center">
+<div class="max-w-6xl mx-auto px-6 py-3 flex justify-between items-center">
 
-    <a href="index.html" class="flex items-center gap-3">
-      <img src="xedge-logo.png" class="w-8 h-8" />
-      <span class="font-bold text-lg">X Edge</span>
-    </a>
+<a href="index.html" class="flex items-center gap-3">
+<img src="xedge-logo.png" class="w-8 h-8">
+<span class="font-bold text-lg">X Edge</span>
+</a>
 
-    <div class="hidden md:flex items-center gap-6">
-      <a href="Explore.html" class="hover:text-blue-400">Explore</a>
-      <a href="Categories.html" class="hover:text-blue-400">Categories</a>
+<div class="hidden md:flex items-center gap-6">
 
-      <a href="Join.html"
-         class="bg-gradient-to-r from-blue-500 to-blue-600 px-4 py-2 rounded-full text-sm">
-        Join Beta
-      </a>
+<a href="Explore.html" class="hover:text-blue-400">Explore</a>
+<a href="Categories.html" class="hover:text-blue-400">Categories</a>
 
-      <div id="auth-area"></div>
-    </div>
-    <button 
-  onclick="goBack()"
-  class="px-4 py-2 mb-4 bg-gray-800 border border-gray-700 rounded-lg 
-         text-gray-300 hover:bg-gray-700 hover:text-white transition flex items-center gap-2">
-  ← Back
+<a href="Join.html"
+class="bg-gradient-to-r from-blue-500 to-blue-600 px-4 py-2 rounded-full text-sm">
+Join Beta
+</a>
+
+<div id="auth-area"></div>
+
+<button
+id="backBtn"
+class="px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg
+text-gray-300 hover:bg-gray-700 hover:text-white transition flex items-center gap-2">
+← Back
 </button>
 
-<script>
-function goBack() {
-  if (document.referrer) {
-    history.back();
-  } else {
-    window.location.href = "Categories.html";
-  }
-}
-</script>
+</div>
 
+<!-- Mobile back -->
+<a href="Categories.html" class="md:hidden text-gray-300 hover:text-blue-400">
+← Back
+</a>
 
-    <!-- Mobile Back -->
-    <a href="Categories.html" class="md:hidden text-gray-300 hover:text-blue-400">
-      ← Back
-    </a>
-  </div>
+</div>
 </nav>
 
 <div class="pt-24"></div>
 
-<!-- MAIN CONTENT -->
+<!-- MAIN -->
 <main class="max-w-6xl mx-auto px-6 pb-24">
-  <h1 id="categoryTitle" class="text-3xl font-bold mb-6">Loading...</h1>
-  <section id="toolsContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></section>
+
+<h1 id="categoryTitle" class="text-3xl font-bold mb-6">Loading...</h1>
+
+<section id="toolsContainer"
+class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+<!-- PREMIUM LOADING SKELETON -->
+
+<div class="animate-pulse bg-gray-800 border border-gray-700 p-6 rounded-xl">
+<div class="w-16 h-16 bg-gray-700 mx-auto mb-4 rounded"></div>
+<div class="h-4 bg-gray-700 rounded mb-2"></div>
+<div class="h-3 bg-gray-700 rounded w-3/4 mx-auto"></div>
+</div>
+
+<div class="animate-pulse bg-gray-800 border border-gray-700 p-6 rounded-xl">
+<div class="w-16 h-16 bg-gray-700 mx-auto mb-4 rounded"></div>
+<div class="h-4 bg-gray-700 rounded mb-2"></div>
+<div class="h-3 bg-gray-700 rounded w-3/4 mx-auto"></div>
+</div>
+
+<div class="animate-pulse bg-gray-800 border border-gray-700 p-6 rounded-xl">
+<div class="w-16 h-16 bg-gray-700 mx-auto mb-4 rounded"></div>
+<div class="h-4 bg-gray-700 rounded mb-2"></div>
+<div class="h-3 bg-gray-700 rounded w-3/4 mx-auto"></div>
+</div>
+
+</section>
+
 </main>
 
 
 <script>
-// Prevent infinite loading on back navigation
-window.addEventListener("pageshow", (event) => {
-  if (event.persisted) window.location.reload();
-});
 
 document.addEventListener("DOMContentLoaded", async () => {
 
-  const RAW_URL = "https://script.google.com/macros/s/AKfycbxXs2ajlwcddAMVEMY5NAMns_ooeEAHSYwDk84nnD6cU2hLjx_k5HKOgFLm-EX_ASSv/exec";
+const RAW_URL =
+"https://script.google.com/macros/s/AKfycbxXs2ajlwcddAMVEMY5NAMns_ooeEAHSYwDk84nnD6cU2hLjx_k5HKOgFLm-EX_ASSv/exec";
 
-  const params = new URLSearchParams(window.location.search);
-  const selectedCat = params.get("cat")?.trim();
+const params = new URLSearchParams(window.location.search);
+const selectedCat = params.get("cat")?.trim();
 
-  const titleEl = document.getElementById("categoryTitle");
-  const container = document.getElementById("toolsContainer");
+const titleEl = document.getElementById("categoryTitle");
+const container = document.getElementById("toolsContainer");
 
-  if (!selectedCat) {
-    titleEl.textContent = "Unknown Category";
-    container.innerHTML = `<p class="text-gray-400">No category selected.</p>`;
-    return;
-  }
+if (!selectedCat) {
+titleEl.textContent = "Unknown Category";
+container.innerHTML =
+`<p class="text-gray-400">No category selected.</p>`;
+return;
+}
 
-  titleEl.textContent = selectedCat;
+titleEl.textContent = selectedCat;
 
-  async function fetchTools() {
-    let res = await fetch(RAW_URL + "?v=" + Date.now());
-    return res.json();
-  }
+async function fetchTools(){
+const res = await fetch(RAW_URL + "?v=" + Date.now());
+return res.json();
+}
 
-  const tools = await fetchTools();
+const tools = await fetchTools();
 
-  const normalized = tools.map(t => ({
-    name: t.name || "Unknown",
-    description: t.description || t.short_description || "",
-    category: t.category || "",
-    logo_url: t.logo_url || "",
-  }));
+const normalized = tools.map(t => ({
+name: t.name || "Unknown",
+description: t.description || t.short_description || "",
+category: t.category || "",
+logo_url: t.logo_url || ""
+}));
 
-  const key = selectedCat.toLowerCase().replace(/\s+/g, "");
+const key = selectedCat.toLowerCase().replace(/\s+/g,"");
 
-  const filtered = normalized.filter(t =>
-    (t.category || "").toLowerCase().replace(/\s+/g, "") === key
-  );
+const filtered = normalized.filter(t =>
+(t.category || "")
+.toLowerCase()
+.replace(/\s+/g,"") === key
+);
 
-  if (!filtered.length) {
-    container.innerHTML = `<p class="text-gray-400">No tools found.</p>`;
-    return;
-  }
+if (!filtered.length){
+container.innerHTML =
+`<p class="text-gray-400">No tools found.</p>`;
+return;
+}
 
-  // FIX: Link to tool.html instead of external website
-  container.innerHTML = filtered.map(tool => {
-    const img = tool.logo_url || "https://via.placeholder.com/200x200?text=X+Edge";
+container.innerHTML = filtered.map(tool => {
 
-    return `
-      <a href="tool.html?tool=${encodeURIComponent(tool.name)}"
-         class="block bg-gray-800 border border-gray-700 p-6 rounded-xl hover:bg-gray-700 transition">
+const img =
+tool.logo_url ||
+"https://via.placeholder.com/200x200?text=X+Edge";
 
-        <img src="${img}"
-             class="w-16 h-16 mx-auto mb-4 object-cover rounded"
-             onerror="this.src='https://via.placeholder.com/200?text=No+Image'">
+return `
+<a href="tool.html?tool=${encodeURIComponent(tool.name)}"
+class="block bg-gray-800 border border-gray-700 p-6 rounded-xl hover:bg-gray-700 transition">
 
-        <h3 class="text-lg font-semibold text-center">${tool.name}</h3>
+<img src="${img}"
+class="w-16 h-16 mx-auto mb-4 object-cover rounded"
+onerror="this.src='https://via.placeholder.com/200?text=No+Image'">
 
-        <p class="text-gray-300 text-sm text-center mt-2">
-          ${tool.description.slice(0, 160)}
-        </p>
+<h3 class="text-lg font-semibold text-center">
+${tool.name}
+</h3>
 
-        <p class="text-blue-400 text-center mt-3">View Details →</p>
-      </a>
-    `;
-  }).join("");
+<p class="text-gray-300 text-sm text-center mt-2">
+${tool.description.slice(0,160)}
+</p>
+
+<p class="text-blue-400 text-center mt-3">
+View Details →
+</p>
+
+</a>
+
+`;
+
+}).join("");
 
 });
+
+
+/* SAFE BACK BUTTON */
+
+const backBtn = document.getElementById("backBtn");
+
+if(backBtn){
+backBtn.addEventListener("click", () => {
+
+if(document.referrer &&
+document.referrer.includes(window.location.hostname)){
+history.back();
+}else{
+window.location.href = "Categories.html";
+}
+
+});
+}
+
 </script>
 
-<!-- FIXED: Correct script tag -->
 <script src="auth.js"></script>
 
 </body>
