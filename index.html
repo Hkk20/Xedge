@@ -1147,148 +1147,166 @@ form.addEventListener("submit", async (e) => {
     
      
 <script>
-  // -------------------------------
-  // FIREBASE INIT (SAFE)
-  // -------------------------------
-  if (!firebase.apps.length) {
-    firebase.initializeApp({
-      apiKey: "AIzaSyBo9cfhTj2W7ikpdrqz6wAtSBisBo78OAc",
-      authDomain: "xedge-1da3a.firebaseapp.com",
-      projectId: "xedge-1da3a",
-      storageBucket: "xedge-1da3a.appspot.com",
-      messagingSenderId: "209657807080",
-      appId: "1:209657807080:web:80180596d966b4667d895d",
-      measurementId: "G-SXW16HCZB8"
-    });
+
+// -------------------------------
+// FIREBASE INIT
+// -------------------------------
+if (!firebase.apps.length) {
+  firebase.initializeApp({
+    apiKey: "AIzaSyBo9cfhTj2W7ikpdrqz6wAtSBisBo78OAc",
+    authDomain: "xedge-1da3a.firebaseapp.com",
+    projectId: "xedge-1da3a",
+    storageBucket: "xedge-1da3a.appspot.com",
+    messagingSenderId: "209657807080",
+    appId: "1:209657807080:web:80180596d966b4667d895d",
+    measurementId: "G-SXW16HCZB8"
+  });
+}
+
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+const provider = new firebase.auth.GoogleAuthProvider();
+provider.addScope("profile");
+provider.addScope("email");
+
+
+// -------------------------------
+// GOOGLE SIGN IN
+// -------------------------------
+window.signInWithGoogle = function () {
+
+  auth.signInWithPopup(provider)
+  .then((result) => {
+
+    const user = result.user;
+
+    db.collection("users").doc(user.uid).set({
+      name: user.displayName,
+      email: user.email,
+      photoURL: user.photoURL,
+      uid: user.uid,
+      lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    }, { merge: true });
+
+    console.log("User logged in:", user.email);
+
+  })
+  .catch((err) => {
+
+    console.error("Login error:", err);
+    alert("Login failed.");
+
+  });
+
+};
+
+
+// -------------------------------
+// LOGOUT
+// -------------------------------
+window.logoutUser = function () {
+
+  auth.signOut().then(() => {
+    console.log("User logged out");
+  });
+
+};
+
+
+// -------------------------------
+// AUTH UI
+// -------------------------------
+auth.onAuthStateChanged((user) => {
+
+  const nav = document.getElementById("auth-area");
+  const heroBtn = document.getElementById("hero-signin-btn");
+
+  if (!nav) return;
+
+  if (user) {
+
+    if (heroBtn) heroBtn.classList.add("hidden");
+
+    nav.innerHTML = `
+      <div class="relative">
+
+        <img
+          id="profileBtn"
+          src="${user.photoURL}"
+          class="w-10 h-10 rounded-full border border-gray-700 cursor-pointer"
+          alt="Profile"
+        />
+
+        <div
+          id="profileMenu"
+          class="hidden absolute right-0 mt-3 w-44 bg-gray-800
+                 border border-gray-700 rounded-xl shadow-lg z-50">
+
+          <div class="px-4 py-3 border-b border-gray-700">
+            <p class="text-sm font-semibold text-white">${user.displayName}</p>
+            <p class="text-xs text-gray-400 truncate">${user.email}</p>
+          </div>
+
+          <button
+            onclick="logoutUser()"
+            class="w-full text-left px-4 py-2 text-red-400 hover:bg-red-500/10 transition">
+            Logout
+          </button>
+
+        </div>
+
+      </div>
+    `;
+
+    // Attach dropdown logic AFTER element exists
+    setTimeout(() => {
+
+      const btn = document.getElementById("profileBtn");
+      const menu = document.getElementById("profileMenu");
+
+      if (!btn || !menu) return;
+
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        menu.classList.toggle("hidden");
+      });
+
+      document.addEventListener("click", (e) => {
+        if (!menu.contains(e.target) && !btn.contains(e.target)) {
+          menu.classList.add("hidden");
+        }
+      });
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          menu.classList.add("hidden");
+        }
+      });
+
+    }, 0);
+
   }
 
-  const auth = firebase.auth();
-  const db = firebase.firestore();
-  const provider = new firebase.auth.GoogleAuthProvider();
+  else {
 
+    if (heroBtn) heroBtn.classList.remove("hidden");
 
-  // -------------------------------
-  // GOOGLE SIGN IN (GLOBAL)
-  // -------------------------------
-  window.signInWithGoogle = function () {
-    auth.signInWithPopup(provider)
-      .then((result) => {
-        const user = result.user;
+    nav.innerHTML = `
+      <button
+        onclick="signInWithGoogle()"
+        class="border border-blue-500 px-6 py-2 rounded-full
+               font-semibold text-sm text-blue-300 hover:bg-blue-500/10 transition">
+        Sign In
+      </button>
+    `;
 
-        db.collection("users").doc(user.uid).set({
-          name: user.displayName,
-          email: user.email,
-          photoURL: user.photoURL,
-          uid: user.uid,
-          lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
-          createdAt: firebase.firestore.FieldValue.serverTimestamp()
-        }, { merge: true });
+  }
 
-        console.log("User logged in:", user.email);
-      })
-      .catch((err) => {
-        console.error(err);
-        alert("Login failed.");
-      });
-  };
-
-
-  // -------------------------------
-  // LOGOUT (GLOBAL)
-  // -------------------------------
-  window.logoutUser = function () {
-    auth.signOut().then(() => {
-      console.log("User logged out");
-    });
-  };
-
-
-  // -------------------------------
-  // AUTH STATE UI
-  // -------------------------------
-  auth.onAuthStateChanged((user) => {
-    const nav = document.getElementById("auth-area");
-    const heroBtn = document.getElementById("hero-signin-btn");
-
-    if (!nav) return;
-
-    if (user) {
-      if (heroBtn) heroBtn.classList.add("hidden");
-
-      nav.innerHTML = `
-        <div class="relative">
-          <img
-            id="profileBtn"
-            src="${user.photoURL}"
-            class="w-10 h-10 rounded-full border border-gray-700 cursor-pointer"
-            alt="Profile"
-          />
-
-          <div
-            id="profileMenu"
-            class="hidden absolute right-0 mt-3 w-44 bg-gray-800
-                   border border-gray-700 rounded-xl shadow-lg z-50">
-
-            <div class="px-4 py-3 border-b border-gray-700">
-              <p class="text-sm font-semibold text-white">${user.displayName}</p>
-              <p class="text-xs text-gray-400 truncate">${user.email}</p>
-            </div>
-
-            <button
-              onclick="logoutUser()"
-              class="w-full text-left px-4 py-2 text-red-400 hover:bg-red-500/10 transition">
-              Logout
-            </button>
-          </div>
-        </div>
-      `;
-    } else {
-      if (heroBtn) heroBtn.classList.remove("hidden");
-
-      nav.innerHTML = `
-        <button
-          onclick="signInWithGoogle()"
-          class="border border-blue-500 px-6 py-2 rounded-full
-                 font-semibold text-sm text-blue-300 hover:bg-blue-500/10 transition">
-          Sign In
-        </button>
-      `;
-    }
-  });
-
-
-  // -------------------------------
-  // CLICK-ONLY DROPDOWN CONTROL
-  
-document.addEventListener("DOMContentLoaded", () => {
-  const btn = document.getElementById("profileBtn");
-  const menu = document.getElementById("profileMenu");
-
-  if (!btn || !menu) return;
-
-  // Toggle menu on button click
-  btn.addEventListener("click", (e) => {
-    e.stopPropagation();
-    menu.classList.toggle("hidden");
-  });
-
-  // Close when clicking outside
-  document.addEventListener("click", (e) => {
-    if (!menu.contains(e.target) && !btn.contains(e.target)) {
-      menu.classList.add("hidden");
-    }
-  });
-
-  // Close on ESC
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") {
-      menu.classList.add("hidden");
-    }
-  });
 });
+
 </script>
-
-
 
        
 
