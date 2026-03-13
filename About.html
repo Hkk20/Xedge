@@ -76,26 +76,42 @@
 
 <body>
   
-    
-<!-- NAV -->
-<nav class="bg-gray-900/80 border-b border-gray-800 fixed w-full z-50">
-  <div class="max-w-6xl mx-auto px-6 py-3 flex justify-between items-center">
+<!-- NAVBAR -->
+<nav class="bg-gray-900/80 backdrop-blur border-b border-gray-800 fixed w-full z-50">
+
+  <div class="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between">
+
+    <!-- Logo -->
     <a href="index.html" class="flex items-center gap-3">
       <img src="xedge-logo.png" class="w-8 h-8 bg-white p-1 rounded">
-      <span class="font-bold">Xedge</span>
+      <span class="text-lg font-bold text-white">Xedge</span>
     </a>
-    <div class="flex items-center gap-3">
-      <button onclick="clearGoalFilter()" id="clearFilterBtn" class="hidden px-4 py-2 bg-blue-600/20 border border-blue-500/30 text-blue-400 rounded-lg text-sm hover:bg-blue-600/30 transition">
-        Clear Filter
-      </button>
-      <button onclick="history.back()" class="px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg hover:bg-gray-700 transition">
-        ← Back
-      </button>
+
+    <!-- Navigation -->
+    <div class="flex items-center gap-6 text-gray-300 text-sm">
+
+      <a href="index.html" class="hover:text-white transition">
+        Home
+      </a>
+
+      <a href="tools.html" class="hover:text-white transition">
+        Tools
+      </a>
+
+      <a href="about.html" class="hover:text-white transition">
+        About
+      </a>
+
+      <a href="contact.html" class="hover:text-white transition">
+        Contact
+      </a>
+
     </div>
+
   </div>
+
 </nav>
-  <main class="container">
-    <main class="max-w-6xl mx-auto px-6 pt-28">
+  <main class="max-w-6xl mx-auto px-6 pt-28">
 
     <h1>About X-Edge</h1>
     <p class="subtitle">
