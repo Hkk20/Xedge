@@ -1,0 +1,873 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+ 
+  <!-- SEO: title & description -->
+  <title>XEdge — Find the Right AI Tool Stack for Your Goal</title>
+  <meta name="description" content="XEdge curates AI tool stacks for specific goals — launching a SaaS, growing a newsletter, building an agency. Find your stack, get the implementation guide, ship faster.">
+  <meta name="keywords" content="AI tool stacks, AI tools directory, best AI tools, AI for business, AI automation tools, curated AI tools">
+  <meta name="author" content="XEdge">
+  <link rel="canonical" href="https://xedge.tech">
+  <meta name="google-site-verification" content="AaE3t0dMHxUJ0ibWWmvyv8PN07Y3No95wPsK6tLhkKc">
+  <meta name="impact-site-verification" content="bffa8044-d60e-477c-aae5-d522e5b7c771">
+ 
+  <!-- Favicon: use your actual logo -->
+  <link rel="icon" href="xedge-logo.png">
+ 
+  <!-- Open Graph (fixed: no typos, no spaces in attribute names) -->
+  <meta property="og:title" content="XEdge — AI Tool Stacks for Every Goal">
+  <meta property="og:description" content="Curated AI tool combinations to achieve specific goals faster. Real implementation guides included.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://xedge.tech">
+  <meta property="og:image" content="https://raw.githubusercontent.com/Hkk20/Xedge/main/xedge-logo.png">
+ 
+  <!-- Twitter Card (fixed: card type in correct attribute) -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="XEdge — AI Tool Stacks for Every Goal">
+  <meta name="twitter:description" content="Discover curated AI tool stacks built for specific outcomes. Launch a SaaS, grow a newsletter, start an AI agency — with a step-by-step execution guide.">
+  <meta name="twitter:image" content="https://raw.githubusercontent.com/Hkk20/Xedge/main/xedge-logo.png">
+ 
+  <!-- Preconnect for performance -->
+  <link rel="preconnect" href="https://script.google.com">
+  <link rel="dns-prefetch" href="https://script.google.com">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+ 
+  <!-- Analytics (your file) -->
+  <script src="analytics.js" defer></script>
+ 
+  <!-- Tailwind CDN (note: replace with a proper build for production to eliminate 3MB penalty) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+ 
+  <!-- Feather icons -->
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js" defer></script>
+ 
+  <!-- Vanta: only load on non-mobile (performance fix) -->
+  <script>
+    if (window.innerWidth >= 768) {
+      var s = document.createElement('script');
+      s.src = 'https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js';
+      s.defer = true;
+      s.onload = function() {
+        if (window.VANTA) {
+          VANTA.NET({
+            el: '#vanta-bg',
+            mouseControls: false,
+            touchControls: false,
+            color: 0x1a5cff,
+            backgroundColor: 0x0b0f15,
+            points: 8,
+            maxDistance: 18,
+            spacing: 18
+          });
+        }
+      };
+      document.head.appendChild(s);
+    }
+  </script>
+ 
+<style>
+/* ============================================================
+   BASE
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; }
+ 
+html, body {
+  margin: 0; padding: 0;
+  width: 100%; overflow-x: hidden;
+  background: #0b0f15;
+  font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+  color: #fff;
+  -webkit-font-smoothing: antialiased;
+}
+ 
+:root { --blue: #3882ff; --blue-dark: #1a5cff; --max: 1400px; }
+ 
+/* ============================================================
+   VANTA BACKGROUND
+   ============================================================ */
+#vanta-bg {
+  position: fixed; inset: 0;
+  z-index: 0; pointer-events: none;
+  opacity: 0.65;
+}
+ 
+.page-top { position: relative; z-index: 10; }
+ 
+/* ============================================================
+   NAV
+   ============================================================ */
+nav {
+  position: fixed; top: 0; left: 0; right: 0;
+  z-index: 60;
+}
+ 
+/* ============================================================
+   MOBILE MENU
+   ============================================================ */
+.mobile-menu {
+  position: fixed; top: 0; right: 0;
+  height: 100vh; width: 84%; max-width: 380px;
+  background: rgba(6,8,12,0.98);
+  transform: translateX(100%);
+  transition: transform 260ms cubic-bezier(.2,.9,.2,1);
+  box-shadow: -20px 0 40px rgba(2,6,23,0.6);
+  z-index: 70; overflow-y: auto;
+}
+.mobile-menu.open { transform: translateX(0); }
+ 
+.nav-backdrop {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 65; opacity: 0;
+  pointer-events: none;
+  transition: opacity 180ms;
+}
+.nav-backdrop.show { opacity: 1; pointer-events: auto; }
+ 
+/* ============================================================
+   SKELETON / SCROLL
+   ============================================================ */
+.skeleton {
+  background: linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.04));
+  border-radius: 12px; min-height: 96px;
+  animation: shimmer 1.4s ease-in-out infinite alternate;
+}
+@keyframes shimmer {
+  from { opacity: 0.5; }
+  to   { opacity: 1; }
+}
+ 
+.scrollbar-none::-webkit-scrollbar { display: none; }
+.scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
+ 
+/* ============================================================
+   CATEGORY CARDS
+   ============================================================ */
+.featured-cat {
+  width: 100%; height: 200px; padding: 24px;
+  border-radius: 16px;
+  background: rgba(15,20,26,0.6);
+  border: 1px solid #1f2a36;
+  display: flex; flex-direction: column;
+  justify-content: center; align-items: center;
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+  text-decoration: none;
+}
+.featured-cat:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0 28px rgba(56,130,255,0.18);
+}
+.featured-cat h3 {
+  font-size: 1rem; font-weight: 600;
+  margin-top: 14px; color: #fff;
+}
+ 
+.category-icon {
+  width: 72px; height: 72px; border-radius: 50%;
+  background: #0f1a2b;
+  border: 1.5px solid rgba(37,99,235,0.6);
+  box-shadow: 0 0 14px rgba(37,99,235,0.4);
+  display: flex; align-items: center; justify-content: center;
+  transition: box-shadow 0.22s ease;
+}
+.featured-cat:hover .category-icon {
+  box-shadow: 0 0 24px rgba(37,99,235,0.8);
+}
+.category-icon i { color: #60a5ff; width: 30px; height: 30px; }
+ 
+@media (max-width: 480px) {
+  .featured-cat { height: auto; padding: 18px; }
+  .category-icon { width: 56px; height: 56px; }
+  .category-icon i { width: 24px; height: 24px; }
+  .featured-cat h3 { font-size: 0.875rem; margin-top: 10px; }
+}
+ 
+/* ============================================================
+   STACK CTA BANNER
+   ============================================================ */
+.stack-cta {
+  background: linear-gradient(135deg, rgba(26,92,255,0.15), rgba(0,200,150,0.08));
+  border: 1px solid rgba(56,130,255,0.3);
+  border-radius: 20px; padding: 40px 32px;
+  text-align: center;
+}
+ 
+/* ============================================================
+   TOOL CARDS
+   ============================================================ */
+.xe-card {
+  background: rgba(31,41,55,0.6);
+  border: 1px solid rgba(63,63,70,0.6);
+  padding: 1rem; border-radius: 14px; display: block;
+}
+.xe-card img { width: 64px; height: 64px; object-fit: cover; border-radius: 10px; }
+ 
+/* ============================================================
+   TOP TOOLS SCROLLER
+   ============================================================ */
+#top-tools-wrapper { width: 100%; max-width: 100%; }
+@media (min-width: 768px) { #top-tools-wrapper { padding: 0 48px; } }
+ 
+/* ============================================================
+   WHY XEDGE
+   ============================================================ */
+.why-card {
+  background: rgba(15,20,26,0.5);
+  border: 1px solid #1f2a36;
+  border-radius: 16px; padding: 28px;
+}
+</style>
+</head>
+ 
+<body>
+  <!-- Vanta background -->
+  <div id="vanta-bg"></div>
+ 
+  <div class="page-top">
+ 
+    <!-- ===================== NAV ===================== -->
+    <header>
+      <nav class="fixed top-0 left-0 w-full bg-gray-900/95 border-b border-gray-800 z-50">
+        <div class="max-w-[1400px] mx-auto px-4 py-3 flex items-center justify-between gap-4">
+ 
+          <!-- Logo -->
+          <a href="index.html" class="flex items-center gap-3 shrink-0">
+            <img src="xedge-logo.png" class="w-9 h-9" alt="XEdge logo">
+            <span class="text-xl font-bold text-blue-400 tracking-wide">XEDGE</span>
+          </a>
+ 
+          <!-- Desktop links -->
+          <div class="hidden md:flex items-center gap-7 text-sm font-medium text-gray-300">
+            <a href="index.html" class="hover:text-white transition">Home</a>
+            <a href="Explore.html" class="hover:text-white transition">Explore</a>
+            <a href="Categories.html" class="hover:text-white transition">Categories</a>
+            <a href="stack.html" class="hover:text-white transition">Stacks</a>
+            <a href="About.html" class="hover:text-white transition">About</a>
+          </div>
+ 
+          <!-- Desktop right -->
+          <div class="hidden md:flex items-center gap-3">
+            <a href="Pricing.html" class="text-sm text-gray-300 hover:text-white transition px-3 py-2">Pricing</a>
+            <a href="stack.html" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-full text-sm font-semibold transition">
+              View Stacks
+            </a>
+            <div id="auth-area" class="flex items-center"></div>
+          </div>
+ 
+          <!-- Mobile: hamburger (inside nav, correct structure) -->
+          <div class="flex md:hidden items-center gap-3">
+            <div id="auth-area-mobile" class="flex items-center"></div>
+            <button id="mobile-menu-toggle" aria-label="Open menu" class="p-2 text-gray-200">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+              </svg>
+            </button>
+          </div>
+ 
+        </div>
+      </nav>
+ 
+      <!-- Mobile backdrop -->
+      <div id="nav-backdrop" class="nav-backdrop" aria-hidden="true"></div>
+ 
+      <!-- Mobile slide menu -->
+      <aside id="mobileMenu" class="mobile-menu" aria-label="Mobile navigation">
+        <div class="p-6">
+          <div class="flex items-center justify-between mb-8">
+            <div class="flex items-center gap-3">
+              <img src="xedge-logo.png" alt="XEdge" class="w-8 h-8">
+              <div>
+                <div class="font-bold text-lg">XEDGE</div>
+                <div class="text-xs text-gray-400">AI tool stacks</div>
+              </div>
+            </div>
+            <button id="mobileClose" aria-label="Close menu" class="text-gray-400 hover:text-white text-xl">✕</button>
+          </div>
+ 
+          <nav class="flex flex-col gap-2">
+            <a href="index.html" class="py-2.5 px-3 rounded-lg hover:bg-gray-800 text-gray-200">Home</a>
+            <a href="Explore.html" class="py-2.5 px-3 rounded-lg hover:bg-gray-800 text-gray-200">Explore</a>
+            <a href="Categories.html" class="py-2.5 px-3 rounded-lg hover:bg-gray-800 text-gray-200">Categories</a>
+            <a href="stack.html" class="py-2.5 px-3 rounded-lg hover:bg-gray-800 text-gray-200">Stacks</a>
+            <a href="About.html" class="py-2.5 px-3 rounded-lg hover:bg-gray-800 text-gray-200">About</a>
+            <a href="Pricing.html" class="py-2.5 px-3 rounded-lg hover:bg-gray-800 text-gray-200">Pricing</a>
+            <a href="stack.html" class="py-2.5 px-3 rounded-lg bg-blue-600 text-white text-center font-semibold mt-4">
+              View Stacks →
+            </a>
+          </nav>
+        </div>
+      </aside>
+    </header>
+ 
+    <!-- ===================== MAIN ===================== -->
+    <main class="pt-20">
+ 
+      <!-- HERO -->
+      <section class="pt-16 pb-20 px-4">
+        <div class="max-w-[860px] mx-auto text-center flex flex-col items-center">
+ 
+          <div class="inline-flex items-center gap-2 bg-blue-500/10 border border-blue-500/30 rounded-full px-4 py-1.5 text-sm text-blue-300 mb-6">
+            <span class="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></span>
+            200+ builders already using XEdge
+          </div>
+ 
+          <h1 class="text-5xl md:text-6xl font-bold mb-6 leading-tight tracking-tight">
+            Find the exact AI stack<br>
+            <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-400">
+              for your goal
+            </span>
+          </h1>
+ 
+          <p class="text-lg text-gray-400 max-w-xl mx-auto mb-10 leading-relaxed">
+            13 curated tool stacks with step-by-step implementation guides. Stop researching. Start building.
+          </p>
+ 
+          <!-- Search -->
+          <div class="relative w-full max-w-2xl mx-auto mb-8 group">
+            <div class="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-full blur opacity-20 group-focus-within:opacity-40 transition"></div>
+            <div class="relative flex items-center bg-gray-900 rounded-full border border-gray-700 px-6 py-4">
+              <svg class="w-5 h-5 text-gray-500 mr-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+              </svg>
+              <input
+                type="text"
+                id="global-search"
+                placeholder="Search AI tools..."
+                autocomplete="off"
+                class="flex-1 bg-transparent text-white text-base placeholder-gray-500 focus:outline-none"
+              >
+            </div>
+            <div id="search-results" class="absolute w-full bg-gray-800 border border-gray-700 rounded-2xl mt-2 hidden z-50 overflow-hidden shadow-xl"></div>
+          </div>
+ 
+          <!-- CTAs -->
+          <div class="flex flex-col sm:flex-row justify-center gap-4">
+            <a href="stack.html"
+               class="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-400 hover:to-blue-500 px-8 py-3.5 rounded-full font-semibold text-base shadow-lg transition">
+              Browse Stacks
+            </a>
+            <a href="Explore.html"
+               class="border border-gray-600 hover:border-gray-400 px-8 py-3.5 rounded-full font-semibold text-base text-gray-300 hover:text-white transition">
+              Explore Tools
+            </a>
+            <button
+              id="hero-signin-btn"
+              onclick="signInWithGoogle()"
+              class="border border-blue-500/60 px-8 py-3.5 rounded-full font-semibold text-base text-blue-300 hover:bg-blue-500/10 transition hidden">
+              Sign In
+            </button>
+          </div>
+ 
+        </div>
+      </section>
+ 
+      <!-- FEATURED CATEGORIES -->
+      <section class="px-4 pb-12 featured-group">
+        <div class="max-w-[1400px] mx-auto">
+          <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
+ 
+            <a href="Categories.html?category=AI-Image" class="featured-cat">
+              <div class="category-icon"><i data-feather="image"></i></div>
+              <h3>AI Image</h3>
+            </a>
+            <a href="Categories.html?category=Chatbot" class="featured-cat">
+              <div class="category-icon"><i data-feather="message-circle"></i></div>
+              <h3>Chatbot</h3>
+            </a>
+            <a href="Categories.html?category=Business" class="featured-cat">
+              <div class="category-icon"><i data-feather="briefcase"></i></div>
+              <h3>Business</h3>
+            </a>
+            <a href="Categories.html?category=Video" class="featured-cat">
+              <div class="category-icon"><i data-feather="video"></i></div>
+              <h3>Video</h3>
+            </a>
+            <a href="Categories.html?category=Productivity" class="featured-cat">
+              <div class="category-icon"><i data-feather="activity"></i></div>
+              <h3>Productivity</h3>
+            </a>
+ 
+          </div>
+        </div>
+      </section>
+ 
+      <!-- TOP TOOLS -->
+      <section class="px-4 py-10">
+        <div class="max-w-[1400px] mx-auto">
+          <div class="flex items-center justify-between mb-6">
+            <h2 class="text-xl font-bold">Top Tools</h2>
+            <a href="Explore.html" class="text-blue-400 text-sm hover:text-blue-300 transition">View All →</a>
+          </div>
+ 
+          <div class="relative">
+            <button id="scroll-left" class="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 bg-gray-800 hover:bg-gray-700 p-2 rounded-full z-20 transition">
+              <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+            </button>
+ 
+            <div class="relative overflow-hidden">
+              <div id="top-tools-wrapper"
+                   class="flex gap-5 pb-4 snap-x snap-mandatory scroll-smooth overflow-x-auto scrollbar-none touch-pan-x">
+                <div id="top-tools-skel" class="flex gap-4">
+                  <div class="min-w-[240px] bg-gray-800/50 rounded-2xl p-6 skeleton"></div>
+                  <div class="min-w-[240px] bg-gray-800/50 rounded-2xl p-6 skeleton"></div>
+                  <div class="min-w-[240px] bg-gray-800/50 rounded-2xl p-6 skeleton"></div>
+                </div>
+              </div>
+            </div>
+ 
+            <button id="scroll-right" class="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 bg-gray-800 hover:bg-gray-700 p-2 rounded-full z-20 transition">
+              <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </button>
+          </div>
+        </div>
+      </section>
+ 
+      <!-- BROWSE BY GOAL -->
+      <section class="px-4 py-10 bg-gray-800/30">
+        <div class="max-w-[1400px] mx-auto">
+          <div class="flex items-center justify-between mb-6">
+            <h2 class="text-xl font-bold">Browse by Goal</h2>
+            <a href="stack.html" class="text-blue-400 text-sm hover:text-blue-300 flex items-center gap-1 transition">
+              All Stacks <i data-feather="chevron-right" class="w-4 h-4"></i>
+            </a>
+          </div>
+          <div id="browse-theme-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5"></div>
+        </div>
+      </section>
+ 
+      <!-- STACK CTA (monetization — was missing entirely) -->
+      <section class="px-4 py-16">
+        <div class="max-w-[860px] mx-auto stack-cta">
+          <div class="inline-flex items-center gap-2 bg-blue-500/10 border border-blue-500/20 rounded-full px-3 py-1 text-xs text-blue-300 mb-4">
+            24-page implementation guides
+          </div>
+          <h2 class="text-3xl font-bold mb-4">Get the full execution plan</h2>
+          <p class="text-gray-400 max-w-lg mx-auto mb-8 leading-relaxed">
+            Each stack PDF includes real code, Claude prompts, revenue math, deployment pipelines, and security checklists. Not a listicle — an actual build guide.
+          </p>
+          <div class="flex flex-col sm:flex-row justify-center gap-4">
+            <a href="stack.html"
+               class="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-400 hover:to-blue-500 px-8 py-3.5 rounded-full font-semibold transition">
+              Browse All 13 Stacks
+            </a>
+            <a href="Pricing.html"
+               class="border border-gray-600 hover:border-gray-400 px-8 py-3.5 rounded-full font-semibold text-gray-300 hover:text-white transition">
+              See Pricing
+            </a>
+          </div>
+        </div>
+      </section>
+ 
+      <!-- WHY XEDGE -->
+      <section class="px-4 py-12">
+        <div class="max-w-[1400px] mx-auto">
+          <h2 class="text-2xl font-bold mb-10 text-center">
+            Why <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-400">XEdge</span>
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="why-card">
+              <i data-feather="zap" class="w-8 h-8 text-blue-400 mb-4"></i>
+              <h3 class="text-lg font-semibold mb-2">Curated, not scraped</h3>
+              <p class="text-gray-400 text-sm leading-relaxed">Every tool is handpicked. No spam tools, no paid placements. Just what actually works for the goal.</p>
+            </div>
+            <div class="why-card">
+              <i data-feather="layers" class="w-8 h-8 text-blue-400 mb-4"></i>
+              <h3 class="text-lg font-semibold mb-2">Stack-first thinking</h3>
+              <p class="text-gray-400 text-sm leading-relaxed">Tools work together. XEdge shows you the right combination for your outcome, not just individual products.</p>
+            </div>
+            <div class="why-card">
+              <i data-feather="file-text" class="w-8 h-8 text-blue-400 mb-4"></i>
+              <h3 class="text-lg font-semibold mb-2">Implementation guides</h3>
+              <p class="text-gray-400 text-sm leading-relaxed">Not just a list. The premium guides include actual code, prompts, and step-by-step deployment instructions.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+ 
+      <!-- NEWSLETTER -->
+      <section class="px-4 py-12">
+        <div class="max-w-[680px] mx-auto bg-gray-800/60 border border-gray-700 rounded-2xl p-8">
+          <h3 class="text-xl font-bold mb-2">Stay on the edge</h3>
+          <p class="text-gray-400 text-sm mb-5">New stacks, tool updates, and AI insights weekly. No spam.</p>
+          <form action="https://formspree.io/f/mblzvykd" method="POST" class="flex flex-col sm:flex-row gap-3">
+            <input name="email" type="email" placeholder="your@email.com" required
+                   class="flex-1 bg-gray-700 border border-gray-600 px-4 py-3 rounded-full text-sm focus:outline-none focus:border-blue-500 transition">
+            <button type="submit"
+                    class="bg-gradient-to-r from-blue-500 to-blue-600 px-6 py-3 rounded-full text-sm font-semibold transition hover:from-blue-400 hover:to-blue-500">
+              Subscribe
+            </button>
+          </form>
+        </div>
+      </section>
+ 
+      <!-- FOOTER -->
+      <footer class="border-t border-gray-800 py-10 px-4 mt-4">
+        <div class="max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
+ 
+          <div>
+            <div class="flex items-center gap-3 mb-3">
+              <img src="xedge-logo.png" alt="XEdge" class="w-7 h-7">
+              <span class="font-bold text-sm">XEDGE</span>
+            </div>
+            <p class="text-gray-500 text-sm mb-4">The operating layer between humans and AI.</p>
+            <div class="flex gap-4">
+              <a class="text-gray-500 hover:text-blue-400 transition" href="#" aria-label="Twitter"><i data-feather="twitter"></i></a>
+              <a class="text-gray-500 hover:text-blue-400 transition" href="#" aria-label="YouTube"><i data-feather="youtube"></i></a>
+              <a class="text-gray-500 hover:text-blue-400 transition" href="mailto:hello@xedge.tech" aria-label="Email"><i data-feather="mail"></i></a>
+            </div>
+          </div>
+ 
+          <div>
+            <h4 class="font-semibold text-sm mb-3">Product</h4>
+            <ul class="space-y-2 text-gray-500 text-sm">
+              <li><a href="Explore.html" class="hover:text-blue-400 transition">All Tools</a></li>
+              <li><a href="Categories.html" class="hover:text-blue-400 transition">Categories</a></li>
+              <li><a href="stack.html" class="hover:text-blue-400 transition">Stacks</a></li>
+              <li><a href="Pricing.html" class="hover:text-blue-400 transition">Pricing</a></li>
+            </ul>
+          </div>
+ 
+          <div>
+            <h4 class="font-semibold text-sm mb-3">Company</h4>
+            <ul class="space-y-2 text-gray-500 text-sm">
+              <li><a href="About.html" class="hover:text-blue-400 transition">About</a></li>
+              <li><a href="mailto:hello@xedge.tech" class="hover:text-blue-400 transition">Contact</a></li>
+            </ul>
+          </div>
+ 
+          <div>
+            <h4 class="font-semibold text-sm mb-3">Legal</h4>
+            <ul class="space-y-2 text-gray-500 text-sm">
+              <li><a href="Privacy.html" class="hover:text-blue-400 transition">Privacy Policy</a></li>
+              <li><a href="Terms.html" class="hover:text-blue-400 transition">Terms of Service</a></li>
+            </ul>
+          </div>
+ 
+        </div>
+        <div class="max-w-[1400px] mx-auto mt-8 text-center text-gray-600 text-xs">
+          © 2025 XEdge. All rights reserved.
+        </div>
+      </footer>
+ 
+    </main>
+  </div><!-- /page-top -->
+ 
+  <!-- =====================================================================
+       FIREBASE (deferred — loaded after page content)
+  ====================================================================== -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js" defer></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js" defer></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js" defer></script>
+ 
+  <script>
+  // Firebase init — runs after Firebase scripts load
+  window.addEventListener('load', function() {
+    if (typeof firebase === 'undefined') return;
+    if (!firebase.apps.length) {
+      firebase.initializeApp({
+        apiKey: "AIzaSyBo9cfhTj2W7ikpdrqz6wAtSBisBo78OAc",
+        authDomain: "xedge-1da3a.firebaseapp.com",
+        projectId: "xedge-1da3a",
+        storageBucket: "xedge-1da3a.appspot.com",
+        messagingSenderId: "209657807080",
+        appId: "1:209657807080:web:80180596d966b4667d895d",
+        measurementId: "G-SXW16HCZB8"
+      });
+    }
+ 
+    const auth = firebase.auth();
+    const db   = firebase.firestore();
+    const provider = new firebase.auth.GoogleAuthProvider();
+ 
+    window.signInWithGoogle = function() {
+      auth.signInWithPopup(provider)
+        .then(result => {
+          const u = result.user;
+          db.collection("users").doc(u.uid).set({
+            name: u.displayName, email: u.email,
+            photoURL: u.photoURL, uid: u.uid,
+            lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+          }, { merge: true });
+        })
+        .catch(err => { console.error(err); alert("Login failed. Please try again."); });
+    };
+ 
+    window.logoutUser = function() {
+      auth.signOut();
+    };
+ 
+    auth.onAuthStateChanged(user => {
+      const authArea = document.getElementById("auth-area");
+      const authMobile = document.getElementById("auth-area-mobile");
+      const heroBtn = document.getElementById("hero-signin-btn");
+ 
+      const loggedInHTML = user => `
+        <div class="relative">
+          <img id="profileBtn" src="${user.photoURL}" onerror="this.src='xedge-logo.png'"
+               class="w-9 h-9 rounded-full border border-gray-700 cursor-pointer" alt="Profile">
+          <div id="profileMenu" class="hidden absolute right-0 mt-2 w-44 bg-gray-800 border border-gray-700 rounded-xl shadow-xl z-50">
+            <div class="px-4 py-3 border-b border-gray-700">
+              <p class="text-sm font-semibold text-white truncate">${user.displayName}</p>
+              <p class="text-xs text-gray-400 truncate">${user.email}</p>
+            </div>
+            <button onclick="logoutUser()" class="w-full text-left px-4 py-2.5 text-red-400 hover:bg-red-500/10 text-sm transition">
+              Logout
+            </button>
+          </div>
+        </div>`;
+ 
+      const loggedOutHTML = `
+        <button onclick="signInWithGoogle()"
+                class="border border-blue-500/60 px-4 py-1.5 rounded-full text-sm font-medium text-blue-300 hover:bg-blue-500/10 transition">
+          Sign In
+        </button>`;
+ 
+      if (authArea)   authArea.innerHTML   = user ? loggedInHTML(user) : loggedOutHTML;
+      if (authMobile) authMobile.innerHTML = user ? loggedInHTML(user) : '';
+      if (heroBtn) heroBtn.classList.toggle("hidden", !!user);
+ 
+      // Profile dropdown toggle (re-attach after innerHTML change)
+      if (user) {
+        setTimeout(() => {
+          const btn  = document.getElementById("profileBtn");
+          const menu = document.getElementById("profileMenu");
+          if (!btn || !menu) return;
+          btn.addEventListener("click", e => { e.stopPropagation(); menu.classList.toggle("hidden"); });
+          document.addEventListener("click", e => {
+            if (!menu.contains(e.target) && !btn.contains(e.target)) menu.classList.add("hidden");
+          });
+        }, 0);
+      }
+    });
+  });
+  </script>
+ 
+  <!-- =====================================================================
+       TOOLS DATA + RENDERING (single clean IIFE — no duplicates)
+  ====================================================================== -->
+  <script>
+  (function() {
+    "use strict";
+ 
+    const SHEET_URL  = "https://script.google.com/macros/s/AKfycbxXs2ajlwcddAMVEMY5NAMns_ooeEAHSYwDk84nnD6cU2hLjx_k5HKOgFLm-EX_ASSv/exec";
+    const CACHE_KEY  = "xedge_tools_cache_v2";
+    const CACHE_TTL  = 30 * 60 * 1000; // 30 minutes
+    const PRIORITY   = ["chatgpt","runway ml","notion ai","leonardo ai","github copilot","midjourney","perplexity"];
+ 
+    const normalize  = s => String(s || "").trim().toLowerCase();
+    const safeParse  = v => { try { return JSON.parse(v); } catch { return null; } };
+ 
+    /* ---------- FETCH with TTL cache ---------- */
+    async function fetchTools() {
+      const raw = safeParse(localStorage.getItem(CACHE_KEY));
+      if (raw && Array.isArray(raw.data) && raw.data.length && (Date.now() - raw.ts < CACHE_TTL)) {
+        return raw.data;
+      }
+      try {
+        const res  = await fetch(SHEET_URL + "?t=" + Date.now(), { cache: "no-store" });
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        const data = await res.json();
+        if (Array.isArray(data) && data.length) {
+          localStorage.setItem(CACHE_KEY, JSON.stringify({ data, ts: Date.now() }));
+          return data;
+        }
+      } catch(e) { console.error("XEdge fetch:", e); }
+      return (raw && raw.data) || [];
+    }
+ 
+    /* ---------- Normalize tool fields ---------- */
+    function normalizeTools(raw) {
+      return raw.map(d => ({
+        name:     d.name  || d.title || "",
+        short:    d.short_description || d.short || d.summary || "",
+        category: d.category || "",
+        logo:     d.logo_url || d.logo || "",
+        link:     d.Link || d.link || "#"
+      }));
+    }
+ 
+    /* ---------- Lazy images ---------- */
+    function lazyLoad(root) {
+      if (!root) return;
+      const imgs = root.querySelectorAll("img[data-src]");
+      if (!imgs.length) return;
+      const obs = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (!e.isIntersecting) return;
+          e.target.src = e.target.dataset.src;
+          e.target.removeAttribute("data-src");
+          obs.unobserve(e.target);
+        });
+      }, { rootMargin: "300px" });
+      imgs.forEach(i => obs.observe(i));
+    }
+ 
+    /* ---------- Browse by Goal ---------- */
+    function renderGoals() {
+      const grid = document.getElementById("browse-theme-grid");
+      if (!grid) return;
+      const goals = [
+        { id: "make-money",      label: "Make Money",       logos: ["chat.openai.com","stripe.com","notion.so"],        color: "from-green-600 to-emerald-600" },
+        { id: "start-business",  label: "Start a Business", logos: ["vercel.com","supabase.com","figma.com"],            color: "from-blue-600 to-indigo-600" },
+        { id: "create-content",  label: "Create Content",   logos: ["claude.ai","midjourney.com","descript.com"],        color: "from-purple-600 to-pink-600" },
+        { id: "grow-audience",   label: "Grow Audience",    logos: ["buffer.com","typefully.com","gumroad.com"],         color: "from-orange-600 to-red-600" },
+        { id: "save-time",       label: "Save Time",        logos: ["make.com","zapier.com","n8n.io"],                   color: "from-yellow-600 to-amber-600" },
+        { id: "learn-ai",        label: "Learn AI",         logos: ["chat.openai.com","claude.ai","perplexity.ai"],      color: "from-cyan-600 to-blue-600" }
+      ];
+      grid.innerHTML = goals.map(g => `
+        <div onclick="location.href='stack.html?goal=${g.id}'"
+             class="cursor-pointer bg-gray-800/60 border border-gray-700 hover:border-gray-500
+                    hover:bg-gray-700/60 transition rounded-2xl p-6 text-center">
+          <div class="flex justify-center -space-x-2 mb-4">
+            ${g.logos.map((d,i) => `
+              <img src="https://www.google.com/s2/favicons?domain=${d}&sz=64"
+                   class="w-9 h-9 rounded-full border-2 border-gray-800 bg-white p-0.5"
+                   style="z-index:${3-i}" onerror="this.style.display='none'">`).join("")}
+          </div>
+          <h3 class="text-white font-semibold text-base mb-1">${g.label}</h3>
+          <p class="text-gray-500 text-xs">Best stack for ${g.label.toLowerCase()}</p>
+        </div>`).join("");
+    }
+ 
+    /* ---------- Top Tools ---------- */
+    function renderTopTools(tools) {
+      const scroller = document.getElementById("top-tools-wrapper");
+      if (!scroller) return;
+      const skel = document.getElementById("top-tools-skel");
+      if (skel) skel.remove();
+ 
+      const priority = tools.filter(t => PRIORITY.includes(normalize(t.name)));
+      const list = (priority.length ? priority : tools).slice(0, 8);
+ 
+      scroller.innerHTML = list.map(t => `
+        <div class="min-w-[230px] snap-start bg-gray-800/60 border border-gray-700 rounded-2xl p-5 text-center shrink-0">
+          <img data-src="${t.logo || `https://dummyimage.com/160x160/1e293b/fff&text=${encodeURIComponent((t.name||"").slice(0,10))}`}"
+               src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+               class="w-16 h-16 object-contain mx-auto mb-3 rounded-lg bg-gray-700/40" alt="${t.name}">
+          <h3 class="text-base font-semibold mb-1">${t.name}</h3>
+          <p class="text-gray-400 text-xs mb-4 line-clamp-2">${(t.short||"").slice(0,70)}</p>
+          <a href="tool.html?tool=${encodeURIComponent(t.name)}"
+             class="bg-blue-600 hover:bg-blue-500 px-4 py-1.5 rounded-full text-xs font-medium transition">
+            View Tool
+          </a>
+        </div>`).join("");
+ 
+      lazyLoad(scroller);
+ 
+      const left  = document.getElementById("scroll-left");
+      const right = document.getElementById("scroll-right");
+      if (left && right) {
+        left.classList.remove("hidden");
+        right.classList.remove("hidden");
+        right.onclick = () => scroller.scrollBy({ left: 300, behavior: "smooth" });
+        left.onclick  = () => scroller.scrollBy({ left: -300, behavior: "smooth" });
+      }
+      if (window.feather) feather.replace();
+    }
+ 
+    /* ---------- Search ---------- */
+    let allTools = [];
+ 
+    function searchTools(query) {
+      const term = query.toLowerCase().trim();
+      if (!term) { hideResults(); return; }
+      const matches = allTools.filter(t =>
+        t.name?.toLowerCase().includes(term) ||
+        t.short?.toLowerCase().includes(term)
+      ).slice(0, 6);
+      // GA tracking (single location, no duplicate)
+      if (typeof gtag !== "undefined") {
+        gtag("event", "search", { search_term: query, results_count: matches.length });
+      }
+      showResults(matches);
+    }
+ 
+    function showResults(tools) {
+      const c = document.getElementById("search-results");
+      if (!c) return;
+      c.innerHTML = tools.length
+        ? tools.map(t => `
+            <a href="tool.html?tool=${encodeURIComponent(t.name)}"
+               class="flex items-center gap-3 px-4 py-3 hover:bg-gray-700 border-b border-gray-700/60 last:border-0 transition">
+              <img src="${t.logo || 'xedge-logo.png'}" class="w-8 h-8 rounded-lg object-cover shrink-0"
+                   onerror="this.src='xedge-logo.png'" alt="${t.name}">
+              <div class="min-w-0">
+                <div class="font-medium text-white text-sm">${t.name}</div>
+                <div class="text-xs text-gray-400 truncate">${t.short || ""}</div>
+              </div>
+            </a>`).join("")
+        : `<div class="px-4 py-3 text-gray-500 text-sm">No tools found</div>`;
+      c.classList.remove("hidden");
+    }
+ 
+    function hideResults() {
+      const c = document.getElementById("search-results");
+      if (c) c.classList.add("hidden");
+    }
+ 
+    /* ---------- Init ---------- */
+    async function init() {
+      renderGoals();
+      const raw  = await fetchTools();
+      allTools   = normalizeTools(raw);
+      renderTopTools(allTools);
+      if (window.feather) feather.replace();
+ 
+      const input = document.getElementById("global-search");
+      if (input) {
+        input.addEventListener("input", e => searchTools(e.target.value));
+      }
+      document.addEventListener("click", e => {
+        if (!e.target.closest("#global-search") && !e.target.closest("#search-results")) hideResults();
+      });
+    }
+ 
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", init);
+    } else {
+      init();
+    }
+  })();
+  </script>
+ 
+  <!-- =====================================================================
+       MOBILE MENU — clean, single listener block
+  ====================================================================== -->
+  <script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const toggle   = document.getElementById("mobile-menu-toggle");
+    const closeBtn = document.getElementById("mobileClose");
+    const menu     = document.getElementById("mobileMenu");
+    const backdrop = document.getElementById("nav-backdrop");
+ 
+    function openMenu() {
+      menu.classList.add("open");
+      backdrop.classList.add("show");
+      document.body.style.overflow = "hidden";
+    }
+    function closeMenu() {
+      menu.classList.remove("open");
+      backdrop.classList.remove("show");
+      document.body.style.overflow = "";
+    }
+ 
+    if (toggle)   toggle.addEventListener("click", openMenu);
+    if (closeBtn) closeBtn.addEventListener("click", closeMenu);
+    if (backdrop) backdrop.addEventListener("click", closeMenu);
+ 
+    // Ensure closed on load
+    if (menu)     menu.classList.remove("open");
+    if (backdrop) backdrop.classList.remove("show");
+ 
+    // Feather icons
+    if (window.feather) feather.replace();
+  });
+  </script>
+ 
+</body>
+</html>
