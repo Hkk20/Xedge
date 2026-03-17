@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- ═══════════════════════════════════════════════
+       CHANGE THESE 6 THINGS FOR EVERY NEW POST
+  ═══════════════════════════════════════════════ -->
+  <title>YOUR POST TITLE — XEdge</title>
+  <meta name="description" content="YOUR 155-CHARACTER META DESCRIPTION. Include your target keyword naturally." />
+  <meta name="keywords" content="keyword1, keyword2, keyword3" />
+  <link rel="canonical" href="https://xedge.tech/blog/YOUR-POST-SLUG.html" />
+
+  <!-- Open Graph (for social sharing previews) -->
+  <meta property="og:title" content="YOUR POST TITLE" />
+  <meta property="og:description" content="YOUR META DESCRIPTION" />
+  <meta property="og:url" content="https://xedge.tech/blog/YOUR-POST-SLUG.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:image" content="https://xedge.tech/blog/images/YOUR-POST-SLUG-og.png" />
+
+  <!-- Article schema (helps Google understand this is a blog post) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "YOUR POST TITLE",
+    "description": "YOUR META DESCRIPTION",
+    "author": {
+      "@type": "Person",
+      "name": "Harsha",
+      "url": "https://xedge.tech/about.html"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "XEdge",
+      "url": "https://xedge.tech"
+    },
+    "datePublished": "2026-03-17",
+    "dateModified": "2026-03-17",
+    "mainEntityOfPage": "https://xedge.tech/blog/YOUR-POST-SLUG.html"
+  }
+  </script>
+  <!-- ═══════════════════════════════════════════════ -->
+
+  <meta name="robots" content="index, follow" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self';">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #080d14;
+      --bg2: #0d1520;
+      --bg3: #111b28;
+      --border: rgba(255,255,255,0.07);
+      --text: #e8edf2;
+      --muted: #8b9ab0;
+      --accent: #38bdf8;
+      --accent2: #818cf8;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(56,189,248,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(56,189,248,0.025) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* NAV */
+    .navbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      background: rgba(8,13,20,0.9);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+      z-index: 100;
+    }
+    .nav-inner {
+      max-width: 1100px;
+      margin: auto;
+      padding: .75rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .brand {
+      display: flex; align-items: center; gap: .5rem;
+      font-family: 'Syne', sans-serif; font-weight: 700;
+      color: white; text-decoration: none;
+    }
+    .brand img { width: 28px; height: 28px; border-radius: 6px; background: white; padding: 3px; }
+    .nav-links { display: flex; gap: 1.5rem; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: .875rem; transition: color .15s; }
+    .nav-links a:hover { color: white; }
+
+    /* LAYOUT */
+    .page-wrap {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 7rem 1.5rem 5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* BREADCRUMB */
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: .8rem;
+      color: var(--muted);
+      margin-bottom: 2rem;
+    }
+    .breadcrumb a { color: var(--accent); text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
+    .breadcrumb-sep { color: var(--muted); }
+
+    /* POST HEADER */
+    .post-header { margin-bottom: 2.5rem; }
+    .post-tag {
+      display: inline-block;
+      font-family: 'Syne', sans-serif;
+      font-size: .65rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: 3px 12px;
+      border-radius: 20px;
+      margin-bottom: 1rem;
+      background: rgba(56,189,248,0.1);
+      color: var(--accent);
+    }
+    .post-header h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .post-meta {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      font-size: .8rem;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+      align-items: center;
+    }
+    .post-meta-dot { color: var(--border); }
+    .post-intro {
+      font-size: 1.1rem;
+      color: #a0b0c0;
+      line-height: 1.75;
+      border-left: 2px solid var(--accent);
+      padding-left: 1.25rem;
+      margin-bottom: 2rem;
+    }
+
+    /* DIVIDER */
+    .post-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 2.5rem 0;
+    }
+
+    /* ARTICLE CONTENT — all your writing goes inside .post-content */
+    .post-content h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: white;
+      margin: 2.5rem 0 1rem;
+      padding-top: .5rem;
+    }
+    .post-content h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #c8d8e8;
+      margin: 2rem 0 .75rem;
+    }
+    .post-content p {
+      font-size: 1rem;
+      color: var(--text);
+      line-height: 1.8;
+      margin-bottom: 1.25rem;
+    }
+    .post-content ul, .post-content ol {
+      padding-left: 1.5rem;
+      margin-bottom: 1.25rem;
+    }
+    .post-content li {
+      font-size: 1rem;
+      color: var(--text);
+      line-height: 1.75;
+      margin-bottom: .4rem;
+    }
+    .post-content a {
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(56,189,248,0.3);
+      transition: border-color .15s;
+    }
+    .post-content a:hover { border-color: var(--accent); }
+    .post-content strong { color: white; font-weight: 500; }
+    .post-content em { color: #a0b8cc; font-style: italic; }
+
+    /* CALLOUT BOX */
+    .callout {
+      background: rgba(56,189,248,0.06);
+      border: 1px solid rgba(56,189,248,0.2);
+      border-radius: 10px;
+      padding: 1.25rem 1.5rem;
+      margin: 1.5rem 0;
+      font-size: .95rem;
+      color: #a0c8e0;
+      line-height: 1.7;
+    }
+    .callout strong { color: var(--accent); }
+
+    /* TOOL CARD INLINE */
+    .tool-row {
+      display: flex;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+      align-items: flex-start;
+      font-size: .9rem;
+    }
+    .tool-row:last-child { border-bottom: none; }
+    .tool-name { width: 110px; font-weight: 600; color: white; flex-shrink: 0; font-family: 'Syne', sans-serif; font-size: .85rem; }
+    .tool-role { flex: 1; color: var(--muted); line-height: 1.5; }
+    .tool-cost { font-size: .75rem; color: #34d399; flex-shrink: 0; font-family: 'Syne', sans-serif; font-weight: 600; }
+
+    /* CTA BOX — put at end of every post */
+    .cta-box {
+      background: var(--bg2);
+      border: 1px solid rgba(56,189,248,0.25);
+      border-radius: 14px;
+      padding: 2rem;
+      text-align: center;
+      margin: 3rem 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-box::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+    }
+    .cta-box h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: .5rem;
+      color: white;
+    }
+    .cta-box p { font-size: .9rem; color: var(--muted); margin-bottom: 1.25rem; }
+    .cta-btn {
+      display: inline-block;
+      background: var(--accent);
+      color: #000;
+      font-family: 'Syne', sans-serif;
+      font-size: .85rem;
+      font-weight: 700;
+      padding: 12px 28px;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: opacity .15s;
+    }
+    .cta-btn:hover { opacity: .85; }
+    .cta-btn-secondary {
+      display: inline-block;
+      color: var(--accent);
+      font-family: 'Syne', sans-serif;
+      font-size: .85rem;
+      font-weight: 600;
+      padding: 12px 20px;
+      text-decoration: none;
+      margin-left: 8px;
+    }
+
+    /* AUTHOR BOX */
+    .author-box {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.25rem;
+      margin: 2.5rem 0;
+    }
+    .author-avatar {
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Syne', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #000;
+      flex-shrink: 0;
+    }
+    .author-info h4 {
+      font-family: 'Syne', sans-serif;
+      font-size: .9rem;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 3px;
+    }
+    .author-info p { font-size: .8rem; color: var(--muted); line-height: 1.5; }
+
+    /* BACK LINK */
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: .85rem;
+      margin-bottom: 2rem;
+      transition: color .15s;
+    }
+    .back-link:hover { color: var(--accent); }
+
+    /* FOOTER */
+    footer {
+      max-width: 1100px;
+      margin: 3rem auto 0;
+      padding: 2rem 1.5rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      font-size: .85rem;
+      color: var(--muted);
+      position: relative;
+      z-index: 1;
+    }
+    footer a { color: var(--accent); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .page-wrap { animation: fadeUp .4s ease both; }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a href="../index.html" class="brand">
+        <img src="../xedge-logo.png" alt="XEdge logo">
+        <span>XEdge</span>
+      </a>
+      <div class="nav-links">
+        <a href="../index.html">Home</a>
+        <a href="../Explore.html">Explore</a>
+        <a href="../stack.html">Stacks</a>
+        <a href="../Blog.html">Blog</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="page-wrap">
+
+    <!-- BREADCRUMB -->
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="../Blog.html">Blog</a>
+      <span class="breadcrumb-sep">›</span>
+      <span>YOUR CATEGORY</span>  <!-- e.g. AI Stacks, Guides, Build in Public -->
+    </nav>
+
+    <!-- POST HEADER — CHANGE THIS SECTION -->
+    <header class="post-header">
+      <span class="post-tag">AI Stacks</span>  <!-- Change category -->
+      <h1>Your Full Post Title Goes Here — Make It the Exact Search Query</h1>
+      <div class="post-meta">
+        <span>Harsha</span>
+        <span class="post-meta-dot">·</span>
+        <span>March 17, 2026</span>  <!-- Change date -->
+        <span class="post-meta-dot">·</span>
+        <span>8 min read</span>  <!-- Estimate: ~200 words per minute -->
+      </div>
+      <!-- ONE SENTENCE that hooks the reader — make it the most compelling thing in the post -->
+      <p class="post-intro">
+        Your hook sentence goes here. This is the first thing people read after the title. Make it specific, make it interesting, make it promise a real outcome.
+      </p>
+    </header>
+
+    <hr class="post-divider">
+
+    <!-- ═══════════════════════════════════════
+         ALL YOUR CONTENT GOES BELOW HERE
+         Use h2 for main sections, h3 for sub-sections
+         Use .callout divs for tips/warnings
+         Use .tool-row divs for stack breakdowns
+         Use .cta-box at the end
+    ═══════════════════════════════════════ -->
+    <article class="post-content">
+
+      <p>Your intro paragraph. Tell them what they're going to learn and why it matters to them right now. Keep it under 3 sentences.</p>
+
+      <h2>Section 1 — Your First H2 (Include Your Target Keyword)</h2>
+
+      <p>Your first section content. Be specific. Use real numbers. Avoid vague statements like "AI tools can help you grow." Say instead "Using Claude for code generation reduced my build time from 3 weeks to 4 days."</p>
+
+      <p>Second paragraph of section 1. Keep paragraphs short — 3-4 sentences maximum. White space is your friend on screen.</p>
+
+      <!-- CALLOUT BOX EXAMPLE — use for tips, warnings, key insights -->
+      <div class="callout">
+        <strong>Key insight:</strong> Your most important point from this section goes here. Make it actionable. Example: "Claude's 200K context window means you can paste your entire codebase and ask it to debug — something GPT-4 can't handle."
+      </div>
+
+      <h2>Section 2 — The Stack (Include Tool Names for SEO)</h2>
+
+      <p>Intro to your stack breakdown. Then use tool rows below:</p>
+
+      <!-- TOOL STACK BREAKDOWN — copy this pattern for each stack post -->
+      <div style="border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:1.25rem;margin:1.25rem 0;">
+        <div class="tool-row">
+          <span class="tool-name">Claude</span>
+          <span class="tool-role">Code generation, debugging, and architecture decisions. Handles 70% of development work.</span>
+          <span class="tool-cost">$20/mo</span>
+        </div>
+        <div class="tool-row">
+          <span class="tool-name">Replit</span>
+          <span class="tool-role">Cloud coding environment. Deploy directly from browser with zero config.</span>
+          <span class="tool-cost">$7/mo</span>
+        </div>
+        <div class="tool-row">
+          <span class="tool-name">Supabase</span>
+          <span class="tool-role">Database, authentication, and backend. Open-source Firebase alternative.</span>
+          <span class="tool-cost">Free</span>
+        </div>
+        <div class="tool-row">
+          <span class="tool-name">Vercel</span>
+          <span class="tool-role">Frontend hosting. Push to GitHub = live in seconds. Global CDN included.</span>
+          <span class="tool-cost">Free</span>
+        </div>
+      </div>
+
+      <h2>Section 3 — Implementation (Week by Week)</h2>
+
+      <h3>Week 1–2: [Phase name]</h3>
+      <p>What to do, specifically. Not "set up your tools" but "create a Supabase project, run this SQL to create your users table, configure Google OAuth in the Authentication tab."</p>
+
+      <h3>Week 3–6: [Phase name]</h3>
+      <p>Continue the roadmap. Every section should give the reader something they can do today.</p>
+
+      <h2>Section 4 — The Revenue Math (Be Honest)</h2>
+
+      <p>Put real numbers here. Conversion rates, realistic timelines, what success looks like at month 3 vs month 12. Don't oversell. Undersell and overdeliver.</p>
+
+      <h2>Common Mistakes (This Section Gets Shared Most)</h2>
+
+      <p>What do people get wrong? Be specific. This section tends to get the most shares because people recognize themselves in the mistakes.</p>
+      <ul>
+        <li><strong>Mistake 1:</strong> Explanation of why this is a mistake and what to do instead.</li>
+        <li><strong>Mistake 2:</strong> Keep it real. If you made this mistake yourself, say so.</li>
+        <li><strong>Mistake 3:</strong> The more specific, the more useful.</li>
+      </ul>
+
+      <h2>Conclusion</h2>
+
+      <p>One paragraph summary. What did we cover? What's the one thing they should do today?</p>
+
+    </article>
+    <!-- END CONTENT -->
+
+    <!-- AUTHOR BOX -->
+    <div class="author-box">
+      <div class="author-avatar">H</div>
+      <div class="author-info">
+        <h4>Harsha — Founder of XEdge</h4>
+        <p>18 years old. Built XEdge in free time over 3 months using AI tools. Writing about AI stacks, building with AI, and growing a platform from zero.</p>
+      </div>
+    </div>
+
+    <!-- CTA BOX — CHANGE THE LINK AND TEXT FOR EACH POST -->
+    <div class="cta-box">
+      <h3>Want the full implementation guide?</h3>
+      <p>The complete 24-page PDF — real code, exact prompts, revenue math, and a week-by-week checklist. Everything you need to actually build this.</p>
+      <a class="cta-btn" href="https://YOUR-GUMROAD-LINK" target="_blank">Get the full guide — $29 →</a>
+      <a class="cta-btn-secondary" href="../stack.html">Or explore free stacks →</a>
+    </div>
+
+    <!-- BACK TO BLOG -->
+    <a class="back-link" href="../Blog.html">← Back to all posts</a>
+
+  </div>
+
+  <footer>
+    <span>© 2026 XEdge</span>
+    <a href="../index.html">Home</a>
+    <a href="../stack.html">Stacks</a>
+    <a href="../Blog.html">Blog</a>
+    <a href="../privacy.html">Privacy</a>
+  </footer>
+</body>
+</html>
