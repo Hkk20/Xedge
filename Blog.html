@@ -3,247 +3,551 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <title>Blog | X-Edge</title>
-  <meta name="description" content="X-Edge Blog — insights on AI tools, security, startups, and product building." />
-
-  <!-- Basic Security -->
-  <meta http-equiv="Content-Security-Policy"
-        content="default-src 'self'; style-src 'self' 'unsafe-inline';">
-
-  <!-- SEO -->
+  <title>Blog — XEdge | AI Tool Stacks & Implementation Guides</title>
+  <meta name="description" content="XEdge Blog — practical guides on AI tool stacks, building with AI, and growing a business without technical skills." />
   <meta name="robots" content="index, follow" />
+  <meta property="og:title" content="XEdge Blog — AI Tool Stacks & Implementation Guides" />
+  <meta property="og:description" content="Practical guides on AI tool stacks, building with AI, and growing a business without technical skills." />
+  <meta property="og:url" content="https://xedge.tech/blog" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; font-src https://fonts.googleapis.com https://fonts.gstatic.com; img-src 'self' data:;">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
 
   <style>
+    :root {
+      --bg: #080d14;
+      --bg2: #0d1520;
+      --bg3: #111b28;
+      --border: rgba(255,255,255,0.07);
+      --border-hover: rgba(56,189,248,0.4);
+      --text: #f0f4f8;
+      --muted: #8b9ab0;
+      --accent: #38bdf8;
+      --accent2: #818cf8;
+      --tag-bg: rgba(56,189,248,0.08);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-      background: #0f172a;
-      color: #e5e7eb;
-      margin: 0;
-      padding: 0;
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
     }
 
-    .container {
+    /* subtle grid bg */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(56,189,248,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(56,189,248,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* NAV */
+    .navbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      background: rgba(8,13,20,0.85);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+      z-index: 100;
+    }
+    .nav-inner {
       max-width: 1100px;
-      margin: 0 auto;
-      padding: 3rem 1.25rem;
+      margin: auto;
+      padding: .75rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
-    
-.navbar{
-  position:fixed;
-  top:0;
-  width:100%;
-  background:rgba(15,23,42,0.9);
-  border-bottom:1px solid #1f2937;
-  backdrop-filter:blur(8px);
-  z-index:1000;
-}
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      color: white;
+      text-decoration: none;
+      font-size: 1rem;
+    }
+    .brand img {
+      width: 30px; height: 30px;
+      border-radius: 6px;
+      background: white;
+      padding: 3px;
+    }
+    .nav-links { display: flex; gap: 1.5rem; }
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: .875rem;
+      transition: color .15s;
+    }
+    .nav-links a:hover { color: white; }
 
-.nav-inner{
-  max-width:1100px;
-  margin:auto;
-  padding:0.75rem 1.25rem;
-
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-}
-
-.brand{
-  display:flex;
-  align-items:center;
-  gap:.5rem;
-  font-weight:bold;
-  color:white;
-}
-
-.brand img{
-  width:32px;
-  height:32px;
-  background:white;
-  padding:4px;
-  border-radius:6px;
-}
-
-.nav-links{
-  display:flex;
-  gap:1.2rem;
-}
-
-.nav-links a{
-  color:#9ca3af;
-  font-size:.9rem;
-}
-
-.nav-links a:hover{
-  color:white;
-}
-
-
-    header {
-      margin-bottom: 3rem;
+    /* MAIN */
+    main {
+      max-width: 1100px;
+      margin: auto;
+      padding: 7rem 1.5rem 5rem;
+      position: relative;
+      z-index: 1;
     }
 
-    h1 {
-      font-size: 2.4rem;
-      margin-bottom: 0.5rem;
-      color: #ffffff;
+    /* HERO */
+    .hero {
+      margin-bottom: 4rem;
     }
-
-    .subtitle {
-      color: #9ca3af;
+    .hero-label {
+      display: inline-block;
+      font-family: 'Syne', sans-serif;
+      font-size: .7rem;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: var(--tag-bg);
+      border: 1px solid rgba(56,189,248,0.2);
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 1.25rem;
+    }
+    .hero h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: .75rem;
+      background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero p {
       font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 540px;
+      line-height: 1.7;
     }
 
+    /* FILTER TABS */
+    .filter-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 2.5rem;
+    }
+    .filter-btn {
+      font-family: 'Syne', sans-serif;
+      font-size: .75rem;
+      font-weight: 600;
+      padding: 6px 16px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all .15s;
+      letter-spacing: .03em;
+    }
+    .filter-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .filter-btn.active { background: var(--accent); color: #000; border-color: var(--accent); }
+
+    /* FEATURED POST */
+    .featured {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2.5rem;
+      margin-bottom: 2.5rem;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 2rem;
+      align-items: center;
+      transition: border-color .2s;
+      text-decoration: none;
+      color: inherit;
+      position: relative;
+      overflow: hidden;
+    }
+    .featured::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+    }
+    .featured:hover { border-color: var(--border-hover); }
+    .featured-label {
+      font-family: 'Syne', sans-serif;
+      font-size: .65rem;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: .75rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .featured-label::before {
+      content: '★';
+      font-size: .7rem;
+    }
+    .featured h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      line-height: 1.25;
+      margin-bottom: .75rem;
+      color: white;
+    }
+    .featured p {
+      color: var(--muted);
+      font-size: .95rem;
+      line-height: 1.65;
+      max-width: 560px;
+    }
+    .featured-meta {
+      font-size: .8rem;
+      color: var(--muted);
+      margin-top: 1rem;
+      display: flex;
+      gap: 1rem;
+    }
+    .featured-cta {
+      background: var(--accent);
+      color: #000;
+      font-family: 'Syne', sans-serif;
+      font-size: .8rem;
+      font-weight: 700;
+      padding: 10px 20px;
+      border-radius: 8px;
+      white-space: nowrap;
+      text-decoration: none;
+      transition: opacity .15s;
+    }
+    .featured-cta:hover { opacity: .85; }
+
+    /* GRID */
     .blog-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 2rem;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
     }
 
     .post-card {
-      background: #020617;
-      border: 1px solid #1f2933;
-      border-radius: 10px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
       padding: 1.5rem;
-      transition: transform 0.15s ease, border 0.15s ease;
-    }
-
-    .post-card:hover {
-      transform: translateY(-4px);
-      border-color: #38bdf8;
-    }
-
-    .post-meta {
-      font-size: 0.85rem;
-      color: #9ca3af;
-      margin-bottom: 0.5rem;
-    }
-
-    .post-title {
-      font-size: 1.25rem;
-      margin: 0.25rem 0 0.75rem;
-      color: #ffffff;
-    }
-
-    .post-desc {
-      font-size: 0.95rem;
-      color: #d1d5db;
-      line-height: 1.6;
-    }
-
-    .read-more {
-      display: inline-block;
-      margin-top: 1rem;
-      font-size: 0.9rem;
-      color: #38bdf8;
       text-decoration: none;
-    }
-
-    .read-more:hover {
-      text-decoration: underline;
-    }
-
-    footer {
-      margin-top: 4rem;
-      border-top: 1px solid #1f2933;
-      padding-top: 1.5rem;
-      font-size: 0.9rem;
-      color: #9ca3af;
+      color: inherit;
       display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
+      flex-direction: column;
+      transition: border-color .2s, transform .2s;
     }
+    .post-card:hover {
+      border-color: var(--border-hover);
+      transform: translateY(-3px);
+    }
+    .post-tag {
+      display: inline-block;
+      font-family: 'Syne', sans-serif;
+      font-size: .65rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 20px;
+      margin-bottom: .75rem;
+      width: fit-content;
+    }
+    .tag-ai { background: rgba(56,189,248,0.1); color: var(--accent); }
+    .tag-build { background: rgba(129,140,248,0.1); color: var(--accent2); }
+    .tag-security { background: rgba(251,191,36,0.1); color: #fbbf24; }
+    .tag-privacy { background: rgba(52,211,153,0.1); color: #34d399; }
+    .tag-guide { background: rgba(251,113,133,0.1); color: #fb7185; }
 
-    footer a {
-      color: #38bdf8;
+    .post-card h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      line-height: 1.35;
+      margin-bottom: .6rem;
+      color: white;
+      flex: 1;
+    }
+    .post-card p {
+      font-size: .875rem;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+    .post-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: auto;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+    }
+    .post-date { font-size: .75rem; color: var(--muted); }
+    .read-link {
+      font-family: 'Syne', sans-serif;
+      font-size: .75rem;
+      font-weight: 700;
+      color: var(--accent);
       text-decoration: none;
+      letter-spacing: .02em;
+    }
+    .coming-soon-card {
+      opacity: .5;
+      pointer-events: none;
+    }
+    .coming-badge {
+      font-size: .7rem;
+      color: var(--muted);
+      background: var(--bg3);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-family: 'Syne', sans-serif;
     }
 
-    footer a:hover {
-      text-decoration: underline;
+    /* NEWSLETTER */
+    .newsletter {
+      margin-top: 4rem;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2.5rem;
+      text-align: center;
+    }
+    .newsletter h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: .5rem;
+    }
+    .newsletter p {
+      color: var(--muted);
+      font-size: .9rem;
+      margin-bottom: 1.5rem;
+    }
+    .nl-form {
+      display: flex;
+      gap: 8px;
+      max-width: 400px;
+      margin: auto;
+    }
+    .nl-form input {
+      flex: 1;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      color: white;
+      font-family: 'DM Sans', sans-serif;
+      font-size: .875rem;
+      outline: none;
+    }
+    .nl-form input:focus { border-color: var(--accent); }
+    .nl-form button {
+      background: var(--accent);
+      color: #000;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 20px;
+      font-family: 'Syne', sans-serif;
+      font-size: .8rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity .15s;
+      white-space: nowrap;
+    }
+    .nl-form button:hover { opacity: .85; }
+
+    /* FOOTER */
+    footer {
+      max-width: 1100px;
+      margin: 3rem auto 0;
+      padding: 2rem 1.5rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      font-size: .85rem;
+      color: var(--muted);
+      position: relative;
+      z-index: 1;
+    }
+    footer a { color: var(--accent); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .hero { animation: fadeUp .5s ease both; }
+    .filter-row { animation: fadeUp .5s .1s ease both; }
+    .featured { animation: fadeUp .5s .15s ease both; }
+    .blog-grid { animation: fadeUp .5s .2s ease both; }
+
+    @media (max-width: 640px) {
+      .featured { grid-template-columns: 1fr; }
+      .featured-cta { display: none; }
+      .nl-form { flex-direction: column; }
     }
   </style>
 </head>
 
 <body>
   <nav class="navbar">
-  <div class="nav-inner">
+    <div class="nav-inner">
+      <a href="index.html" class="brand">
+        <img src="xedge-logo.png" alt="XEdge logo">
+        <span>XEdge</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="Explore.html">Explore</a>
+        <a href="stack.html">Stacks</a>
+        <a href="Blog.html">Blog</a>
+      </div>
+    </div>
+  </nav>
 
-    <a href="index.html" class="brand">
-      <img src="xedge-logo.png" alt="Xedge logo">
-      <span>Xedge</span>
-    </a>
-
-    <div class="nav-links">
-      <a href="index.html">Home</a>
-      <a href="tools.html">Tools</a>
-      <a href="about.html">About</a>
-      <a href="contact.html">Contact</a>
+  <main>
+    <div class="hero">
+      <span class="hero-label">XEdge Blog</span>
+      <h1>Build anything with AI.<br>Here's how.</h1>
+      <p>Practical guides on AI tool stacks, implementation roadmaps, and building a real business without technical skills.</p>
     </div>
 
-  </div>
-</nav>
-  <main class="container">
+    <div class="filter-row">
+      <button class="filter-btn active" onclick="filterPosts('all', this)">All</button>
+      <button class="filter-btn" onclick="filterPosts('ai-stacks', this)">AI Stacks</button>
+      <button class="filter-btn" onclick="filterPosts('build-in-public', this)">Build in Public</button>
+      <button class="filter-btn" onclick="filterPosts('guides', this)">Guides</button>
+      <button class="filter-btn" onclick="filterPosts('security', this)">Security</button>
+    </div>
 
-    <header>
-      <h1>X-Edge Blog</h1>
-      <p class="subtitle">
-        Building, securing, and scaling AI-powered products — transparently.
-      </p>
-    </header>
+    <!-- FEATURED — replace with your first real SEO post when ready -->
+    <a class="featured" href="blog/build-saas-without-technical-cofounder.html" data-category="ai-stacks guides">
+      <div>
+        <div class="featured-label">Featured Post</div>
+        <h2>How to Build a SaaS Without a Technical Co-Founder in 2026</h2>
+        <p>The exact AI stack — Claude, Replit, Figma, Supabase, Vercel, PostHog — with a week-by-week roadmap, real cost breakdown, and implementation guide. No coding experience required.</p>
+        <div class="featured-meta">
+          <span>Mar 2026</span>
+          <span>·</span>
+          <span>8 min read</span>
+          <span>·</span>
+          <span>AI Stacks</span>
+        </div>
+      </div>
+      <a class="featured-cta" href="blog/build-saas-without-technical-cofounder.html">Read now →</a>
+    </a>
 
-    <section class="blog-grid">
+    <div class="blog-grid" id="blog-grid">
 
-      <!-- Blog Post Card -->
-      <article class="post-card">
-        <div class="post-meta">Jan 2026 · Security</div>
-        <h2 class="post-title">Is My App Secure Enough as an MVP?</h2>
-        <p class="post-desc">
-          A realistic breakdown of security expectations for early-stage products,
-          static sites, and solo founders.
-        </p>
-        <a class="read-more" href="blog/is-my-app-secure.html">
-          Read article →
-        </a>
-      </article>
+      <!-- POST 1 — your first SEO post (duplicate of featured, smaller card) -->
+      <a class="post-card" href="blog/build-saas-without-technical-cofounder.html" data-category="ai-stacks guides">
+        <span class="post-tag tag-ai">AI Stacks</span>
+        <h2>How to Build a SaaS Without a Technical Co-Founder in 2026</h2>
+        <p>The exact tool combination, cost breakdown, and step-by-step roadmap.</p>
+        <div class="post-footer">
+          <span class="post-date">Mar 2026 · 8 min</span>
+          <a class="read-link" href="blog/build-saas-without-technical-cofounder.html">Read →</a>
+        </div>
+      </a>
 
-      <!-- Blog Post Card -->
-      <article class="post-card">
-        <div class="post-meta">Jan 2026 · Privacy</div>
-        <h2 class="post-title">Why X-Edge Collects Emails (And How We Protect Them)</h2>
-        <p class="post-desc">
-          Full transparency on why we collect emails, how Firebase is used,
-          and what data we never collect.
-        </p>
-        <a class="read-more" href="blog/email-privacy.html">
-          Read article →
-        </a>
-      </article>
+      <!-- POST 2 — coming soon, your story post -->
+      <div class="post-card coming-soon-card" data-category="build-in-public">
+        <span class="post-tag tag-build">Build in Public</span>
+        <h2>I Built an AI Platform at 18 Using Only AI Tools — Here's the Stack</h2>
+        <p>3 months, no team, no funding. The exact tools, what worked, what failed, real costs.</p>
+        <div class="post-footer">
+          <span class="post-date">Coming soon</span>
+          <span class="coming-badge">Coming soon</span>
+        </div>
+      </div>
 
-      <!-- Blog Post Card -->
-      <article class="post-card">
-        <div class="post-meta">Coming Soon · AI Tools</div>
-        <h2 class="post-title">How We Evaluate AI Tools for X-Edge</h2>
-        <p class="post-desc">
-          Our criteria for listing tools — usefulness, safety, pricing,
-          and real-world value.
-        </p>
-        <a class="read-more" href="#">
-          Coming soon
-        </a>
-      </article>
+      <!-- POST 3 — coming soon, freelancer stack -->
+      <div class="post-card coming-soon-card" data-category="ai-stacks guides">
+        <span class="post-tag tag-guide">Guide</span>
+        <h2>Best AI Tools for Freelancers in 2026 — The Complete Stack That Scales to $100K</h2>
+        <p>Real tools, real costs, real timeline. No fluff.</p>
+        <div class="post-footer">
+          <span class="post-date">Coming soon</span>
+          <span class="coming-badge">Coming soon</span>
+        </div>
+      </div>
 
-    </section>
+      <!-- EXISTING POST 1 -->
+      <a class="post-card" href="blog/is-my-app-secure.html" data-category="security">
+        <span class="post-tag tag-security">Security</span>
+        <h2>Is My App Secure Enough as an MVP?</h2>
+        <p>A realistic breakdown of security expectations for early-stage products, static sites, and solo founders.</p>
+        <div class="post-footer">
+          <span class="post-date">Jan 2026 · 5 min</span>
+          <a class="read-link" href="blog/is-my-app-secure.html">Read →</a>
+        </div>
+      </a>
 
-    <footer>
-      <span>© 2026 X-Edge</span>
-      <a href="index.html">Home</a>
-      <a href="privacy.html">Privacy</a>
-      <a href="terms.html">Terms</a>
-      <a href="cookies.html">Cookies</a>
-    </footer>
+      <!-- EXISTING POST 2 -->
+      <a class="post-card" href="blog/email-privacy.html" data-category="security">
+        <span class="post-tag tag-privacy">Privacy</span>
+        <h2>Why XEdge Collects Emails (And How We Protect Them)</h2>
+        <p>Full transparency on why we collect emails, how Firebase is used, and what data we never collect.</p>
+        <div class="post-footer">
+          <span class="post-date">Jan 2026 · 4 min</span>
+          <a class="read-link" href="blog/email-privacy.html">Read →</a>
+        </div>
+      </a>
 
+    </div>
+
+    <div class="newsletter">
+      <h3>Get new stacks + guides weekly</h3>
+      <p>Join 200+ builders. No spam — just practical AI tools content every week.</p>
+      <div class="nl-form">
+        <input type="email" placeholder="your@email.com" />
+        <button type="button">Subscribe</button>
+      </div>
+    </div>
   </main>
+
+  <footer>
+    <span>© 2026 XEdge</span>
+    <a href="index.html">Home</a>
+    <a href="stack.html">Stacks</a>
+    <a href="privacy.html">Privacy</a>
+    <a href="terms.html">Terms</a>
+  </footer>
+
+  <script>
+    function filterPosts(cat, btn) {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.post-card, .featured').forEach(card => {
+        if (cat === 'all') {
+          card.style.display = '';
+        } else {
+          const cats = card.dataset.category || '';
+          card.style.display = cats.includes(cat) ? '' : 'none';
+        }
+      });
+    }
+  </script>
 </body>
 </html>
