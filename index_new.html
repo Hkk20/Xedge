@@ -3,871 +3,1359 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
- 
-  <!-- SEO: title & description -->
-  <title>XEdge — Find the Right AI Tool Stack for Your Goal</title>
-  <meta name="description" content="XEdge curates AI tool stacks for specific goals — launching a SaaS, growing a newsletter, building an agency. Find your stack, get the implementation guide, ship faster.">
-  <meta name="keywords" content="AI tool stacks, AI tools directory, best AI tools, AI for business, AI automation tools, curated AI tools">
-  <meta name="author" content="XEdge">
-  <link rel="canonical" href="https://xedge.tech">
-  <meta name="google-site-verification" content="AaE3t0dMHxUJ0ibWWmvyv8PN07Y3No95wPsK6tLhkKc">
-  <meta name="impact-site-verification" content="bffa8044-d60e-477c-aae5-d522e5b7c771">
- 
-  <!-- Favicon: use your actual logo -->
-  <link rel="icon" href="xedge-logo.png">
- 
-  <!-- Open Graph (fixed: no typos, no spaces in attribute names) -->
-  <meta property="og:title" content="XEdge — AI Tool Stacks for Every Goal">
-  <meta property="og:description" content="Curated AI tool combinations to achieve specific goals faster. Real implementation guides included.">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://xedge.tech">
-  <meta property="og:image" content="https://raw.githubusercontent.com/Hkk20/Xedge/main/xedge-logo.png">
- 
-  <!-- Twitter Card (fixed: card type in correct attribute) -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="XEdge — AI Tool Stacks for Every Goal">
-  <meta name="twitter:description" content="Discover curated AI tool stacks built for specific outcomes. Launch a SaaS, grow a newsletter, start an AI agency — with a step-by-step execution guide.">
-  <meta name="twitter:image" content="https://raw.githubusercontent.com/Hkk20/Xedge/main/xedge-logo.png">
- 
-  <!-- Preconnect for performance -->
-  <link rel="preconnect" href="https://script.google.com">
-  <link rel="dns-prefetch" href="https://script.google.com">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
- 
-  <!-- Analytics (your file) -->
-  <script src="analytics.js" defer></script>
- 
-  <!-- Tailwind CDN (note: replace with a proper build for production to eliminate 3MB penalty) -->
+
+  <!-- ═══ SEO ═══ -->
+  <title>XEdge — Discover & Deploy AI Tool Stacks for Every Goal</title>
+  <meta name="description" content="XEdge curates the best AI tool stacks for building a business, creating content, automating work, and making money. Find your perfect AI stack in 30 seconds."/>
+  <meta name="keywords" content="AI tools, AI tool stacks, best AI tools 2025, AI automation, AI for business, curated AI tools, artificial intelligence platform"/>
+  <meta name="author" content="XEdge"/>
+  <link rel="canonical" href="https://xedge.tech/"/>
+  <meta name="robots" content="index, follow"/>
+
+  <!-- ═══ OPEN GRAPH ═══ -->
+  <meta property="og:title" content="XEdge — AI Tool Stacks for Every Goal"/>
+  <meta property="og:description" content="Curated AI tool combinations to achieve specific goals faster. Step-by-step execution plans included."/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:image" content="https://xedge.tech/xedge-logo.png"/>
+  <meta property="og:url" content="https://xedge.tech/"/>
+  <meta property="og:site_name" content="XEdge"/>
+
+  <!-- ═══ TWITTER ═══ -->
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="XEdge — AI Tool Stacks for Every Goal"/>
+  <meta name="twitter:description" content="Discover curated AI stacks for building, creating, and automating. XEdge is your gateway to the world of AI."/>
+  <meta name="twitter:image" content="https://xedge.tech/xedge-logo.png"/>
+
+  <!-- ═══ VERIFICATION ═══ -->
+  <meta name="google-site-verification" content="AaE3t0dMHxUJ0ibWWmvyv8PN07Y3No95wPsK6tLhkKc"/>
+  <meta name="impact-site-verification" content="bffa8044-d60e-477c-aae5-d522e5b7c771"/>
+
+  <!-- ═══ FAVICON ═══ -->
+  <link rel="icon" href="xedge-logo.png" type="image/png"/>
+
+  <!-- ═══ PERFORMANCE: Preconnect only what matters ═══ -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link rel="dns-prefetch" href="https://script.google.com"/>
+  <link rel="dns-prefetch" href="https://www.gstatic.com"/>
+
+  <!-- ═══ FONTS: Only 2 weights, display=swap ═══ -->
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+
+  <!-- ═══ TAILWIND ═══ -->
   <script src="https://cdn.tailwindcss.com"></script>
- 
-  <!-- Feather icons -->
+
+  <!-- ═══ FEATHER ICONS (deferred) ═══ -->
   <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js" defer></script>
- 
-  <!-- Vanta: only load on non-mobile (performance fix) -->
+
+  <!-- ═══ VANTA: Only on desktop, fully deferred ═══ -->
   <script>
-    if (window.innerWidth >= 768) {
+    if (window.innerWidth > 768) {
       var s = document.createElement('script');
       s.src = 'https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js';
       s.defer = true;
       s.onload = function() {
-        if (window.VANTA) {
-          VANTA.NET({
-            el: '#vanta-bg',
-            mouseControls: false,
-            touchControls: false,
-            color: 0x1a5cff,
-            backgroundColor: 0x0b0f15,
-            points: 8,
-            maxDistance: 18,
-            spacing: 18
-          });
-        }
+        VANTA.NET({
+          el: "#vanta-bg",
+          color: 0x1d4ed8,
+          backgroundColor: 0x0b0f15,
+          points: 6,
+          maxDistance: 18,
+          spacing: 20,
+          mouseControls: false,
+          touchControls: false
+        });
       };
       document.head.appendChild(s);
     }
   </script>
- 
-<style>
-/* ============================================================
-   BASE
-   ============================================================ */
-*, *::before, *::after { box-sizing: border-box; }
- 
-html, body {
-  margin: 0; padding: 0;
-  width: 100%; overflow-x: hidden;
-  background: #0b0f15;
-  font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
-  color: #fff;
-  -webkit-font-smoothing: antialiased;
-}
- 
-:root { --blue: #3882ff; --blue-dark: #1a5cff; --max: 1400px; }
- 
-/* ============================================================
-   VANTA BACKGROUND
-   ============================================================ */
-#vanta-bg {
-  position: fixed; inset: 0;
-  z-index: 0; pointer-events: none;
-  opacity: 0.65;
-}
- 
-.page-top { position: relative; z-index: 10; }
- 
-/* ============================================================
-   NAV
-   ============================================================ */
-nav {
-  position: fixed; top: 0; left: 0; right: 0;
-  z-index: 60;
-}
- 
-/* ============================================================
-   MOBILE MENU
-   ============================================================ */
-.mobile-menu {
-  position: fixed; top: 0; right: 0;
-  height: 100vh; width: 84%; max-width: 380px;
-  background: rgba(6,8,12,0.98);
-  transform: translateX(100%);
-  transition: transform 260ms cubic-bezier(.2,.9,.2,1);
-  box-shadow: -20px 0 40px rgba(2,6,23,0.6);
-  z-index: 70; overflow-y: auto;
-}
-.mobile-menu.open { transform: translateX(0); }
- 
-.nav-backdrop {
-  position: fixed; inset: 0;
-  background: rgba(0,0,0,0.45);
-  z-index: 65; opacity: 0;
-  pointer-events: none;
-  transition: opacity 180ms;
-}
-.nav-backdrop.show { opacity: 1; pointer-events: auto; }
- 
-/* ============================================================
-   SKELETON / SCROLL
-   ============================================================ */
-.skeleton {
-  background: linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.04));
-  border-radius: 12px; min-height: 96px;
-  animation: shimmer 1.4s ease-in-out infinite alternate;
-}
-@keyframes shimmer {
-  from { opacity: 0.5; }
-  to   { opacity: 1; }
-}
- 
-.scrollbar-none::-webkit-scrollbar { display: none; }
-.scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
- 
-/* ============================================================
-   CATEGORY CARDS
-   ============================================================ */
-.featured-cat {
-  width: 100%; height: 200px; padding: 24px;
-  border-radius: 16px;
-  background: rgba(15,20,26,0.6);
-  border: 1px solid #1f2a36;
-  display: flex; flex-direction: column;
-  justify-content: center; align-items: center;
-  transition: transform 0.22s ease, box-shadow 0.22s ease;
-  text-decoration: none;
-}
-.featured-cat:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 0 28px rgba(56,130,255,0.18);
-}
-.featured-cat h3 {
-  font-size: 1rem; font-weight: 600;
-  margin-top: 14px; color: #fff;
-}
- 
-.category-icon {
-  width: 72px; height: 72px; border-radius: 50%;
-  background: #0f1a2b;
-  border: 1.5px solid rgba(37,99,235,0.6);
-  box-shadow: 0 0 14px rgba(37,99,235,0.4);
-  display: flex; align-items: center; justify-content: center;
-  transition: box-shadow 0.22s ease;
-}
-.featured-cat:hover .category-icon {
-  box-shadow: 0 0 24px rgba(37,99,235,0.8);
-}
-.category-icon i { color: #60a5ff; width: 30px; height: 30px; }
- 
-@media (max-width: 480px) {
-  .featured-cat { height: auto; padding: 18px; }
-  .category-icon { width: 56px; height: 56px; }
-  .category-icon i { width: 24px; height: 24px; }
-  .featured-cat h3 { font-size: 0.875rem; margin-top: 10px; }
-}
- 
-/* ============================================================
-   STACK CTA BANNER
-   ============================================================ */
-.stack-cta {
-  background: linear-gradient(135deg, rgba(26,92,255,0.15), rgba(0,200,150,0.08));
-  border: 1px solid rgba(56,130,255,0.3);
-  border-radius: 20px; padding: 40px 32px;
-  text-align: center;
-}
- 
-/* ============================================================
-   TOOL CARDS
-   ============================================================ */
-.xe-card {
-  background: rgba(31,41,55,0.6);
-  border: 1px solid rgba(63,63,70,0.6);
-  padding: 1rem; border-radius: 14px; display: block;
-}
-.xe-card img { width: 64px; height: 64px; object-fit: cover; border-radius: 10px; }
- 
-/* ============================================================
-   TOP TOOLS SCROLLER
-   ============================================================ */
-#top-tools-wrapper { width: 100%; max-width: 100%; }
-@media (min-width: 768px) { #top-tools-wrapper { padding: 0 48px; } }
- 
-/* ============================================================
-   WHY XEDGE
-   ============================================================ */
-.why-card {
-  background: rgba(15,20,26,0.5);
-  border: 1px solid #1f2a36;
-  border-radius: 16px; padding: 28px;
-}
-</style>
+
+  <!-- ═══ ANALYTICS ═══ -->
+  <script src="analytics.js" defer></script>
+
+  <style>
+    /* ─── RESET & BASE ─── */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; width: 100%; overflow-x: hidden; }
+    body {
+      font-family: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+      background: #0b0f15;
+      color: #fff;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─── VANTA BG ─── */
+    #vanta-bg {
+      position: fixed; inset: 0; z-index: 0;
+      pointer-events: none; touch-action: none; opacity: 0.65;
+    }
+    .page-top { position: relative; z-index: 10; }
+
+    /* ─── NAV ─── */
+    .xe-nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 60;
+      height: 68px;
+      background: rgba(11,15,21,0.9);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      display: flex; align-items: center;
+    }
+    .xe-nav-inner {
+      max-width: 1400px; width: 100%; margin: 0 auto;
+      padding: 0 24px;
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    }
+    .xe-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0; }
+    .xe-logo img { width: 36px; height: 36px; border-radius: 8px; }
+    .xe-logo span { font-size: 1.25rem; font-weight: 700; color: #60a5fa; letter-spacing: -0.3px; }
+    .xe-nav-links { display: flex; align-items: center; gap: 4px; }
+    .xe-nav-links a {
+      font-size: 0.9rem; font-weight: 500; color: #9ca3af;
+      padding: 6px 14px; border-radius: 8px; text-decoration: none;
+      transition: color .15s, background .15s;
+    }
+    .xe-nav-links a:hover { color: #fff; background: rgba(255,255,255,0.06); }
+    .xe-nav-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    .xe-btn-beta {
+      background: linear-gradient(135deg, #3b82f6, #6366f1);
+      padding: 8px 20px; border-radius: 100px;
+      font-size: 0.85rem; font-weight: 600; color: #fff;
+      text-decoration: none; transition: opacity .15s, transform .15s;
+      white-space: nowrap;
+    }
+    .xe-btn-beta:hover { opacity: 0.88; transform: translateY(-1px); }
+
+    /* ─── HAMBURGER ─── */
+    .xe-hamburger {
+      display: none; background: none; border: none;
+      cursor: pointer; padding: 8px; color: #d1d5db;
+      flex-direction: column; gap: 5px; align-items: center; justify-content: center;
+    }
+    .xe-hamburger span {
+      display: block; width: 22px; height: 2px;
+      background: currentColor; border-radius: 2px;
+      transition: transform .25s, opacity .25s;
+    }
+    .xe-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .xe-hamburger.open span:nth-child(2) { opacity: 0; }
+    .xe-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* ─── MOBILE MENU ─── */
+    .xe-mobile-menu {
+      position: fixed; top: 68px; left: 0; right: 0; z-index: 59;
+      background: rgba(11,15,21,0.98);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      padding: 12px 16px 20px;
+      display: none; flex-direction: column; gap: 4px;
+      transform: translateY(-8px); opacity: 0;
+      transition: transform .2s ease, opacity .2s ease;
+    }
+    .xe-mobile-menu.open {
+      display: flex; transform: translateY(0); opacity: 1;
+    }
+    .xe-mobile-menu a {
+      padding: 12px 16px; border-radius: 10px;
+      font-size: 1rem; font-weight: 500; color: #9ca3af;
+      text-decoration: none; transition: color .15s, background .15s;
+    }
+    .xe-mobile-menu a:hover { color: #fff; background: rgba(255,255,255,0.06); }
+    .xe-mobile-menu .xe-mobile-cta {
+      background: linear-gradient(135deg, #3b82f6, #6366f1);
+      color: #fff !important; text-align: center;
+      margin-top: 8px; font-weight: 600;
+    }
+
+    /* ─── BACKDROP ─── */
+    .nav-backdrop {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.4);
+      z-index: 58; opacity: 0; pointer-events: none; transition: opacity .2s;
+    }
+    .nav-backdrop.show { opacity: 1; pointer-events: auto; }
+
+    /* ─── HERO ─── */
+    .xe-hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 100px 24px 80px;
+      text-align: center;
+    }
+    .xe-hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(59,130,246,0.1);
+      border: 1px solid rgba(59,130,246,0.3);
+      border-radius: 100px; padding: 6px 16px 6px 10px;
+      font-size: 0.8rem; font-weight: 600; color: #60a5fa;
+      margin-bottom: 28px; letter-spacing: 0.5px;
+      animation: fadeUp .5s ease both;
+    }
+    .xe-hero-badge-dot {
+      width: 7px; height: 7px; background: #34d399;
+      border-radius: 50%; animation: pulse 2s ease infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(.8)} }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+
+    .xe-hero h1 {
+      font-size: clamp(2.6rem, 6vw, 5.5rem);
+      font-weight: 800; line-height: 1.05; letter-spacing: -2px;
+      margin-bottom: 20px; max-width: 920px;
+      animation: fadeUp .5s .08s ease both;
+    }
+    .xe-hero h1 .gradient-text {
+      background: linear-gradient(135deg, #60a5fa 0%, #818cf8 50%, #a78bfa 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .xe-hero-sub {
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      color: #6b7280; max-width: 560px;
+      margin: 0 auto 36px; line-height: 1.75; font-weight: 400;
+      animation: fadeUp .5s .14s ease both;
+    }
+
+    /* ─── SEARCH BAR ─── */
+    .xe-search-wrap {
+      position: relative; width: 100%; max-width: 640px;
+      margin: 0 auto 32px;
+      animation: fadeUp .5s .2s ease both;
+    }
+    .xe-search-glow {
+      position: absolute; inset: -2px;
+      background: linear-gradient(135deg, #3b82f6, #6366f1);
+      border-radius: 100px; opacity: 0; filter: blur(6px);
+      transition: opacity .25s;
+    }
+    .xe-search-wrap:focus-within .xe-search-glow { opacity: 0.3; }
+    .xe-search-inner {
+      position: relative; display: flex; align-items: center;
+      background: rgba(17,24,39,0.95);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 100px; padding: 0 20px; height: 58px;
+      transition: border-color .2s;
+    }
+    .xe-search-wrap:focus-within .xe-search-inner { border-color: rgba(59,130,246,0.5); }
+    .xe-search-inner svg { width: 20px; height: 20px; color: #4b5563; flex-shrink: 0; margin-right: 12px; }
+    .xe-search-inner input {
+      flex: 1; background: transparent; border: none; outline: none;
+      font-size: 1rem; color: #fff; font-family: inherit;
+    }
+    .xe-search-inner input::placeholder { color: #4b5563; }
+    .xe-search-results {
+      position: absolute; top: calc(100% + 8px); left: 0; right: 0;
+      background: #111827; border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px; overflow: hidden; z-index: 50;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+    .xe-search-results.hidden { display: none; }
+    .xe-search-results a {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 16px; color: #fff; text-decoration: none;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      transition: background .15s;
+    }
+    .xe-search-results a:last-child { border-bottom: none; }
+    .xe-search-results a:hover { background: rgba(59,130,246,0.1); }
+    .xe-search-results img { width: 36px; height: 36px; border-radius: 8px; object-fit: contain; background: #1f2937; flex-shrink: 0; }
+    .xe-no-results { padding: 16px; color: #6b7280; text-align: center; font-size: .9rem; }
+
+    /* ─── HERO CTA BUTTONS ─── */
+    .xe-hero-btns {
+      display: flex; align-items: center; justify-content: center;
+      gap: 12px; flex-wrap: wrap;
+      animation: fadeUp .5s .26s ease both;
+    }
+    .xe-btn-primary {
+      background: linear-gradient(135deg, #3b82f6, #6366f1);
+      padding: 13px 32px; border-radius: 100px;
+      font-size: 1rem; font-weight: 600; color: #fff;
+      text-decoration: none; border: none; cursor: pointer;
+      font-family: inherit; transition: opacity .15s, transform .15s, box-shadow .15s;
+    }
+    .xe-btn-primary:hover { opacity: .88; transform: translateY(-2px); box-shadow: 0 10px 30px rgba(59,130,246,.35); }
+    .xe-btn-ghost {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.15);
+      padding: 13px 32px; border-radius: 100px;
+      font-size: 1rem; font-weight: 500; color: #9ca3af;
+      text-decoration: none; cursor: pointer; font-family: inherit;
+      transition: border-color .15s, color .15s, background .15s;
+    }
+    .xe-btn-ghost:hover { border-color: rgba(255,255,255,0.3); color: #fff; background: rgba(255,255,255,0.05); }
+
+    /* ─── HERO STATS ─── */
+    .xe-hero-stats {
+      display: flex; align-items: center; justify-content: center;
+      gap: 40px; flex-wrap: wrap;
+      margin-top: 60px; padding-top: 40px;
+      border-top: 1px solid rgba(255,255,255,0.07);
+      animation: fadeUp .5s .32s ease both;
+    }
+    .xe-stat-num { font-size: 2rem; font-weight: 800; letter-spacing: -1px; color: #fff; }
+    .xe-stat-label { font-size: 0.8rem; color: #4b5563; margin-top: 2px; }
+    .xe-stat-divider { width: 1px; height: 36px; background: rgba(255,255,255,0.08); }
+
+    /* ─── SECTION LABELS ─── */
+    .xe-section-label {
+      font-size: 0.75rem; font-weight: 600; letter-spacing: 2px;
+      text-transform: uppercase; color: #3b82f6; margin-bottom: 12px;
+    }
+    .xe-section-title {
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      font-weight: 800; letter-spacing: -0.5px; line-height: 1.2;
+    }
+
+    /* ─── CATEGORY CARDS ─── */
+    .xe-cat-card {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 14px; padding: 28px 20px;
+      background: rgba(15,20,26,0.7);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 18px;
+      text-decoration: none; color: #fff;
+      transition: transform .2s, border-color .2s, box-shadow .2s;
+      min-height: 160px;
+    }
+    .xe-cat-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(59,130,246,0.35);
+      box-shadow: 0 12px 36px rgba(59,130,246,0.12);
+    }
+    .xe-cat-icon {
+      width: 60px; height: 60px; border-radius: 50%;
+      background: rgba(59,130,246,0.12);
+      border: 1px solid rgba(59,130,246,0.2);
+      display: flex; align-items: center; justify-content: center;
+      transition: box-shadow .2s;
+    }
+    .xe-cat-card:hover .xe-cat-icon { box-shadow: 0 0 20px rgba(59,130,246,.25); }
+    .xe-cat-icon svg { width: 26px; height: 26px; color: #60a5fa; stroke-width: 1.8; }
+    .xe-cat-card h3 { font-size: 1rem; font-weight: 600; margin: 0; }
+
+    /* ─── TOOL CARDS ─── */
+    .xe-tool-card {
+      min-width: 240px; max-width: 260px;
+      flex-shrink: 0; snap-align: start;
+      background: rgba(17,24,39,0.7);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 18px; padding: 24px; text-align: center;
+      transition: border-color .2s, transform .2s;
+    }
+    .xe-tool-card:hover { border-color: rgba(59,130,246,0.3); transform: translateY(-3px); }
+    .xe-tool-card img {
+      width: 72px; height: 72px; object-fit: contain;
+      border-radius: 14px; margin: 0 auto 16px;
+      background: #1f2937;
+    }
+    .xe-tool-card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 6px; }
+    .xe-tool-card p { font-size: 0.82rem; color: #6b7280; margin-bottom: 16px; line-height: 1.5; }
+    .xe-tool-link {
+      display: inline-block;
+      background: rgba(59,130,246,0.15);
+      border: 1px solid rgba(59,130,246,0.3);
+      color: #60a5fa; padding: 7px 18px;
+      border-radius: 100px; font-size: 0.82rem; font-weight: 600;
+      text-decoration: none; transition: background .15s;
+    }
+    .xe-tool-link:hover { background: rgba(59,130,246,.3); }
+
+    /* ─── SCROLL ARROWS ─── */
+    .xe-scroll-arrow {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      width: 36px; height: 36px; background: rgba(17,24,39,0.9);
+      border: 1px solid rgba(255,255,255,0.1); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; z-index: 20; transition: background .15s;
+      color: #9ca3af;
+    }
+    .xe-scroll-arrow:hover { background: rgba(59,130,246,0.2); color: #fff; }
+    .xe-scroll-arrow svg { width: 16px; height: 16px; }
+
+    /* ─── GOAL CARDS ─── */
+    .xe-goal-card {
+      background: rgba(17,24,39,0.6);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 18px; padding: 28px 24px;
+      cursor: pointer; text-align: center;
+      transition: border-color .2s, background .2s, transform .2s;
+    }
+    .xe-goal-card:hover {
+      border-color: rgba(59,130,246,.35);
+      background: rgba(17,24,39,0.9);
+      transform: translateY(-4px);
+    }
+    .xe-goal-logos { display: flex; justify-content: center; margin-bottom: 16px; }
+    .xe-goal-logos img {
+      width: 36px; height: 36px; border-radius: 50%;
+      border: 2px solid #111827; background: #fff;
+      object-fit: contain; padding: 3px;
+      margin-left: -10px;
+    }
+    .xe-goal-logos img:first-child { margin-left: 0; }
+    .xe-goal-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 6px; }
+    .xe-goal-card p { font-size: 0.82rem; color: #6b7280; }
+
+    /* ─── WHY XEDGE ─── */
+    .xe-why-card {
+      background: rgba(15,20,26,0.6);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 18px; padding: 32px;
+      transition: border-color .2s, transform .2s;
+    }
+    .xe-why-card:hover { border-color: rgba(59,130,246,.25); transform: translateY(-3px); }
+    .xe-why-icon {
+      width: 48px; height: 48px; border-radius: 12px;
+      background: rgba(59,130,246,0.12);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 20px;
+    }
+    .xe-why-icon svg { width: 22px; height: 22px; color: #60a5fa; }
+    .xe-why-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 10px; }
+    .xe-why-card p { font-size: 0.9rem; color: #6b7280; line-height: 1.7; }
+
+    /* ─── NEWSLETTER ─── */
+    .xe-newsletter {
+      background: linear-gradient(135deg, rgba(37,99,235,0.12), rgba(99,102,241,0.1));
+      border: 1px solid rgba(59,130,246,0.2);
+      border-radius: 24px; padding: 56px 40px; text-align: center;
+    }
+    .xe-newsletter h3 { font-size: 1.8rem; font-weight: 800; margin-bottom: 10px; }
+    .xe-newsletter p { color: #6b7280; margin-bottom: 28px; }
+    .xe-newsletter-form { display: flex; gap: 10px; max-width: 440px; margin: 0 auto; }
+    .xe-newsletter-form input {
+      flex: 1; background: rgba(17,24,39,0.8);
+      border: 1px solid rgba(255,255,255,0.1); border-radius: 100px;
+      padding: 12px 20px; color: #fff; font-family: inherit; font-size: .95rem;
+      outline: none; transition: border-color .15s;
+    }
+    .xe-newsletter-form input:focus { border-color: rgba(59,130,246,.5); }
+    .xe-newsletter-form button {
+      background: linear-gradient(135deg, #3b82f6, #6366f1);
+      padding: 12px 24px; border-radius: 100px; border: none;
+      color: #fff; font-family: inherit; font-size: .9rem;
+      font-weight: 600; cursor: pointer; white-space: nowrap;
+      transition: opacity .15s, transform .15s;
+    }
+    .xe-newsletter-form button:hover { opacity: .88; transform: translateY(-1px); }
+    @media (max-width: 480px) {
+      .xe-newsletter-form { flex-direction: column; }
+      .xe-newsletter { padding: 36px 20px; }
+    }
+
+    /* ─── REVIEW SECTION ─── */
+    .xe-review-box {
+      max-width: 700px; margin: 0 auto;
+      background: rgba(17,24,39,0.6);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 24px; padding: 48px 40px; text-align: center;
+    }
+    .xe-review-box h2 { font-size: 1.8rem; font-weight: 800; margin-bottom: 10px; }
+    .xe-review-box > p { color: #6b7280; margin-bottom: 28px; }
+    .xe-review-input, .xe-review-textarea {
+      width: 100%; background: rgba(15,20,26,.8);
+      border: 1px solid rgba(255,255,255,0.1); border-radius: 12px;
+      padding: 13px 18px; color: #fff; font-family: inherit;
+      font-size: .95rem; outline: none; transition: border-color .15s;
+      display: block; margin-bottom: 12px;
+    }
+    .xe-review-input:focus, .xe-review-textarea:focus { border-color: rgba(59,130,246,.5); }
+    .xe-review-textarea { height: 120px; resize: vertical; }
+    @media (max-width: 640px) { .xe-review-box { padding: 28px 20px; } }
+
+    /* ─── FOOTER ─── */
+    .xe-footer {
+      border-top: 1px solid rgba(255,255,255,0.07);
+      padding: 60px 24px 32px;
+    }
+    .xe-footer-inner { max-width: 1400px; margin: 0 auto; }
+    .xe-footer-grid {
+      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 48px; margin-bottom: 48px;
+    }
+    .xe-footer-brand img { width: 36px; height: 36px; border-radius: 8px; margin-bottom: 12px; }
+    .xe-footer-brand .name { font-weight: 800; font-size: 1.1rem; color: #60a5fa; margin-bottom: 8px; }
+    .xe-footer-brand p { font-size: .85rem; color: #4b5563; line-height: 1.6; max-width: 240px; }
+    .xe-footer-socials { display: flex; gap: 12px; margin-top: 16px; }
+    .xe-footer-socials a {
+      width: 36px; height: 36px; border-radius: 10px;
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);
+      display: flex; align-items: center; justify-content: center;
+      color: #6b7280; text-decoration: none; transition: color .15s, background .15s;
+    }
+    .xe-footer-socials a:hover { color: #60a5fa; background: rgba(59,130,246,0.1); }
+    .xe-footer-socials svg { width: 16px; height: 16px; }
+    .xe-footer-col h4 { font-size: .85rem; font-weight: 700; color: #9ca3af; letter-spacing: .5px; margin-bottom: 16px; }
+    .xe-footer-col ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
+    .xe-footer-col a { font-size: .85rem; color: #4b5563; text-decoration: none; transition: color .15s; }
+    .xe-footer-col a:hover { color: #60a5fa; }
+    .xe-footer-bottom {
+      padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.06);
+      text-align: center; font-size: .8rem; color: #374151;
+    }
+    @media (max-width: 900px) {
+      .xe-footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+    }
+    @media (max-width: 560px) {
+      .xe-footer-grid { grid-template-columns: 1fr; gap: 28px; }
+    }
+
+    /* ─── CHATBOT BUTTON ─── */
+    #xedge-ai-button {
+      position: fixed; bottom: 24px; right: 24px;
+      width: 60px; height: 60px; border-radius: 50%;
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      color: #fff; font-size: 24px; cursor: pointer; z-index: 99999;
+      box-shadow: 0 8px 24px rgba(59,130,246,0.4);
+      display: flex; align-items: center; justify-content: center;
+      transition: transform .2s, box-shadow .2s; border: none;
+    }
+    #xedge-ai-button:hover { transform: scale(1.1); box-shadow: 0 12px 32px rgba(59,130,246,0.5); }
+
+    /* ─── SKELETON ─── */
+    .xe-skeleton {
+      background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.06) 50%, rgba(255,255,255,0.03) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.4s ease infinite;
+      border-radius: 18px;
+    }
+    @keyframes shimmer { to { background-position: -200% 0; } }
+
+    /* ─── SECTION SPACING ─── */
+    .xe-section { padding: 72px 24px; }
+    .xe-section-sm { padding: 48px 24px; }
+    .xe-max { max-width: 1400px; margin: 0 auto; }
+
+    /* ─── DIVIDER ─── */
+    .xe-divider { height: 1px; background: rgba(255,255,255,0.06); margin: 0 24px; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 767px) {
+      .xe-nav-links, .xe-btn-beta { display: none !important; }
+      .xe-hamburger { display: flex !important; }
+      .xe-hero { padding: 90px 20px 60px; }
+      .xe-hero h1 { letter-spacing: -1px; }
+      .xe-hero-stats { gap: 24px; }
+      .xe-stat-divider { display: none; }
+    }
+  </style>
+
+  <!-- Structured Data for SEO -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "XEdge",
+    "url": "https://xedge.tech",
+    "description": "Curated AI tool stacks to achieve your goals faster",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://xedge.tech/Explore.html?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
 </head>
- 
+
 <body>
   <!-- Vanta background -->
-  <div id="vanta-bg"></div>
- 
+  <div id="vanta-bg" aria-hidden="true"></div>
+
+  <!-- Nav backdrop -->
+  <div id="nav-backdrop" class="nav-backdrop" aria-hidden="true"></div>
+
   <div class="page-top">
- 
-    <!-- ===================== NAV ===================== -->
+
+    <!-- ═══════════════════════════════════════
+         NAV
+    ═══════════════════════════════════════ -->
     <header>
-      <nav class="fixed top-0 left-0 w-full bg-gray-900/95 border-b border-gray-800 z-50">
-        <div class="max-w-[1400px] mx-auto px-4 py-3 flex items-center justify-between gap-4">
- 
+      <nav class="xe-nav" role="navigation" aria-label="Main navigation">
+        <div class="xe-nav-inner">
+
           <!-- Logo -->
-          <a href="index.html" class="flex items-center gap-3 shrink-0">
-            <img src="xedge-logo.png" class="w-9 h-9" alt="XEdge logo">
-            <span class="text-xl font-bold text-blue-400 tracking-wide">XEDGE</span>
+          <a href="index.html" class="xe-logo" aria-label="XEdge home">
+            <img src="xedge-logo.png" alt="XEdge logo" width="36" height="36"/>
+            <span>XEDGE</span>
           </a>
- 
+
           <!-- Desktop links -->
-          <div class="hidden md:flex items-center gap-7 text-sm font-medium text-gray-300">
-            <a href="index.html" class="hover:text-white transition">Home</a>
-            <a href="Explore.html" class="hover:text-white transition">Explore</a>
-            <a href="Categories.html" class="hover:text-white transition">Categories</a>
-            <a href="stack.html" class="hover:text-white transition">Stacks</a>
-            <a href="About.html" class="hover:text-white transition">About</a>
+          <div class="xe-nav-links" role="list">
+            <a href="index.html" role="listitem">Home</a>
+            <a href="Explore.html" role="listitem">Explore</a>
+            <a href="Categories.html" role="listitem">Categories</a>
+            <a href="stack.html" role="listitem">Stacks</a>
+            <a href="About.html" role="listitem">About</a>
           </div>
- 
-          <!-- Desktop right -->
-          <div class="hidden md:flex items-center gap-3">
-            <a href="Pricing.html" class="text-sm text-gray-300 hover:text-white transition px-3 py-2">Pricing</a>
-            <a href="stack.html" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-full text-sm font-semibold transition">
-              View Stacks
-            </a>
-            <div id="auth-area" class="flex items-center"></div>
-          </div>
- 
-          <!-- Mobile: hamburger (inside nav, correct structure) -->
-          <div class="flex md:hidden items-center gap-3">
-            <div id="auth-area-mobile" class="flex items-center"></div>
-            <button id="mobile-menu-toggle" aria-label="Open menu" class="p-2 text-gray-200">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-              </svg>
+
+          <!-- Right side -->
+          <div class="xe-nav-right">
+            <a href="Join.html" class="xe-btn-beta">Join Beta</a>
+            <div id="auth-area" style="display:flex;align-items:center;"></div>
+            <!-- Hamburger -->
+            <button id="mobile-menu-toggle" class="xe-hamburger" aria-label="Toggle menu" aria-expanded="false">
+              <span></span><span></span><span></span>
             </button>
           </div>
- 
+
         </div>
       </nav>
- 
-      <!-- Mobile backdrop -->
-      <div id="nav-backdrop" class="nav-backdrop" aria-hidden="true"></div>
- 
-      <!-- Mobile slide menu -->
-      <aside id="mobileMenu" class="mobile-menu" aria-label="Mobile navigation">
-        <div class="p-6">
-          <div class="flex items-center justify-between mb-8">
-            <div class="flex items-center gap-3">
-              <img src="xedge-logo.png" alt="XEdge" class="w-8 h-8">
-              <div>
-                <div class="font-bold text-lg">XEDGE</div>
-                <div class="text-xs text-gray-400">AI tool stacks</div>
-              </div>
-            </div>
-            <button id="mobileClose" aria-label="Close menu" class="text-gray-400 hover:text-white text-xl">✕</button>
-          </div>
- 
-          <nav class="flex flex-col gap-2">
-            <a href="index.html" class="py-2.5 px-3 rounded-lg hover:bg-gray-800 text-gray-200">Home</a>
-            <a href="Explore.html" class="py-2.5 px-3 rounded-lg hover:bg-gray-800 text-gray-200">Explore</a>
-            <a href="Categories.html" class="py-2.5 px-3 rounded-lg hover:bg-gray-800 text-gray-200">Categories</a>
-            <a href="stack.html" class="py-2.5 px-3 rounded-lg hover:bg-gray-800 text-gray-200">Stacks</a>
-            <a href="About.html" class="py-2.5 px-3 rounded-lg hover:bg-gray-800 text-gray-200">About</a>
-            <a href="Pricing.html" class="py-2.5 px-3 rounded-lg hover:bg-gray-800 text-gray-200">Pricing</a>
-            <a href="stack.html" class="py-2.5 px-3 rounded-lg bg-blue-600 text-white text-center font-semibold mt-4">
-              View Stacks →
-            </a>
-          </nav>
-        </div>
-      </aside>
+
+      <!-- Mobile menu -->
+      <div id="mobileMenu" class="xe-mobile-menu" role="dialog" aria-label="Mobile menu">
+        <a href="index.html">Home</a>
+        <a href="Explore.html">Explore</a>
+        <a href="Categories.html">Categories</a>
+        <a href="stack.html">Stacks</a>
+        <a href="About.html">About</a>
+        <a href="Join.html" class="xe-mobile-cta">Join Beta</a>
+      </div>
     </header>
- 
-    <!-- ===================== MAIN ===================== -->
-    <main class="pt-20">
- 
-      <!-- HERO -->
-      <section class="pt-16 pb-20 px-4">
-        <div class="max-w-[860px] mx-auto text-center flex flex-col items-center">
- 
-          <div class="inline-flex items-center gap-2 bg-blue-500/10 border border-blue-500/30 rounded-full px-4 py-1.5 text-sm text-blue-300 mb-6">
-            <span class="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></span>
-            200+ builders already using XEdge
-          </div>
- 
-          <h1 class="text-5xl md:text-6xl font-bold mb-6 leading-tight tracking-tight">
-            Find the exact AI stack<br>
-            <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-400">
-              for your goal
-            </span>
-          </h1>
- 
-          <p class="text-lg text-gray-400 max-w-xl mx-auto mb-10 leading-relaxed">
-            13 curated tool stacks with step-by-step implementation guides. Stop researching. Start building.
-          </p>
- 
-          <!-- Search -->
-          <div class="relative w-full max-w-2xl mx-auto mb-8 group">
-            <div class="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-full blur opacity-20 group-focus-within:opacity-40 transition"></div>
-            <div class="relative flex items-center bg-gray-900 rounded-full border border-gray-700 px-6 py-4">
-              <svg class="w-5 h-5 text-gray-500 mr-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-              </svg>
-              <input
-                type="text"
-                id="global-search"
-                placeholder="Search AI tools..."
-                autocomplete="off"
-                class="flex-1 bg-transparent text-white text-base placeholder-gray-500 focus:outline-none"
-              >
-            </div>
-            <div id="search-results" class="absolute w-full bg-gray-800 border border-gray-700 rounded-2xl mt-2 hidden z-50 overflow-hidden shadow-xl"></div>
-          </div>
- 
-          <!-- CTAs -->
-          <div class="flex flex-col sm:flex-row justify-center gap-4">
-            <a href="stack.html"
-               class="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-400 hover:to-blue-500 px-8 py-3.5 rounded-full font-semibold text-base shadow-lg transition">
-              Browse Stacks
-            </a>
-            <a href="Explore.html"
-               class="border border-gray-600 hover:border-gray-400 px-8 py-3.5 rounded-full font-semibold text-base text-gray-300 hover:text-white transition">
-              Explore Tools
-            </a>
-            <button
-              id="hero-signin-btn"
-              onclick="signInWithGoogle()"
-              class="border border-blue-500/60 px-8 py-3.5 rounded-full font-semibold text-base text-blue-300 hover:bg-blue-500/10 transition hidden">
-              Sign In
-            </button>
-          </div>
- 
+
+    <!-- ═══════════════════════════════════════
+         HERO
+    ═══════════════════════════════════════ -->
+    <main>
+      <section class="xe-hero" aria-label="Hero">
+
+        <!-- Live badge -->
+        <div class="xe-hero-badge" role="status">
+          <span class="xe-hero-badge-dot" aria-hidden="true"></span>
+          200+ builders already on XEdge
         </div>
+
+        <!-- Headline -->
+        <h1>
+          The AI stack for<br/>
+          <span class="gradient-text">everything you're building</span>
+        </h1>
+
+        <!-- Subheading -->
+        <p class="xe-hero-sub">
+          Stop wasting hours researching AI tools. XEdge gives you curated,
+          goal-based stacks with step-by-step execution plans — so you can
+          move fast and build with confidence.
+        </p>
+
+        <!-- Search -->
+        <div class="xe-search-wrap" role="search">
+          <div class="xe-search-glow" aria-hidden="true"></div>
+          <div class="xe-search-inner">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+            </svg>
+            <input
+              type="search"
+              id="global-search"
+              placeholder="Search AI tools — ChatGPT, Midjourney, Notion…"
+              autocomplete="off"
+              aria-label="Search AI tools"
+              aria-controls="search-results"
+              aria-autocomplete="list"
+            />
+          </div>
+          <div id="search-results" class="xe-search-results hidden" role="listbox" aria-label="Search results"></div>
+        </div>
+
+        <!-- CTAs -->
+        <div class="xe-hero-btns">
+          <a href="Explore.html" class="xe-btn-primary">Explore Tools →</a>
+          <a href="stack.html" class="xe-btn-ghost">Browse Stacks</a>
+          <button id="hero-signin-btn" onclick="signInWithGoogle()" class="xe-btn-ghost">Sign In</button>
+        </div>
+
+        <!-- Stats -->
+        <div class="xe-hero-stats" aria-label="Platform stats">
+          <div>
+            <div class="xe-stat-num">200+</div>
+            <div class="xe-stat-label">Active Users</div>
+          </div>
+          <div class="xe-stat-divider" aria-hidden="true"></div>
+          <div>
+            <div class="xe-stat-num">13</div>
+            <div class="xe-stat-label">Goal Stacks</div>
+          </div>
+          <div class="xe-stat-divider" aria-hidden="true"></div>
+          <div>
+            <div class="xe-stat-num">16</div>
+            <div class="xe-stat-label">AI Categories</div>
+          </div>
+          <div class="xe-stat-divider" aria-hidden="true"></div>
+          <div>
+            <div class="xe-stat-num">30s</div>
+            <div class="xe-stat-label">To Find Your Stack</div>
+          </div>
+        </div>
+
       </section>
- 
-      <!-- FEATURED CATEGORIES -->
-      <section class="px-4 pb-12 featured-group">
-        <div class="max-w-[1400px] mx-auto">
-          <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
- 
-            <a href="Categories.html?category=AI-Image" class="featured-cat">
-              <div class="category-icon"><i data-feather="image"></i></div>
+
+      <div class="xe-divider"></div>
+
+      <!-- ═══════════════════════════════════════
+           CATEGORIES
+      ═══════════════════════════════════════ -->
+      <section class="xe-section-sm" aria-label="Browse categories">
+        <div class="xe-max">
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:16px;">
+
+            <a href="category.html?cat=Image generation" class="xe-cat-card">
+              <div class="xe-cat-icon">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3" stroke-width="1.8"/><circle cx="8.5" cy="8.5" r="1.5" stroke-width="1.8"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M21 15l-5-5L5 21"/></svg>
+              </div>
               <h3>AI Image</h3>
             </a>
-            <a href="Categories.html?category=Chatbot" class="featured-cat">
-              <div class="category-icon"><i data-feather="message-circle"></i></div>
+
+            <a href="category.html?cat=Ai chatbot" class="xe-cat-card">
+              <div class="xe-cat-icon">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
+              </div>
               <h3>Chatbot</h3>
             </a>
-            <a href="Categories.html?category=Business" class="featured-cat">
-              <div class="category-icon"><i data-feather="briefcase"></i></div>
+
+            <a href="category.html?cat=Bussiness%20and%20Analytics" class="xe-cat-card">
+              <div class="xe-cat-icon">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+              </div>
               <h3>Business</h3>
             </a>
-            <a href="Categories.html?category=Video" class="featured-cat">
-              <div class="category-icon"><i data-feather="video"></i></div>
+
+            <a href="category.html?cat=Video generation" class="xe-cat-card">
+              <div class="xe-cat-icon">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 10l4.553-2.069A1 1 0 0121 8.87v6.26a1 1 0 01-1.447.9L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+              </div>
               <h3>Video</h3>
             </a>
-            <a href="Categories.html?category=Productivity" class="featured-cat">
-              <div class="category-icon"><i data-feather="activity"></i></div>
+
+            <a href="category.html?cat=Productivity" class="xe-cat-card">
+              <div class="xe-cat-icon">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+              </div>
               <h3>Productivity</h3>
             </a>
- 
+
           </div>
         </div>
       </section>
- 
-      <!-- TOP TOOLS -->
-      <section class="px-4 py-10">
-        <div class="max-w-[1400px] mx-auto">
-          <div class="flex items-center justify-between mb-6">
-            <h2 class="text-xl font-bold">Top Tools</h2>
-            <a href="Explore.html" class="text-blue-400 text-sm hover:text-blue-300 transition">View All →</a>
+
+      <div class="xe-divider"></div>
+
+      <!-- ═══════════════════════════════════════
+           TOP TOOLS
+      ═══════════════════════════════════════ -->
+      <section class="xe-section" aria-label="Top tools">
+        <div class="xe-max">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;flex-wrap:wrap;gap:12px;">
+            <div>
+              <div class="xe-section-label">Handpicked</div>
+              <h2 class="xe-section-title">Top Tools Right Now</h2>
+            </div>
+            <a href="Explore.html" style="font-size:.9rem;color:#3b82f6;font-weight:600;text-decoration:none;">View All →</a>
           </div>
- 
-          <div class="relative">
-            <button id="scroll-left" class="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 bg-gray-800 hover:bg-gray-700 p-2 rounded-full z-20 transition">
-              <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+
+          <div style="position:relative;">
+            <button id="scroll-left" class="xe-scroll-arrow" style="left:-16px;display:none;" aria-label="Scroll left">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
             </button>
- 
-            <div class="relative overflow-hidden">
-              <div id="top-tools-wrapper"
-                   class="flex gap-5 pb-4 snap-x snap-mandatory scroll-smooth overflow-x-auto scrollbar-none touch-pan-x">
-                <div id="top-tools-skel" class="flex gap-4">
-                  <div class="min-w-[240px] bg-gray-800/50 rounded-2xl p-6 skeleton"></div>
-                  <div class="min-w-[240px] bg-gray-800/50 rounded-2xl p-6 skeleton"></div>
-                  <div class="min-w-[240px] bg-gray-800/50 rounded-2xl p-6 skeleton"></div>
+
+            <div style="overflow:hidden;">
+              <div id="top-tools-wrapper" style="display:flex;gap:16px;overflow-x:auto;padding-bottom:8px;scroll-snap-type:x mandatory;-ms-overflow-style:none;scrollbar-width:none;">
+                <!-- Skeletons -->
+                <div id="top-tools-skel" style="display:flex;gap:16px;">
+                  <div class="xe-skeleton" style="min-width:240px;height:220px;"></div>
+                  <div class="xe-skeleton" style="min-width:240px;height:220px;"></div>
+                  <div class="xe-skeleton" style="min-width:240px;height:220px;"></div>
                 </div>
               </div>
             </div>
- 
-            <button id="scroll-right" class="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 bg-gray-800 hover:bg-gray-700 p-2 rounded-full z-20 transition">
-              <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+
+            <button id="scroll-right" class="xe-scroll-arrow" style="right:-16px;display:none;" aria-label="Scroll right">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
             </button>
           </div>
         </div>
       </section>
- 
-      <!-- BROWSE BY GOAL -->
-      <section class="px-4 py-10 bg-gray-800/30">
-        <div class="max-w-[1400px] mx-auto">
-          <div class="flex items-center justify-between mb-6">
-            <h2 class="text-xl font-bold">Browse by Goal</h2>
-            <a href="stack.html" class="text-blue-400 text-sm hover:text-blue-300 flex items-center gap-1 transition">
-              All Stacks <i data-feather="chevron-right" class="w-4 h-4"></i>
-            </a>
+
+      <div class="xe-divider"></div>
+
+      <!-- ═══════════════════════════════════════
+           BROWSE BY GOAL
+      ═══════════════════════════════════════ -->
+      <section class="xe-section" style="background:rgba(17,24,39,0.3);" aria-label="Browse by goal">
+        <div class="xe-max">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;flex-wrap:wrap;gap:12px;">
+            <div>
+              <div class="xe-section-label">Goal-Based</div>
+              <h2 class="xe-section-title">What Are You Building?</h2>
+            </div>
+            <a href="stack.html" style="font-size:.9rem;color:#3b82f6;font-weight:600;text-decoration:none;">View All Stacks →</a>
           </div>
-          <div id="browse-theme-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5"></div>
+
+          <div id="browse-theme-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;"></div>
         </div>
       </section>
- 
-      <!-- STACK CTA (monetization — was missing entirely) -->
-      <section class="px-4 py-16">
-        <div class="max-w-[860px] mx-auto stack-cta">
-          <div class="inline-flex items-center gap-2 bg-blue-500/10 border border-blue-500/20 rounded-full px-3 py-1 text-xs text-blue-300 mb-4">
-            24-page implementation guides
+
+      <div class="xe-divider"></div>
+
+      <!-- ═══════════════════════════════════════
+           WHY XEDGE
+      ═══════════════════════════════════════ -->
+      <section class="xe-section" aria-label="Why XEdge">
+        <div class="xe-max">
+          <div style="text-align:center;margin-bottom:48px;">
+            <div class="xe-section-label" style="text-align:center;">The difference</div>
+            <h2 class="xe-section-title">Why builders choose <span style="color:#60a5fa;">XEdge</span></h2>
           </div>
-          <h2 class="text-3xl font-bold mb-4">Get the full execution plan</h2>
-          <p class="text-gray-400 max-w-lg mx-auto mb-8 leading-relaxed">
-            Each stack PDF includes real code, Claude prompts, revenue math, deployment pipelines, and security checklists. Not a listicle — an actual build guide.
-          </p>
-          <div class="flex flex-col sm:flex-row justify-center gap-4">
-            <a href="stack.html"
-               class="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-400 hover:to-blue-500 px-8 py-3.5 rounded-full font-semibold transition">
-              Browse All 13 Stacks
-            </a>
-            <a href="Pricing.html"
-               class="border border-gray-600 hover:border-gray-400 px-8 py-3.5 rounded-full font-semibold text-gray-300 hover:text-white transition">
-              See Pricing
-            </a>
+
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;">
+
+            <article class="xe-why-card">
+              <div class="xe-why-icon">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+              </div>
+              <h3>Cutting-Edge Selection</h3>
+              <p>We handpick only the most advanced, breakthrough AI tools — vetted for real-world results, not just hype.</p>
+            </article>
+
+            <article class="xe-why-card">
+              <div class="xe-why-icon">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+              </div>
+              <h3>Unbiased Reviews</h3>
+              <p>Reviews based on real testing and measurable results. No sponsored listings, no pay-to-rank.</p>
+            </article>
+
+            <article class="xe-why-card">
+              <div class="xe-why-icon">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="1.8"/><polyline points="12 6 12 12 16 14" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"/></svg>
+              </div>
+              <h3>Save Hours of Research</h3>
+              <p>Comparisons, pricing, pros/cons — all in one place. Stop searching, start building.</p>
+            </article>
+
+            <article class="xe-why-card">
+              <div class="xe-why-icon">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+              </div>
+              <h3>Goal-Based Stacks</h3>
+              <p>Not just a directory — a system. Every stack comes with an execution roadmap tailored to your goal.</p>
+            </article>
+
           </div>
         </div>
       </section>
- 
-      <!-- WHY XEDGE -->
-      <section class="px-4 py-12">
-        <div class="max-w-[1400px] mx-auto">
-          <h2 class="text-2xl font-bold mb-10 text-center">
-            Why <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-400">XEdge</span>
-          </h2>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="why-card">
-              <i data-feather="zap" class="w-8 h-8 text-blue-400 mb-4"></i>
-              <h3 class="text-lg font-semibold mb-2">Curated, not scraped</h3>
-              <p class="text-gray-400 text-sm leading-relaxed">Every tool is handpicked. No spam tools, no paid placements. Just what actually works for the goal.</p>
-            </div>
-            <div class="why-card">
-              <i data-feather="layers" class="w-8 h-8 text-blue-400 mb-4"></i>
-              <h3 class="text-lg font-semibold mb-2">Stack-first thinking</h3>
-              <p class="text-gray-400 text-sm leading-relaxed">Tools work together. XEdge shows you the right combination for your outcome, not just individual products.</p>
-            </div>
-            <div class="why-card">
-              <i data-feather="file-text" class="w-8 h-8 text-blue-400 mb-4"></i>
-              <h3 class="text-lg font-semibold mb-2">Implementation guides</h3>
-              <p class="text-gray-400 text-sm leading-relaxed">Not just a list. The premium guides include actual code, prompts, and step-by-step deployment instructions.</p>
-            </div>
+
+      <div class="xe-divider"></div>
+
+      <!-- ═══════════════════════════════════════
+           NEWSLETTER
+      ═══════════════════════════════════════ -->
+      <section class="xe-section" aria-label="Newsletter">
+        <div class="xe-max">
+          <div class="xe-newsletter">
+            <div class="xe-section-label" style="text-align:center;">Stay sharp</div>
+            <h3>Get the Edge every week</h3>
+            <p>New AI tools, stack updates, and builder strategies — delivered free.</p>
+            <form id="newsletter-form" class="xe-newsletter-form">
+              <input name="email" type="email" placeholder="your@email.com" required aria-label="Email address"/>
+              <button type="submit">Subscribe</button>
+            </form>
+            <p id="newsletter-success" class="hidden" style="color:#34d399;margin-top:14px;font-size:.9rem;" role="status">
+              ✓ You're in. Check your inbox.
+            </p>
           </div>
         </div>
       </section>
- 
-      <!-- NEWSLETTER -->
-      <section class="px-4 py-12">
-        <div class="max-w-[680px] mx-auto bg-gray-800/60 border border-gray-700 rounded-2xl p-8">
-          <h3 class="text-xl font-bold mb-2">Stay on the edge</h3>
-          <p class="text-gray-400 text-sm mb-5">New stacks, tool updates, and AI insights weekly. No spam.</p>
-          <form action="https://formspree.io/f/mblzvykd" method="POST" class="flex flex-col sm:flex-row gap-3">
-            <input name="email" type="email" placeholder="your@email.com" required
-                   class="flex-1 bg-gray-700 border border-gray-600 px-4 py-3 rounded-full text-sm focus:outline-none focus:border-blue-500 transition">
-            <button type="submit"
-                    class="bg-gradient-to-r from-blue-500 to-blue-600 px-6 py-3 rounded-full text-sm font-semibold transition hover:from-blue-400 hover:to-blue-500">
-              Subscribe
-            </button>
-          </form>
+
+      <div class="xe-divider"></div>
+
+      <!-- ═══════════════════════════════════════
+           REVIEW
+      ═══════════════════════════════════════ -->
+      <section class="xe-section" aria-label="Submit a review">
+        <div class="xe-max">
+          <div class="xe-review-box">
+            <h2>Share Your Experience</h2>
+            <p>Your review helps other builders find the right stack. Leave a thought — get featured.</p>
+            <form action="https://formspree.io/f/mblzvykd" method="POST">
+              <input type="text" name="name" placeholder="Your name" required class="xe-review-input" aria-label="Your name"/>
+              <textarea name="review" placeholder="What's working for you on XEdge?" required class="xe-review-textarea" aria-label="Your review"></textarea>
+              <button type="submit" class="xe-btn-primary" style="width:100%;justify-content:center;">Submit Review</button>
+            </form>
+          </div>
         </div>
       </section>
- 
-      <!-- FOOTER -->
-      <footer class="border-t border-gray-800 py-10 px-4 mt-4">
-        <div class="max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
- 
-          <div>
-            <div class="flex items-center gap-3 mb-3">
-              <img src="xedge-logo.png" alt="XEdge" class="w-7 h-7">
-              <span class="font-bold text-sm">XEDGE</span>
-            </div>
-            <p class="text-gray-500 text-sm mb-4">The operating layer between humans and AI.</p>
-            <div class="flex gap-4">
-              <a class="text-gray-500 hover:text-blue-400 transition" href="#" aria-label="Twitter"><i data-feather="twitter"></i></a>
-              <a class="text-gray-500 hover:text-blue-400 transition" href="#" aria-label="YouTube"><i data-feather="youtube"></i></a>
-              <a class="text-gray-500 hover:text-blue-400 transition" href="mailto:hello@xedge.tech" aria-label="Email"><i data-feather="mail"></i></a>
-            </div>
-          </div>
- 
-          <div>
-            <h4 class="font-semibold text-sm mb-3">Product</h4>
-            <ul class="space-y-2 text-gray-500 text-sm">
-              <li><a href="Explore.html" class="hover:text-blue-400 transition">All Tools</a></li>
-              <li><a href="Categories.html" class="hover:text-blue-400 transition">Categories</a></li>
-              <li><a href="stack.html" class="hover:text-blue-400 transition">Stacks</a></li>
-              <li><a href="Pricing.html" class="hover:text-blue-400 transition">Pricing</a></li>
-            </ul>
-          </div>
- 
-          <div>
-            <h4 class="font-semibold text-sm mb-3">Company</h4>
-            <ul class="space-y-2 text-gray-500 text-sm">
-              <li><a href="About.html" class="hover:text-blue-400 transition">About</a></li>
-              <li><a href="mailto:hello@xedge.tech" class="hover:text-blue-400 transition">Contact</a></li>
-            </ul>
-          </div>
- 
-          <div>
-            <h4 class="font-semibold text-sm mb-3">Legal</h4>
-            <ul class="space-y-2 text-gray-500 text-sm">
-              <li><a href="Privacy.html" class="hover:text-blue-400 transition">Privacy Policy</a></li>
-              <li><a href="Terms.html" class="hover:text-blue-400 transition">Terms of Service</a></li>
-            </ul>
-          </div>
- 
-        </div>
-        <div class="max-w-[1400px] mx-auto mt-8 text-center text-gray-600 text-xs">
-          © 2025 XEdge. All rights reserved.
-        </div>
-      </footer>
- 
+
     </main>
-  </div><!-- /page-top -->
- 
-  <!-- =====================================================================
-       FIREBASE (deferred — loaded after page content)
-  ====================================================================== -->
+
+    <!-- ═══════════════════════════════════════
+         FOOTER
+    ═══════════════════════════════════════ -->
+    <footer class="xe-footer" aria-label="Site footer">
+      <div class="xe-footer-inner">
+        <div class="xe-footer-grid">
+
+          <div class="xe-footer-brand">
+            <img src="xedge-logo.png" alt="XEdge logo" width="36" height="36"/>
+            <div class="name">XEDGE</div>
+            <p>The AI operating layer. Discover, build, and deploy AI systems — all in one place.</p>
+            <div class="xe-footer-socials">
+              <a href="https://twitter.com/xedgeai" aria-label="Twitter">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/></svg>
+              </a>
+              <a href="https://youtube.com/@xedgeai" aria-label="YouTube">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M22.54 6.42a2.78 2.78 0 00-1.95-1.97C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 00-1.95 1.96A29 29 0 001 12a29 29 0 00.46 5.58A2.78 2.78 0 003.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 001.95-1.95A29 29 0 0023 12a29 29 0 00-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"/></svg>
+              </a>
+              <a href="mailto:xedgecorp@gmail.com" aria-label="Email">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+              </a>
+            </div>
+          </div>
+
+          <div class="xe-footer-col">
+            <h4>Resources</h4>
+            <ul>
+              <li><a href="Explore.html">All Tools</a></li>
+              <li><a href="Categories.html">Categories</a></li>
+              <li><a href="stack.html">Stacks</a></li>
+              <li><a href="Pricing.html">Pricing</a></li>
+              <li><a href="Blog.html">Blog</a></li>
+            </ul>
+          </div>
+
+          <div class="xe-footer-col">
+            <h4>Company</h4>
+            <ul>
+              <li><a href="About.html">About</a></li>
+              <li><a href="Collab.html">Collab</a></li>
+              <li><a href="Contact.html">Contact</a></li>
+              <li><a href="Press.html">Press</a></li>
+            </ul>
+          </div>
+
+          <div class="xe-footer-col">
+            <h4>Legal</h4>
+            <ul>
+              <li><a href="Privacy.html">Privacy Policy</a></li>
+              <li><a href="Terms.html">Terms of Service</a></li>
+              <li><a href="Cookie.html">Cookie Policy</a></li>
+            </ul>
+          </div>
+
+        </div>
+
+        <div class="xe-footer-bottom">
+          © 2026 XEdge. All rights reserved.
+        </div>
+      </div>
+    </footer>
+
+  </div><!-- .page-top -->
+
+  <!-- ═══════════════════════════════════════
+       CHATBOT BUTTON
+  ═══════════════════════════════════════ -->
+  <button id="xedge-ai-button" aria-label="Open AI assistant">⚡</button>
+  <div id="root"></div>
+  <script type="module" src="/chatbot/assets/index-DOdIsJde.js"></script>
+
+  <!-- ═══════════════════════════════════════
+       FIREBASE v8
+  ═══════════════════════════════════════ -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js" defer></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js" defer></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js" defer></script>
- 
+
+  <!-- ═══════════════════════════════════════
+       ALL JAVASCRIPT — single DOMContentLoaded
+  ═══════════════════════════════════════ -->
   <script>
-  // Firebase init — runs after Firebase scripts load
-  window.addEventListener('load', function() {
-    if (typeof firebase === 'undefined') return;
-    if (!firebase.apps.length) {
-      firebase.initializeApp({
-        apiKey: "AIzaSyBo9cfhTj2W7ikpdrqz6wAtSBisBo78OAc",
-        authDomain: "xedge-1da3a.firebaseapp.com",
-        projectId: "xedge-1da3a",
-        storageBucket: "xedge-1da3a.appspot.com",
-        messagingSenderId: "209657807080",
-        appId: "1:209657807080:web:80180596d966b4667d895d",
-        measurementId: "G-SXW16HCZB8"
-      });
-    }
- 
-    const auth = firebase.auth();
-    const db   = firebase.firestore();
-    const provider = new firebase.auth.GoogleAuthProvider();
- 
-    window.signInWithGoogle = function() {
-      auth.signInWithPopup(provider)
-        .then(result => {
-          const u = result.user;
-          db.collection("users").doc(u.uid).set({
-            name: u.displayName, email: u.email,
-            photoURL: u.photoURL, uid: u.uid,
-            lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
-            createdAt: firebase.firestore.FieldValue.serverTimestamp()
-          }, { merge: true });
-        })
-        .catch(err => { console.error(err); alert("Login failed. Please try again."); });
-    };
- 
-    window.logoutUser = function() {
-      auth.signOut();
-    };
- 
-    auth.onAuthStateChanged(user => {
-      const authArea = document.getElementById("auth-area");
-      const authMobile = document.getElementById("auth-area-mobile");
-      const heroBtn = document.getElementById("hero-signin-btn");
- 
-      const loggedInHTML = user => `
-        <div class="relative">
-          <img id="profileBtn" src="${user.photoURL}" onerror="this.src='xedge-logo.png'"
-               class="w-9 h-9 rounded-full border border-gray-700 cursor-pointer" alt="Profile">
-          <div id="profileMenu" class="hidden absolute right-0 mt-2 w-44 bg-gray-800 border border-gray-700 rounded-xl shadow-xl z-50">
-            <div class="px-4 py-3 border-b border-gray-700">
-              <p class="text-sm font-semibold text-white truncate">${user.displayName}</p>
-              <p class="text-xs text-gray-400 truncate">${user.email}</p>
-            </div>
-            <button onclick="logoutUser()" class="w-full text-left px-4 py-2.5 text-red-400 hover:bg-red-500/10 text-sm transition">
-              Logout
-            </button>
-          </div>
-        </div>`;
- 
-      const loggedOutHTML = `
-        <button onclick="signInWithGoogle()"
-                class="border border-blue-500/60 px-4 py-1.5 rounded-full text-sm font-medium text-blue-300 hover:bg-blue-500/10 transition">
-          Sign In
-        </button>`;
- 
-      if (authArea)   authArea.innerHTML   = user ? loggedInHTML(user) : loggedOutHTML;
-      if (authMobile) authMobile.innerHTML = user ? loggedInHTML(user) : '';
-      if (heroBtn) heroBtn.classList.toggle("hidden", !!user);
- 
-      // Profile dropdown toggle (re-attach after innerHTML change)
-      if (user) {
-        setTimeout(() => {
-          const btn  = document.getElementById("profileBtn");
-          const menu = document.getElementById("profileMenu");
-          if (!btn || !menu) return;
-          btn.addEventListener("click", e => { e.stopPropagation(); menu.classList.toggle("hidden"); });
-          document.addEventListener("click", e => {
-            if (!menu.contains(e.target) && !btn.contains(e.target)) menu.classList.add("hidden");
-          });
-        }, 0);
-      }
-    });
-  });
-  </script>
- 
-  <!-- =====================================================================
-       TOOLS DATA + RENDERING (single clean IIFE — no duplicates)
-  ====================================================================== -->
-  <script>
-  (function() {
+  (function () {
     "use strict";
- 
-    const SHEET_URL  = "https://script.google.com/macros/s/AKfycbxXs2ajlwcddAMVEMY5NAMns_ooeEAHSYwDk84nnD6cU2hLjx_k5HKOgFLm-EX_ASSv/exec";
-    const CACHE_KEY  = "xedge_tools_cache_v2";
-    const CACHE_TTL  = 30 * 60 * 1000; // 30 minutes
-    const PRIORITY   = ["chatgpt","runway ml","notion ai","leonardo ai","github copilot","midjourney","perplexity"];
- 
-    const normalize  = s => String(s || "").trim().toLowerCase();
-    const safeParse  = v => { try { return JSON.parse(v); } catch { return null; } };
- 
-    /* ---------- FETCH with TTL cache ---------- */
-    async function fetchTools() {
-      const raw = safeParse(localStorage.getItem(CACHE_KEY));
-      if (raw && Array.isArray(raw.data) && raw.data.length && (Date.now() - raw.ts < CACHE_TTL)) {
-        return raw.data;
-      }
-      try {
-        const res  = await fetch(SHEET_URL + "?t=" + Date.now(), { cache: "no-store" });
-        if (!res.ok) throw new Error("HTTP " + res.status);
-        const data = await res.json();
-        if (Array.isArray(data) && data.length) {
-          localStorage.setItem(CACHE_KEY, JSON.stringify({ data, ts: Date.now() }));
-          return data;
+
+    /* ─── CONFIG ─── */
+    const SHEET_URL = "https://script.google.com/macros/s/AKfycbxXs2ajlwcddAMVEMY5NAMns_ooeEAHSYwDk84nnD6cU2hLjx_k5HKOgFLm-EX_ASSv/exec";
+    const CACHE_KEY = "xedge_tools_cache_v2";
+    const CACHE_TTL = 5 * 60 * 1000; // 5 min
+    const PRIORITY = ["chat gpt","chatgpt","runway ml","notion ai","leonardo ai","github copilot","mid journey","midjourney","perplexity"];
+
+    /* ─── UTILS ─── */
+    const normalize = s => String(s || "").trim().toLowerCase();
+    const safeParse = v => { try { return JSON.parse(v); } catch { return null; } };
+    const makePlaceholder = (name) =>
+      `https://dummyimage.com/160x160/1e293b/ffffff&text=${encodeURIComponent(String(name || "Tool").slice(0, 12))}`;
+
+    /* ─── SINGLE TOOL FETCH — with TTL cache ─── */
+    let _toolsPromise = null;
+    function fetchTools() {
+      if (_toolsPromise) return _toolsPromise;
+      _toolsPromise = (async () => {
+        const cached = safeParse(localStorage.getItem(CACHE_KEY));
+        if (cached && cached.ts && (Date.now() - cached.ts < CACHE_TTL) && Array.isArray(cached.data)) {
+          return cached.data;
         }
-      } catch(e) { console.error("XEdge fetch:", e); }
-      return (raw && raw.data) || [];
+        try {
+          const res = await fetch(SHEET_URL + "?t=" + Date.now(), { mode: "cors", cache: "no-store" });
+          if (!res.ok) throw new Error("HTTP " + res.status);
+          const raw = await res.json();
+          if (Array.isArray(raw)) {
+            localStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data: raw }));
+            return raw;
+          }
+        } catch (e) {
+          console.warn("XEdge fetch failed, using cache:", e.message);
+        }
+        return (safeParse(localStorage.getItem(CACHE_KEY)) || {}).data || [];
+      })();
+      return _toolsPromise;
     }
- 
-    /* ---------- Normalize tool fields ---------- */
+
+    /* ─── NORMALIZE TOOLS ─── */
     function normalizeTools(raw) {
       return raw.map(d => ({
-        name:     d.name  || d.title || "",
-        short:    d.short_description || d.short || d.summary || "",
+        name: d.name || d.title || "",
+        short: d.short_description || d.short || d.summary || "",
         category: d.category || "",
-        logo:     d.logo_url || d.logo || "",
-        link:     d.Link || d.link || "#"
+        goal: d.goal || d.goals || d.use_case || "",
+        logo: d.logo_url || d.logo || "",
+        link: d.Link || d.link || "#"
       }));
     }
- 
-    /* ---------- Lazy images ---------- */
-    function lazyLoad(root) {
-      if (!root) return;
-      const imgs = root.querySelectorAll("img[data-src]");
-      if (!imgs.length) return;
-      const obs = new IntersectionObserver(entries => {
-        entries.forEach(e => {
-          if (!e.isIntersecting) return;
-          e.target.src = e.target.dataset.src;
-          e.target.removeAttribute("data-src");
-          obs.unobserve(e.target);
-        });
-      }, { rootMargin: "300px" });
-      imgs.forEach(i => obs.observe(i));
+
+    /* ─── LAZY IMAGE OBSERVER ─── */
+    const imgObserver = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        const img = e.target;
+        img.src = img.dataset.src;
+        img.removeAttribute("data-src");
+        imgObserver.unobserve(img);
+      });
+    }, { rootMargin: "300px" });
+
+    function observeLazyImages(root) {
+      root.querySelectorAll("img[data-src]").forEach(img => imgObserver.observe(img));
     }
- 
-    /* ---------- Browse by Goal ---------- */
-    function renderGoals() {
-      const grid = document.getElementById("browse-theme-grid");
-      if (!grid) return;
-      const goals = [
-        { id: "make-money",      label: "Make Money",       logos: ["chat.openai.com","stripe.com","notion.so"],        color: "from-green-600 to-emerald-600" },
-        { id: "start-business",  label: "Start a Business", logos: ["vercel.com","supabase.com","figma.com"],            color: "from-blue-600 to-indigo-600" },
-        { id: "create-content",  label: "Create Content",   logos: ["claude.ai","midjourney.com","descript.com"],        color: "from-purple-600 to-pink-600" },
-        { id: "grow-audience",   label: "Grow Audience",    logos: ["buffer.com","typefully.com","gumroad.com"],         color: "from-orange-600 to-red-600" },
-        { id: "save-time",       label: "Save Time",        logos: ["make.com","zapier.com","n8n.io"],                   color: "from-yellow-600 to-amber-600" },
-        { id: "learn-ai",        label: "Learn AI",         logos: ["chat.openai.com","claude.ai","perplexity.ai"],      color: "from-cyan-600 to-blue-600" }
-      ];
-      grid.innerHTML = goals.map(g => `
-        <div onclick="location.href='stack.html?goal=${g.id}'"
-             class="cursor-pointer bg-gray-800/60 border border-gray-700 hover:border-gray-500
-                    hover:bg-gray-700/60 transition rounded-2xl p-6 text-center">
-          <div class="flex justify-center -space-x-2 mb-4">
-            ${g.logos.map((d,i) => `
-              <img src="https://www.google.com/s2/favicons?domain=${d}&sz=64"
-                   class="w-9 h-9 rounded-full border-2 border-gray-800 bg-white p-0.5"
-                   style="z-index:${3-i}" onerror="this.style.display='none'">`).join("")}
-          </div>
-          <h3 class="text-white font-semibold text-base mb-1">${g.label}</h3>
-          <p class="text-gray-500 text-xs">Best stack for ${g.label.toLowerCase()}</p>
-        </div>`).join("");
-    }
- 
-    /* ---------- Top Tools ---------- */
+
+    /* ─── RENDER: TOP TOOLS ─── */
     function renderTopTools(tools) {
       const scroller = document.getElementById("top-tools-wrapper");
       if (!scroller) return;
       const skel = document.getElementById("top-tools-skel");
       if (skel) skel.remove();
- 
-      const priority = tools.filter(t => PRIORITY.includes(normalize(t.name)));
-      const list = (priority.length ? priority : tools).slice(0, 8);
- 
+
+      const prioritized = tools.filter(t => PRIORITY.includes(normalize(t.name)));
+      const list = prioritized.length ? prioritized.slice(0, 8) : tools.slice(0, 8);
+
       scroller.innerHTML = list.map(t => `
-        <div class="min-w-[230px] snap-start bg-gray-800/60 border border-gray-700 rounded-2xl p-5 text-center shrink-0">
-          <img data-src="${t.logo || `https://dummyimage.com/160x160/1e293b/fff&text=${encodeURIComponent((t.name||"").slice(0,10))}`}"
-               src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
-               class="w-16 h-16 object-contain mx-auto mb-3 rounded-lg bg-gray-700/40" alt="${t.name}">
-          <h3 class="text-base font-semibold mb-1">${t.name}</h3>
-          <p class="text-gray-400 text-xs mb-4 line-clamp-2">${(t.short||"").slice(0,70)}</p>
-          <a href="tool.html?tool=${encodeURIComponent(t.name)}"
-             class="bg-blue-600 hover:bg-blue-500 px-4 py-1.5 rounded-full text-xs font-medium transition">
-            View Tool
-          </a>
-        </div>`).join("");
- 
-      lazyLoad(scroller);
- 
-      const left  = document.getElementById("scroll-left");
+        <div class="xe-tool-card" style="scroll-snap-align:start;">
+          <img data-src="${t.logo || makePlaceholder(t.name)}"
+               src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E"
+               alt="${t.name} logo" width="72" height="72" loading="lazy"/>
+          <h3>${t.name}</h3>
+          <p>${(t.short || "").slice(0, 72)}${t.short && t.short.length > 72 ? "…" : ""}</p>
+          <a href="tool.html?tool=${encodeURIComponent(t.name)}" class="xe-tool-link">View Tool →</a>
+        </div>
+      `).join("");
+
+      observeLazyImages(scroller);
+
+      const left = document.getElementById("scroll-left");
       const right = document.getElementById("scroll-right");
       if (left && right) {
-        left.classList.remove("hidden");
-        right.classList.remove("hidden");
-        right.onclick = () => scroller.scrollBy({ left: 300, behavior: "smooth" });
-        left.onclick  = () => scroller.scrollBy({ left: -300, behavior: "smooth" });
+        left.style.display = "flex";
+        right.style.display = "flex";
+        right.onclick = () => scroller.scrollBy({ left: 280, behavior: "smooth" });
+        left.onclick = () => scroller.scrollBy({ left: -280, behavior: "smooth" });
       }
-      if (window.feather) feather.replace();
     }
- 
-    /* ---------- Search ---------- */
+
+    /* ─── RENDER: BROWSE BY GOAL ─── */
+    function renderBrowseByGoal() {
+      const grid = document.getElementById("browse-theme-grid");
+      if (!grid) return;
+
+      const goals = [
+        { id: "make-money",     label: "Make Money",      logos: ["chat.openai.com","stripe.com","notion.so"],     desc: "AI tools to generate income" },
+        { id: "start-business", label: "Start a Business", logos: ["vercel.com","supabase.com","figma.com"],        desc: "Launch your startup stack" },
+        { id: "create-content", label: "Create Content",  logos: ["claude.ai","midjourney.com","descript.com"],     desc: "Write, design & ship faster" },
+        { id: "grow-audience",  label: "Grow Audience",   logos: ["buffer.com","typefully.com","gumroad.com"],      desc: "Distribution & growth tools" },
+        { id: "save-time",      label: "Automate Work",   logos: ["make.com","zapier.com","n8n.io"],                desc: "Cut repetitive tasks to zero" },
+        { id: "learn-ai",       label: "Learn AI",        logos: ["chat.openai.com","claude.ai","perplexity.ai"],   desc: "Go from zero to AI-fluent" }
+      ];
+
+      grid.innerHTML = goals.map(g => `
+        <div class="xe-goal-card" onclick="location.href='stack.html?goal=${g.id}'" role="button" tabindex="0"
+             aria-label="Browse ${g.label} stacks"
+             onkeydown="if(event.key==='Enter')location.href='stack.html?goal=${g.id}'">
+          <div class="xe-goal-logos">
+            ${g.logos.map((d, i) => `
+              <img src="https://www.google.com/s2/favicons?domain=${d}&sz=64"
+                   alt="${d} logo" loading="lazy" width="36" height="36"
+                   style="z-index:${3 - i};" onerror="this.style.display='none'"/>
+            `).join("")}
+          </div>
+          <h3>${g.label}</h3>
+          <p>${g.desc}</p>
+        </div>
+      `).join("");
+    }
+
+    /* ─── SEARCH ─── */
     let allTools = [];
- 
-    function searchTools(query) {
-      const term = query.toLowerCase().trim();
-      if (!term) { hideResults(); return; }
-      const matches = allTools.filter(t =>
-        t.name?.toLowerCase().includes(term) ||
-        t.short?.toLowerCase().includes(term)
-      ).slice(0, 6);
-      // GA tracking (single location, no duplicate)
+    let searchDebounce = null;
+
+    function renderSearchResults(tools) {
+      const container = document.getElementById("search-results");
+      if (!container) return;
+      if (!tools.length) {
+        container.innerHTML = `<div class="xe-no-results">No tools found — try a different keyword</div>`;
+      } else {
+        container.innerHTML = tools.map(t => `
+          <a href="tool.html?tool=${encodeURIComponent(t.name)}" role="option">
+            <img src="${t.logo || makePlaceholder(t.name)}" alt="${t.name}" loading="lazy"
+                 onerror="this.src='xedge-logo.png'"/>
+            <div>
+              <div style="font-weight:600;font-size:.9rem;">${t.name}</div>
+              <div style="font-size:.8rem;color:#6b7280;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:300px;">${t.short || ""}</div>
+            </div>
+          </a>
+        `).join("");
+      }
+      container.classList.remove("hidden");
       if (typeof gtag !== "undefined") {
-        gtag("event", "search", { search_term: query, results_count: matches.length });
+        gtag("event", "search", { search_term: tools.length ? tools[0].name : "no_results" });
       }
-      showResults(matches);
     }
- 
-    function showResults(tools) {
-      const c = document.getElementById("search-results");
-      if (!c) return;
-      c.innerHTML = tools.length
-        ? tools.map(t => `
-            <a href="tool.html?tool=${encodeURIComponent(t.name)}"
-               class="flex items-center gap-3 px-4 py-3 hover:bg-gray-700 border-b border-gray-700/60 last:border-0 transition">
-              <img src="${t.logo || 'xedge-logo.png'}" class="w-8 h-8 rounded-lg object-cover shrink-0"
-                   onerror="this.src='xedge-logo.png'" alt="${t.name}">
-              <div class="min-w-0">
-                <div class="font-medium text-white text-sm">${t.name}</div>
-                <div class="text-xs text-gray-400 truncate">${t.short || ""}</div>
-              </div>
-            </a>`).join("")
-        : `<div class="px-4 py-3 text-gray-500 text-sm">No tools found</div>`;
-      c.classList.remove("hidden");
+
+    function hideSearchResults() {
+      const el = document.getElementById("search-results");
+      if (el) el.classList.add("hidden");
     }
- 
-    function hideResults() {
-      const c = document.getElementById("search-results");
-      if (c) c.classList.add("hidden");
-    }
- 
-    /* ---------- Init ---------- */
-    async function init() {
-      renderGoals();
-      const raw  = await fetchTools();
-      allTools   = normalizeTools(raw);
-      renderTopTools(allTools);
-      if (window.feather) feather.replace();
- 
-      const input = document.getElementById("global-search");
-      if (input) {
-        input.addEventListener("input", e => searchTools(e.target.value));
+
+    /* ─── MOBILE MENU ─── */
+    function initMobileMenu() {
+      const toggle = document.getElementById("mobile-menu-toggle");
+      const menu = document.getElementById("mobileMenu");
+      const backdrop = document.getElementById("nav-backdrop");
+      if (!toggle || !menu) return;
+
+      let isOpen = false;
+
+      function openMenu() {
+        isOpen = true;
+        menu.classList.add("open");
+        backdrop && backdrop.classList.add("show");
+        toggle.classList.add("open");
+        toggle.setAttribute("aria-expanded", "true");
+        document.body.style.overflow = "hidden";
       }
-      document.addEventListener("click", e => {
-        if (!e.target.closest("#global-search") && !e.target.closest("#search-results")) hideResults();
+
+      function closeMenu() {
+        isOpen = false;
+        menu.classList.remove("open");
+        backdrop && backdrop.classList.remove("show");
+        toggle.classList.remove("open");
+        toggle.setAttribute("aria-expanded", "false");
+        document.body.style.overflow = "";
+      }
+
+      toggle.addEventListener("click", () => isOpen ? closeMenu() : openMenu());
+      backdrop && backdrop.addEventListener("click", closeMenu);
+      menu.querySelectorAll("a").forEach(a => a.addEventListener("click", closeMenu));
+      document.addEventListener("keydown", e => { if (e.key === "Escape" && isOpen) closeMenu(); });
+    }
+
+    /* ─── NEWSLETTER ─── */
+    function initNewsletter() {
+      const form = document.getElementById("newsletter-form");
+      const msg = document.getElementById("newsletter-success");
+      if (!form) return;
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const btn = form.querySelector("button");
+        const original = btn.textContent;
+        btn.textContent = "Sending…";
+        btn.disabled = true;
+
+        try {
+          const res = await fetch("https://weathered-cake-1046.kumarharsha980.workers.dev/", {
+            method: "POST",
+            body: new FormData(form)
+          });
+          if (res.ok) {
+            form.reset();
+            if (msg) msg.classList.remove("hidden");
+          } else {
+            throw new Error("Server error");
+          }
+        } catch {
+          alert("Something went wrong. Please try again.");
+          btn.textContent = original;
+          btn.disabled = false;
+        }
       });
     }
- 
+
+    /* ─── CHATBOT BUTTON ─── */
+    function initChatbot() {
+      const btn = document.getElementById("xedge-ai-button");
+      if (!btn) return;
+      btn.addEventListener("click", () => {
+        const chatbotBtn = document.querySelector("#root button");
+        if (chatbotBtn) chatbotBtn.click();
+      });
+    }
+
+    /* ─── FIREBASE + AUTH ─── */
+    function initFirebase() {
+      if (typeof firebase === "undefined") return;
+      if (!firebase.apps.length) {
+        firebase.initializeApp({
+          apiKey: "AIzaSyC-uRePD86sTpCRgjPsjhpOp-lzTNNF8Zg",
+          authDomain: "xedge-1da3a.firebaseapp.com",
+          projectId: "xedge-1da3a",
+          storageBucket: "xedge-1da3a.appspot.com",
+          messagingSenderId: "209657807080",
+          appId: "1:209657807080:web:80180596d966b4667d895d",
+          measurementId: "G-SXW16HCZB8"
+        });
+      }
+
+      const auth = firebase.auth();
+      const db = firebase.firestore();
+      const provider = new firebase.auth.GoogleAuthProvider();
+      provider.addScope("profile");
+      provider.addScope("email");
+
+      window.signInWithGoogle = () => {
+        auth.signInWithPopup(provider)
+          .then(({ user }) => {
+            db.collection("users").doc(user.uid).set({
+              name: user.displayName, email: user.email,
+              photoURL: user.photoURL, uid: user.uid,
+              lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
+              createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            }, { merge: true });
+          })
+          .catch(err => { console.error("Login error:", err); alert("Login failed. Please try again."); });
+      };
+
+      window.logoutUser = () => auth.signOut();
+
+      auth.onAuthStateChanged(user => {
+        const nav = document.getElementById("auth-area");
+        const heroBtn = document.getElementById("hero-signin-btn");
+        if (!nav) return;
+
+        if (user) {
+          if (heroBtn) heroBtn.style.display = "none";
+          nav.innerHTML = `
+            <div style="position:relative;">
+              <img id="profileBtn" src="${user.photoURL}" alt="Profile photo"
+                   style="width:36px;height:36px;border-radius:50%;border:2px solid rgba(255,255,255,0.1);cursor:pointer;display:block;"
+                   onerror="this.src='xedge-logo.png'"/>
+              <div id="profileMenu" style="display:none;position:absolute;right:0;top:calc(100%+8px);
+                   min-width:180px;background:#111827;border:1px solid rgba(255,255,255,0.1);
+                   border-radius:14px;overflow:hidden;box-shadow:0 20px 40px rgba(0,0,0,0.5);z-index:100;">
+                <div style="padding:14px 16px;border-bottom:1px solid rgba(255,255,255,0.08);">
+                  <div style="font-weight:700;font-size:.9rem;">${user.displayName}</div>
+                  <div style="font-size:.78rem;color:#6b7280;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${user.email}</div>
+                </div>
+                <button onclick="logoutUser()"
+                  style="width:100%;text-align:left;padding:12px 16px;background:none;border:none;
+                         color:#f87171;cursor:pointer;font-size:.9rem;font-family:inherit;
+                         transition:background .15s;"
+                  onmouseover="this.style.background='rgba(248,113,113,0.08)'"
+                  onmouseout="this.style.background='none'">
+                  Sign out
+                </button>
+              </div>
+            </div>`;
+
+          setTimeout(() => {
+            const btn = document.getElementById("profileBtn");
+            const menu = document.getElementById("profileMenu");
+            if (!btn || !menu) return;
+            btn.onclick = e => { e.stopPropagation(); menu.style.display = menu.style.display === "none" ? "block" : "none"; };
+            document.addEventListener("click", e => { if (!menu.contains(e.target) && e.target !== btn) menu.style.display = "none"; });
+            document.addEventListener("keydown", e => { if (e.key === "Escape") menu.style.display = "none"; });
+          }, 0);
+        } else {
+          if (heroBtn) heroBtn.style.display = "";
+          nav.innerHTML = `
+            <button onclick="signInWithGoogle()"
+              style="border:1px solid rgba(59,130,246,0.4);padding:7px 18px;border-radius:100px;
+                     background:none;color:#60a5fa;cursor:pointer;font-family:inherit;font-size:.85rem;
+                     font-weight:600;transition:background .15s,border-color .15s;"
+              onmouseover="this.style.background='rgba(59,130,246,0.1)'"
+              onmouseout="this.style.background='none'">
+              Sign In
+            </button>`;
+        }
+      });
+    }
+
+    /* ─── MAIN INIT ─── */
+    async function init() {
+      // Non-data inits first (instant)
+      initMobileMenu();
+      initNewsletter();
+      initChatbot();
+      renderBrowseByGoal();
+
+      // Feather icons
+      if (window.feather) feather.replace();
+
+      // Load data — single fetch
+      const raw = await fetchTools();
+      allTools = normalizeTools(raw);
+
+      renderTopTools(allTools);
+
+      // Init search after tools loaded
+      const searchInput = document.getElementById("global-search");
+      if (searchInput) {
+        searchInput.addEventListener("input", e => {
+          clearTimeout(searchDebounce);
+          const term = e.target.value.toLowerCase().trim();
+          if (!term) { hideSearchResults(); return; }
+          searchDebounce = setTimeout(() => {
+            const matches = allTools.filter(t =>
+              t.name.toLowerCase().includes(term) ||
+              (t.short && t.short.toLowerCase().includes(term))
+            ).slice(0, 6);
+            renderSearchResults(matches);
+          }, 160);
+        });
+
+        document.addEventListener("click", e => {
+          if (!e.target.closest(".xe-search-wrap")) hideSearchResults();
+        });
+
+        searchInput.addEventListener("keydown", e => {
+          if (e.key === "Escape") { hideSearchResults(); searchInput.blur(); }
+        });
+      }
+
+      // Firebase loads async — retry until ready
+      let fbRetries = 0;
+      const fbPoll = setInterval(() => {
+        if (typeof firebase !== "undefined") { clearInterval(fbPoll); initFirebase(); }
+        if (++fbRetries > 20) clearInterval(fbPoll);
+      }, 300);
+    }
+
+    // Boot
     if (document.readyState === "loading") {
       document.addEventListener("DOMContentLoaded", init);
     } else {
       init();
     }
+
   })();
   </script>
- 
-  <!-- =====================================================================
-       MOBILE MENU — clean, single listener block
-  ====================================================================== -->
-  <script>
-  document.addEventListener("DOMContentLoaded", function() {
-    const toggle   = document.getElementById("mobile-menu-toggle");
-    const closeBtn = document.getElementById("mobileClose");
-    const menu     = document.getElementById("mobileMenu");
-    const backdrop = document.getElementById("nav-backdrop");
- 
-    function openMenu() {
-      menu.classList.add("open");
-      backdrop.classList.add("show");
-      document.body.style.overflow = "hidden";
-    }
-    function closeMenu() {
-      menu.classList.remove("open");
-      backdrop.classList.remove("show");
-      document.body.style.overflow = "";
-    }
- 
-    if (toggle)   toggle.addEventListener("click", openMenu);
-    if (closeBtn) closeBtn.addEventListener("click", closeMenu);
-    if (backdrop) backdrop.addEventListener("click", closeMenu);
- 
-    // Ensure closed on load
-    if (menu)     menu.classList.remove("open");
-    if (backdrop) backdrop.classList.remove("show");
- 
-    // Feather icons
-    if (window.feather) feather.replace();
-  });
-  </script>
- 
+
 </body>
 </html>
