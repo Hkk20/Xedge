@@ -187,40 +187,11 @@
       line-height: 1.7;
     }
 
-    /* ─── TOGGLE ─── */
-    .billing-toggle {
-      display: inline-flex; align-items: center; gap: 12px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 100px; padding: 6px 8px;
-      font-size: 0.9rem; font-weight: 500;
-      margin-bottom: 56px;
-    }
-    .billing-toggle button {
-      padding: 7px 20px; border-radius: 100px;
-      border: none; cursor: pointer; font-family: inherit;
-      font-size: 0.88rem; font-weight: 600;
-      transition: background .2s, color .2s;
-    }
-    .billing-toggle button.active {
-      background: #3b82f6; color: #fff;
-    }
-    .billing-toggle button:not(.active) {
-      background: transparent; color: #6b7a9a;
-    }
-    .billing-toggle button:not(.active):hover { color: #9ca3af; }
-    .billing-badge {
-      background: rgba(52,211,153,0.15);
-      border: 1px solid rgba(52,211,153,0.3);
-      color: #34d399; font-size: 0.72rem; font-weight: 700;
-      padding: 3px 10px; border-radius: 100px; letter-spacing: 0.5px;
-    }
-
     /* ─── PRICING GRID ─── */
     .pricing-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 20px;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
       align-items: start;
       margin-bottom: 80px;
     }
@@ -230,7 +201,7 @@
       background: rgba(15,20,28,0.8);
       border: 1px solid rgba(255,255,255,0.08);
       border-radius: 22px;
-      padding: 36px 32px;
+      padding: 28px 24px;
       position: relative;
       transition: border-color .2s, transform .2s;
     }
@@ -401,10 +372,13 @@
     a:focus:not(:focus-visible), button:focus:not(:focus-visible) { outline: none; }
 
     /* ─── RESPONSIVE ─── */
-    @media (max-width: 900px) {
-      .pricing-grid { grid-template-columns: 1fr; max-width: 480px; margin-left: auto; margin-right: auto; }
+    @media (max-width: 1100px) {
+      .pricing-grid { grid-template-columns: 1fr 1fr; }
       .xe-plan.featured { transform: none; }
       .xe-plan.featured:hover { transform: translateY(-4px); }
+    }
+    @media (max-width: 640px) {
+      .pricing-grid { grid-template-columns: 1fr; max-width: 440px; margin-left: auto; margin-right: auto; }
     }
     @media (max-width: 767px) {
       .xe-nav-links, .xe-btn-beta { display: none !important; }
@@ -474,16 +448,8 @@
       <!-- Hero -->
       <section class="pricing-hero" aria-label="Pricing header">
         <div class="xe-section-label">Simple pricing</div>
-        <h1>One goal. One stack.<br/><span>One price.</span></h1>
-        <p>No subscriptions required. Buy the guide for your goal and get a 24-page execution plan with real code, prompts, and tooling — or go Pro for everything.</p>
-
-        <!-- Billing toggle -->
-        <div class="billing-toggle" role="group" aria-label="Billing period">
-          <button type="button" id="toggle-one-time" class="active" onclick="setBilling('one-time')">One-time</button>
-          <button type="button" id="toggle-monthly" onclick="setBilling('monthly')">
-            Monthly <span class="billing-badge">SAVE 50%</span>
-          </button>
-        </div>
+        <h1>Start free.<br/><span>Upgrade when ready.</span></h1>
+        <p>Explore everything for free. When you're ready to execute, grab the guide for your goal — or go Pro for the full system.</p>
       </section>
 
       <!-- Pricing cards -->
@@ -491,18 +457,59 @@
         <div class="xe-max">
           <div class="pricing-grid" id="pricing-grid">
 
-            <!-- ── PLAN 1: Single Stack ── -->
+            <!-- ── PLAN 1: Free ── -->
+            <article class="xe-plan" aria-label="Free plan">
+              <div class="xe-plan-name">Free</div>
+              <div class="xe-plan-price">
+                <span class="amount">$0</span>
+              </div>
+              <p class="xe-plan-desc">Explore tools, browse stacks, and use the AI chatbot. No card needed.</p>
+              <a href="Explore.html" class="xe-plan-cta ghost" role="button">Start Exploring →</a>
+              <div class="xe-plan-divider" aria-hidden="true"></div>
+              <ul class="xe-features" role="list">
+                <li>
+                  <span class="check" aria-hidden="true"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1.5,5 4,7.5 8.5,2.5"/></svg></span>
+                  <span>Full access to all 16 AI categories</span>
+                </li>
+                <li>
+                  <span class="check" aria-hidden="true"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1.5,5 4,7.5 8.5,2.5"/></svg></span>
+                  <span>Browse all 13 goal stacks</span>
+                </li>
+                <li>
+                  <span class="check" aria-hidden="true"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1.5,5 4,7.5 8.5,2.5"/></svg></span>
+                  <span>AI chatbot tool recommendations</span>
+                </li>
+                <li>
+                  <span class="check" aria-hidden="true"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1.5,5 4,7.5 8.5,2.5"/></svg></span>
+                  <span>Weekly newsletter</span>
+                </li>
+                <li class="muted">
+                  <span class="check" aria-hidden="true"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="2" y1="5" x2="8" y2="5"/></svg></span>
+                  <span>Execution guide PDFs</span>
+                </li>
+                <li class="muted">
+                  <span class="check" aria-hidden="true"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="2" y1="5" x2="8" y2="5"/></svg></span>
+                  <span>Discord community</span>
+                </li>
+              </ul>
+            </article>
+
+            <!-- ── PLAN 2: Single Stack ── -->
             <article class="xe-plan" aria-label="Single Stack plan">
               <div class="xe-plan-name">Single Stack</div>
               <div class="xe-plan-price">
                 <span class="currency">$</span>
-                <span class="amount" id="price-single">29</span>
-                <span class="period" id="period-single">one-time</span>
+                <span class="amount">29</span>
+                <span class="period">one-time</span>
               </div>
-              <p class="xe-plan-desc">Pick one goal. Get the complete execution guide for it.</p>
+              <p class="xe-plan-desc">Pick one goal. Get the complete 24-page execution guide for it.</p>
               <a href="stack.html" class="xe-plan-cta ghost" role="button">Browse Stacks →</a>
               <div class="xe-plan-divider" aria-hidden="true"></div>
               <ul class="xe-features" role="list">
+                <li>
+                  <span class="check" aria-hidden="true"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1.5,5 4,7.5 8.5,2.5"/></svg></span>
+                  <span>Everything in Free</span>
+                </li>
                 <li>
                   <span class="check" aria-hidden="true"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1.5,5 4,7.5 8.5,2.5"/></svg></span>
                   <span>24-page deep-dive PDF guide</span>
@@ -517,55 +524,39 @@
                 </li>
                 <li>
                   <span class="check" aria-hidden="true"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1.5,5 4,7.5 8.5,2.5"/></svg></span>
-                  <span>Security checklist &amp; deployment notes</span>
-                </li>
-                <li>
-                  <span class="check" aria-hidden="true"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1.5,5 4,7.5 8.5,2.5"/></svg></span>
                   <span>Revenue math &amp; pricing models</span>
                 </li>
                 <li class="muted">
                   <span class="check" aria-hidden="true"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="2" y1="5" x2="8" y2="5"/></svg></span>
-                  <span>All 13 stacks</span>
-                </li>
-                <li class="muted">
-                  <span class="check" aria-hidden="true"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="2" y1="5" x2="8" y2="5"/></svg></span>
-                  <span>Discord community access</span>
-                </li>
-                <li class="muted">
-                  <span class="check" aria-hidden="true"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="2" y1="5" x2="8" y2="5"/></svg></span>
-                  <span>New stack every month</span>
+                  <span>Discord community</span>
                 </li>
               </ul>
             </article>
 
-            <!-- ── PLAN 2: Pro (FEATURED) ── -->
+            <!-- ── PLAN 3: Pro (FEATURED) ── -->
             <article class="xe-plan featured" aria-label="XEdge Pro plan — most popular">
               <div class="xe-plan-badge" aria-label="Most popular">⚡ MOST POPULAR</div>
               <div class="xe-plan-name">XEdge Pro</div>
               <div class="xe-plan-price">
                 <span class="currency">$</span>
-                <span class="amount" id="price-pro">19</span>
-                <span class="period" id="period-pro">/month</span>
+                <span class="amount">19</span>
+                <span class="period">/month</span>
               </div>
-              <p class="xe-plan-desc">Everything in the bundle, plus new stacks monthly and a community of builders.</p>
-              <a href="Join.html" class="xe-plan-cta primary" role="button" id="cta-pro">Start for $19/mo →</a>
+              <p class="xe-plan-desc">All guides, Discord, and a new stack every month. The full system.</p>
+              <a href="Join.html" class="xe-plan-cta primary" role="button">Start for $19/mo →</a>
               <div class="xe-plan-divider" aria-hidden="true"></div>
               <ul class="xe-features" role="list">
+                <li>
+                  <span class="check" aria-hidden="true"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1.5,5 4,7.5 8.5,2.5"/></svg></span>
+                  <span>Everything in Free</span>
+                </li>
                 <li>
                   <span class="check" aria-hidden="true"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1.5,5 4,7.5 8.5,2.5"/></svg></span>
                   <span><strong>All 13 stack guides</strong> included</span>
                 </li>
                 <li>
                   <span class="check" aria-hidden="true"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1.5,5 4,7.5 8.5,2.5"/></svg></span>
-                  <span>24-page deep-dive PDFs for every stack</span>
-                </li>
-                <li>
-                  <span class="check" aria-hidden="true"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1.5,5 4,7.5 8.5,2.5"/></svg></span>
-                  <span>Real SQL, prompts &amp; code snippets</span>
-                </li>
-                <li>
-                  <span class="check" aria-hidden="true"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1.5,5 4,7.5 8.5,2.5"/></svg></span>
-                  <span><strong>New stack added every month</strong></span>
+                  <span><strong>New stack every month</strong></span>
                 </li>
                 <li>
                   <span class="check" aria-hidden="true"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1.5,5 4,7.5 8.5,2.5"/></svg></span>
@@ -577,18 +568,18 @@
                 </li>
                 <li>
                   <span class="check" aria-hidden="true"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1.5,5 4,7.5 8.5,2.5"/></svg></span>
-                  <span>Cancel anytime — no lock-in</span>
+                  <span>Cancel anytime</span>
                 </li>
               </ul>
             </article>
 
-            <!-- ── PLAN 3: Bundle ── -->
+            <!-- ── PLAN 4: Bundle ── -->
             <article class="xe-plan" aria-label="All Stacks Bundle plan">
               <div class="xe-plan-name">All Stacks Bundle</div>
               <div class="xe-plan-price">
                 <span class="currency">$</span>
-                <span class="amount" id="price-bundle">97</span>
-                <span class="period" id="period-bundle">one-time</span>
+                <span class="amount">97</span>
+                <span class="period">one-time</span>
               </div>
               <p class="xe-plan-desc">Every guide, once. No subscription. Own it forever.</p>
               <a href="Join.html" class="xe-plan-cta ghost" role="button">Get All 13 Guides →</a>
@@ -596,31 +587,27 @@
               <ul class="xe-features" role="list">
                 <li>
                   <span class="check" aria-hidden="true"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1.5,5 4,7.5 8.5,2.5"/></svg></span>
-                  <span><strong>All 13 stack guides</strong> — $377 value</span>
+                  <span>Everything in Free</span>
                 </li>
                 <li>
                   <span class="check" aria-hidden="true"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1.5,5 4,7.5 8.5,2.5"/></svg></span>
-                  <span>24-page deep-dive PDFs for every stack</span>
+                  <span><strong>All 13 guides</strong> — $377 value</span>
                 </li>
                 <li>
                   <span class="check" aria-hidden="true"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1.5,5 4,7.5 8.5,2.5"/></svg></span>
-                  <span>Real SQL, prompts &amp; code snippets</span>
+                  <span>Lifetime access + updates</span>
                 </li>
                 <li>
                   <span class="check" aria-hidden="true"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1.5,5 4,7.5 8.5,2.5"/></svg></span>
-                  <span>Lifetime access — updates included</span>
+                  <span>Real SQL, prompts &amp; code</span>
                 </li>
                 <li>
                   <span class="check" aria-hidden="true"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1.5,5 4,7.5 8.5,2.5"/></svg></span>
-                  <span>Security checklists &amp; deployment notes</span>
+                  <span>Security checklists &amp; deployment</span>
                 </li>
                 <li class="muted">
                   <span class="check" aria-hidden="true"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="2" y1="5" x2="8" y2="5"/></svg></span>
-                  <span>Discord community access</span>
-                </li>
-                <li class="muted">
-                  <span class="check" aria-hidden="true"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="2" y1="5" x2="8" y2="5"/></svg></span>
-                  <span>New stacks monthly</span>
+                  <span>Discord &amp; new stacks monthly</span>
                 </li>
               </ul>
             </article>
@@ -767,28 +754,6 @@
       menu.querySelectorAll("a").forEach(a => a.addEventListener("click", closeMenu));
       document.addEventListener("keydown", e => { if (e.key === "Escape" && open) closeMenu(); });
     }
-
-    /* ─── BILLING TOGGLE ─── */
-    window.setBilling = function(mode) {
-      const isMonthly = mode === "monthly";
-
-      // Update button states
-      document.getElementById("toggle-one-time").classList.toggle("active", !isMonthly);
-      document.getElementById("toggle-monthly").classList.toggle("active",  isMonthly);
-
-      // Single stack
-      document.getElementById("price-single").textContent  = isMonthly ? "—"   : "29";
-      document.getElementById("period-single").textContent = isMonthly ? "(Pro only)" : "one-time";
-
-      // Pro
-      document.getElementById("price-pro").textContent  = isMonthly ? "19" : "19";
-      document.getElementById("period-pro").textContent = isMonthly ? "/month" : "/month";
-      document.getElementById("cta-pro").textContent    = isMonthly ? "Start for $19/mo →" : "Start for $19/mo →";
-
-      // Bundle
-      document.getElementById("price-bundle").textContent  = isMonthly ? "—"   : "97";
-      document.getElementById("period-bundle").textContent = isMonthly ? "(one-time)" : "one-time";
-    };
 
     /* ─── FAQ ACCORDION ─── */
     window.toggleFaq = function(id) {
