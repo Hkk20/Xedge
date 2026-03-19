@@ -1,0 +1,1192 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+
+  <!-- ═══ SEO ═══ -->
+  <title>Builder Showcase — XEdge Collab</title>
+  <meta name="description" content="Browse AI projects built by the XEdge community. Submit your own project to get featured, find collaborators, and connect with builders."/>
+  <meta name="robots" content="index, follow"/>
+  <link rel="canonical" href="https://xedge.tech/Collab.html"/>
+  <meta property="og:title" content="Builder Showcase — XEdge Collab"/>
+  <meta property="og:description" content="Real AI projects built by real people. Get featured, find collaborators, connect with builders."/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:image" content="https://xedge.tech/xedge-logo.png"/>
+  <meta property="og:url" content="https://xedge.tech/Collab.html"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="Builder Showcase — XEdge Collab"/>
+  <meta name="twitter:image" content="https://xedge.tech/xedge-logo.png"/>
+  <link rel="icon" href="xedge-logo.png" type="image/png"/>
+  <meta name="theme-color" content="#0b0f15"/>
+
+  <!-- ═══ FONTS: non-blocking ═══ -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap"/>
+  <link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap"/>
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap"/></noscript>
+
+  <script src="analytics.js" defer></script>
+
+  <style>
+    /* ─── BASE ─── */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; overflow-x: hidden; }
+    body {
+      font-family: 'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif;
+      background: #0b0f15;
+      color: #fff;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─── NAV ─── */
+    .xe-nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 60;
+      height: 68px;
+      background: rgba(11,15,21,0.92);
+      backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      display: flex; align-items: center;
+    }
+    .xe-nav-inner {
+      max-width: 1400px; width: 100%; margin: 0 auto; padding: 0 24px;
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    }
+    .xe-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0; }
+    .xe-logo img { width: 36px; height: 36px; border-radius: 8px; }
+    .xe-logo span { font-size: 1.25rem; font-weight: 700; color: #60a5fa; letter-spacing: -0.3px; }
+    .xe-nav-links { display: flex; align-items: center; gap: 4px; }
+    .xe-nav-links a {
+      font-size: 0.9rem; font-weight: 500; color: #9ca3af;
+      padding: 6px 14px; border-radius: 8px; text-decoration: none;
+      transition: color .15s, background .15s;
+    }
+    .xe-nav-links a:hover { color: #fff; background: rgba(255,255,255,0.06); }
+    .xe-nav-links a.active { color: #60a5fa; background: rgba(59,130,246,0.08); }
+    .xe-nav-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    .xe-btn-beta {
+      background: linear-gradient(135deg, #3b82f6, #6366f1);
+      padding: 8px 20px; border-radius: 100px;
+      font-size: 0.85rem; font-weight: 600; color: #fff;
+      text-decoration: none; transition: opacity .15s, transform .15s; white-space: nowrap;
+    }
+    .xe-btn-beta:hover { opacity: 0.88; transform: translateY(-1px); }
+    .xe-hamburger {
+      display: none; background: none; border: none; cursor: pointer; padding: 8px;
+      color: #d1d5db; flex-direction: column; gap: 5px; align-items: center; justify-content: center;
+    }
+    .xe-hamburger span { display: block; width: 22px; height: 2px; background: currentColor; border-radius: 2px; transition: transform .25s, opacity .25s; }
+    .xe-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .xe-hamburger.open span:nth-child(2) { opacity: 0; }
+    .xe-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    .xe-mobile-menu {
+      position: fixed; top: 68px; left: 0; right: 0; z-index: 59;
+      background: rgba(11,15,21,0.98); backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      padding: 12px 16px 20px; display: none; flex-direction: column; gap: 4px;
+    }
+    .xe-mobile-menu.open { display: flex; }
+    .xe-mobile-menu a { padding: 12px 16px; border-radius: 10px; font-size: 1rem; font-weight: 500; color: #9ca3af; text-decoration: none; transition: color .15s, background .15s; }
+    .xe-mobile-menu a:hover { color: #fff; background: rgba(255,255,255,0.06); }
+    .xe-mobile-menu .xe-mobile-cta { background: linear-gradient(135deg, #3b82f6, #6366f1); color: #fff !important; text-align: center; margin-top: 8px; font-weight: 600; }
+    .nav-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 58; opacity: 0; pointer-events: none; transition: opacity .2s; }
+    .nav-backdrop.show { opacity: 1; pointer-events: auto; }
+
+    /* ─── LAYOUT ─── */
+    .page-top { position: relative; z-index: 10; }
+    main { padding-top: 68px; }
+    .xe-max { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+    .xe-section-label { font-size: 0.75rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: #3b82f6; margin-bottom: 12px; }
+    .xe-divider { height: 1px; background: rgba(255,255,255,0.06); }
+
+    /* ─── HERO ─── */
+    .collab-hero {
+      padding: 72px 24px 56px;
+      text-align: center;
+    }
+    .collab-hero h1 {
+      font-size: clamp(2.2rem, 5vw, 3.6rem);
+      font-weight: 800; letter-spacing: -2px; line-height: 1.05;
+      margin: 0 auto 20px; max-width: 720px;
+    }
+    .collab-hero h1 span {
+      background: linear-gradient(135deg, #60a5fa 0%, #818cf8 50%, #a78bfa 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .collab-hero p { font-size: 1.05rem; color: #9ca3af; max-width: 480px; margin: 0 auto 36px; line-height: 1.75; }
+    .hero-actions { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; }
+    .xe-btn-primary {
+      background: linear-gradient(135deg, #3b82f6, #6366f1);
+      padding: 13px 28px; border-radius: 100px;
+      font-size: 0.95rem; font-weight: 700; color: #fff;
+      border: none; cursor: pointer; font-family: inherit; text-decoration: none;
+      transition: opacity .15s, transform .15s, box-shadow .15s; display: inline-flex; align-items: center; gap: 8px;
+    }
+    .xe-btn-primary:hover { opacity: .88; transform: translateY(-2px); box-shadow: 0 10px 28px rgba(99,102,241,.35); }
+    .xe-btn-ghost {
+      background: transparent; border: 1px solid rgba(255,255,255,0.15);
+      padding: 13px 28px; border-radius: 100px;
+      font-size: 0.95rem; font-weight: 500; color: #9ca3af;
+      cursor: pointer; font-family: inherit; text-decoration: none;
+      transition: border-color .15s, color .15s, background .15s; display: inline-flex; align-items: center; gap: 8px;
+    }
+    .xe-btn-ghost:hover { border-color: rgba(255,255,255,0.3); color: #fff; }
+
+    /* ─── STATS ROW ─── */
+    .collab-stats {
+      display: flex; align-items: center; justify-content: center;
+      gap: 40px; flex-wrap: wrap;
+      padding: 32px 24px 56px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .collab-stats.hidden { display: none; }
+    .collab-stat { text-align: center; }
+    .collab-stat-num { font-size: 2rem; font-weight: 800; letter-spacing: -1px; color: #fff; }
+    .collab-stat-label { font-size: 0.78rem; color: #8b93b0; margin-top: 3px; }
+    .collab-stat-divider { width: 1px; height: 36px; background: rgba(255,255,255,0.08); }
+
+    /* ─── FILTER BAR ─── */
+    .filter-bar {
+      display: flex; align-items: center; gap: 10px;
+      padding: 32px 24px 0; flex-wrap: wrap;
+      max-width: 1200px; margin: 0 auto;
+    }
+    .filter-search-wrap {
+      flex: 1; min-width: 220px; max-width: 360px;
+      position: relative;
+    }
+    .filter-search-wrap svg {
+      position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+      width: 16px; height: 16px; color: #6b7a9a; pointer-events: none;
+    }
+    .filter-search-wrap input {
+      width: 100%; background: rgba(17,24,39,0.8);
+      border: 1px solid rgba(255,255,255,0.09); border-radius: 100px;
+      padding: 10px 16px 10px 38px; color: #fff; font-family: inherit;
+      font-size: 0.88rem; outline: none; transition: border-color .15s;
+    }
+    .filter-search-wrap input:focus { border-color: rgba(59,130,246,0.5); }
+    .filter-search-wrap input::placeholder { color: #6b7a9a; }
+    .filter-pills { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .filter-pill {
+      padding: 8px 18px; border-radius: 100px;
+      font-size: 0.82rem; font-weight: 600; cursor: pointer;
+      border: 1px solid rgba(255,255,255,0.09);
+      background: transparent; color: #8b93b0; font-family: inherit;
+      transition: all .15s;
+    }
+    .filter-pill:hover { border-color: rgba(255,255,255,0.2); color: #fff; }
+    .filter-pill.active {
+      background: rgba(59,130,246,0.15);
+      border-color: rgba(59,130,246,0.4);
+      color: #60a5fa;
+    }
+    .filter-count {
+      margin-left: auto; font-size: 0.82rem; color: #6b7a9a; white-space: nowrap;
+    }
+
+    /* ─── PROJECT GRID ─── */
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 20px;
+      padding: 28px 24px 80px;
+      max-width: 1200px; margin: 0 auto;
+    }
+
+    /* ─── PROJECT CARD ─── */
+    .project-card {
+      background: rgba(13,18,28,0.85);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px; overflow: hidden;
+      transition: border-color .2s, transform .2s, box-shadow .2s;
+      display: flex; flex-direction: column;
+      cursor: pointer;
+    }
+    .project-card:hover {
+      border-color: rgba(99,102,241,0.35);
+      transform: translateY(-4px);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.35);
+    }
+    .project-card-cover {
+      height: 160px;
+      background: linear-gradient(135deg, #0f172a, #1e1b4b);
+      position: relative; overflow: hidden; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .project-card-cover-emoji {
+      font-size: 3rem; line-height: 1; user-select: none;
+      filter: drop-shadow(0 4px 12px rgba(0,0,0,0.4));
+    }
+    .project-card-cover-gradient {
+      position: absolute; inset: 0;
+      opacity: 0.6;
+    }
+    .project-card-status {
+      position: absolute; top: 14px; right: 14px;
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.5px;
+      padding: 4px 12px; border-radius: 100px;
+      backdrop-filter: blur(8px);
+    }
+    .status-seeking { background: rgba(52,211,153,0.15); border: 1px solid rgba(52,211,153,0.3); color: #34d399; }
+    .status-feedback { background: rgba(251,191,36,0.12); border: 1px solid rgba(251,191,36,0.25); color: #fbbf24; }
+    .status-launching { background: rgba(99,102,241,0.15); border: 1px solid rgba(99,102,241,0.3); color: #818cf8; }
+    .status-showcase { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12); color: #9ca3af; }
+
+    .project-card-body { padding: 22px 24px 20px; flex: 1; display: flex; flex-direction: column; }
+    .project-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
+    .project-card-name { font-size: 1.05rem; font-weight: 700; line-height: 1.3; }
+    .project-card-link {
+      flex-shrink: 0; width: 32px; height: 32px; border-radius: 8px;
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.09);
+      display: flex; align-items: center; justify-content: center;
+      text-decoration: none; color: #8b93b0;
+      transition: background .15s, color .15s, border-color .15s;
+    }
+    .project-card-link:hover { background: rgba(59,130,246,0.15); color: #60a5fa; border-color: rgba(59,130,246,0.3); }
+    .project-card-link svg { width: 14px; height: 14px; }
+    .project-card-desc { font-size: 0.85rem; color: #8b93b0; line-height: 1.65; margin-bottom: 18px; flex: 1; }
+
+    .project-card-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 18px; }
+    .project-tag {
+      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.3px;
+      padding: 4px 10px; border-radius: 6px;
+      background: rgba(59,130,246,0.08); border: 1px solid rgba(59,130,246,0.15); color: #7bb3ff;
+    }
+
+    .project-card-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .project-builder {
+      display: flex; align-items: center; gap: 8px;
+      text-decoration: none; color: inherit;
+      transition: color .15s;
+    }
+    .project-builder:hover { color: #60a5fa; }
+    .project-builder-avatar {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: linear-gradient(135deg, #3b82f6, #6366f1);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.72rem; font-weight: 700; color: #fff; flex-shrink: 0;
+    }
+    .project-builder-name { font-size: 0.82rem; font-weight: 600; color: #9ca3af; }
+    .project-builder:hover .project-builder-name { color: #60a5fa; }
+    .project-card-date { font-size: 0.75rem; color: #4b5a72; }
+
+    /* ─── EMPTY STATE ─── */
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center; padding: 80px 24px; color: #6b7a9a;
+    }
+    .empty-state svg { width: 48px; height: 48px; margin: 0 auto 16px; display: block; opacity: 0.4; }
+    .empty-state h3 { font-size: 1.1rem; font-weight: 700; color: #9ca3af; margin-bottom: 8px; }
+    .empty-state p { font-size: 0.88rem; line-height: 1.6; }
+
+    /* First-to-submit empty state */
+    .empty-state-first {
+      grid-column: 1 / -1;
+      position: relative;
+      text-align: center;
+      padding: 80px 32px 72px;
+      max-width: 580px;
+      margin: 0 auto;
+      display: flex; flex-direction: column; align-items: center; gap: 0;
+    }
+    .esf-glow {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 60% 50% at 50% 40%, rgba(99,102,241,0.07) 0%, transparent 70%);
+      pointer-events: none; border-radius: 24px;
+    }
+    .esf-icon {
+      width: 72px; height: 72px; border-radius: 20px;
+      background: rgba(99,102,241,0.1);
+      border: 1px solid rgba(99,102,241,0.2);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 24px; color: #818cf8;
+    }
+    .empty-state-first h3 {
+      font-size: 1.35rem; font-weight: 800; letter-spacing: -0.4px;
+      color: #fff; margin-bottom: 16px; line-height: 1.3;
+    }
+    .empty-state-first > p {
+      font-size: 0.92rem; color: #8b93b0; line-height: 1.8;
+      max-width: 440px; margin: 0 auto 28px;
+    }
+    .esf-sub {
+      font-size: 0.78rem !important; color: #4b5a72 !important;
+      margin-top: 14px !important; margin-bottom: 0 !important;
+    }
+
+    /* ─── SUBMIT MODAL OVERLAY ─── */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 200;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(6px);
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+      opacity: 0; pointer-events: none;
+      transition: opacity .2s;
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: auto; }
+
+    .modal {
+      background: #0f1520;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 24px;
+      width: 100%; max-width: 580px;
+      max-height: 90vh; overflow-y: auto;
+      transform: translateY(16px) scale(0.98);
+      transition: transform .25s cubic-bezier(.2,.9,.2,1);
+      scrollbar-width: none;
+    }
+    .modal::-webkit-scrollbar { display: none; }
+    .modal-overlay.open .modal { transform: translateY(0) scale(1); }
+
+    .modal-header {
+      padding: 28px 32px 0;
+      display: flex; align-items: flex-start; justify-content: space-between; gap: 16px;
+    }
+    .modal-header h2 { font-size: 1.4rem; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 6px; }
+    .modal-header p { font-size: 0.85rem; color: #8b93b0; line-height: 1.6; }
+    .modal-close {
+      flex-shrink: 0; width: 32px; height: 32px; border-radius: 8px;
+      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.09);
+      color: #9ca3af; cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: background .15s, color .15s; font-family: inherit;
+    }
+    .modal-close:hover { background: rgba(255,255,255,0.1); color: #fff; }
+    .modal-close svg { width: 14px; height: 14px; }
+
+    .modal-body { padding: 24px 32px 32px; }
+
+    /* Form */
+    .form-group { margin-bottom: 20px; }
+    .form-label {
+      display: block; font-size: 0.82rem; font-weight: 600;
+      color: #c4c9dc; margin-bottom: 8px; letter-spacing: 0.3px;
+    }
+    .form-label .req { color: #f87171; margin-left: 2px; }
+    .form-input, .form-textarea, .form-select {
+      width: 100%; background: rgba(17,24,39,0.8);
+      border: 1px solid rgba(255,255,255,0.09); border-radius: 12px;
+      padding: 12px 16px; color: #fff; font-family: inherit;
+      font-size: 0.92rem; outline: none; transition: border-color .15s, box-shadow .15s;
+      display: block;
+    }
+    .form-input:focus, .form-textarea:focus, .form-select:focus {
+      border-color: rgba(59,130,246,0.5);
+      box-shadow: 0 0 0 3px rgba(59,130,246,0.08);
+    }
+    .form-input::placeholder, .form-textarea::placeholder { color: #4b5a72; }
+    .form-textarea { height: 100px; resize: vertical; line-height: 1.6; }
+    .form-select { appearance: none; cursor: pointer; }
+    .form-select option { background: #111827; }
+    .form-hint { font-size: 0.78rem; color: #6b7a9a; margin-top: 6px; line-height: 1.5; }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+    /* Tag checkboxes */
+    .tag-picker { display: flex; flex-wrap: wrap; gap: 8px; }
+    .tag-check { display: none; }
+    .tag-check-label {
+      font-size: 0.78rem; font-weight: 600; padding: 6px 14px;
+      border-radius: 8px; border: 1px solid rgba(255,255,255,0.09);
+      background: rgba(17,24,39,0.6); color: #8b93b0;
+      cursor: pointer; transition: all .15s; user-select: none;
+    }
+    .tag-check:checked + .tag-check-label {
+      background: rgba(59,130,246,0.12);
+      border-color: rgba(59,130,246,0.35);
+      color: #60a5fa;
+    }
+    .tag-check-label:hover { border-color: rgba(255,255,255,0.18); color: #c4c9dc; }
+
+    /* Progress steps */
+    .form-steps {
+      display: flex; align-items: center; gap: 0; margin-bottom: 28px;
+    }
+    .form-step-item { display: flex; align-items: center; gap: 0; flex: 1; }
+    .form-step-circle {
+      width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.72rem; font-weight: 700;
+      border: 2px solid rgba(255,255,255,0.15); color: #6b7a9a;
+      background: rgba(17,24,39,0.8); transition: all .2s;
+    }
+    .form-step-circle.active { border-color: #3b82f6; color: #fff; background: #3b82f6; }
+    .form-step-circle.done { border-color: #34d399; background: rgba(52,211,153,0.15); color: #34d399; }
+    .form-step-label { font-size: 0.72rem; color: #6b7a9a; margin-left: 8px; white-space: nowrap; }
+    .form-step-label.active { color: #c4c9dc; font-weight: 600; }
+    .form-step-line { flex: 1; height: 1px; background: rgba(255,255,255,0.08); margin: 0 10px; }
+
+    /* Step panels */
+    .form-panel { display: none; }
+    .form-panel.active { display: block; }
+
+    .form-nav { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 28px; }
+    .btn-next, .btn-back, .btn-submit {
+      padding: 12px 28px; border-radius: 100px;
+      font-size: 0.9rem; font-weight: 700; font-family: inherit; cursor: pointer;
+      transition: opacity .15s, transform .15s; border: none;
+    }
+    .btn-next, .btn-submit {
+      background: linear-gradient(135deg, #3b82f6, #6366f1); color: #fff;
+      box-shadow: 0 4px 16px rgba(99,102,241,0.25);
+    }
+    .btn-next:hover, .btn-submit:hover { opacity: .88; transform: translateY(-1px); }
+    .btn-back { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.09); color: #9ca3af; }
+    .btn-back:hover { background: rgba(255,255,255,0.1); color: #fff; }
+    .btn-submit:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+
+    /* Success state */
+    .submit-success {
+      text-align: center; padding: 40px 24px;
+    }
+    .submit-success-icon {
+      width: 64px; height: 64px; border-radius: 50%;
+      background: rgba(52,211,153,0.12); border: 2px solid rgba(52,211,153,0.3);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 20px;
+    }
+    .submit-success-icon svg { width: 28px; height: 28px; color: #34d399; }
+    .submit-success h3 { font-size: 1.3rem; font-weight: 800; margin-bottom: 10px; }
+    .submit-success p { font-size: 0.88rem; color: #8b93b0; line-height: 1.7; max-width: 340px; margin: 0 auto 24px; }
+
+    /* ─── FOOTER ─── */
+    .xe-footer { border-top: 1px solid rgba(255,255,255,0.07); padding: 40px 24px; text-align: center; }
+    .xe-footer-links { display: flex; align-items: center; justify-content: center; gap: 24px; flex-wrap: wrap; margin-bottom: 16px; }
+    .xe-footer-links a { font-size: .82rem; color: #6b7a9a; text-decoration: none; transition: color .15s; }
+    .xe-footer-links a:hover { color: #60a5fa; }
+    .xe-footer-copy { font-size: .78rem; color: #374151; }
+
+    /* ─── ACCESSIBILITY ─── */
+    .xe-sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+    a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible { outline: 2px solid #3b82f6; outline-offset: 3px; border-radius: 4px; }
+    a:focus:not(:focus-visible), button:focus:not(:focus-visible) { outline: none; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 767px) {
+      .xe-nav-links, .xe-btn-beta { display: none !important; }
+      .xe-hamburger { display: flex !important; }
+      .collab-hero { padding: 52px 20px 40px; }
+      .collab-hero h1 { letter-spacing: -1px; }
+      .collab-stats { gap: 24px; }
+      .collab-stat-divider { display: none; }
+      .project-grid { grid-template-columns: 1fr; padding: 20px 16px 60px; }
+      .filter-bar { padding: 24px 16px 0; }
+      .filter-count { display: none; }
+      .form-row { grid-template-columns: 1fr; }
+      .modal-header, .modal-body { padding-left: 20px; padding-right: 20px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    }
+  </style>
+</head>
+
+<body>
+  <a href="#main-content" style="position:absolute;top:-100px;left:16px;background:#3b82f6;color:#fff;padding:8px 16px;border-radius:8px;font-weight:600;font-size:.9rem;z-index:9999;text-decoration:none;transition:top .15s;" onfocus="this.style.top='16px'" onblur="this.style.top='-100px'">Skip to main content</a>
+
+  <div class="nav-backdrop" id="nav-backdrop" aria-hidden="true"></div>
+
+  <div class="page-top">
+    <!-- NAV -->
+    <header>
+      <nav class="xe-nav" role="navigation" aria-label="Main navigation">
+        <div class="xe-nav-inner">
+          <a href="index.html" class="xe-logo" aria-label="XEdge home">
+            <img src="xedge-logo.png" alt="XEdge logo" width="36" height="36" fetchpriority="high"/>
+            <span>XEDGE</span>
+          </a>
+          <div class="xe-nav-links" role="list">
+            <a href="index.html" role="listitem">Home</a>
+            <a href="Explore.html" role="listitem">Explore</a>
+            <a href="Categories.html" role="listitem">Categories</a>
+            <a href="stack.html" role="listitem">Stacks</a>
+            <a href="About.html" role="listitem">About</a>
+          </div>
+          <div class="xe-nav-right">
+            <a href="Join.html" class="xe-btn-beta">Join Beta</a>
+            <div id="auth-area" style="display:flex;align-items:center;"></div>
+            <button id="mobile-menu-toggle" class="xe-hamburger" aria-label="Toggle menu" aria-expanded="false" type="button">
+              <span></span><span></span><span></span>
+            </button>
+          </div>
+        </div>
+      </nav>
+      <div id="mobileMenu" class="xe-mobile-menu" role="dialog" aria-label="Mobile menu">
+        <a href="index.html">Home</a>
+        <a href="Explore.html">Explore</a>
+        <a href="Categories.html">Categories</a>
+        <a href="stack.html">Stacks</a>
+        <a href="About.html">About</a>
+        <a href="Join.html" class="xe-mobile-cta">Join Beta</a>
+      </div>
+    </header>
+
+    <main id="main-content">
+
+      <!-- HERO -->
+      <section class="collab-hero" aria-label="Page header">
+        <div class="xe-section-label">Builder Showcase</div>
+        <h1>Real projects.<br/><span>Real builders.</span></h1>
+        <p>Ship something with AI? Show it here. Get feedback, find collaborators, and inspire the next builder.</p>
+        <div class="hero-actions">
+          <button type="button" class="xe-btn-primary" onclick="openModal()" aria-haspopup="dialog">
+            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+            Submit Your Project
+          </button>
+          <a href="#gallery" class="xe-btn-ghost">
+            Browse Projects
+            <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </a>
+        </div>
+      </section>
+
+      <!-- STATS -->
+      <div class="collab-stats" aria-label="Community stats">
+        <div class="collab-stat">
+          <div class="collab-stat-num" id="stat-projects">—</div>
+          <div class="collab-stat-label">Projects Submitted</div>
+        </div>
+        <div class="collab-stat-divider" aria-hidden="true"></div>
+        <div class="collab-stat">
+          <div class="collab-stat-num" id="stat-builders">—</div>
+          <div class="collab-stat-label">Builders Showcased</div>
+        </div>
+        <div class="collab-stat-divider" aria-hidden="true"></div>
+        <div class="collab-stat">
+          <div class="collab-stat-num">AI</div>
+          <div class="collab-stat-label">Powered Everything</div>
+        </div>
+      </div>
+
+      <!-- GALLERY -->
+      <section id="gallery" aria-label="Project gallery">
+
+        <!-- Filter bar -->
+        <div class="filter-bar" role="search">
+          <div class="filter-search-wrap">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            <input type="search" id="project-search" placeholder="Search projects…" aria-label="Search projects" autocomplete="off"/>
+          </div>
+          <div class="filter-pills" role="group" aria-label="Filter by status">
+            <button type="button" class="filter-pill active" data-filter="all">All</button>
+            <button type="button" class="filter-pill" data-filter="seeking">Seeking Collab</button>
+            <button type="button" class="filter-pill" data-filter="feedback">Needs Feedback</button>
+            <button type="button" class="filter-pill" data-filter="launching">Launching Soon</button>
+            <button type="button" class="filter-pill" data-filter="showcase">Showcase</button>
+          </div>
+          <span class="filter-count" id="filter-count" aria-live="polite"></span>
+        </div>
+
+        <!-- Cards -->
+        <div class="project-grid" id="project-grid" role="list" aria-label="Submitted projects"></div>
+
+      </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="xe-footer" aria-label="Site footer">
+      <nav class="xe-footer-links" aria-label="Footer links">
+        <a href="index.html">Home</a>
+        <a href="Explore.html">Explore</a>
+        <a href="stack.html">Stacks</a>
+        <a href="Pricing.html">Pricing</a>
+        <a href="About.html">About</a>
+        <a href="Privacy.html">Privacy</a>
+        <a href="Terms.html">Terms</a>
+      </nav>
+      <p class="xe-footer-copy">© 2026 XEdge. All rights reserved.</p>
+    </footer>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       SUBMIT MODAL
+  ══════════════════════════════════════ -->
+  <div class="modal-overlay" id="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-desc">
+    <div class="modal" id="modal">
+
+      <!-- Header -->
+      <div class="modal-header">
+        <div>
+          <h2 id="modal-title">Submit Your Project</h2>
+          <p id="modal-desc">Get featured in front of 200+ builders. Takes 2 minutes.</p>
+        </div>
+        <button type="button" class="modal-close" onclick="closeModal()" aria-label="Close modal">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <div class="modal-body">
+
+        <!-- Step indicator -->
+        <div class="form-steps" aria-label="Form progress">
+          <div class="form-step-item">
+            <div class="form-step-circle active" id="step-circle-1" aria-current="step">1</div>
+            <span class="form-step-label active" id="step-label-1">Project</span>
+          </div>
+          <div class="form-step-line" aria-hidden="true"></div>
+          <div class="form-step-item">
+            <div class="form-step-circle" id="step-circle-2">2</div>
+            <span class="form-step-label" id="step-label-2">Builder</span>
+          </div>
+          <div class="form-step-line" aria-hidden="true"></div>
+          <div class="form-step-item">
+            <div class="form-step-circle" id="step-circle-3">3</div>
+            <span class="form-step-label" id="step-label-3">Details</span>
+          </div>
+        </div>
+
+        <form id="submit-form" novalidate>
+
+          <!-- STEP 1: Project basics -->
+          <div class="form-panel active" id="panel-1">
+            <div class="form-group">
+              <label class="form-label" for="f-name">Project name <span class="req" aria-hidden="true">*</span></label>
+              <input type="text" id="f-name" name="project_name" class="form-input" placeholder="e.g. ContentFlow AI" required autocomplete="off" maxlength="80"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="f-desc">What does it do? <span class="req" aria-hidden="true">*</span></label>
+              <textarea id="f-desc" name="description" class="form-textarea" placeholder="One short paragraph. What problem does it solve, who is it for, and what makes it different?" required maxlength="500"></textarea>
+              <p class="form-hint" id="f-desc-count">0 / 500</p>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="f-url">Live URL or demo link</label>
+              <input type="url" id="f-url" name="url" class="form-input" placeholder="https://yourproject.com" autocomplete="url"/>
+              <p class="form-hint">Leave blank if still in stealth mode.</p>
+            </div>
+            <div class="form-nav">
+              <span></span>
+              <button type="button" class="btn-next" onclick="nextStep(1)">Next: About you →</button>
+            </div>
+          </div>
+
+          <!-- STEP 2: Builder info -->
+          <div class="form-panel" id="panel-2">
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="f-builder">Your name <span class="req" aria-hidden="true">*</span></label>
+                <input type="text" id="f-builder" name="builder_name" class="form-input" placeholder="Harsha" required autocomplete="name" maxlength="60"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="f-twitter">X / Twitter handle</label>
+                <input type="text" id="f-twitter" name="twitter" class="form-input" placeholder="@yourhandle" autocomplete="off" maxlength="50"/>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="f-email">Email <span class="req" aria-hidden="true">*</span></label>
+              <input type="email" id="f-email" name="email" class="form-input" placeholder="you@email.com" required autocomplete="email"/>
+              <p class="form-hint">Used only to notify you when you're featured. Never shared.</p>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="f-status">What are you looking for?</label>
+              <select id="f-status" name="status" class="form-select">
+                <option value="showcase">Just showcasing — no ask</option>
+                <option value="feedback">Feedback on the product</option>
+                <option value="seeking">Seeking collaborators</option>
+                <option value="launching">Launching soon — want early users</option>
+              </select>
+            </div>
+            <div class="form-nav">
+              <button type="button" class="btn-back" onclick="prevStep(2)">← Back</button>
+              <button type="button" class="btn-next" onclick="nextStep(2)">Next: AI stack →</button>
+            </div>
+          </div>
+
+          <!-- STEP 3: AI stack tags -->
+          <div class="form-panel" id="panel-3">
+            <div class="form-group">
+              <label class="form-label">Which AI tools did you use?</label>
+              <div class="tag-picker" role="group" aria-label="Select AI tools used">
+                <input type="checkbox" class="tag-check" id="tag-claude" name="tags" value="Claude"><label class="tag-check-label" for="tag-claude">Claude</label>
+                <input type="checkbox" class="tag-check" id="tag-chatgpt" name="tags" value="ChatGPT"><label class="tag-check-label" for="tag-chatgpt">ChatGPT</label>
+                <input type="checkbox" class="tag-check" id="tag-gemini" name="tags" value="Gemini"><label class="tag-check-label" for="tag-gemini">Gemini</label>
+                <input type="checkbox" class="tag-check" id="tag-midjourney" name="tags" value="Midjourney"><label class="tag-check-label" for="tag-midjourney">Midjourney</label>
+                <input type="checkbox" class="tag-check" id="tag-cursor" name="tags" value="Cursor"><label class="tag-check-label" for="tag-cursor">Cursor</label>
+                <input type="checkbox" class="tag-check" id="tag-replit" name="tags" value="Replit"><label class="tag-check-label" for="tag-replit">Replit</label>
+                <input type="checkbox" class="tag-check" id="tag-runway" name="tags" value="Runway"><label class="tag-check-label" for="tag-runway">Runway</label>
+                <input type="checkbox" class="tag-check" id="tag-make" name="tags" value="Make"><label class="tag-check-label" for="tag-make">Make.com</label>
+                <input type="checkbox" class="tag-check" id="tag-zapier" name="tags" value="Zapier"><label class="tag-check-label" for="tag-zapier">Zapier</label>
+                <input type="checkbox" class="tag-check" id="tag-elevenlabs" name="tags" value="ElevenLabs"><label class="tag-check-label" for="tag-elevenlabs">ElevenLabs</label>
+                <input type="checkbox" class="tag-check" id="tag-perplexity" name="tags" value="Perplexity"><label class="tag-check-label" for="tag-perplexity">Perplexity</label>
+                <input type="checkbox" class="tag-check" id="tag-other" name="tags" value="Other"><label class="tag-check-label" for="tag-other">Other</label>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="f-other-tools">Other tools or frameworks</label>
+              <input type="text" id="f-other-tools" name="other_tools" class="form-input" placeholder="e.g. Supabase, Vercel, Next.js…" maxlength="120" autocomplete="off"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="f-emoji">Pick an emoji for your project card</label>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;" role="group" aria-label="Emoji picker" id="emoji-picker">
+                <!-- rendered by JS -->
+              </div>
+              <input type="hidden" id="f-emoji" name="emoji" value="🚀"/>
+            </div>
+            <div class="form-nav">
+              <button type="button" class="btn-back" onclick="prevStep(3)">← Back</button>
+              <button type="submit" class="btn-submit" id="btn-submit">Submit Project ⚡</button>
+            </div>
+          </div>
+
+          <!-- SUCCESS -->
+          <div class="form-panel" id="panel-success">
+            <div class="submit-success">
+              <div class="submit-success-icon" aria-hidden="true">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+              </div>
+              <h3>You're in the showcase! 🎉</h3>
+              <p>Your project has been submitted. We review submissions within 24 hours — you'll get an email when you're live.</p>
+              <button type="button" class="xe-btn-primary" onclick="closeModal()" style="margin: 0 auto;">Back to Showcase</button>
+            </div>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- FIREBASE -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js" defer></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js" defer></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js" defer></script>
+
+  <script>
+  (function() {
+    "use strict";
+
+    /* ─── NO SEED DATA — real submissions only ─── */
+    const SEED_PROJECTS = [];
+
+    /* ─── STATE ─── */
+    let allProjects = [...SEED_PROJECTS];
+    let activeFilter = "all";
+    let searchTerm = "";
+    let currentStep = 1;
+    let selectedEmoji = "🚀";
+    const EMOJIS = ["🚀","🤖","💡","🎯","⚡","🛠️","🎬","📱","🌐","💰","🎙️","📄","🔥","✨","🧠","🎨"];
+
+    /* ─── STATUS CONFIG ─── */
+    const STATUS = {
+      seeking:  { label: "Seeking Collab",   cls: "status-seeking"  },
+      feedback: { label: "Needs Feedback",   cls: "status-feedback" },
+      launching:{ label: "Launching Soon",   cls: "status-launching"},
+      showcase: { label: "Showcase",         cls: "status-showcase" }
+    };
+
+    /* ─── UTILS ─── */
+    function initials(name) {
+      return name.split(" ").map(w => w[0]).join("").toUpperCase().slice(0, 2);
+    }
+    function escHtml(s) {
+      return String(s || "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+    }
+
+    /* ─── RENDER CARDS ─── */
+    function renderCards() {
+      const grid = document.getElementById("project-grid");
+      const countEl = document.getElementById("filter-count");
+      if (!grid) return;
+
+      let filtered = allProjects.filter(p => {
+        const matchFilter = activeFilter === "all" || p.status === activeFilter;
+        const term = searchTerm.toLowerCase();
+        const matchSearch = !term ||
+          p.name.toLowerCase().includes(term) ||
+          p.desc.toLowerCase().includes(term) ||
+          p.builder.toLowerCase().includes(term) ||
+          (p.tags || []).some(t => t.toLowerCase().includes(term));
+        return matchFilter && matchSearch;
+      });
+
+      countEl.textContent = `${filtered.length} project${filtered.length !== 1 ? "s" : ""}`;
+
+      if (!filtered.length && searchTerm) {
+        grid.innerHTML = `
+          <div class="empty-state" role="status">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            <h3>No results for "${escHtml(searchTerm)}"</h3>
+            <p>Try a different keyword or <button type="button" onclick="clearFilters()" style="background:none;border:none;color:#60a5fa;cursor:pointer;font-family:inherit;font-size:inherit;padding:0;font-weight:600;">clear the search</button>.</p>
+          </div>`;
+        return;
+      }
+
+      if (!filtered.length) {
+        grid.innerHTML = `
+          <div class="empty-state-first" role="status">
+            <div class="esf-glow" aria-hidden="true"></div>
+            <div class="esf-icon" aria-hidden="true">
+              <svg width="32" height="32" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+              </svg>
+            </div>
+            <h3>No projects yet — yours could be first.</h3>
+            <p>This showcase is brand new. Every community starts with one person willing to go first. If you've built something with AI — a tool, an automation, a side project, anything — submit it. You'll be the first name here.</p>
+            <button type="button" class="xe-btn-primary" onclick="openModal()" style="margin:0 auto;">
+              <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+              Submit the First Project
+            </button>
+            <p class="esf-sub">Takes 2 minutes. No login required.</p>
+          </div>`;
+        return;
+      }
+
+      grid.innerHTML = filtered.map(p => {
+        const s = STATUS[p.status] || STATUS.showcase;
+        const tags = (p.tags || []).slice(0, 3).map(t => `<span class="project-tag">${escHtml(t)}</span>`).join("");
+        const link = p.url
+          ? `<a href="${escHtml(p.url)}" class="project-card-link" target="_blank" rel="noopener noreferrer" aria-label="Visit ${escHtml(p.name)}" onclick="event.stopPropagation()">
+               <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+             </a>`
+          : "";
+        const social = p.twitter
+          ? `https://twitter.com/${p.twitter.replace("@","")}`
+          : "#";
+
+        return `
+          <article class="project-card" role="listitem" tabindex="0"
+            aria-label="${escHtml(p.name)} by ${escHtml(p.builder)}"
+            onclick="if(${!!p.url}){ window.open('${escHtml(p.url)}','_blank','noopener') }"
+            onkeydown="if(event.key==='Enter'&&${!!p.url}){ window.open('${escHtml(p.url)}','_blank','noopener') }">
+
+            <div class="project-card-cover" style="background:${p.gradient || "linear-gradient(135deg,#0f172a,#1e1b4b)"}">
+              <div class="project-card-cover-emoji" aria-hidden="true">${p.emoji || "🚀"}</div>
+              <span class="project-card-status ${s.cls}">${s.label}</span>
+            </div>
+
+            <div class="project-card-body">
+              <div class="project-card-top">
+                <h2 class="project-card-name">${escHtml(p.name)}</h2>
+                ${link}
+              </div>
+              <p class="project-card-desc">${escHtml(p.desc)}</p>
+              ${tags ? `<div class="project-card-tags" aria-label="Tools used">${tags}</div>` : ""}
+              <div class="project-card-footer">
+                <a href="${escHtml(social)}" class="project-builder" target="_blank" rel="noopener noreferrer"
+                   aria-label="${escHtml(p.builder)} on Twitter" onclick="event.stopPropagation()">
+                  <div class="project-builder-avatar" aria-hidden="true">${initials(p.builder)}</div>
+                  <span class="project-builder-name">${escHtml(p.twitter || p.builder)}</span>
+                </a>
+                <span class="project-card-date" aria-label="Submitted ${p.date}">${p.date}</span>
+              </div>
+            </div>
+          </article>`;
+      }).join("");
+    }
+
+    /* ─── STATS ─── */
+    function updateStats() {
+      const statsBar = document.querySelector(".collab-stats");
+      const pEl = document.getElementById("stat-projects");
+      const bEl = document.getElementById("stat-builders");
+      if (!allProjects.length) {
+        if (statsBar) statsBar.classList.add("hidden");
+        return;
+      }
+      if (statsBar) statsBar.classList.remove("hidden");
+      if (pEl) pEl.textContent = allProjects.length + "+";
+      if (bEl) bEl.textContent = new Set(allProjects.map(p => p.builder)).size + "+";
+    }
+
+    /* ─── FILTERS ─── */
+    window.clearFilters = function() {
+      activeFilter = "all";
+      searchTerm = "";
+      const searchEl = document.getElementById("project-search");
+      if (searchEl) searchEl.value = "";
+      document.querySelectorAll(".filter-pill").forEach(p => p.classList.toggle("active", p.dataset.filter === "all"));
+      renderCards();
+    };
+
+    /* ─── EMOJI PICKER ─── */
+    function renderEmojiPicker() {
+      const container = document.getElementById("emoji-picker");
+      if (!container) return;
+      container.innerHTML = EMOJIS.map(e => `
+        <button type="button"
+          class="tag-check-label emoji-opt${e === selectedEmoji ? " active-emoji" : ""}"
+          style="font-size:1.3rem;padding:6px 10px;${e === selectedEmoji ? "border-color:rgba(59,130,246,.4);background:rgba(59,130,246,.12);" : ""}"
+          onclick="selectEmoji('${e}')" aria-label="Select ${e}" aria-pressed="${e === selectedEmoji}">
+          ${e}
+        </button>`).join("");
+    }
+
+    window.selectEmoji = function(e) {
+      selectedEmoji = e;
+      document.getElementById("f-emoji").value = e;
+      renderEmojiPicker();
+    };
+
+    /* ─── MODAL ─── */
+    window.openModal = function() {
+      const overlay = document.getElementById("modal-overlay");
+      overlay.classList.add("open");
+      document.body.style.overflow = "hidden";
+      overlay.querySelector("input,textarea,select,button")?.focus();
+      // ensure step 1 visible
+      goToStep(1);
+      renderEmojiPicker();
+    };
+
+    window.closeModal = function() {
+      document.getElementById("modal-overlay").classList.remove("open");
+      document.body.style.overflow = "";
+    };
+
+    document.getElementById("modal-overlay").addEventListener("click", function(e) {
+      if (e.target === this) closeModal();
+    });
+
+    document.addEventListener("keydown", e => {
+      if (e.key === "Escape" && document.getElementById("modal-overlay").classList.contains("open")) closeModal();
+    });
+
+    /* ─── MULTI-STEP ─── */
+    function goToStep(n) {
+      currentStep = n;
+      for (let i = 1; i <= 3; i++) {
+        const panel  = document.getElementById(`panel-${i}`);
+        const circle = document.getElementById(`step-circle-${i}`);
+        const label  = document.getElementById(`step-label-${i}`);
+        if (!panel) continue;
+        panel.classList.toggle("active", i === n);
+        circle.classList.toggle("active", i === n);
+        circle.classList.toggle("done", i < n);
+        label.classList.toggle("active", i === n);
+        circle.setAttribute("aria-current", i === n ? "step" : "false");
+        if (i < n) circle.innerHTML = `<svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1.5,5 4,7.5 8.5,2.5"/></svg>`;
+        else circle.textContent = i;
+      }
+    }
+
+    function validateStep(step) {
+      if (step === 1) {
+        const name = document.getElementById("f-name").value.trim();
+        const desc = document.getElementById("f-desc").value.trim();
+        if (!name) { document.getElementById("f-name").focus(); return false; }
+        if (!desc)  { document.getElementById("f-desc").focus(); return false; }
+      }
+      if (step === 2) {
+        const builder = document.getElementById("f-builder").value.trim();
+        const email   = document.getElementById("f-email").value.trim();
+        const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        if (!builder) { document.getElementById("f-builder").focus(); return false; }
+        if (!email || !emailOk) { document.getElementById("f-email").focus(); return false; }
+      }
+      return true;
+    }
+
+    window.nextStep = function(from) {
+      if (!validateStep(from)) return;
+      goToStep(from + 1);
+      if (from + 1 === 3) renderEmojiPicker();
+      document.getElementById("modal").scrollTop = 0;
+    };
+
+    window.prevStep = function(from) {
+      goToStep(from - 1);
+      document.getElementById("modal").scrollTop = 0;
+    };
+
+    /* ─── FORM SUBMIT ─── */
+    document.getElementById("submit-form").addEventListener("submit", async function(e) {
+      e.preventDefault();
+      if (!validateStep(3)) return;
+
+      const btn = document.getElementById("btn-submit");
+      btn.disabled = true;
+      btn.textContent = "Submitting…";
+
+      // Collect form data
+      const fd = new FormData(this);
+      const tags = [...document.querySelectorAll('input[name="tags"]:checked')].map(el => el.value);
+
+      const payload = {
+        project_name: fd.get("project_name"),
+        description:  fd.get("description"),
+        url:          fd.get("url"),
+        builder_name: fd.get("builder_name"),
+        twitter:      fd.get("twitter"),
+        email:        fd.get("email"),
+        status:       fd.get("status"),
+        tags:         tags.join(", "),
+        other_tools:  fd.get("other_tools"),
+        emoji:        fd.get("emoji"),
+        submitted_at: new Date().toISOString()
+      };
+
+      // Optimistically add to local gallery
+      const month = new Date().toLocaleString("en-US",{month:"short",year:"numeric"});
+      const gradients = [
+        "linear-gradient(135deg,#0f172a,#1e3a5f)",
+        "linear-gradient(135deg,#1a0533,#2d1b69)",
+        "linear-gradient(135deg,#0c1a0f,#0d3320)",
+        "linear-gradient(135deg,#1a0a00,#3d1a00)"
+      ];
+      const newProject = {
+        id: "user-" + Date.now(),
+        name: payload.project_name,
+        desc: payload.description,
+        url: payload.url,
+        builder: payload.builder_name,
+        twitter: payload.twitter,
+        status: payload.status,
+        tags: tags.slice(0, 3),
+        emoji: payload.emoji,
+        gradient: gradients[Math.floor(Math.random() * gradients.length)],
+        date: month
+      };
+
+      try {
+        // Submit to Formspree — replace with your actual endpoint
+        const res = await fetch("https://formspree.io/f/mblzvykd", {
+          method: "POST",
+          headers: { "Accept": "application/json", "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+
+        allProjects.unshift(newProject);
+        updateStats();
+        renderCards();
+
+        // Show success panel
+        ["panel-1","panel-2","panel-3"].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.classList.remove("active");
+        });
+        document.getElementById("panel-success").classList.add("active");
+
+        // Reset step circles
+        for (let i = 1; i <= 3; i++) {
+          const c = document.getElementById(`step-circle-${i}`);
+          if (c) { c.classList.remove("active","done"); c.textContent = i; }
+        }
+
+      } catch (err) {
+        console.error("Submit error:", err);
+        btn.disabled = false;
+        btn.textContent = "Submit Project ⚡";
+        alert("Something went wrong. Please try again.");
+      }
+    });
+
+    /* ─── MOBILE MENU ─── */
+    function initMobileMenu() {
+      const toggle   = document.getElementById("mobile-menu-toggle");
+      const menu     = document.getElementById("mobileMenu");
+      const backdrop = document.getElementById("nav-backdrop");
+      if (!toggle || !menu) return;
+      let open = false;
+      function openMenu()  { open=true;  menu.classList.add("open");    backdrop&&backdrop.classList.add("show");    toggle.classList.add("open");    toggle.setAttribute("aria-expanded","true");  document.body.style.overflow="hidden"; }
+      function closeMenu() { open=false; menu.classList.remove("open"); backdrop&&backdrop.classList.remove("show"); toggle.classList.remove("open"); toggle.setAttribute("aria-expanded","false"); document.body.style.overflow=""; }
+      toggle.addEventListener("click", () => open ? closeMenu() : openMenu());
+      backdrop && backdrop.addEventListener("click", closeMenu);
+      menu.querySelectorAll("a").forEach(a => a.addEventListener("click", closeMenu));
+      document.addEventListener("keydown", e => { if (e.key==="Escape"&&open) closeMenu(); });
+    }
+
+    /* ─── FIREBASE AUTH ─── */
+    function initFirebase() {
+      if (typeof firebase === "undefined") return;
+      if (!firebase.apps.length) {
+        firebase.initializeApp({
+          apiKey: "AIzaSyC-uRePD86sTpCRgjPsjhpOp-lzTNNF8Zg",
+          authDomain: "xedge-1da3a.firebaseapp.com",
+          projectId: "xedge-1da3a",
+          storageBucket: "xedge-1da3a.appspot.com",
+          messagingSenderId: "209657807080",
+          appId: "1:209657807080:web:80180596d966b4667d895d"
+        });
+      }
+      const auth = firebase.auth();
+      const provider = new firebase.auth.GoogleAuthProvider();
+      window.signInWithGoogle = () => auth.signInWithPopup(provider).catch(console.error);
+      window.logoutUser = () => auth.signOut();
+      auth.onAuthStateChanged(user => {
+        const nav = document.getElementById("auth-area");
+        if (!nav) return;
+        if (user) {
+          nav.innerHTML = `<div style="position:relative;">
+            <img id="profileBtn" src="${user.photoURL}" alt="Profile" onerror="this.src='xedge-logo.png'"
+              style="width:36px;height:36px;border-radius:50%;border:2px solid rgba(255,255,255,0.1);cursor:pointer;display:block;"/>
+            <div id="profileMenu" style="display:none;position:absolute;right:0;top:calc(100%+8px);min-width:180px;background:#111827;border:1px solid rgba(255,255,255,.1);border-radius:14px;overflow:hidden;box-shadow:0 20px 40px rgba(0,0,0,.5);z-index:100;">
+              <div style="padding:14px 16px;border-bottom:1px solid rgba(255,255,255,.08);">
+                <div style="font-weight:700;font-size:.9rem;">${user.displayName}</div>
+                <div style="font-size:.78rem;color:#6b7280;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${user.email}</div>
+              </div>
+              <button onclick="logoutUser()" style="width:100%;text-align:left;padding:12px 16px;background:none;border:none;color:#f87171;cursor:pointer;font-size:.9rem;font-family:inherit;">Sign out</button>
+            </div></div>`;
+          setTimeout(() => {
+            const btn = document.getElementById("profileBtn");
+            const menu = document.getElementById("profileMenu");
+            if (!btn||!menu) return;
+            btn.onclick = e => { e.stopPropagation(); menu.style.display = menu.style.display==="none"?"block":"none"; };
+            document.addEventListener("click", e => { if (!menu.contains(e.target)&&e.target!==btn) menu.style.display="none"; });
+          }, 0);
+        } else {
+          nav.innerHTML = `<button onclick="signInWithGoogle()" style="border:1px solid rgba(59,130,246,.4);padding:7px 18px;border-radius:100px;background:none;color:#60a5fa;cursor:pointer;font-family:inherit;font-size:.85rem;font-weight:600;">Sign In</button>`;
+        }
+      });
+    }
+
+    /* ─── DESCRIPTION CHAR COUNT ─── */
+    function initCharCount() {
+      const ta = document.getElementById("f-desc");
+      const ct = document.getElementById("f-desc-count");
+      if (!ta || !ct) return;
+      ta.addEventListener("input", () => { ct.textContent = `${ta.value.length} / 500`; });
+    }
+
+    /* ─── BOOT ─── */
+    function init() {
+      initMobileMenu();
+      initCharCount();
+      renderCards();
+      updateStats();
+
+      // Show/hide filter bar based on whether there's content
+      const filterBar = document.querySelector(".filter-bar");
+      if (filterBar) filterBar.style.display = allProjects.length ? "" : "none";
+
+      // Filter pills
+      document.querySelectorAll(".filter-pill").forEach(pill => {
+        pill.addEventListener("click", () => {
+          activeFilter = pill.dataset.filter;
+          document.querySelectorAll(".filter-pill").forEach(p => p.classList.toggle("active", p === pill));
+          renderCards();
+        });
+      });
+
+      // Search
+      const searchEl = document.getElementById("project-search");
+      if (searchEl) {
+        let debounce;
+        searchEl.addEventListener("input", () => {
+          clearTimeout(debounce);
+          debounce = setTimeout(() => { searchTerm = searchEl.value; renderCards(); }, 180);
+        });
+      }
+
+      // Firebase
+      let tries = 0;
+      const poll = setInterval(() => {
+        if (typeof firebase !== "undefined") { clearInterval(poll); initFirebase(); }
+        if (++tries > 30) clearInterval(poll);
+      }, 300);
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", init);
+    } else {
+      init();
+    }
+
+  })();
+  </script>
+
+</body>
+</html>
