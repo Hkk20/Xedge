@@ -1,156 +1,329 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Explore – X Edge</title>
-  <!-- Firebase Core -->
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
+  <!-- ═══ SEO ═══ -->
+  <title>Explore AI Tools — XEdge</title>
+  <meta name="description" content="Browse 144+ curated AI tools across 16 categories. Search by name, category, or use case and find the right tool in seconds."/>
+  <meta name="robots" content="index, follow"/>
+  <link rel="canonical" href="https://xedge.tech/Explore.html"/>
+  <meta property="og:title" content="Explore AI Tools — XEdge"/>
+  <meta property="og:description" content="Browse 144+ curated AI tools. Find the right one in seconds."/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:image" content="https://xedge.tech/xedge-logo.png"/>
+  <meta property="og:url" content="https://xedge.tech/Explore.html"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="Explore AI Tools — XEdge"/>
+  <meta name="twitter:image" content="https://xedge.tech/xedge-logo.png"/>
 
-  <script src="https://cdn.tailwindcss.com"></script>
-  
+  <!-- ═══ FAVICON + THEME ═══ -->
+  <link rel="icon" href="xedge-logo.png" type="image/png"/>
+  <meta name="theme-color" content="#0b0f15"/>
 
-  <link rel="icon" href="xedge-logo.png" />
+  <!-- ═══ FONTS: non-blocking ═══ -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap"/>
+  <link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap"/>
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap"/></noscript>
+
+  <script src="analytics.js" defer></script>
 
   <style>
-    .scrollbar-none::-webkit-scrollbar { display: none; }
-    .scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
-
-    .xe-card { 
-      background: rgba(31,41,55,0.45);
-      border: 1px solid rgba(55,65,81,0.6);
-      padding: 0.9rem;
-      border-radius: 12px;
-      transition: 0.12s;
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; overflow-x: hidden; }
+    body {
+      font-family: 'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif;
+      background: #0b0f15; color: #fff; -webkit-font-smoothing: antialiased;
     }
 
-    .xe-thumb img {
-      width: 64px;
-      height: 64px;
-      border-radius: 8px;
-      object-fit: cover;
+    /* ─── NAV ─── */
+    .xe-nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 60; height: 68px;
+      background: rgba(11,15,21,0.92); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(255,255,255,0.07); display: flex; align-items: center;
     }
-
-    .skeleton {
-      height: 90px;
-      background: linear-gradient(90deg, rgba(55,65,81,.2), rgba(71,85,105,.15));
-      animation: pulse 1.2s infinite;
-      border-radius: 10px;
+    .xe-nav-inner {
+      max-width: 1400px; width: 100%; margin: 0 auto; padding: 0 24px;
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
     }
+    .xe-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0; }
+    .xe-logo img { width: 36px; height: 36px; border-radius: 8px; }
+    .xe-logo span { font-size: 1.25rem; font-weight: 700; color: #60a5fa; letter-spacing: -0.3px; }
+    .xe-nav-links { display: flex; align-items: center; gap: 4px; }
+    .xe-nav-links a { font-size: 0.9rem; font-weight: 500; color: #9ca3af; padding: 6px 14px; border-radius: 8px; text-decoration: none; transition: color .15s, background .15s; }
+    .xe-nav-links a:hover { color: #fff; background: rgba(255,255,255,0.06); }
+    .xe-nav-links a.active { color: #60a5fa; background: rgba(59,130,246,0.08); }
+    .xe-nav-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    .xe-btn-beta { background: linear-gradient(135deg, #3b82f6, #6366f1); padding: 8px 20px; border-radius: 100px; font-size: 0.85rem; font-weight: 600; color: #fff; text-decoration: none; transition: opacity .15s, transform .15s; white-space: nowrap; }
+    .xe-btn-beta:hover { opacity: 0.88; transform: translateY(-1px); }
+    .xe-hamburger { display: none; background: none; border: none; cursor: pointer; padding: 8px; color: #d1d5db; flex-direction: column; gap: 5px; align-items: center; justify-content: center; }
+    .xe-hamburger span { display: block; width: 22px; height: 2px; background: currentColor; border-radius: 2px; transition: transform .25s, opacity .25s; }
+    .xe-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .xe-hamburger.open span:nth-child(2) { opacity: 0; }
+    .xe-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    .xe-mobile-menu { position: fixed; top: 68px; left: 0; right: 0; z-index: 59; background: rgba(11,15,21,0.98); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.07); padding: 12px 16px 20px; display: none; flex-direction: column; gap: 4px; }
+    .xe-mobile-menu.open { display: flex; }
+    .xe-mobile-menu a { padding: 12px 16px; border-radius: 10px; font-size: 1rem; font-weight: 500; color: #9ca3af; text-decoration: none; transition: color .15s, background .15s; }
+    .xe-mobile-menu a:hover { color: #fff; background: rgba(255,255,255,0.06); }
+    .xe-mobile-menu .xe-mobile-cta { background: linear-gradient(135deg, #3b82f6, #6366f1); color: #fff !important; text-align: center; margin-top: 8px; font-weight: 600; }
+    .nav-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 58; opacity: 0; pointer-events: none; transition: opacity .2s; }
+    .nav-backdrop.show { opacity: 1; pointer-events: auto; }
 
-    @keyframes pulse {
-      0% { opacity: 1 }
-      50% { opacity: .6 }
-      100% { opacity: 1 }
+    /* ─── PAGE ─── */
+    main { padding-top: 68px; }
+    .xe-page { max-width: 1400px; margin: 0 auto; padding: 48px 24px 96px; }
+    .explore-header { margin-bottom: 32px; }
+    .xe-section-label { font-size: 0.75rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: #3b82f6; margin-bottom: 10px; }
+    .explore-header h1 { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 800; letter-spacing: -1px; margin: 0 0 8px; }
+    .explore-header p { font-size: 0.95rem; color: #8b93b0; margin: 0; }
+
+    /* ─── SEARCH ─── */
+    .xe-search-wrap { position: relative; max-width: 560px; margin-bottom: 16px; }
+    .xe-search-wrap svg { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; color: #6b7a9a; pointer-events: none; }
+    #toolSearch { width: 100%; background: rgba(17,24,39,0.9); border: 1px solid rgba(255,255,255,0.09); border-radius: 100px; padding: 13px 20px 13px 44px; color: #fff; font-family: inherit; font-size: 0.95rem; outline: none; transition: border-color .15s, box-shadow .15s; }
+    #toolSearch:focus { border-color: rgba(59,130,246,0.5); box-shadow: 0 0 0 3px rgba(59,130,246,0.08); }
+    #toolSearch::placeholder { color: #4b5a72; }
+
+    /* ─── COUNT ─── */
+    #result-count { font-size: 0.82rem; color: #6b7a9a; margin: 0 0 20px; min-height: 20px; }
+
+    /* ─── GRID ─── */
+    #toolsContainer { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+
+    /* ─── CARD ─── */
+    .xe-tool-card { display: block; background: rgba(13,18,28,0.85); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 20px; text-decoration: none; color: #fff; transition: border-color .2s, transform .2s, box-shadow .2s; }
+    .xe-tool-card:hover { border-color: rgba(59,130,246,0.35); transform: translateY(-3px); box-shadow: 0 12px 32px rgba(0,0,0,0.3); }
+    .xe-tool-card img { width: 56px; height: 56px; border-radius: 12px; object-fit: contain; background: #1f2937; margin-bottom: 14px; display: block; }
+    .xe-tool-card h2 { font-size: 1rem; font-weight: 700; margin: 0 0 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .xe-tool-card .cat { font-size: 0.8rem; color: #8b93b0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin: 0; }
+
+    /* ─── SKELETON ─── */
+    .xe-skel { height: 130px; border-radius: 16px; background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.055) 50%, rgba(255,255,255,0.03) 75%); background-size: 200% 100%; animation: shimmer 1.4s ease infinite; }
+    @keyframes shimmer { to { background-position: -200% 0; } }
+
+    /* ─── SENTINEL / LOADER ─── */
+    #load-more-sentinel { height: 40px; }
+    #explore-loader { text-align: center; color: #6b7a9a; padding: 24px; font-size: 0.88rem; display: none; }
+
+    /* ─── EMPTY STATE ─── */
+    .xe-empty { grid-column: 1/-1; text-align: center; padding: 64px 24px; color: #6b7a9a; }
+    .xe-empty svg { width: 40px; height: 40px; margin: 0 auto 14px; display: block; opacity: 0.35; }
+    .xe-empty h3 { font-size: 1rem; font-weight: 700; color: #9ca3af; margin-bottom: 6px; }
+    .xe-empty p { font-size: 0.85rem; margin: 0; }
+
+    /* ─── ACCESSIBILITY ─── */
+    .xe-sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+    a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid #3b82f6; outline-offset: 3px; border-radius: 4px; }
+    a:focus:not(:focus-visible), button:focus:not(:focus-visible) { outline: none; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 767px) {
+      .xe-nav-links, .xe-btn-beta { display: none !important; }
+      .xe-hamburger { display: flex !important; }
+      .xe-page { padding: 32px 16px 80px; }
+      #toolsContainer { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
     }
   </style>
 </head>
 
-<body class="bg-gray-900 text-white">
+<body>
+  <a href="#main-content" style="position:absolute;top:-100px;left:16px;background:#3b82f6;color:#fff;padding:8px 16px;border-radius:8px;font-weight:600;font-size:.9rem;z-index:9999;text-decoration:none;transition:top .15s;" onfocus="this.style.top='16px'" onblur="this.style.top='-100px'">Skip to main content</a>
 
- <!-- NAV -->
-<nav class="bg-gray-900/80 fixed w-full z-30 border-b border-gray-800">
-  <div class="max-w-6xl mx-auto px-6 py-3 flex justify-between items-center">
+  <div class="nav-backdrop" id="nav-backdrop" aria-hidden="true"></div>
 
-    <!-- LOGO -->
-    <a href="index.html" class="flex items-center gap-3">
-      <img src="xedge-logo.png" class="w-8 h-8" alt="X Edge Logo">
-      <span class="font-bold">X Edge</span>
-    </a>
-
-    <!-- RIGHT SIDE -->
-    <div class="flex items-center gap-3">
-
-      <!-- JOIN BETA (DESKTOP ONLY) -->
-      <a href="Join.html"
-         class="hidden md:inline-block bg-gradient-to-r from-blue-500 to-blue-600 px-3 py-1 rounded">
-        Join Beta
-      </a>
-
-      <!-- AUTH (DESKTOP ONLY) -->
-      <div id="auth-area" class="hidden md:flex items-center"></div>
-
-      <!-- BACK BUTTON (MOBILE ONLY) -->
-      <button
-        onclick="goBack()"
-        class="md:hidden px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg
-               text-gray-300 hover:bg-gray-700 hover:text-white transition
-               flex items-center gap-2">
-        ← Back
-      </button>
-
+  <header>
+    <nav class="xe-nav" role="navigation" aria-label="Main navigation">
+      <div class="xe-nav-inner">
+        <a href="index.html" class="xe-logo" aria-label="XEdge home">
+          <img src="xedge-logo.png" alt="XEdge logo" width="36" height="36" fetchpriority="high"/>
+          <span>XEDGE</span>
+        </a>
+        <div class="xe-nav-links" role="list">
+          <a href="index.html" role="listitem">Home</a>
+          <a href="Explore.html" role="listitem" class="active" aria-current="page">Explore</a>
+          <a href="Categories.html" role="listitem">Categories</a>
+          <a href="stack.html" role="listitem">Stacks</a>
+          <a href="About.html" role="listitem">About</a>
+        </div>
+        <div class="xe-nav-right">
+          <a href="Join.html" class="xe-btn-beta">Join Beta</a>
+          <div id="auth-area" style="display:flex;align-items:center;"></div>
+          <button id="mobile-menu-toggle" class="xe-hamburger" aria-label="Toggle menu" aria-expanded="false" type="button">
+            <span></span><span></span><span></span>
+          </button>
+        </div>
+      </div>
+    </nav>
+    <div id="mobileMenu" class="xe-mobile-menu" role="dialog" aria-label="Mobile menu">
+      <a href="index.html">Home</a>
+      <a href="Explore.html">Explore</a>
+      <a href="Categories.html">Categories</a>
+      <a href="stack.html">Stacks</a>
+      <a href="About.html">About</a>
+      <a href="Join.html" class="xe-mobile-cta">Join Beta</a>
     </div>
+  </header>
 
-  </div>
-</nav>
+  <main id="main-content">
+    <div class="xe-page">
 
-
-<script>
-function goBack() {
-  if (document.referrer) {
-    history.back();
-  } else {
-    window.location.href = "Categories.html";
-  }
-}
-</script>
-
-    </div>
-   
-  </nav>
-
-  <!-- PAGE CONTENT -->
-  <main class="pt-24 px-6 max-w-7xl mx-auto pb-24">
-
-    <h1 class="text-4xl font-bold mb-6">Explore Tools</h1>
-
-    <!-- Search -->
-    <input 
-      id="toolSearch"
-      type="text"
-      placeholder="Search tools..."
-      class="w-full mb-6 p-3 rounded-xl bg-gray-800 border border-gray-700 focus:border-blue-500 outline-none"
-    />
-
-    <!-- TOOLS GRID + SENTINEL -->
-    <section class="mt-8">
-
-      <!-- Tools appear here -->
-      <div id="toolsContainer"
-           class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="explore-header">
+        <div class="xe-section-label">All tools</div>
+        <h1>Explore AI Tools</h1>
+        <p>144+ tools across 16 categories. Find yours in seconds.</p>
       </div>
 
-      <!-- Sentinel for infinite scroll -->
-      <div id="load-more-sentinel" style="height:40px;"></div>
-
-      <!-- Loader -->
-      <div id="explore-loader"
-           class="text-center text-gray-400 py-6 hidden">
-           Loading…
+      <div class="xe-search-wrap" role="search">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+        </svg>
+        <input id="toolSearch" type="search" placeholder="Search by name or category…"
+               autocomplete="off" aria-label="Search AI tools"
+               aria-controls="toolsContainer" aria-autocomplete="list"/>
       </div>
 
-    </section>
+      <p id="result-count" aria-live="polite" aria-atomic="true"></p>
 
-  <!-- INIT JS -->
-<script src="tools.js" defer></script>
-<script src="app.js" defer></script>
+      <section>
+        <div id="toolsContainer" role="list" aria-label="AI tools"></div>
+        <div id="load-more-sentinel" aria-hidden="true"></div>
+        <div id="explore-loader" role="status" aria-live="polite">Loading more tools…</div>
+      </section>
 
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    if (typeof initExplorePage === "function") {
-      initExplorePage();
-    }
-  });
-</script>
-    
-<script src="auth.js"></script>
-   
-
-
+    </div>
   </main>
+
+  <!-- Firebase: deferred — never blocks paint -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js" defer></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js" defer></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js" defer></script>
+
+  <!-- tools.js + app.js loaded deferred. Both are fixed at source. -->
+  <script src="tools.js" defer></script>
+  <script src="app.js" defer></script>
+
+  <script>
+  (function() {
+    "use strict";
+
+    /* ── CROSS-PAGE CACHE BRIDGE ──────────────────────────────────────────
+       index.html stores tools in localStorage "xedge_tools_cache_v2".
+       tools.js reads from sessionStorage "xedge_tools_v1".
+       This bridge primes sessionStorage from localStorage so Explore never
+       hits Google Sheets cold if index already fetched the data.
+    ─────────────────────────────────────────────────────────────────────── */
+    function primeSessionCache() {
+      try {
+        if (sessionStorage.getItem("xedge_tools_v1")) return;
+        const raw = localStorage.getItem("xedge_tools_cache_v2");
+        if (!raw) return;
+        const parsed = JSON.parse(raw);
+        if (!parsed || !Array.isArray(parsed.data) || !parsed.data.length) return;
+        const mapped = parsed.data.map(d => ({
+          name:              d.name || "",
+          category:          d.category || "",
+          short_description: d.short || d.short_description || "",
+          long_description:  d.long_description || "",
+          logo_url:          d.logo_url || d.logo || "",
+          link:              d.link || d.Link || "#",
+          pros_raw:          d.pros || "",
+          cons_raw:          d.cons || "",
+          key_features_raw:  d.key_features || "",
+          best_for_raw:      d.best_for || "",
+          standout_raw:      d.standout || "",
+          screenshots_raw:   d.screenshots || "",
+          pricing_free:      d.pricing_free || "",
+          pricing_plus:      d.pricing_plus || "",
+          pricing_team:      d.pricing_team || ""
+        }));
+        sessionStorage.setItem("xedge_tools_v1", JSON.stringify(mapped));
+      } catch(e) { /* non-critical */ }
+    }
+
+    /* ── MOBILE MENU ─────────────────────────────────────────────────────── */
+    function initMobileMenu() {
+      const toggle = document.getElementById("mobile-menu-toggle");
+      const menu   = document.getElementById("mobileMenu");
+      const bd     = document.getElementById("nav-backdrop");
+      if (!toggle || !menu) return;
+      let open = false;
+      const openFn  = () => { open=true;  menu.classList.add("open");    bd&&bd.classList.add("show");    toggle.classList.add("open");    toggle.setAttribute("aria-expanded","true");  document.body.style.overflow="hidden"; };
+      const closeFn = () => { open=false; menu.classList.remove("open"); bd&&bd.classList.remove("show"); toggle.classList.remove("open"); toggle.setAttribute("aria-expanded","false"); document.body.style.overflow=""; };
+      toggle.addEventListener("click", () => open ? closeFn() : openFn());
+      bd && bd.addEventListener("click", closeFn);
+      menu.querySelectorAll("a").forEach(a => a.addEventListener("click", closeFn));
+      document.addEventListener("keydown", e => { if (e.key==="Escape"&&open) closeFn(); });
+    }
+
+    /* ── FIREBASE AUTH ───────────────────────────────────────────────────── */
+    function initFirebase() {
+      if (typeof firebase === "undefined") return;
+      if (!firebase.apps.length) {
+        firebase.initializeApp({
+          apiKey:"AIzaSyC-uRePD86sTpCRgjPsjhpOp-lzTNNF8Zg",
+          authDomain:"xedge-1da3a.firebaseapp.com",
+          projectId:"xedge-1da3a",
+          storageBucket:"xedge-1da3a.appspot.com",
+          messagingSenderId:"209657807080",
+          appId:"1:209657807080:web:80180596d966b4667d895d"
+        });
+      }
+      const auth = firebase.auth();
+      const prov = new firebase.auth.GoogleAuthProvider();
+      window.signInWithGoogle = () => auth.signInWithPopup(prov).catch(console.error);
+      window.logoutUser = () => auth.signOut();
+      auth.onAuthStateChanged(user => {
+        const nav = document.getElementById("auth-area");
+        if (!nav) return;
+        if (user) {
+          nav.innerHTML = `<div style="position:relative;">
+            <img id="profileBtn" src="${user.photoURL}" alt="Profile" onerror="this.src='xedge-logo.png'"
+              style="width:36px;height:36px;border-radius:50%;border:2px solid rgba(255,255,255,.1);cursor:pointer;display:block;"/>
+            <div id="profileMenu" style="display:none;position:absolute;right:0;top:calc(100%+8px);min-width:180px;background:#111827;border:1px solid rgba(255,255,255,.1);border-radius:14px;overflow:hidden;box-shadow:0 20px 40px rgba(0,0,0,.5);z-index:100;">
+              <div style="padding:14px 16px;border-bottom:1px solid rgba(255,255,255,.08);">
+                <div style="font-weight:700;font-size:.9rem;">${user.displayName}</div>
+                <div style="font-size:.78rem;color:#6b7280;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${user.email}</div>
+              </div>
+              <button onclick="logoutUser()" style="width:100%;text-align:left;padding:12px 16px;background:none;border:none;color:#f87171;cursor:pointer;font-size:.9rem;font-family:inherit;">Sign out</button>
+            </div></div>`;
+          setTimeout(() => {
+            const btn = document.getElementById("profileBtn");
+            const pm  = document.getElementById("profileMenu");
+            if (!btn||!pm) return;
+            btn.onclick = e => { e.stopPropagation(); pm.style.display = pm.style.display==="none"?"block":"none"; };
+            document.addEventListener("click", e => { if (!pm.contains(e.target)&&e.target!==btn) pm.style.display="none"; });
+          }, 0);
+        } else {
+          nav.innerHTML = `<button onclick="signInWithGoogle()" style="border:1px solid rgba(59,130,246,.4);padding:7px 18px;border-radius:100px;background:none;color:#60a5fa;cursor:pointer;font-family:inherit;font-size:.85rem;font-weight:600;">Sign In</button>`;
+        }
+      });
+    }
+
+    /* ── BOOT ────────────────────────────────────────────────────────────── */
+    function boot() {
+      primeSessionCache(); // runs synchronously before app.js DOMContentLoaded fires
+      initMobileMenu();
+      let tries = 0;
+      const poll = setInterval(() => {
+        if (typeof firebase !== "undefined") { clearInterval(poll); initFirebase(); }
+        if (++tries > 30) clearInterval(poll);
+      }, 300);
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", boot);
+    } else {
+      boot();
+    }
+
+  })();
+  </script>
 
 </body>
 </html>

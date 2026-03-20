@@ -86,48 +86,27 @@ function findToolByName(list, rawName) {
     null
   );
 }
-console.log("=== DEBUGGING ABOUT SECTION ===");
-console.log("Tool data:", window.__CURRENT_TOOL_DATA__);
-console.log("Pros data:", window.__TOOL_PROS__);
-console.log("Cons data:", window.__TOOL_CONS__);
-console.log("About section exists:", document.getElementById("about-tool-section") !== null);
-console.log("Features UL exists:", document.getElementById("about-features") !== null);
-console.log("BestFor UL exists:", document.getElementById("about-bestfor") !== null);
-console.log("Standout P exists:", document.getElementById("about-standout") !== null);
+
 
 /* ===== ABOUT SECTION - SHOW ALL COLUMNS ===== */
 function renderAbout() {
-  console.log("renderAbout() called");
-  
   const aboutSection = document.getElementById("about-tool-section");
-  if (!aboutSection) {
-    console.log("About section not found");
-    return;
-  }
+  if (!aboutSection) return;
 
   const checkData = () => {
-    // Get all data from globals
     const keyFeatures = window.__TOOL_KEY_FEATURES__ || [];
     const bestFor = window.__TOOL_BEST_FOR__ || [];
     const standout = window.__TOOL_STANDOUT__ || "";
     const toolData = window.__CURRENT_TOOL_DATA__;
-    
-    console.log("About data:", { 
-      keyFeatures: keyFeatures.length, 
-      bestFor: bestFor.length, 
-      hasStandout: !!standout,
-      hasShortDesc: !!toolData?.short_description
-    });
 
     if (!toolData) {
-      console.log("No tool data yet, retrying...");
       setTimeout(checkData, 100);
       return;
     }
 
     let hasAnyContent = false;
 
-    // --- KEY FEATURES (from key_features column) ---
+    // --- KEY FEATURES ---
     const featuresUl = document.getElementById("about-features");
     if (featuresUl) {
       if (keyFeatures.length > 0) {
@@ -136,14 +115,12 @@ function renderAbout() {
           .map(f => `<li>✓ ${escapeHtml(f)}</li>`)
           .join("");
         hasAnyContent = true;
-        console.log("Key features rendered:", keyFeatures.length);
       } else {
-        featuresUl.innerHTML = ""; // Empty if no data
-        console.log("Key features: empty");
+        featuresUl.innerHTML = "";
       }
     }
 
-    // --- BEST FOR (from best_for column) ---
+    // --- BEST FOR ---
     const bestForUl = document.getElementById("about-bestfor");
     if (bestForUl) {
       if (bestFor.length > 0) {
@@ -152,85 +129,36 @@ function renderAbout() {
           .map(b => `<li>${escapeHtml(b)}</li>`)
           .join("");
         hasAnyContent = true;
-        console.log("Best for rendered:", bestFor.length);
       } else if (toolData.category) {
-        // Fallback to category if best_for is empty
         bestForUl.innerHTML = `
           <li>${escapeHtml(toolData.category)} professionals</li>
           <li>Teams in ${escapeHtml(toolData.category)}</li>
           <li>Students and beginners</li>
         `;
         hasAnyContent = true;
-        console.log("Best for rendered (from category)");
       } else {
         bestForUl.innerHTML = "";
-        console.log("Best for: empty");
       }
     }
 
-    // --- STANDOUT (from standout column) ---
+    // --- STANDOUT ---
     const standoutP = document.getElementById("about-standout");
     if (standoutP) {
       if (standout) {
         standoutP.textContent = standout;
         hasAnyContent = true;
-        console.log("Standout rendered");
       } else if (toolData.short_description) {
-        // Fallback to short_description if standout is empty
         standoutP.textContent = toolData.short_description;
         hasAnyContent = true;
-        console.log("Standout rendered (from short_description)");
       } else {
         standoutP.textContent = "";
-        console.log("Standout: empty");
       }
     }
 
-    // Always show about section (even if empty columns)
     aboutSection.classList.remove("hidden");
-    console.log("About section revealed!");
   };
 
   checkData();
-}
-/* -- rendering pros and cons --*/
-function renderProsCons() {
-console.log("=== renderProsCons() STARTED ===");
-console.log("Cons data:", window.TOOL_CONS);
-
-const consUl = document.querySelector("#cons-box ul");
-console.log("Cons UL found:", !!consUl);
-console.log("renderProsCons() called");
-
-const prosUl = document.querySelector("#pros-box ul");
-
-// Render PROS
-if (prosUl) {
-const pros = window.TOOL_PROS || [];
-if (pros.length > 0) {
-prosUl.innerHTML = pros
-.map(p => `<li>✔ ${escapeHtml(p)}</li>`)
-.join("");
-console.log("Pros rendered:", pros.length);
-} else {
-prosUl.innerHTML = `<li>No pros listed</li>`;
-console.log("Pros: empty");
-}
-}
-
-// Render CONS
-if (consUl) {
-const cons = window.TOOL_CONS || [];
-if (cons.length > 0) {
-consUl.innerHTML = cons
-.map(c => `<li>✖ ${escapeHtml(c)}</li>`)
-.join("");
-console.log("Cons rendered:", cons.length);
-} else {
-consUl.innerHTML = `<li>No cons listed</li>`;
-console.log("Cons: empty");
-}
-}
 }
 /* ===== PLACEHOLDER LOGO ===== */
 function placeholderLogo(name) {
@@ -428,12 +356,6 @@ window.__CURRENT_TOOL_DATA__ = {
 
 
 renderProsCons();
-renderAbout();
-   
-console.log("About to call renderProsCons");
-console.log("merged.cons:", merged.cons);
-renderProsCons();
-console.log("Finished renderProsCons");
 renderAbout();
 
   /* ===== RENDER ===== */
