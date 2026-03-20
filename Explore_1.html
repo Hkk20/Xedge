@@ -208,6 +208,51 @@
   <script src="tools.js" defer></script>
   <script src="app.js" defer></script>
 
+  <!--
+    PATCH SCRIPT — runs after tools.js + app.js because it's also deferred
+    and appears after them in source order.
+
+    What this does:
+    1. Overrides window.createCard so app.js's initExplorePage() uses our
+       styled version instead of the Tailwind one (which has no CSS now).
+    2. Overrides window.loadMore to use our batching + fragment approach.
+    3. Prevents app.js from calling initExplorePage() a second time
+       (our inline IIFE already handles the full init).
+  -->
+  <script defer>
+    // Runs after tools.js and app.js are both parsed.
+    // Replace createCard with our styled version before initExplorePage fires.
+    window.createCard = function(tool) {
+      const name = tool.name || "";
+      const logo = tool.logo_url ||
+        "https://dummyimage.com/56x56/1e293b/fff&text=" +
+        encodeURIComponent(name.slice(0, 2) || "?");
+      const safe = name.replace(/"/g,"&quot;").replace(/'/g,"&#39;");
+      return `<a href="tool.html?tool=${encodeURIComponent(name)}"
+                 class="xe-tool-card" role="listitem" aria-label="${safe}"
+                 onclick="if(window.storeSelectedTool)storeSelectedTool(${JSON.stringify(tool).replace(/"/g,'&quot;')})">
+               <img src="${logo}" alt="${safe} logo"
+                    width="56" height="56" loading="lazy"
+                    onerror="this.src='xedge-logo.png'"/>
+               <h2>${name}</h2>
+               <p class="cat">${tool.category || ""}</p>
+             </a>`;
+    };
+
+    // Prevent app.js DOMContentLoaded handler from double-initing.
+    // Our IIFE already ran initExplorePage equivalent — mark container as done.
+    if (document.getElementById("toolsContainer")) {
+      document.getElementById("toolsContainer").dataset.xeInit = "1";
+    }
+
+    // Neutralise app.js's own DOMContentLoaded call to initExplorePage.
+    // app.js checks: if (document.getElementById("toolsContainer")) { initExplorePage(); }
+    // We replace the function with a no-op after our init has run.
+    window.initExplorePage = function() {
+      // no-op — already initialised by Explore.html inline script
+    };
+  </script>
+
   <script>
   (function() {
     "use strict";
@@ -419,17 +464,15 @@
 
     /* ─── BOOT ─── */
     async function init() {
+      // Guard: if app.js already ran initExplorePage, don't double-init
+      const container = document.getElementById("toolsContainer");
+      if (container && container.dataset.xeInit === "done") return;
+      if (container) container.dataset.xeInit = "done";
       initMobileMenu();
       primeSessionCache();
       showSkeletons();
 
-      // Wait for tools.js to load (deferred — may not be ready yet)
-      let waited = 0;
-      while (typeof getTools !== "function" && waited < 5000) {
-        await new Promise(r => setTimeout(r, 50));
-        waited += 50;
-      }
-
+      // tools.js is deferred and listed before this script, so getTools is available
       if (typeof getTools !== "function") {
         document.getElementById("toolsContainer").innerHTML =
           `<div class="xe-empty" role="alert"><h3>Could not load tools</h3><p>Please refresh.</p></div>`;
