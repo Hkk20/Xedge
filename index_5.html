@@ -342,11 +342,11 @@
       <div class="hero-input-wrap" role="search">
         <div class="hero-input-box">
           <input type="text" id="global-search"
-            placeholder="What are you building or trying to do?"
-            autocomplete="off" aria-label="Describe what you're building"
+            placeholder="Search stacks — content creator, SaaS, e-commerce…"
+            autocomplete="off" aria-label="Search goal-based stacks"
             aria-controls="search-results" aria-autocomplete="list"/>
-          <button class="btn-gen" onclick="location.href='Explore.html'">
-            Find My Stack
+          <button class="btn-gen" id="stack-search-btn">
+            Find Stack
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
           </button>
         </div>
@@ -713,21 +713,64 @@
       grid.querySelectorAll('.goal-card').forEach(el=>scrollObserver.observe(el));
     }
 
-    window.fillSearch=function(text){
-      const input=document.getElementById("global-search");
-      if(input){input.value=text;input.focus();input.dispatchEvent(new Event("input"));}
+    window.fillSearch = function(text) {
+      const input = document.getElementById("global-search");
+      if (input) {
+        input.value = text;
+        input.focus();
+        const matches = searchStacks(text);
+        if (matches.length) renderSearchResults(matches);
+      }
     };
 
-    let allTools=[],searchDebounce=null;
-    function renderSearchResults(tools){
-      const container=document.getElementById("search-results");
-      if(!container)return;
-      container.innerHTML=!tools.length
-        ?`<div class="search-no-results">No tools found — try a different keyword</div>`
-        :tools.map(t=>`<a href="tool.html?tool=${encodeURIComponent(t.name)}" role="option"><img src="${t.logo||makePlaceholder(t.name)}" alt="${t.name}" loading="lazy" onerror="this.src='xedge-logo.png'"/><div><div style="font-weight:500;font-size:.85rem;">${t.name}</div><div style="font-size:.74rem;color:var(--ink3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:280px;">${t.short||""}</div></div></a>`).join("");
+    /* ─── STACK DATA (mirrors renderBrowseByGoal) ─── */
+    const ALL_STACKS = [
+      { id:"make-money",      label:"Make Money Online",      desc:"Generate income with AI-powered workflows",        tags:["money","income","revenue","freelance","sell","profit","monetize"] },
+      { id:"start-business",  label:"Start a Business",       desc:"Go from idea to launched product, fast",           tags:["business","startup","launch","product","founder","entrepreneur","saas"] },
+      { id:"create-content",  label:"Create Content",         desc:"Write, design, and ship content 10× faster",       tags:["content","blog","write","video","social","post","creator","design"] },
+      { id:"grow-audience",   label:"Grow an Audience",       desc:"Build distribution and grow your following",       tags:["audience","followers","growth","marketing","social media","newsletter","twitter","instagram"] },
+      { id:"save-time",       label:"Automate Your Work",     desc:"Cut repetitive tasks completely to zero",          tags:["automate","automation","workflow","zapier","productivity","save time","efficiency"] },
+      { id:"learn-ai",        label:"Learn AI Fast",          desc:"Go from zero to AI-fluent in days, not months",    tags:["learn","ai","beginner","course","skill","education","study"] },
+      { id:"ecommerce",       label:"Run E-Commerce",         desc:"Sell smarter with AI-powered store tools",         tags:["ecommerce","e-commerce","shop","store","shopify","sell online","products"] },
+      { id:"developer",       label:"Build as a Developer",   desc:"Ship code faster with the best dev AI stack",      tags:["developer","code","coding","software","engineer","programming","build","app"] },
+      { id:"freelance",       label:"Freelance & Consulting", desc:"Win clients and deliver work faster with AI",      tags:["freelance","freelancer","consultant","client","agency","designer","writer"] },
+      { id:"marketing",       label:"Marketing & Growth",     desc:"Run campaigns, ads, and SEO with AI tools",        tags:["marketing","seo","ads","campaign","growth","email","analytics"] },
+    ];
+
+    let searchDebounce = null;
+
+    function renderSearchResults(stacks) {
+      const container = document.getElementById("search-results");
+      if (!container) return;
+      if (!stacks.length) {
+        container.innerHTML = `<div class="search-no-results">No stacks found — try "content", "business", or "automate"</div>`;
+      } else {
+        container.innerHTML = stacks.map(s => `
+          <a href="stack.html?goal=${s.id}" role="option">
+            <div style="width:32px;height:32px;border-radius:7px;background:var(--gold-d);border:1px solid var(--gold-b);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px;">⚡</div>
+            <div>
+              <div style="font-weight:500;font-size:.85rem;color:var(--ink);">${s.label}</div>
+              <div style="font-size:.74rem;color:var(--ink3);margin-top:1px;">${s.desc}</div>
+            </div>
+          </a>`).join("");
+      }
       container.classList.remove("hidden");
     }
-    function hideSearchResults(){const el=document.getElementById("search-results");if(el)el.classList.add("hidden");}
+
+    function hideSearchResults() {
+      const el = document.getElementById("search-results");
+      if (el) el.classList.add("hidden");
+    }
+
+    function searchStacks(term) {
+      const t = term.toLowerCase().trim();
+      if (!t) return [];
+      return ALL_STACKS.filter(s =>
+        s.label.toLowerCase().includes(t) ||
+        s.desc.toLowerCase().includes(t) ||
+        s.tags.some(tag => tag.includes(t))
+      ).slice(0, 6);
+    }
 
     function initMobileMenu(){
       const toggle=document.getElementById("mobile-menu-toggle");
@@ -845,30 +888,66 @@
       initCounters();
       document.querySelectorAll(".reveal").forEach(el=>scrollObserver.observe(el));
 
-      const searchInput=document.getElementById("global-search");
-      if(searchInput){
-        searchInput.addEventListener("input",e=>{
+      // Stack search input
+      const searchInput = document.getElementById("global-search");
+      const searchBtn   = document.getElementById("stack-search-btn");
+
+      if (searchInput) {
+        searchInput.addEventListener("input", e => {
           clearTimeout(searchDebounce);
-          const term=e.target.value.toLowerCase().trim();
-          if(!term){hideSearchResults();return;}
-          searchDebounce=setTimeout(()=>{
-            const matches=allTools.filter(t=>t.name.toLowerCase().includes(term)||(t.short&&t.short.toLowerCase().includes(term))).slice(0,6);
-            renderSearchResults(matches);
-          },160);
+          const term = e.target.value;
+          if (!term.trim()) { hideSearchResults(); return; }
+          searchDebounce = setTimeout(() => {
+            renderSearchResults(searchStacks(term));
+          }, 140);
         });
-        document.addEventListener("click",e=>{if(!e.target.closest(".hero-input-wrap"))hideSearchResults();});
-        searchInput.addEventListener("keydown",e=>{if(e.key==="Escape"){hideSearchResults();searchInput.blur();}});
+
+        searchInput.addEventListener("keydown", e => {
+          if (e.key === "Enter") {
+            const term = searchInput.value.trim();
+            if (term) {
+              // Go to stack.html with query, or first result
+              const matches = searchStacks(term);
+              if (matches.length) {
+                location.href = `stack.html?goal=${matches[0].id}`;
+              } else {
+                location.href = `stack.html?q=${encodeURIComponent(term)}`;
+              }
+            }
+            hideSearchResults();
+            searchInput.blur();
+          }
+          if (e.key === "Escape") { hideSearchResults(); searchInput.blur(); }
+        });
+
+        document.addEventListener("click", e => {
+          if (!e.target.closest(".hero-input-wrap")) hideSearchResults();
+        });
       }
 
-      try{
-        const raw=await fetchTools();
-        allTools=normalizeTools(raw);
-        renderTopTools(allTools);
-      }catch(err){
-        console.error("XEdge: renderTopTools failed:",err);
-        const skel=document.getElementById("top-tools-skel");if(skel)skel.remove();
-        const scroller=document.getElementById("top-tools-wrapper");
-        if(scroller)scroller.innerHTML=`<p style="color:var(--ink3);padding:24px 0;">Tools unavailable — please refresh.</p>`;
+      if (searchBtn) {
+        searchBtn.addEventListener("click", () => {
+          const term = document.getElementById("global-search")?.value.trim();
+          if (term) {
+            const matches = searchStacks(term);
+            location.href = matches.length
+              ? `stack.html?goal=${matches[0].id}`
+              : `stack.html?q=${encodeURIComponent(term)}`;
+          } else {
+            location.href = "stack.html";
+          }
+        });
+      }
+
+      // Load tools for the Top Tools scroller section (not search)
+      try {
+        const raw = await fetchTools();
+        renderTopTools(normalizeTools(raw));
+      } catch(err) {
+        console.error("XEdge: renderTopTools failed:", err);
+        const skel = document.getElementById("top-tools-skel"); if(skel) skel.remove();
+        const scroller = document.getElementById("top-tools-wrapper");
+        if(scroller) scroller.innerHTML = `<p style="color:var(--ink3);padding:24px 0;">Tools unavailable — please refresh.</p>`;
       }
 
       let fbRetries=0;
