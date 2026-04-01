@@ -1,0 +1,27 @@
+Summary of CSS Additions to the Goal Entry Section:
+
+1. .goal-entry (Main Container)
+   - Added `position: relative` and `overflow: hidden` to contain the advanced backgrounds.
+   - Introduced a stronger glassmorphism effect: `rgba(17, 24, 39, 0.4)` background with `backdrop-filter: blur(20px)`.
+   - Added a `box-shadow` for 3D elevation and an inner glowing border highlight (`inset 0 1px 0 rgba(255,255,255,0.05)`).
+   - CREATED: `.goal-entry::before` pseudoelement. This acts as a massive subtle radial-gradient glow positioned behind the box that spins continuously using a new `@keyframes slow-spin` animation.
+
+2. .goal-entry-label (Live Indicator)
+   - Converted to flexbox (`display: flex; align-items: center; gap: 8px`).
+   - CREATED: `.goal-entry-label::before` to serve as the "Live Indicator". It is a green dot (`#34d399`) with a pulsing drop shadow using a new `@keyframes pulse-dot` animation.
+
+3. .goal-btn (Interactive Goal Buttons)
+   - Added `overflow: hidden` to contain the shimmer effect.
+   - Restyled the default border, background, and added a refined `transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);` for smoother physics.
+   - Converted the layout to flex-column to better center and manage internal spacing.
+
+4. .goal-btn:hover & .goal-btn:active
+   - On hover: The button levitates (`transform: translateY(-4px) scale(1.02)`) and emits an indigo shadow.
+   - On active/click: The button compresses like a real physical button (`transform: translateY(-1px) scale(0.98)`).
+
+5. Button Shimmer Sweep Effect
+   - CREATED: `.goal-btn::after`. A white diagonal gradient strip that stays hidden outside the left edge by default. When `.goal-btn:hover` is triggered, it sweeps rapidly to the right side (`left: 150%`), simulating a light reflection.
+
+6. Text and Arrow Interaction (.goal-btn-title & .goal-btn-sub)
+   - Both the main title and sub-text dynamically shift colors on button hover (title glows indigo `#818cf8`, subtitle brightens).
+   - CREATED: `.goal-btn-title::after`. An arrow icon (`→`) that starts invisible and shifted left (`opacity: 0; transform: translateX(-10px)`). On hover, it elegantly fades in and assumes its natural position next to the text.

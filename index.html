@@ -385,6 +385,140 @@
       font-weight: 400;
       animation: fadeUp .5s .14s ease both;
     }
+      /* ── GOAL ENTRY BOX ── */
+    .goal-entry {
+      position: relative;
+      width: 100%; max-width: 680px; margin: 0 auto 40px;
+      background: rgba(17, 24, 39, 0.4);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 24px; padding: 32px;
+      animation: fadeUp .5s .2s ease both;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255,255,255,0.05);
+      overflow: hidden;
+    }
+    
+    /* Subtle background glow behind the entry box */
+    .goal-entry::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: radial-gradient(circle at center, rgba(59, 130, 246, 0.08) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+      animation: slow-spin 15s linear infinite;
+    }
+
+    @keyframes slow-spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .goal-entry-label {
+      position: relative; z-index: 1;
+      font-size: 0.8rem; font-weight: 600;
+      color: #9ca3af; letter-spacing: 0.15em;
+      text-transform: uppercase; margin-bottom: 20px;
+      text-align: left;
+      display: flex; align-items: center; gap: 8px;
+    }
+    
+    .goal-entry-label::before {
+      content: '';
+      display: inline-block;
+      width: 8px; height: 8px;
+      background: #34d399; /* Green active dot */
+      border-radius: 50%;
+      box-shadow: 0 0 10px rgba(52, 211, 153, 0.8);
+      animation: pulse-dot 2s infinite;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.3); opacity: 0.5; }
+    }
+
+    .goal-grid {
+      position: relative; z-index: 1;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+    }
+    
+    .goal-btn {
+      position: relative;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 16px; padding: 20px 22px;
+      text-align: left; cursor: pointer;
+      color: #fff; font-family: inherit;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    
+    .goal-btn:hover {
+      border-color: rgba(99, 102, 241, 0.5);
+      background: rgba(99, 102, 241, 0.08);
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 12px 24px -10px rgba(99, 102, 241, 0.4);
+    }
+    
+    .goal-btn:active {
+      transform: translateY(-1px) scale(0.98);
+      transition: all 0.1s;
+    }
+
+    /* Shimmer effect */
+    .goal-btn::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 50%; height: 100%;
+      background: linear-gradient(to right, transparent, rgba(255,255,255,0.06), transparent);
+      transform: skewX(-20deg);
+      transition: left 0.6s ease;
+    }
+    
+    .goal-btn:hover::after {
+      left: 150%;
+    }
+
+    .goal-btn-title {
+      font-size: 1rem; font-weight: 600; margin-bottom: 6px;
+      transition: color 0.3s ease;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    
+    /* Add an arrow on hover */
+    .goal-btn-title::after {
+      content: '→';
+      opacity: 0;
+      transform: translateX(-10px);
+      transition: all 0.3s ease;
+      color: #818cf8;
+      font-size: 1.1rem;
+    }
+
+    .goal-btn:hover .goal-btn-title::after {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    
+    .goal-btn:hover .goal-btn-title {
+      color: #818cf8;
+    }
+
+    .goal-btn-sub {
+      font-size: 0.82rem; color: #9ca3af; line-height: 1.5;
+      transition: color 0.3s;
+    }
+    
+    .goal-btn:hover .goal-btn-sub {
+      color: #d1d5db;
+    }
 
     /* ─── SEARCH BAR ─── */
     .xe-search-wrap {
@@ -1345,6 +1479,28 @@
           goal-based stacks with step-by-step execution plans — so you can
           move fast and build with confidence.
         </p>
+        <!-- GOAL ENTRY — the beginner glue -->
+        <div class="goal-entry" role="group" aria-label="Choose your goal">
+          <div class="goal-entry-label">What are you trying to do?</div>
+          <div class="goal-grid">
+            <button class="goal-btn" onclick="location.href='stack.html?goal=start-business'">
+              <div class="goal-btn-title">Start a business</div>
+              <div class="goal-btn-sub">Turn an idea into income</div>
+            </button>
+            <button class="goal-btn" onclick="location.href='stack.html?goal=build-app'">
+              <div class="goal-btn-title">Build an app</div>
+              <div class="goal-btn-sub">No-code or with code</div>
+            </button>
+            <button class="goal-btn" onclick="location.href='stack.html?goal=grow-audience'">
+              <div class="goal-btn-title">Grow an audience</div>
+              <div class="goal-btn-sub">Content, social, brand</div>
+            </button>
+            <button class="goal-btn" onclick="location.href='stack.html?goal=automate-work'">
+              <div class="goal-btn-title">Automate my work</div>
+              <div class="goal-btn-sub">Save hours every week</div>
+            </button>
+          </div>
+        </div>
 
         <!-- Search -->
         <div class="xe-search-wrap" role="search">

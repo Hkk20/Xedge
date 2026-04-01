@@ -1,0 +1,60 @@
+<style>
+/* ── GOAL ENTRY BOX ── */
+    .goal-entry {
+      width: 100%; max-width: 660px; margin: 0 auto 40px;
+      background: rgba(13,17,23,0.8);
+      border: 1px solid var(--border2);
+      border-radius: 20px; padding: 28px;
+      animation: fadeUp .5s .2s ease both;
+    }
+    .goal-entry-label {
+      font-size: 0.75rem; font-weight: 500;
+      color: var(--muted); letter-spacing: 0.1em;
+      text-transform: uppercase; margin-bottom: 16px;
+      text-align: left;
+    }
+    .goal-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+    }
+    .goal-btn {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: 12px; padding: 16px 18px;
+      text-align: left; cursor: pointer;
+      color: var(--text); font-family: var(--font-body);
+      transition: border-color .2s, background .2s, transform .15s;
+    }
+    .goal-btn:hover {
+      border-color: rgba(79,142,247,0.4);
+      background: rgba(79,142,247,0.06);
+      transform: translateY(-2px);
+    }
+    .goal-btn-title {
+      font-size: 0.9rem; font-weight: 500; margin-bottom: 4px;
+    }
+    .goal-btn-sub {
+      font-size: 0.78rem; color: var(--muted); line-height: 1.4;
+    }
+</style> 
+<!-- GOAL ENTRY — the beginner glue -->
+        <div class="goal-entry" role="group" aria-label="Choose your goal">
+          <div class="goal-entry-label">What are you trying to do?</div>
+          <div class="goal-grid">
+            <button class="goal-btn" onclick="location.href='stack.html?goal=start-business'">
+              <div class="goal-btn-title">Start a business</div>
+              <div class="goal-btn-sub">Turn an idea into income</div>
+            </button>
+            <button class="goal-btn" onclick="location.href='stack.html?goal=build-app'">
+              <div class="goal-btn-title">Build an app</div>
+              <div class="goal-btn-sub">No-code or with code</div>
+            </button>
+            <button class="goal-btn" onclick="location.href='stack.html?goal=grow-audience'">
+              <div class="goal-btn-title">Grow an audience</div>
+              <div class="goal-btn-sub">Content, social, brand</div>
+            </button>
+            <button class="goal-btn" onclick="location.href='stack.html?goal=automate-work'">
+              <div class="goal-btn-title">Automate my work</div>
+              <div class="goal-btn-sub">Save hours every week</div>
+            </button>
+          </div>
+        </div>
