@@ -1374,6 +1374,177 @@
         transition-duration: 0.01ms !important;
       }
     }
+
+    /* ── STACK DRAWER ── */
+    .stack-drawer-overlay {
+      position: fixed; inset: 0; z-index: 200;
+      background: rgba(0,0,0,0.65);
+      backdrop-filter: blur(4px);
+      opacity: 0; pointer-events: none;
+      transition: opacity .3s ease;
+    }
+    .stack-drawer-overlay.open { opacity: 1; pointer-events: auto; }
+
+    .stack-drawer {
+      position: fixed; top: 0; right: 0; bottom: 0;
+      width: min(520px, 100vw);
+      z-index: 201;
+      background: #0d1117;
+      border-left: 1px solid rgba(255,255,255,0.08);
+      transform: translateX(100%);
+      transition: transform .35s cubic-bezier(.4,0,.2,1);
+      display: flex; flex-direction: column;
+      overflow: hidden;
+    }
+    .stack-drawer.open { transform: translateX(0); }
+
+    .drawer-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 24px;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      flex-shrink: 0;
+    }
+    .drawer-header-left { display: flex; align-items: center; gap: 10px; }
+    .drawer-badge {
+      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; color: #60a5fa;
+      background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.2);
+      border-radius: 100px; padding: 4px 12px;
+    }
+    .drawer-close {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: #9ca3af; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .15s, color .15s;
+    }
+    .drawer-close:hover { background: rgba(255,255,255,0.1); color: #fff; }
+    .drawer-close svg { width: 14px; height: 14px; }
+
+    .drawer-body {
+      flex: 1; overflow-y: auto; padding: 28px 24px 32px;
+      scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.1) transparent;
+    }
+    .drawer-body::-webkit-scrollbar { width: 4px; }
+    .drawer-body::-webkit-scrollbar-thumb { background: rgba(255,255,255,.1); border-radius: 4px; }
+
+    /* Step indicator */
+    .drawer-steps {
+      display: flex; align-items: center; gap: 8px; margin-bottom: 28px;
+    }
+    .d-step {
+      width: 26px; height: 26px; border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.15);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.72rem; font-weight: 600; color: #9ca3af;
+      transition: all .2s;
+    }
+    .d-step.active { background: #3b82f6; border-color: #3b82f6; color: #fff; }
+    .d-step.done   { background: rgba(52,211,153,0.15); border-color: #34d399; color: #34d399; }
+    .d-line { flex: 1; height: 1px; background: rgba(255,255,255,0.08); transition: background .3s; }
+    .d-line.done { background: #34d399; }
+
+    /* Question view */
+    .drawer-q { display: none; }
+    .drawer-q.active { display: block; }
+    .drawer-q-label {
+      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; color: #6b7a9a; margin-bottom: 10px;
+    }
+    .drawer-q-title {
+      font-size: 1.2rem; font-weight: 700; margin-bottom: 6px; line-height: 1.3;
+    }
+    .drawer-q-sub { font-size: 0.85rem; color: #9ca3af; margin-bottom: 24px; }
+
+    .d-options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .d-opt {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 14px; padding: 16px 14px;
+      text-align: left; cursor: pointer; color: #fff;
+      font-family: inherit;
+      transition: border-color .2s, background .2s, transform .15s;
+    }
+    .d-opt:hover {
+      border-color: rgba(99,102,241,0.5);
+      background: rgba(99,102,241,0.07);
+      transform: translateY(-2px);
+    }
+    .d-opt-title { font-size: 0.88rem; font-weight: 600; margin-bottom: 4px; }
+    .d-opt-sub   { font-size: 0.76rem; color: #9ca3af; line-height: 1.4; }
+
+    .drawer-back {
+      background: none; border: none; cursor: pointer;
+      font-size: 0.82rem; color: #9ca3af; padding: 0;
+      margin-top: 20px; display: inline-flex; align-items: center; gap: 5px;
+      transition: color .15s;
+    }
+    .drawer-back:hover { color: #fff; }
+
+    /* Stack result view */
+    .drawer-result { display: none; }
+    .drawer-result.active { display: block; }
+
+    .result-title {
+      font-size: 1.15rem; font-weight: 700; margin-bottom: 6px; line-height: 1.3;
+    }
+    .result-sub { font-size: 0.83rem; color: #9ca3af; margin-bottom: 24px; line-height: 1.6; }
+
+    .result-section-label {
+      font-size: 0.7rem; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; color: #6b7a9a; margin-bottom: 14px;
+    }
+
+    .tool-row {
+      display: flex; gap: 12px; padding: 14px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .tool-row:last-of-type { border-bottom: none; }
+    .tool-num {
+      width: 24px; height: 24px; border-radius: 50%;
+      background: rgba(59,130,246,0.12); border: 1px solid rgba(59,130,246,0.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.7rem; font-weight: 700; color: #60a5fa;
+      flex-shrink: 0; margin-top: 2px;
+    }
+    .tool-info { flex: 1; }
+    .tool-name { font-size: 0.92rem; font-weight: 700; margin-bottom: 3px; }
+    .tool-why  { font-size: 0.8rem; color: #9ca3af; line-height: 1.5; }
+    .tool-when {
+      display: inline-block; margin-top: 6px;
+      font-size: 0.7rem; font-weight: 600; color: #34d399;
+      background: rgba(52,211,153,0.1); border-radius: 100px; padding: 2px 9px;
+    }
+
+    .week-row { display: flex; gap: 10px; margin-bottom: 10px; }
+    .week-tag {
+      font-size: 0.7rem; font-weight: 600; color: #60a5fa;
+      background: rgba(59,130,246,0.1); border-radius: 100px; padding: 3px 10px;
+      flex-shrink: 0; align-self: flex-start; margin-top: 2px; white-space: nowrap;
+    }
+    .week-task { font-size: 0.82rem; color: #9ca3af; line-height: 1.6; }
+
+    .drawer-cta-row {
+      display: flex; gap: 10px; margin-top: 28px; flex-wrap: wrap;
+    }
+    .drawer-cta-main {
+      flex: 1; min-width: 120px;
+      background: linear-gradient(135deg, #3b82f6, #6366f1);
+      color: #fff; border: none; border-radius: 12px; padding: 13px;
+      font-size: 0.9rem; font-weight: 600; cursor: pointer;
+      font-family: inherit; transition: opacity .15s;
+    }
+    .drawer-cta-main:hover { opacity: .85; }
+    .drawer-cta-sec {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: #9ca3af; border-radius: 12px; padding: 13px 18px;
+      font-size: 0.9rem; cursor: pointer; font-family: inherit;
+      transition: background .15s, color .15s;
+    }
+    .drawer-cta-sec:hover { background: rgba(255,255,255,0.08); color: #fff; }
+
   </style>
 
   <!-- Structured Data for SEO -->
@@ -1483,19 +1654,19 @@
         <div class="goal-entry" role="group" aria-label="Choose your goal">
           <div class="goal-entry-label">What are you trying to do?</div>
           <div class="goal-grid">
-            <button class="goal-btn" onclick="location.href='stack.html?goal=start-business'">
+            <button class="goal-btn" onclick="openStackDrawer('start-business')">
               <div class="goal-btn-title">Start a business</div>
               <div class="goal-btn-sub">Turn an idea into income</div>
             </button>
-            <button class="goal-btn" onclick="location.href='stack.html?goal=build-app'">
+            <button class="goal-btn" onclick="openStackDrawer('build-app')">
               <div class="goal-btn-title">Build an app</div>
               <div class="goal-btn-sub">No-code or with code</div>
             </button>
-            <button class="goal-btn" onclick="location.href='stack.html?goal=grow-audience'">
+            <button class="goal-btn" onclick="openStackDrawer('grow-audience')">
               <div class="goal-btn-title">Grow an audience</div>
               <div class="goal-btn-sub">Content, social, brand</div>
             </button>
-            <button class="goal-btn" onclick="location.href='stack.html?goal=automate-work'">
+            <button class="goal-btn" onclick="openStackDrawer('automate-work')">
               <div class="goal-btn-title">Automate my work</div>
               <div class="goal-btn-sub">Save hours every week</div>
             </button>
@@ -2068,9 +2239,9 @@
         ];
 
         grid.innerHTML = goals.map(g => `
-        <div class="xe-goal-card" onclick="location.href='stack.html?goal=${g.id}'" role="button" tabindex="0"
+        <div class="xe-goal-card" onclick="openStackDrawer('${g.id}')" role="button" tabindex="0"
              aria-label="Browse ${g.label} stacks"
-             onkeydown="if(event.key==='Enter')location.href='stack.html?goal=${g.id}'">
+             onkeydown="if(event.key==='Enter')openStackDrawer('${g.id}')">
           <div class="xe-goal-logos">
             ${g.logos.map((d, i) => `
               <img src="https://www.google.com/s2/favicons?domain=${d}&sz=64"
@@ -2440,6 +2611,9 @@
         }, 300);
       }
 
+
+
+
       // Boot — wait for DOM
       if (document.readyState === "loading") {
         document.addEventListener("DOMContentLoaded", init);
@@ -2450,6 +2624,310 @@
     })();
   </script>
 
+
+  <!-- ═══ STACK DRAWER ═══ -->
+  <div id="stack-drawer-overlay" class="stack-drawer-overlay" onclick="closeStackDrawer()" aria-hidden="true"></div>
+  <aside id="stack-drawer" class="stack-drawer" role="dialog" aria-modal="true" aria-label="Your stack">
+
+    <div class="drawer-header">
+      <div class="drawer-header-left">
+        <img src="xedge-logo.png" alt="XEdge" width="24" height="24" style="border-radius:6px;"/>
+        <span id="drawer-badge" class="drawer-badge">Find your stack</span>
+      </div>
+      <button class="drawer-close" onclick="closeStackDrawer()" aria-label="Close">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="drawer-body">
+
+      <!-- Step indicators -->
+      <div class="drawer-steps">
+        <div class="d-step active" id="ds1">1</div>
+        <div class="d-line" id="dl1"></div>
+        <div class="d-step" id="ds2">2</div>
+        <div class="d-line" id="dl2"></div>
+        <div class="d-step" id="ds3">3</div>
+      </div>
+
+      <!-- Step 1: Where are you? -->
+      <div class="drawer-q active" id="dq1">
+        <div class="drawer-q-label">Step 1 of 2</div>
+        <div class="drawer-q-title">Where are you right now?</div>
+        <div class="drawer-q-sub">Be honest — it helps us pick the right stack for you.</div>
+        <div class="d-options">
+          <button class="d-opt" onclick="drawerStep2('idea')">
+            <div class="d-opt-title">Just have an idea</div>
+            <div class="d-opt-sub">Nothing built yet</div>
+          </button>
+          <button class="d-opt" onclick="drawerStep2('budget')">
+            <div class="d-opt-title">Idea + some budget</div>
+            <div class="d-opt-sub">Ready to invest a little</div>
+          </button>
+          <button class="d-opt" onclick="drawerStep2('stuck')">
+            <div class="d-opt-title">Started but stuck</div>
+            <div class="d-opt-sub">Something isn't working</div>
+          </button>
+          <button class="d-opt" onclick="drawerStep2('validate')">
+            <div class="d-opt-title">Want to test first</div>
+            <div class="d-opt-sub">Not sure people want it</div>
+          </button>
+        </div>
+      </div>
+
+      <!-- Step 2: What type? -->
+      <div class="drawer-q" id="dq2">
+        <div class="drawer-q-label">Step 2 of 2</div>
+        <div class="drawer-q-title">What kind of business?</div>
+        <div class="drawer-q-sub">Pick the one closest to your idea.</div>
+        <div class="d-options">
+          <button class="d-opt" onclick="drawerShowStack('product')">
+            <div class="d-opt-title">Selling a product</div>
+            <div class="d-opt-sub">Physical or digital</div>
+          </button>
+          <button class="d-opt" onclick="drawerShowStack('service')">
+            <div class="d-opt-title">Selling a service</div>
+            <div class="d-opt-sub">Freelance or consulting</div>
+          </button>
+          <button class="d-opt" onclick="drawerShowStack('saas')">
+            <div class="d-opt-title">App or SaaS</div>
+            <div class="d-opt-sub">Software people pay for</div>
+          </button>
+          <button class="d-opt" onclick="drawerShowStack('content')">
+            <div class="d-opt-title">Content business</div>
+            <div class="d-opt-sub">Newsletter, creator, brand</div>
+          </button>
+        </div>
+        <button class="drawer-back" onclick="drawerBack(1)">← Back</button>
+      </div>
+
+      <!-- Step 3: Stack result -->
+      <div class="drawer-result" id="dq3">
+        <div id="drawer-result-content"></div>
+        <div class="drawer-cta-row">
+          <button class="drawer-cta-main" onclick="window.location.href='stack.html'">See all stacks →</button>
+          <button class="drawer-cta-sec" onclick="drawerBack(1)">Start over</button>
+        </div>
+      </div>
+
+    </div>
+  </aside>
+
+
+  <script>
+/* ─── STACK DRAWER ─── */
+var _drawerGoal = '';
+var _drawerStage = '';
+
+var DRAWER_STACKS = {
+  'product': {
+    badge: 'Zero to first sale',
+    title: 'Validate and sell your product — before building anything',
+    sub: 'This stack helps you test if people will actually pay for your idea in under 2 weeks.',
+    tools: [
+      { name: 'Notion', why: 'Write your idea clearly — what it is, who its for, what problem it solves.', when: 'Day 1' },
+      { name: 'Framer', why: 'Build a simple landing page in hours. No code needed. Describe your product and add a buy button.', when: 'Days 2–3' },
+      { name: 'Gumroad', why: 'Set up payment in 10 minutes. Take pre-orders to validate demand before you build.', when: 'Day 3' },
+      { name: 'Claude AI', why: 'Write your landing page copy, product description, and outreach messages faster.', when: 'Throughout' },
+      { name: 'Beehiiv', why: 'Start collecting emails from day one. Your email list is your most valuable long-term asset.', when: 'Day 4+' }
+    ],
+    plan: [
+      { week: 'Week 1', task: 'Write your idea in one paragraph. Build a landing page. Share it with 20 people you know and ask for honest feedback.' },
+      { week: 'Week 2', task: 'Post it in 3 relevant communities. Try to get 10 email signups or 1 pre-order.' },
+      { week: 'Week 3', task: 'Talk to 5 signups on a call. Ask what they expected. Build based on what you learn.' },
+      { week: 'Week 4', task: 'Ship a simple version to your first users. Done beats perfect. Get feedback and iterate.' }
+    ]
+  },
+  'service': {
+    badge: 'First client in 2 weeks',
+    title: 'Land your first paying client with zero experience or portfolio',
+    sub: 'Services are the fastest way to make money from a skill. This stack gets you from idea to paid client fast.',
+    tools: [
+      { name: 'Notion', why: 'Create a one-page offer doc — what you do, who its for, what they get, and the price.', when: 'Day 1' },
+      { name: 'Cal.com', why: 'Free booking link so clients can book calls with you instantly. Looks professional immediately.', when: 'Day 1' },
+      { name: 'Claude AI', why: 'Write your outreach messages, proposals, and service descriptions. Cuts writing time by 80%.', when: 'Throughout' },
+      { name: 'Framer', why: 'Once you have 1–2 clients, build a simple portfolio page to show your work.', when: 'Week 3+' },
+      { name: 'Notion invoicing', why: 'Use a Notion invoice template to bill clients professionally from day one.', when: 'When you close' }
+    ],
+    plan: [
+      { week: 'Week 1', task: 'Define your service clearly. Message 10 people in your network who might need this or know someone who does.' },
+      { week: 'Week 2', task: 'Do 5 discovery calls. Offer 1 free or discounted project to get a case study.' },
+      { week: 'Week 3', task: 'Deliver your first project. Ask for a testimonial immediately. Post about what you learned.' },
+      { week: 'Week 4', task: 'Use your testimonial to reach out to 20 more clients. Raise your price slightly. Repeat.' }
+    ]
+  },
+  'saas': {
+    badge: 'Build without code',
+    title: 'Turn your app idea into a working product — no coding required',
+    sub: 'You dont need to be a developer anymore. This stack gets you to a working MVP fast.',
+    tools: [
+      { name: 'Bolt.new', why: 'Describe your app in plain English and it generates working code instantly.', when: 'Days 1–3' },
+      { name: 'Supabase', why: 'Free database and backend. Bolt integrates with it directly — no setup needed.', when: 'Day 2+' },
+      { name: 'Stripe', why: 'Add payments to your app in one afternoon. Start charging users as soon as you have something working.', when: 'Week 2' },
+      { name: 'Framer', why: 'Build a marketing landing page for your app. Drives signups while you build.', when: 'Week 1' },
+      { name: 'Beehiiv', why: 'Collect emails before the app is ready. Launch to a warm audience instead of zero.', when: 'Week 1+' }
+    ],
+    plan: [
+      { week: 'Week 1', task: 'Write a one-paragraph description of exactly what your app does. Build a landing page. Start collecting emails.' },
+      { week: 'Week 2', task: 'Use Bolt to build your first version. Keep it to one core feature only. Dont add more until someone pays.' },
+      { week: 'Week 3', task: 'Share with your email list. Offer founding member pricing. Get 5 people to try it.' },
+      { week: 'Week 4', task: 'Fix the top 3 complaints. Add payments. Aim for your first paying user before adding any new features.' }
+    ]
+  },
+  'content': {
+    badge: 'Audience from zero',
+    title: 'Build an audience around your idea — and eventually monetize it',
+    sub: 'Content businesses compound powerfully over time. This stack helps you start consistently from day one.',
+    tools: [
+      { name: 'Beehiiv', why: 'Start a newsletter — email is the most valuable audience you can own. Free until 2,500 subscribers.', when: 'Day 1' },
+      { name: 'Claude AI', why: 'Use AI to help outline, draft, and edit your content faster. You provide the ideas and voice.', when: 'Throughout' },
+      { name: 'Opus Clip', why: 'Turn any long video into short clips for Instagram, TikTok, and YouTube Shorts automatically.', when: 'Week 2+' },
+      { name: 'Buffer', why: 'Schedule all your social posts in one place so you can batch-create and stay consistent.', when: 'Week 1+' },
+      { name: 'Gumroad', why: 'When you have an audience, sell a simple digital product. Easy to set up, no upfront cost.', when: 'Month 2+' }
+    ],
+    plan: [
+      { week: 'Week 1', task: 'Pick one platform to focus on. Publish one piece of content. Tell everyone you know.' },
+      { week: 'Week 2', task: 'Publish 3 times. Study what got the most response. Double down on that format.' },
+      { week: 'Week 3', task: 'Reach out to 5 people in your niche. Comment on their content. Build relationships.' },
+      { week: 'Week 4', task: 'Set a publishing schedule you can keep for 6 months. Consistency beats quality at this stage.' }
+    ]
+  }
+};
+
+// Fallback: if non-business goal opened the drawer, map to best fit
+var GOAL_TYPE_MAP = {
+  'build-app': 'saas',
+  'grow-audience': 'content',
+  'automate-work': 'service',
+  'make-money': 'product',
+  'create-content': 'content',
+  'learn-ai': 'product',
+  'save-time': 'service'
+};
+
+function openStackDrawer(goal) {
+  _drawerGoal = goal;
+  _drawerStage = '';
+
+  // Reset to step 1
+  document.getElementById('dq1').className = 'drawer-q active';
+  document.getElementById('dq2').className = 'drawer-q';
+  document.getElementById('dq3').className = 'drawer-result';
+  document.getElementById('ds1').className = 'd-step active';
+  document.getElementById('ds2').className = 'd-step';
+  document.getElementById('ds3').className = 'd-step';
+  document.getElementById('dl1').className = 'd-line';
+  document.getElementById('dl2').className = 'd-line';
+  document.getElementById('drawer-badge').textContent = 'Find your stack';
+
+  // For non-start-business goals, skip Q2 and show result directly
+  var directTypes = ['build-app','grow-audience','automate-work','make-money','create-content','learn-ai','save-time'];
+  if (directTypes.indexOf(goal) !== -1) {
+    var type = GOAL_TYPE_MAP[goal] || 'product';
+    _drawerStage = 'idea';
+    showDrawerResult(type);
+  } else {
+    // start-business: show full 2-step flow
+    document.getElementById('stack-drawer-overlay').classList.add('open');
+    document.getElementById('stack-drawer').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  document.getElementById('stack-drawer-overlay').classList.add('open');
+  document.getElementById('stack-drawer').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  document.getElementById('stack-drawer').focus();
+}
+
+function drawerStep2(stage) {
+  _drawerStage = stage;
+  document.getElementById('dq1').className = 'drawer-q';
+  document.getElementById('dq2').className = 'drawer-q active';
+  document.getElementById('ds1').className = 'd-step done';
+  document.getElementById('ds2').className = 'd-step active';
+  document.getElementById('dl1').className = 'd-line done';
+}
+
+function drawerShowStack(type) {
+  document.getElementById('ds2').className = 'd-step done';
+  document.getElementById('ds3').className = 'd-step done';
+  document.getElementById('dl2').className = 'd-line done';
+  document.getElementById('dq2').className = 'drawer-q';
+  showDrawerResult(type);
+}
+
+function showDrawerResult(type) {
+  var s = DRAWER_STACKS[type] || DRAWER_STACKS['product'];
+  document.getElementById('drawer-badge').textContent = s.badge;
+  document.getElementById('ds1').className = 'd-step done';
+  document.getElementById('ds2').className = 'd-step done';
+  document.getElementById('ds3').className = 'd-step done';
+  document.getElementById('dl1').className = 'd-line done';
+  document.getElementById('dl2').className = 'd-line done';
+
+  var toolsHtml = s.tools.map(function(t, i) {
+    return '<div class="tool-row">' +
+      '<div class="tool-num">' + (i+1) + '</div>' +
+      '<div class="tool-info">' +
+        '<div class="tool-name">' + t.name + '</div>' +
+        '<div class="tool-why">' + t.why + '</div>' +
+        '<span class="tool-when">' + t.when + '</span>' +
+      '</div></div>';
+  }).join('');
+
+  var planHtml = s.plan.map(function(p) {
+    return '<div class="week-row">' +
+      '<span class="week-tag">' + p.week + '</span>' +
+      '<span class="week-task">' + p.task + '</span>' +
+    '</div>';
+  }).join('');
+
+  document.getElementById('drawer-result-content').innerHTML =
+    '<div class="result-title">' + s.title + '</div>' +
+    '<div class="result-sub">' + s.sub + '</div>' +
+    '<div class="result-section-label">Your tools — in order</div>' +
+    toolsHtml +
+    '<div class="result-section-label" style="margin-top:24px;">Your first 4 weeks</div>' +
+    planHtml;
+
+  document.getElementById('dq3').className = 'drawer-result active';
+  document.getElementById('stack-drawer-overlay').classList.add('open');
+  document.getElementById('stack-drawer').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  document.getElementById('drawer-body') && (document.getElementById('drawer-body').scrollTop = 0);
+  document.querySelector('.drawer-body').scrollTop = 0;
+}
+
+function drawerBack(toStep) {
+  if (toStep === 1) {
+    _drawerStage = '';
+    document.getElementById('dq1').className = 'drawer-q active';
+    document.getElementById('dq2').className = 'drawer-q';
+    document.getElementById('dq3').className = 'drawer-result';
+    document.getElementById('ds1').className = 'd-step active';
+    document.getElementById('ds2').className = 'd-step';
+    document.getElementById('ds3').className = 'd-step';
+    document.getElementById('dl1').className = 'd-line';
+    document.getElementById('dl2').className = 'd-line';
+    document.getElementById('drawer-badge').textContent = 'Find your stack';
+  }
+}
+
+function closeStackDrawer() {
+  document.getElementById('stack-drawer-overlay').classList.remove('open');
+  document.getElementById('stack-drawer').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// Close on Escape
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape' && document.getElementById('stack-drawer').classList.contains('open')) {
+    closeStackDrawer();
+  }
+});
+  </script>
 </body>
 
 </html>
