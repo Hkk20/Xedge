@@ -1375,60 +1375,7 @@
       }
     }
 
-    /* ── STACK DRAWER ── */
-    .stack-drawer-overlay {
-      position: fixed; inset: 0; z-index: 200;
-      background: rgba(0,0,0,0.65);
-      backdrop-filter: blur(4px);
-      opacity: 0; pointer-events: none;
-      transition: opacity .3s ease;
-    }
-    .stack-drawer-overlay.open { opacity: 1; pointer-events: auto; }
-
-    .stack-drawer {
-      position: fixed; top: 0; right: 0; bottom: 0;
-      width: min(520px, 100vw);
-      z-index: 201;
-      background: #0d1117;
-      border-left: 1px solid rgba(255,255,255,0.08);
-      transform: translateX(100%);
-      transition: transform .35s cubic-bezier(.4,0,.2,1);
-      display: flex; flex-direction: column;
-      overflow: hidden;
-    }
-    .stack-drawer.open { transform: translateX(0); }
-
-    .drawer-header {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 20px 24px;
-      border-bottom: 1px solid rgba(255,255,255,0.07);
-      flex-shrink: 0;
-    }
-    .drawer-header-left { display: flex; align-items: center; gap: 10px; }
-    .drawer-badge {
-      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.1em;
-      text-transform: uppercase; color: #60a5fa;
-      background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.2);
-      border-radius: 100px; padding: 4px 12px;
-    }
-    .drawer-close {
-      width: 32px; height: 32px; border-radius: 50%;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.08);
-      color: #9ca3af; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      transition: background .15s, color .15s;
-    }
-    .drawer-close:hover { background: rgba(255,255,255,0.1); color: #fff; }
-    .drawer-close svg { width: 14px; height: 14px; }
-
-    .drawer-body {
-      flex: 1; overflow-y: auto; padding: 28px 24px 32px;
-      scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.1) transparent;
-    }
-    .drawer-body::-webkit-scrollbar { width: 4px; }
-    .drawer-body::-webkit-scrollbar-thumb { background: rgba(255,255,255,.1); border-radius: 4px; }
-
+    
     /* Step indicator */
     .drawer-steps {
       display: flex; align-items: center; gap: 8px; margin-bottom: 28px;
@@ -1545,6 +1492,463 @@
     }
     .drawer-cta-sec:hover { background: rgba(255,255,255,0.08); color: #fff; }
 
+    /* ════════════════════════════════════
+       XEDGE INTERACTIVE GUIDE MODAL CSS
+    ════════════════════════════════════ */
+
+    #xg-overlay {
+      position: fixed; inset: 0; z-index: 900;
+      background: rgba(4,6,10,0.88);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      opacity: 0; pointer-events: none;
+      transition: opacity .35s ease;
+    }
+    #xg-overlay.xg-open { opacity: 1; pointer-events: auto; }
+
+    #xg-modal {
+      position: fixed;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -48%) scale(0.96);
+      z-index: 901;
+      width: min(900px, 96vw);
+      max-height: 90vh;
+      background: #0b0f15;
+      border: 1px solid rgba(255,255,255,0.09);
+      border-radius: 24px;
+      overflow: hidden;
+      display: flex; flex-direction: column;
+      opacity: 0; pointer-events: none;
+      transition: transform .35s cubic-bezier(.4,0,.2,1), opacity .35s ease;
+      box-shadow: 0 40px 120px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.04) inset;
+    }
+    #xg-modal.xg-open {
+      transform: translate(-50%, -50%) scale(1);
+      opacity: 1; pointer-events: auto;
+    }
+
+    /* ── progress ── */
+    #xg-progress-wrap {
+      height: 3px; background: rgba(255,255,255,0.05); flex-shrink: 0;
+    }
+    #xg-progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #3b82f6, #6366f1);
+      width: 0%; transition: width .5s cubic-bezier(.4,0,.2,1);
+    }
+
+    /* ── step label ── */
+    #xg-step-label {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 28px 0;
+      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; color: #4b5a75;
+      flex-shrink: 0;
+    }
+    #xg-step-label span { color: #60a5fa; }
+
+    /* ── close ── */
+    #xg-close {
+      position: absolute; top: 14px; right: 18px;
+      width: 32px; height: 32px; border-radius: 50%;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: #6b7a9a; cursor: pointer; z-index: 10;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .15s, color .15s;
+    }
+    #xg-close:hover { background: rgba(255,255,255,0.1); color: #fff; }
+
+    /* ── screens ── */
+    #xg-screens { flex: 1; overflow-y: auto; min-height: 0; }
+
+    .xg-screen { display: none; }
+    .xg-screen.xg-active { display: flex; }
+
+    .xg-screen-inner {
+      width: 100%; max-width: 580px; margin: 0 auto;
+      padding: 32px 28px 36px;
+    }
+    .xg-screen-inner.xg-center { text-align: center; align-items: center; display: flex; flex-direction: column; justify-content: center; min-height: 420px; }
+
+    /* ── typography ── */
+    .xg-eyebrow {
+      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em;
+      text-transform: uppercase; color: #3b82f6; margin-bottom: 10px;
+    }
+    .xg-title {
+      font-size: clamp(1.4rem, 3vw, 1.9rem);
+      font-weight: 800; line-height: 1.2;
+      margin: 0 0 10px; color: #f0f4ff;
+    }
+    .xg-sub {
+      font-size: 0.92rem; color: #8b93b0;
+      line-height: 1.7; margin: 0 0 28px;
+    }
+
+    /* ── textarea ── */
+    .xg-textarea-wrap { position: relative; margin-bottom: 16px; }
+    .xg-textarea {
+      width: 100%; background: rgba(17,24,39,0.8);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 14px; padding: 16px 18px;
+      color: #f0f4ff; font-family: inherit;
+      font-size: 0.95rem; line-height: 1.7;
+      outline: none; resize: none;
+      transition: border-color .2s;
+    }
+    .xg-textarea:focus { border-color: rgba(59,130,246,0.5); }
+    .xg-textarea::placeholder { color: #4b5a75; }
+    .xg-char-count {
+      position: absolute; bottom: 10px; right: 14px;
+      font-size: 0.72rem; color: #4b5a75;
+    }
+
+    /* ── example chips ── */
+    .xg-examples { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 28px; }
+    .xg-examples-label { font-size: 0.76rem; color: #4b5a75; }
+    .xg-example-chip {
+      font-size: 0.76rem; font-weight: 500;
+      color: #60a5fa; background: rgba(59,130,246,0.08);
+      border: 1px solid rgba(59,130,246,0.2);
+      border-radius: 100px; padding: 5px 12px;
+      cursor: pointer; font-family: inherit;
+      transition: background .15s, border-color .15s;
+    }
+    .xg-example-chip:hover { background: rgba(59,130,246,0.15); border-color: rgba(59,130,246,0.4); }
+
+    /* ── choice cards ── */
+    .xg-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 28px; }
+    .xg-cards-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+    .xg-card {
+      background: rgba(17,24,39,0.6);
+      border: 1.5px solid rgba(255,255,255,0.07);
+      border-radius: 16px; padding: 20px 18px;
+      text-align: left; cursor: pointer; color: #f0f4ff;
+      font-family: inherit;
+      transition: border-color .2s, background .2s, transform .15s;
+    }
+    .xg-card:hover {
+      border-color: rgba(99,102,241,0.45);
+      background: rgba(99,102,241,0.07);
+      transform: translateY(-3px);
+    }
+    .xg-card.xg-selected {
+      border-color: #6366f1;
+      background: rgba(99,102,241,0.12);
+    }
+    .xg-card-icon { font-size: 1.6rem; margin-bottom: 10px; display: block; }
+    .xg-card-title { font-size: 0.9rem; font-weight: 700; margin-bottom: 4px; }
+    .xg-card-sub   { font-size: 0.78rem; color: #8b93b0; line-height: 1.4; }
+
+    /* ── next / back buttons ── */
+    .xg-btn-next {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      width: 100%;
+      background: linear-gradient(135deg, #3b82f6, #6366f1);
+      border: none; border-radius: 12px; padding: 14px;
+      font-size: 0.95rem; font-weight: 700; color: #fff;
+      cursor: pointer; font-family: inherit;
+      transition: opacity .2s, transform .15s;
+    }
+    .xg-btn-next:disabled { opacity: 0.35; cursor: not-allowed; transform: none !important; }
+    .xg-btn-next:not(:disabled):hover { opacity: 0.88; transform: translateY(-2px); }
+
+    .xg-back {
+      background: none; border: none; cursor: pointer;
+      font-size: 0.82rem; color: #4b5a75; padding: 0;
+      margin-top: 16px; display: inline-flex; align-items: center; gap: 5px;
+      font-family: inherit; transition: color .15s;
+    }
+    .xg-back:hover { color: #9ca3af; }
+
+    /* ── generating animation ── */
+    .xg-gen-ring {
+      position: relative; width: 80px; height: 80px; margin: 0 auto;
+    }
+    .xg-gen-ring::before, .xg-gen-ring::after {
+      content: ''; position: absolute; inset: 0;
+      border-radius: 50%;
+      border: 2px solid transparent;
+    }
+    .xg-gen-ring::before {
+      border-top-color: #3b82f6;
+      border-right-color: #6366f1;
+      animation: xg-spin 1s linear infinite;
+    }
+    .xg-gen-ring::after {
+      inset: 8px;
+      border-top-color: rgba(59,130,246,0.3);
+      animation: xg-spin 1.5s linear infinite reverse;
+    }
+    @keyframes xg-spin { to { transform: rotate(360deg); } }
+
+    .xg-gen-logo {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .xg-gen-steps {
+      display: flex; flex-direction: column; gap: 10px;
+      margin-top: 28px; text-align: left; width: 100%; max-width: 360px;
+    }
+    .xg-gen-step {
+      display: flex; align-items: center; gap: 12px;
+      font-size: 0.85rem; color: #4b5a75;
+      transition: color .3s;
+    }
+    .xg-gen-step.done { color: #9ca3af; }
+    .xg-gen-step.active { color: #f0f4ff; }
+    .xg-gen-step-dot {
+      width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+      background: rgba(255,255,255,0.1); transition: background .3s;
+    }
+    .xg-gen-step.done .xg-gen-step-dot   { background: #34d399; }
+    .xg-gen-step.active .xg-gen-step-dot { background: #3b82f6; animation: xg-pulse 1s infinite; }
+    @keyframes xg-pulse { 0%,100%{opacity:1}50%{opacity:.4} }
+
+    /* ── result layout ── */
+    .xg-result-layout {
+      display: grid; grid-template-columns: 1fr 1.4fr;
+      min-height: 500px;
+    }
+    .xg-result-left {
+      padding: 36px 28px;
+      border-right: 1px solid rgba(255,255,255,0.06);
+      display: flex; flex-direction: column;
+    }
+    .xg-result-right { padding: 28px 28px 28px 24px; overflow-y: auto; }
+
+    .xg-result-badge {
+      display: inline-block; font-size: 0.7rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: #34d399; background: rgba(52,211,153,0.1);
+      border: 1px solid rgba(52,211,153,0.25);
+      border-radius: 100px; padding: 4px 12px; margin-bottom: 16px;
+      align-self: flex-start;
+    }
+    .xg-result-title {
+      font-size: 1.1rem; font-weight: 800; line-height: 1.3;
+      margin: 0 0 10px; color: #f0f4ff;
+    }
+    .xg-result-sub { font-size: 0.83rem; color: #8b93b0; line-height: 1.7; flex: 1; }
+
+    .xg-result-meta {
+      display: flex; flex-direction: column; gap: 8px;
+      margin: 20px 0; padding: 16px;
+      background: rgba(17,24,39,0.6);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 12px;
+    }
+    .xg-meta-row {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 0.8rem; color: #8b93b0;
+    }
+    .xg-meta-label { color: #4b5a75; width: 70px; flex-shrink: 0; }
+    .xg-meta-val { color: #d1d5db; font-weight: 600; }
+
+    .xg-result-actions { display: flex; flex-direction: column; gap: 10px; margin-top: 8px; }
+    .xg-btn-primary {
+      background: linear-gradient(135deg, #3b82f6, #6366f1);
+      border: none; border-radius: 10px; padding: 12px;
+      font-size: 0.88rem; font-weight: 700; color: #fff;
+      cursor: pointer; font-family: inherit;
+      transition: opacity .15s, transform .15s;
+    }
+    .xg-btn-primary:hover { opacity: .85; transform: translateY(-1px); }
+    .xg-btn-ghost {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px; padding: 12px;
+      font-size: 0.88rem; color: #9ca3af;
+      cursor: pointer; font-family: inherit;
+      transition: background .15s, color .15s;
+    }
+    .xg-btn-ghost:hover { background: rgba(255,255,255,0.08); color: #fff; }
+
+    /* ── tabs ── */
+    .xg-tabs {
+      display: flex; gap: 4px; margin-bottom: 20px;
+      background: rgba(17,24,39,0.6); border-radius: 10px; padding: 4px;
+    }
+    .xg-tab {
+      flex: 1; padding: 8px 12px; border-radius: 8px;
+      background: none; border: none; color: #6b7a9a;
+      font-size: 0.82rem; font-weight: 600; cursor: pointer;
+      font-family: inherit; transition: background .15s, color .15s;
+    }
+    .xg-tab.active { background: rgba(59,130,246,0.15); color: #60a5fa; }
+    .xg-tab:hover:not(.active) { color: #9ca3af; }
+
+    /* ── tool rows ── */
+    .xg-tool-row {
+      display: flex; gap: 14px; padding: 14px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      animation: xg-fadein .3s ease both;
+    }
+    .xg-tool-row:last-child { border-bottom: none; }
+    @keyframes xg-fadein { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:none} }
+    .xg-tool-num {
+      width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0; margin-top: 1px;
+      background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.72rem; font-weight: 800; color: #60a5fa;
+    }
+    .xg-tool-info { flex: 1; }
+    .xg-tool-name { font-size: 0.92rem; font-weight: 700; margin-bottom: 3px; color: #f0f4ff; }
+    .xg-tool-why  { font-size: 0.8rem; color: #8b93b0; line-height: 1.55; }
+    .xg-tool-foot { display: flex; align-items: center; gap: 8px; margin-top: 7px; }
+    .xg-tool-when {
+      font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+      color: #34d399; background: rgba(52,211,153,0.1);
+      border-radius: 100px; padding: 3px 9px;
+    }
+    .xg-tool-cost {
+      font-size: 0.68rem; font-weight: 600; color: #a78bfa;
+      background: rgba(167,139,250,0.1); border-radius: 100px; padding: 3px 9px;
+    }
+
+    /* ── plan rows ── */
+    .xg-plan-row {
+      display: flex; gap: 14px; margin-bottom: 16px;
+      animation: xg-fadein .3s ease both;
+    }
+    .xg-plan-left { display: flex; flex-direction: column; align-items: center; gap: 0; }
+    .xg-plan-week {
+      font-size: 0.7rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase;
+      color: #3b82f6; white-space: nowrap; padding-top: 2px;
+    }
+    .xg-plan-line { width: 1px; flex: 1; background: rgba(59,130,246,0.2); margin-top: 6px; }
+    .xg-plan-content { flex: 1; }
+    .xg-plan-title { font-size: 0.88rem; font-weight: 700; color: #f0f4ff; margin-bottom: 4px; }
+    .xg-plan-desc  { font-size: 0.8rem; color: #8b93b0; line-height: 1.6; }
+
+    /* ── tips ── */
+    .xg-tip-row {
+      display: flex; gap: 12px; padding: 14px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      animation: xg-fadein .3s ease both;
+    }
+    .xg-tip-row:last-child { border-bottom: none; }
+    .xg-tip-icon {
+      width: 32px; height: 32px; border-radius: 8px; flex-shrink: 0;
+      background: rgba(251,191,36,0.1);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+    }
+    .xg-tip-title { font-size: 0.88rem; font-weight: 700; color: #f0f4ff; margin-bottom: 3px; }
+    .xg-tip-body  { font-size: 0.8rem; color: #8b93b0; line-height: 1.55; }
+
+    /* saved toast */
+    #xg-toast {
+      position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(20px);
+      background: #111827; border: 1px solid rgba(52,211,153,0.3);
+      border-radius: 100px; padding: 12px 24px;
+      font-size: 0.88rem; font-weight: 600; color: #34d399;
+      z-index: 9999; opacity: 0;
+      transition: opacity .3s, transform .3s;
+      pointer-events: none;
+    }
+    #xg-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* ── responsive ── */
+    @media (max-width: 680px) {
+      #xg-modal { width: 100vw; height: 100dvh; max-height: 100dvh; border-radius: 0; top: 0; left: 0; transform: translateY(100%) scale(1); }
+      #xg-modal.xg-open { transform: translateY(0) scale(1); }
+      .xg-result-layout { grid-template-columns: 1fr; }
+      .xg-result-left { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.06); padding: 24px 20px; }
+      .xg-result-right { padding: 20px; }
+      .xg-cards-3 { grid-template-columns: 1fr; }
+      .xg-screen-inner { padding: 24px 20px 28px; }
+    }
+
+
+    /* ── upsell button ── */
+    .xg-btn-upsell {
+      display: flex; align-items: center; gap: 12px;
+      width: 100%; text-align: left;
+      background: linear-gradient(135deg, rgba(251,191,36,0.12), rgba(245,158,11,0.08));
+      border: 1px solid rgba(251,191,36,0.3);
+      border-radius: 14px; padding: 14px 16px;
+      cursor: pointer; font-family: inherit;
+      transition: border-color .2s, background .2s, transform .15s;
+      position: relative; overflow: hidden;
+    }
+    .xg-btn-upsell::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(251,191,36,0.06), transparent);
+      transform: translateX(-100%);
+      transition: transform .6s ease;
+    }
+    .xg-btn-upsell:hover::before { transform: translateX(100%); }
+    .xg-btn-upsell:hover { border-color: rgba(251,191,36,0.5); transform: translateY(-2px); }
+    .xg-upsell-icon { font-size: 1.3rem; flex-shrink: 0; }
+    .xg-upsell-title { display: block; font-size: 0.88rem; font-weight: 700; color: #fbbf24; margin-bottom: 2px; }
+    .xg-upsell-sub   { display: block; font-size: 0.74rem; color: #92700a; line-height: 1.4; }
+    .xg-upsell-badge {
+      margin-left: auto; flex-shrink: 0;
+      font-size: 0.65rem; font-weight: 800; letter-spacing: 0.08em;
+      color: #fbbf24; background: rgba(251,191,36,0.15);
+      border: 1px solid rgba(251,191,36,0.3);
+      border-radius: 100px; padding: 3px 9px;
+    }
+
+    /* ── save button ── */
+    .xg-btn-save {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      width: 100%;
+      background: rgba(59,130,246,0.1);
+      border: 1px solid rgba(59,130,246,0.25);
+      border-radius: 12px; padding: 12px;
+      font-size: 0.88rem; font-weight: 600; color: #60a5fa;
+      cursor: pointer; font-family: inherit;
+      transition: background .2s, border-color .2s, transform .15s;
+    }
+    .xg-btn-save:hover { background: rgba(59,130,246,0.18); border-color: rgba(59,130,246,0.45); transform: translateY(-1px); }
+    .xg-btn-save.saved { color: #34d399; background: rgba(52,211,153,0.1); border-color: rgba(52,211,153,0.3); }
+    .xg-btn-save:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    /* ── sign-in prompt overlay ── */
+    #xg-signin-prompt {
+      position: absolute; inset: 0; z-index: 10;
+      background: rgba(11,15,21,0.92);
+      backdrop-filter: blur(8px);
+      display: none; align-items: center; justify-content: center;
+      border-radius: 24px;
+    }
+    #xg-signin-prompt.show { display: flex; }
+    .xg-signin-box {
+      background: #111827;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 20px; padding: 40px 36px;
+      text-align: center; max-width: 360px; width: 100%;
+    }
+    .xg-signin-icon { font-size: 2.5rem; margin-bottom: 16px; }
+    .xg-signin-title { font-size: 1.2rem; font-weight: 800; margin-bottom: 8px; color: #f0f4ff; }
+    .xg-signin-sub { font-size: 0.85rem; color: #8b93b0; line-height: 1.6; margin-bottom: 28px; }
+    .xg-signin-google {
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      width: 100%; padding: 13px;
+      background: #fff; color: #111827;
+      border: none; border-radius: 12px;
+      font-size: 0.9rem; font-weight: 700;
+      cursor: pointer; font-family: inherit;
+      transition: opacity .15s, transform .15s;
+      margin-bottom: 10px;
+    }
+    .xg-signin-google:hover { opacity: .9; transform: translateY(-1px); }
+    .xg-signin-dismiss {
+      background: none; border: none; cursor: pointer;
+      font-size: 0.82rem; color: #4b5a75; font-family: inherit;
+      transition: color .15s; margin-top: 4px;
+    }
+    .xg-signin-dismiss:hover { color: #9ca3af; }
+
+    /* ── upsell sub-label color fix dark bg ── */
+    .xg-upsell-sub { color: #a16207 !important; }
+
   </style>
 
   <!-- Structured Data for SEO -->
@@ -1654,19 +2058,19 @@
         <div class="goal-entry" role="group" aria-label="Choose your goal">
           <div class="goal-entry-label">What are you trying to do?</div>
           <div class="goal-grid">
-            <button class="goal-btn" onclick="openStackDrawer('start-business')">
+            <button class="goal-btn" onclick="openGuide('start-business')">
               <div class="goal-btn-title">Start a business</div>
               <div class="goal-btn-sub">Turn an idea into income</div>
             </button>
-            <button class="goal-btn" onclick="openStackDrawer('build-app')">
+            <button class="goal-btn" onclick="openGuide('build-app')">
               <div class="goal-btn-title">Build an app</div>
               <div class="goal-btn-sub">No-code or with code</div>
             </button>
-            <button class="goal-btn" onclick="openStackDrawer('grow-audience')">
+            <button class="goal-btn" onclick="openGuide('grow-audience')">
               <div class="goal-btn-title">Grow an audience</div>
               <div class="goal-btn-sub">Content, social, brand</div>
             </button>
-            <button class="goal-btn" onclick="openStackDrawer('automate-work')">
+            <button class="goal-btn" onclick="openGuide('automate-work')">
               <div class="goal-btn-title">Automate my work</div>
               <div class="goal-btn-sub">Save hours every week</div>
             </button>
@@ -2058,6 +2462,7 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js" defer></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js" defer></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js" defer></script>
 
   <!-- ═══════════════════════════════════════
        ALL JAVASCRIPT — single DOMContentLoaded
@@ -2239,9 +2644,9 @@
         ];
 
         grid.innerHTML = goals.map(g => `
-        <div class="xe-goal-card" onclick="openStackDrawer('${g.id}')" role="button" tabindex="0"
+        <div class="xe-goal-card" onclick="openGuide('${g.id}')" role="button" tabindex="0"
              aria-label="Browse ${g.label} stacks"
-             onkeydown="if(event.key==='Enter')openStackDrawer('${g.id}')">
+             onkeydown="if(event.key==='Enter')openGuide('${g.id}')">
           <div class="xe-goal-logos">
             ${g.logos.map((d, i) => `
               <img src="https://www.google.com/s2/favicons?domain=${d}&sz=64"
@@ -2625,308 +3030,742 @@
   </script>
 
 
-  <!-- ═══ STACK DRAWER ═══ -->
-  <div id="stack-drawer-overlay" class="stack-drawer-overlay" onclick="closeStackDrawer()" aria-hidden="true"></div>
-  <aside id="stack-drawer" class="stack-drawer" role="dialog" aria-modal="true" aria-label="Your stack">
 
-    <div class="drawer-header">
-      <div class="drawer-header-left">
-        <img src="xedge-logo.png" alt="XEdge" width="24" height="24" style="border-radius:6px;"/>
-        <span id="drawer-badge" class="drawer-badge">Find your stack</span>
-      </div>
-      <button class="drawer-close" onclick="closeStackDrawer()" aria-label="Close">
-        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-        </svg>
+
+
+<!-- ═══════════════════════════════════════
+     XEDGE INTERACTIVE GUIDE MODAL
+═══════════════════════════════════════ -->
+<div id="xg-overlay" aria-hidden="true" onclick="if(event.target===this)xgClose()"></div>
+<div id="xg-modal" role="dialog" aria-modal="true" aria-label="XEdge stack guide">
+
+
+  <!-- Sign-in prompt overlay (shown inside modal) -->
+  <div id="xg-signin-prompt">
+    <div class="xg-signin-box">
+      <div class="xg-signin-icon">🔒</div>
+      <div class="xg-signin-title">Sign in to save your stack</div>
+      <p class="xg-signin-sub">Create a free account to save stacks, track your progress, and get personalised recommendations as you build.</p>
+      <button class="xg-signin-google" onclick="xgSignInAndSave()">
+        <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/></svg>
+        Continue with Google
       </button>
+      <button class="xg-signin-dismiss" onclick="xgDismissSignin()">Maybe later</button>
+    </div>
+  </div>
+
+  <!-- Close -->
+  <button id="xg-close" onclick="xgClose()" aria-label="Close guide">
+    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+    </svg>
+  </button>
+
+  <!-- Progress bar -->
+  <div id="xg-progress-wrap">
+    <div id="xg-progress-bar"></div>
+  </div>
+
+  <!-- Step label -->
+  <div id="xg-step-label"></div>
+
+  <!-- Screens -->
+  <div id="xg-screens">
+
+    <!-- ── SCREEN 0: Describe your idea ── -->
+    <div class="xg-screen" id="xgs-0">
+      <div class="xg-screen-inner">
+        <div class="xg-eyebrow">Let's figure out your stack</div>
+        <h2 class="xg-title">What's your idea?</h2>
+        <p class="xg-sub">Describe it in your own words. Even one rough sentence is enough — we'll take it from there.</p>
+        <div class="xg-textarea-wrap">
+          <textarea id="xg-idea-input" class="xg-textarea" placeholder="e.g. I want to build a marketplace where freelancers sell AI-generated templates..." maxlength="400" rows="4"></textarea>
+          <div class="xg-char-count"><span id="xg-char-num">0</span>/400</div>
+        </div>
+        <div class="xg-examples">
+          <span class="xg-examples-label">Try an example:</span>
+          <button class="xg-example-chip" onclick="xgFillExample(this)" data-val="I want to start a freelance video editing service using AI tools to work faster">Freelance service</button>
+          <button class="xg-example-chip" onclick="xgFillExample(this)" data-val="I want to build a SaaS tool that helps small businesses automate their social media posting">SaaS product</button>
+          <button class="xg-example-chip" onclick="xgFillExample(this)" data-val="I want to grow a newsletter about AI tools and eventually monetize it">Newsletter / content</button>
+        </div>
+        <button class="xg-btn-next" id="xg-btn-0" onclick="xgNext(0)" disabled>
+          Continue <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        </button>
+      </div>
     </div>
 
-    <div class="drawer-body">
-
-      <!-- Step indicators -->
-      <div class="drawer-steps">
-        <div class="d-step active" id="ds1">1</div>
-        <div class="d-line" id="dl1"></div>
-        <div class="d-step" id="ds2">2</div>
-        <div class="d-line" id="dl2"></div>
-        <div class="d-step" id="ds3">3</div>
-      </div>
-
-      <!-- Step 1: Where are you? -->
-      <div class="drawer-q active" id="dq1">
-        <div class="drawer-q-label">Step 1 of 2</div>
-        <div class="drawer-q-title">Where are you right now?</div>
-        <div class="drawer-q-sub">Be honest — it helps us pick the right stack for you.</div>
-        <div class="d-options">
-          <button class="d-opt" onclick="drawerStep2('idea')">
-            <div class="d-opt-title">Just have an idea</div>
-            <div class="d-opt-sub">Nothing built yet</div>
+    <!-- ── SCREEN 1: Stage ── -->
+    <div class="xg-screen" id="xgs-1">
+      <div class="xg-screen-inner">
+        <div class="xg-eyebrow">About you</div>
+        <h2 class="xg-title">Where are you right now?</h2>
+        <p class="xg-sub">This helps us pick the right tools for your stage — not too advanced, not too basic.</p>
+        <div class="xg-cards">
+          <button class="xg-card" onclick="xgPick(this,'stage','idea')">
+            <div class="xg-card-icon">💡</div>
+            <div class="xg-card-title">Just have the idea</div>
+            <div class="xg-card-sub">Haven't started anything yet</div>
           </button>
-          <button class="d-opt" onclick="drawerStep2('budget')">
-            <div class="d-opt-title">Idea + some budget</div>
-            <div class="d-opt-sub">Ready to invest a little</div>
+          <button class="xg-card" onclick="xgPick(this,'stage','building')">
+            <div class="xg-card-icon">🔨</div>
+            <div class="xg-card-title">Already building</div>
+            <div class="xg-card-sub">Started but need better tools</div>
           </button>
-          <button class="d-opt" onclick="drawerStep2('stuck')">
-            <div class="d-opt-title">Started but stuck</div>
-            <div class="d-opt-sub">Something isn't working</div>
+          <button class="xg-card" onclick="xgPick(this,'stage','stuck')">
+            <div class="xg-card-icon">🧱</div>
+            <div class="xg-card-title">Stuck somewhere</div>
+            <div class="xg-card-sub">Hit a wall, need to unblock</div>
           </button>
-          <button class="d-opt" onclick="drawerStep2('validate')">
-            <div class="d-opt-title">Want to test first</div>
-            <div class="d-opt-sub">Not sure people want it</div>
+          <button class="xg-card" onclick="xgPick(this,'stage','validate')">
+            <div class="xg-card-icon">🔬</div>
+            <div class="xg-card-title">Want to validate first</div>
+            <div class="xg-card-sub">Not sure people want this yet</div>
           </button>
         </div>
+        <button class="xg-btn-next" id="xg-btn-1" onclick="xgNext(1)" disabled>
+          Continue <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        </button>
+        <button class="xg-back" onclick="xgBack(1)">← Back</button>
       </div>
-
-      <!-- Step 2: What type? -->
-      <div class="drawer-q" id="dq2">
-        <div class="drawer-q-label">Step 2 of 2</div>
-        <div class="drawer-q-title">What kind of business?</div>
-        <div class="drawer-q-sub">Pick the one closest to your idea.</div>
-        <div class="d-options">
-          <button class="d-opt" onclick="drawerShowStack('product')">
-            <div class="d-opt-title">Selling a product</div>
-            <div class="d-opt-sub">Physical or digital</div>
-          </button>
-          <button class="d-opt" onclick="drawerShowStack('service')">
-            <div class="d-opt-title">Selling a service</div>
-            <div class="d-opt-sub">Freelance or consulting</div>
-          </button>
-          <button class="d-opt" onclick="drawerShowStack('saas')">
-            <div class="d-opt-title">App or SaaS</div>
-            <div class="d-opt-sub">Software people pay for</div>
-          </button>
-          <button class="d-opt" onclick="drawerShowStack('content')">
-            <div class="d-opt-title">Content business</div>
-            <div class="d-opt-sub">Newsletter, creator, brand</div>
-          </button>
-        </div>
-        <button class="drawer-back" onclick="drawerBack(1)">← Back</button>
-      </div>
-
-      <!-- Step 3: Stack result -->
-      <div class="drawer-result" id="dq3">
-        <div id="drawer-result-content"></div>
-        <div class="drawer-cta-row">
-          <button class="drawer-cta-main" onclick="window.location.href='stack.html'">See all stacks →</button>
-          <button class="drawer-cta-sec" onclick="drawerBack(1)">Start over</button>
-        </div>
-      </div>
-
     </div>
-  </aside>
 
+    <!-- ── SCREEN 2: Budget ── -->
+    <div class="xg-screen" id="xgs-2">
+      <div class="xg-screen-inner">
+        <div class="xg-eyebrow">Resources</div>
+        <h2 class="xg-title">What's your budget to start?</h2>
+        <p class="xg-sub">We'll only recommend tools that fit what you can actually spend right now.</p>
+        <div class="xg-cards xg-cards-3">
+          <button class="xg-card" onclick="xgPick(this,'budget','zero')">
+            <div class="xg-card-icon">🆓</div>
+            <div class="xg-card-title">$0 — free only</div>
+            <div class="xg-card-sub">I need to start with no spend</div>
+          </button>
+          <button class="xg-card" onclick="xgPick(this,'budget','low')">
+            <div class="xg-card-icon">💵</div>
+            <div class="xg-card-title">Under $50/mo</div>
+            <div class="xg-card-sub">Small budget, need it to count</div>
+          </button>
+          <button class="xg-card" onclick="xgPick(this,'budget','open')">
+            <div class="xg-card-icon">🚀</div>
+            <div class="xg-card-title">Open to investing</div>
+            <div class="xg-card-sub">Will spend if the ROI is there</div>
+          </button>
+        </div>
+        <button class="xg-btn-next" id="xg-btn-2" onclick="xgNext(2)" disabled>
+          Continue <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        </button>
+        <button class="xg-back" onclick="xgBack(2)">← Back</button>
+      </div>
+    </div>
+
+    <!-- ── SCREEN 3: Skill level ── -->
+    <div class="xg-screen" id="xgs-3">
+      <div class="xg-screen-inner">
+        <div class="xg-eyebrow">Your background</div>
+        <h2 class="xg-title">How technical are you?</h2>
+        <p class="xg-sub">Honest answer only — this shapes which tools we recommend and how complex the stack gets.</p>
+        <div class="xg-cards">
+          <button class="xg-card" onclick="xgPick(this,'skill','none')">
+            <div class="xg-card-icon">👋</div>
+            <div class="xg-card-title">Not technical at all</div>
+            <div class="xg-card-sub">No code, no experience</div>
+          </button>
+          <button class="xg-card" onclick="xgPick(this,'skill','some')">
+            <div class="xg-card-icon">⚡</div>
+            <div class="xg-card-title">Some basics</div>
+            <div class="xg-card-sub">Can follow tutorials</div>
+          </button>
+          <button class="xg-card" onclick="xgPick(this,'skill','mid')">
+            <div class="xg-card-icon">💻</div>
+            <div class="xg-card-title">Comfortable with tools</div>
+            <div class="xg-card-sub">Used no-code apps before</div>
+          </button>
+          <button class="xg-card" onclick="xgPick(this,'skill','dev')">
+            <div class="xg-card-icon">🧑‍💻</div>
+            <div class="xg-card-title">Developer</div>
+            <div class="xg-card-sub">Can read and write code</div>
+          </button>
+        </div>
+        <button class="xg-btn-next" id="xg-btn-3" onclick="xgNext(3)" disabled>
+          Build my stack <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        </button>
+        <button class="xg-back" onclick="xgBack(3)">← Back</button>
+      </div>
+    </div>
+
+    <!-- ── SCREEN 4: Generating ── -->
+    <div class="xg-screen" id="xgs-4">
+      <div class="xg-screen-inner xg-center">
+        <div id="xg-gen-anim">
+          <div class="xg-gen-ring"></div>
+          <div class="xg-gen-logo">
+            <img src="xedge-logo.png" width="36" height="36" alt="XEdge" style="border-radius:10px;"/>
+          </div>
+        </div>
+        <h2 class="xg-title" style="margin-top:28px;" id="xg-gen-title">Building your stack…</h2>
+        <p class="xg-sub" id="xg-gen-sub">Analysing your idea and matching the best tools</p>
+        <div class="xg-gen-steps" id="xg-gen-steps"></div>
+      </div>
+    </div>
+
+    <!-- ── SCREEN 5: Stack result ── -->
+    <div class="xg-screen" id="xgs-5">
+      <div class="xg-result-layout">
+
+        <!-- Left: summary -->
+        <div class="xg-result-left">
+          <div class="xg-result-badge" id="xg-result-badge"></div>
+          <h2 class="xg-result-title" id="xg-result-title"></h2>
+          <p class="xg-result-sub" id="xg-result-sub"></p>
+
+          <div class="xg-result-meta" id="xg-result-meta"></div>
+
+          <div class="xg-result-actions">
+            <button class="xg-btn-upsell" onclick="xgDeepPlan()">
+              <span class="xg-upsell-icon">⚡</span>
+              <span>
+                <span class="xg-upsell-title">Get your deep-dive plan</span>
+                <span class="xg-upsell-sub">Week-by-week execution, tool tutorials &amp; 1-on-1 guidance</span>
+              </span>
+              <span class="xg-upsell-badge">Pro</span>
+            </button>
+            <button class="xg-btn-save" id="xg-save-btn" onclick="xgSaveStack()">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="15" height="15"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
+              <span id="xg-save-label">Save this stack</span>
+            </button>
+            <button class="xg-btn-ghost" onclick="window.location.href='stack.html'">
+              Explore all stacks →
+            </button>
+          </div>
+          <button class="xg-back" style="margin-top:16px;" onclick="xgReset()">↺ Start over</button>
+        </div>
+
+        <!-- Right: tools + plan tabs -->
+        <div class="xg-result-right">
+          <div class="xg-tabs">
+            <button class="xg-tab active" onclick="xgTab(this,'tools')">Your tools</button>
+            <button class="xg-tab" onclick="xgTab(this,'plan')">4-week plan</button>
+            <button class="xg-tab" onclick="xgTab(this,'tips')">Pro tips</button>
+          </div>
+
+          <div class="xg-tab-content" id="xg-tab-tools"></div>
+          <div class="xg-tab-content" id="xg-tab-plan" style="display:none;"></div>
+          <div class="xg-tab-content" id="xg-tab-tips" style="display:none;"></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /xg-screens -->
+</div>
+
+  <div id="xg-toast">✓ Stack saved to your profile</div>
 
   <script>
-/* ─── STACK DRAWER ─── */
-var _drawerGoal = '';
-var _drawerStage = '';
+  /* ════════════════════════════════════
+     XEDGE INTERACTIVE GUIDE — GLOBAL JS
+  ════════════════════════════════════ */
+  (function() {
+    var XG = {
+      goal:  '',
+      stage: '',
+      budget:'',
+      skill: '',
+      idea:  ''
+    };
 
-var DRAWER_STACKS = {
-  'product': {
-    badge: 'Zero to first sale',
-    title: 'Validate and sell your product — before building anything',
-    sub: 'This stack helps you test if people will actually pay for your idea in under 2 weeks.',
-    tools: [
-      { name: 'Notion', why: 'Write your idea clearly — what it is, who its for, what problem it solves.', when: 'Day 1' },
-      { name: 'Framer', why: 'Build a simple landing page in hours. No code needed. Describe your product and add a buy button.', when: 'Days 2–3' },
-      { name: 'Gumroad', why: 'Set up payment in 10 minutes. Take pre-orders to validate demand before you build.', when: 'Day 3' },
-      { name: 'Claude AI', why: 'Write your landing page copy, product description, and outreach messages faster.', when: 'Throughout' },
-      { name: 'Beehiiv', why: 'Start collecting emails from day one. Your email list is your most valuable long-term asset.', when: 'Day 4+' }
-    ],
-    plan: [
-      { week: 'Week 1', task: 'Write your idea in one paragraph. Build a landing page. Share it with 20 people you know and ask for honest feedback.' },
-      { week: 'Week 2', task: 'Post it in 3 relevant communities. Try to get 10 email signups or 1 pre-order.' },
-      { week: 'Week 3', task: 'Talk to 5 signups on a call. Ask what they expected. Build based on what you learn.' },
-      { week: 'Week 4', task: 'Ship a simple version to your first users. Done beats perfect. Get feedback and iterate.' }
-    ]
-  },
-  'service': {
-    badge: 'First client in 2 weeks',
-    title: 'Land your first paying client with zero experience or portfolio',
-    sub: 'Services are the fastest way to make money from a skill. This stack gets you from idea to paid client fast.',
-    tools: [
-      { name: 'Notion', why: 'Create a one-page offer doc — what you do, who its for, what they get, and the price.', when: 'Day 1' },
-      { name: 'Cal.com', why: 'Free booking link so clients can book calls with you instantly. Looks professional immediately.', when: 'Day 1' },
-      { name: 'Claude AI', why: 'Write your outreach messages, proposals, and service descriptions. Cuts writing time by 80%.', when: 'Throughout' },
-      { name: 'Framer', why: 'Once you have 1–2 clients, build a simple portfolio page to show your work.', when: 'Week 3+' },
-      { name: 'Notion invoicing', why: 'Use a Notion invoice template to bill clients professionally from day one.', when: 'When you close' }
-    ],
-    plan: [
-      { week: 'Week 1', task: 'Define your service clearly. Message 10 people in your network who might need this or know someone who does.' },
-      { week: 'Week 2', task: 'Do 5 discovery calls. Offer 1 free or discounted project to get a case study.' },
-      { week: 'Week 3', task: 'Deliver your first project. Ask for a testimonial immediately. Post about what you learned.' },
-      { week: 'Week 4', task: 'Use your testimonial to reach out to 20 more clients. Raise your price slightly. Repeat.' }
-    ]
-  },
-  'saas': {
-    badge: 'Build without code',
-    title: 'Turn your app idea into a working product — no coding required',
-    sub: 'You dont need to be a developer anymore. This stack gets you to a working MVP fast.',
-    tools: [
-      { name: 'Bolt.new', why: 'Describe your app in plain English and it generates working code instantly.', when: 'Days 1–3' },
-      { name: 'Supabase', why: 'Free database and backend. Bolt integrates with it directly — no setup needed.', when: 'Day 2+' },
-      { name: 'Stripe', why: 'Add payments to your app in one afternoon. Start charging users as soon as you have something working.', when: 'Week 2' },
-      { name: 'Framer', why: 'Build a marketing landing page for your app. Drives signups while you build.', when: 'Week 1' },
-      { name: 'Beehiiv', why: 'Collect emails before the app is ready. Launch to a warm audience instead of zero.', when: 'Week 1+' }
-    ],
-    plan: [
-      { week: 'Week 1', task: 'Write a one-paragraph description of exactly what your app does. Build a landing page. Start collecting emails.' },
-      { week: 'Week 2', task: 'Use Bolt to build your first version. Keep it to one core feature only. Dont add more until someone pays.' },
-      { week: 'Week 3', task: 'Share with your email list. Offer founding member pricing. Get 5 people to try it.' },
-      { week: 'Week 4', task: 'Fix the top 3 complaints. Add payments. Aim for your first paying user before adding any new features.' }
-    ]
-  },
-  'content': {
-    badge: 'Audience from zero',
-    title: 'Build an audience around your idea — and eventually monetize it',
-    sub: 'Content businesses compound powerfully over time. This stack helps you start consistently from day one.',
-    tools: [
-      { name: 'Beehiiv', why: 'Start a newsletter — email is the most valuable audience you can own. Free until 2,500 subscribers.', when: 'Day 1' },
-      { name: 'Claude AI', why: 'Use AI to help outline, draft, and edit your content faster. You provide the ideas and voice.', when: 'Throughout' },
-      { name: 'Opus Clip', why: 'Turn any long video into short clips for Instagram, TikTok, and YouTube Shorts automatically.', when: 'Week 2+' },
-      { name: 'Buffer', why: 'Schedule all your social posts in one place so you can batch-create and stay consistent.', when: 'Week 1+' },
-      { name: 'Gumroad', why: 'When you have an audience, sell a simple digital product. Easy to set up, no upfront cost.', when: 'Month 2+' }
-    ],
-    plan: [
-      { week: 'Week 1', task: 'Pick one platform to focus on. Publish one piece of content. Tell everyone you know.' },
-      { week: 'Week 2', task: 'Publish 3 times. Study what got the most response. Double down on that format.' },
-      { week: 'Week 3', task: 'Reach out to 5 people in your niche. Comment on their content. Build relationships.' },
-      { week: 'Week 4', task: 'Set a publishing schedule you can keep for 6 months. Consistency beats quality at this stage.' }
-    ]
+    var TOTAL_STEPS = 4; // 0-based screens 0..3 = questions, 4 = generating, 5 = result
+
+    /* ── stack data ── */
+    var STACKS = {
+      product: {
+        badge: 'Zero → First Sale',
+        title: 'Validate and sell your product before you build anything',
+        sub: 'This stack gets you from idea to your first real sale in under two weeks — without wasting time building the wrong thing.',
+        meta: { timeline: '2–3 weeks', difficulty: 'Beginner friendly', cost: '$0–$20/mo' },
+        tools: [
+          { name:'Notion',    why:'Write your idea as a one-pager — what it is, who it\'s for, what problem it solves. Clarity here saves weeks.', when:'Day 1', cost:'Free' },
+          { name:'Framer',    why:'Build a landing page in a few hours. No code. Add a buy or waitlist button and test if people actually want this.', when:'Days 2–3', cost:'Free' },
+          { name:'Gumroad',   why:'Take pre-orders or sell digital products in 10 minutes. Validates demand before you build anything.', when:'Day 3', cost:'Free' },
+          { name:'Claude AI', why:'Write landing page copy, outreach messages, and product descriptions 5x faster. Your unfair advantage.', when:'Throughout', cost:'Free tier' },
+          { name:'Beehiiv',   why:'Start collecting emails from day one. Your list is the most valuable thing you\'ll build — own it.', when:'Day 4+', cost:'Free to 2.5k' }
+        ],
+        plan: [
+          { week:'Week 1', title:'Write & launch your landing page', desc:'Describe your idea in one paragraph. Build a page on Framer. Share it with 20 people you actually know and ask for brutal feedback.' },
+          { week:'Week 2', title:'Get your first signups or sale', desc:'Post in 3 relevant communities. Try to get 10 email signups or 1 pre-order. Either result tells you something important.' },
+          { week:'Week 3', title:'Talk to real people', desc:'Call or message 5 people who signed up. Ask what they expected, what they\'d pay, what they were hoping for. Build based on this.' },
+          { week:'Week 4', title:'Ship the simplest version', desc:'Done beats perfect. Get something in people\'s hands. One feature, one use case. Gather feedback and iterate weekly.' }
+        ],
+        tips: [
+          { icon:'⚡', title:'Sell before you build', body:'Create the checkout page before the product exists. Pre-orders are proof of demand, not just interest.' },
+          { icon:'🎯', title:'Niche beats broad every time', body:'\"AI tools for freelance video editors\" beats \"AI productivity tools\" — specificity is how you get word-of-mouth.' },
+          { icon:'📧', title:'Email > social from day one', body:'Algorithms change. Your email list doesn\'t. Treat every visitor as a potential subscriber, not a visitor.' }
+        ]
+      },
+      service: {
+        badge: 'First Client in 2 Weeks',
+        title: 'Land your first paying client — no portfolio, no experience needed',
+        sub: 'Services are the fastest path from zero to income. This stack helps you look professional, reach the right people, and close your first client fast.',
+        meta: { timeline: '1–2 weeks', difficulty: 'No tech needed', cost: '$0–$15/mo' },
+        tools: [
+          { name:'Notion',      why:'Create a one-page offer doc — what you do, who it\'s for, what they get, price, and how to book. Send this instead of a website.', when:'Day 1', cost:'Free' },
+          { name:'Cal.com',     why:'Free booking link so clients can schedule a call without back-and-forth emails. Looks professional immediately.', when:'Day 1', cost:'Free' },
+          { name:'Claude AI',   why:'Write your outreach messages, service descriptions, and proposals. Cuts your writing time by 80%.', when:'Throughout', cost:'Free tier' },
+          { name:'Canva',       why:'Create a simple portfolio PDF or social post without any design skills. First impressions matter.', when:'Week 1', cost:'Free' },
+          { name:'Framer',      why:'Once you have 1–2 clients and a testimonial, build a simple portfolio site. Amplifies your credibility.', when:'Week 3+', cost:'Free' }
+        ],
+        plan: [
+          { week:'Week 1', title:'Define your offer and reach out', desc:'Write your one-page offer doc. Message 15 people in your network — not to pitch, just to ask if they know anyone who might need this.' },
+          { week:'Week 2', title:'Do your first discovery calls', desc:'Book 5 calls. Even no\'s are valuable — ask why. Offer one free or deeply discounted project to get your first case study.' },
+          { week:'Week 3', title:'Deliver and collect proof', desc:'Deliver your first project better than expected. Ask for a short written testimonial or a 1-minute Loom video the same day.' },
+          { week:'Week 4', title:'Use proof to get more clients', desc:'Your testimonial is now your best marketing asset. Use it in your outreach. Slowly raise your price each new client.' }
+        ],
+        tips: [
+          { icon:'💬', title:'Your first client is already in your network', body:'Post on LinkedIn, message old colleagues, tell friends. The first client almost always comes from someone you already know.' },
+          { icon:'💰', title:'Price higher than feels comfortable', body:'Undercharging signals low confidence. Charge what feels slightly too high — then deliver work that justifies it.' },
+          { icon:'📋', title:'The offer doc does more than a website', body:'A clear, specific one-pager converts better than a vague portfolio site. Write down the outcome, not just the service.' }
+        ]
+      },
+      saas: {
+        badge: 'No Code → Live Product',
+        title: 'Build a working app or SaaS without writing a single line of code',
+        sub: 'You don\'t need a developer. This stack takes you from idea to a working, paying product — using the AI tools changing how software gets built.',
+        meta: { timeline: '2–4 weeks', difficulty: 'Some tech comfort', cost: '$0–$50/mo' },
+        tools: [
+          { name:'Bolt.new',   why:'Describe your app in plain English and it builds working React code instantly. The fastest way from idea to prototype.', when:'Days 1–3', cost:'Free tier' },
+          { name:'Supabase',   why:'Free database and backend that Bolt connects to directly. Handles auth, data storage, and APIs without configuration.', when:'Day 2+', cost:'Free tier' },
+          { name:'Stripe',     why:'Add real payments to your app in one afternoon. Don\'t wait — if people won\'t pay, you\'ll find out fast.', when:'Week 2', cost:'% of revenue' },
+          { name:'Framer',     why:'Build your marketing landing page separately from the app. Drive email signups while you\'re still building.', when:'Week 1', cost:'Free' },
+          { name:'Beehiiv',    why:'Collect emails before launch so you\'re not launching to silence. A warm list of 50 people beats 0 every time.', when:'Week 1+', cost:'Free to 2.5k' }
+        ],
+        plan: [
+          { week:'Week 1', title:'Landing page + email collection', desc:'Describe your app in one clear sentence. Build a Framer landing page. Start collecting emails from anyone who seems interested.' },
+          { week:'Week 2', title:'Build your MVP in Bolt', desc:'One core feature only. Not two, not three — one. The thing that makes your app worth using. Don\'t ship until someone would pay for that one thing.' },
+          { week:'Week 3', title:'Share with your list', desc:'Email your list. Offer founding member pricing. Get 5 people to actually use it and give you raw feedback — not polite feedback.' },
+          { week:'Week 4', title:'Fix, charge, repeat', desc:'Fix the top 3 most-mentioned problems. Add Stripe. Get your first paying user. Add zero new features until someone is paying.' }
+        ],
+        tips: [
+          { icon:'🔑', title:'One feature, fully working', body:'Most apps fail because they ship 10 half-built features. Ship one feature so good that people tell others about it.' },
+          { icon:'💸', title:'Add payments on day 7, not day 70', body:'If you wait until it\'s "ready" to charge, you\'ll keep building forever. Charge early and let revenue tell you what to build next.' },
+          { icon:'🧪', title:'Talk to users before writing code', body:'Before building anything, get 5 people to describe the problem in their own words. Build what they describe, not what you imagined.' }
+        ]
+      },
+      content: {
+        badge: 'Zero → Audience',
+        title: 'Build an audience around your idea — and turn it into income',
+        sub: 'Content businesses are slow to start but compound faster than almost anything. This stack helps you build consistently from day one and monetize when the time is right.',
+        meta: { timeline: 'Ongoing (6+ mo)', difficulty: 'No tech needed', cost: '$0–$20/mo' },
+        tools: [
+          { name:'Beehiiv',    why:'Start a newsletter. Email is the audience you own — no algorithm can take it from you. Free until 2,500 subscribers.', when:'Day 1', cost:'Free' },
+          { name:'Claude AI',  why:'Help outline, draft, and refine your content faster. You provide the ideas and voice — Claude handles the heavy lifting.', when:'Throughout', cost:'Free tier' },
+          { name:'Opus Clip',  why:'Turn any long video or podcast into short clips for Instagram, TikTok, and YouTube Shorts automatically.', when:'Week 2+', cost:'Free tier' },
+          { name:'Buffer',     why:'Schedule all your posts across platforms in one place. Batch-create on Monday, post all week automatically.', when:'Week 1+', cost:'Free tier' },
+          { name:'Gumroad',    why:'When you have an audience, sell a simple digital product — guide, template, course. Zero upfront cost.', when:'Month 2+', cost:'% of revenue' }
+        ],
+        plan: [
+          { week:'Week 1', title:'Pick one platform and publish', desc:'Don\'t try three platforms at once. Pick one. Publish your first piece. Tell everyone you know. Watch what happens.' },
+          { week:'Week 2', title:'Find what works', desc:'Publish 3 times. Study which piece got the most response — shares, replies, DMs. That topic is your lane.' },
+          { week:'Week 3', title:'Build relationships not just followers', desc:'Reach out to 5 people in your niche. Reply to their posts thoughtfully. Real relationships beat cold followers 10x.' },
+          { week:'Week 4', title:'Set a pace you can keep for 6 months', desc:'Decide: can you publish once a week for 6 months? That\'s the bar. Not viral — consistent. Consistency is your real moat.' }
+        ],
+        tips: [
+          { icon:'📬', title:'Build the list from post one', body:'Add a newsletter link to every piece of content from day one. Even 10 subscribers early beats scrambling for them later.' },
+          { icon:'🔁', title:'Repurpose aggressively', body:'One idea → newsletter issue → Twitter thread → short-form video → LinkedIn post. Same idea, five formats, five times the reach.' },
+          { icon:'🎯', title:'Specificity is the algorithm', body:'\"I help indie hackers grow their newsletter\" outperforms \"I write about tech\" every single time. Niche down hard early on.' }
+        ]
+      }
+    };
+
+    /* ── goal → type mapping ── */
+    var GOAL_MAP = {
+      'start-business': null,   // full flow
+      'build-app':      'saas',
+      'grow-audience':  'content',
+      'automate-work':  'service',
+      'make-money':     'product',
+      'create-content': 'content',
+      'learn-ai':       'product',
+      'save-time':      'service'
+    };
+
+    /* ── stage → type override if no Q2 ── */
+    function resolveType() {
+      // Derive from idea text keywords + stage
+      var idea = XG.idea.toLowerCase();
+      if (/newsletter|content|blog|write|audience|creator|youtube|tiktok|social|instagram/.test(idea)) return 'content';
+      if (/app|saas|software|platform|tool|subscription|dashboard|api/.test(idea)) return 'saas';
+      if (/freelan|consult|agency|service|client|design|edit|coach/.test(idea)) return 'service';
+      return 'product';
+    }
+
+    /* ── open / close ── */
+    window.openGuide = function(goal) {
+      XG.goal = goal; XG.stage = ''; XG.budget = ''; XG.skill = ''; XG.idea = '';
+      document.querySelectorAll('.xg-card').forEach(function(c){ c.classList.remove('xg-selected'); });
+      document.querySelectorAll('.xg-btn-next').forEach(function(b){ b.disabled = true; });
+      document.getElementById('xg-idea-input').value = '';
+      document.getElementById('xg-char-num').textContent = '0';
+
+      // If goal has a direct mapping (non-business), show full flow still but pre-fill type later
+      xgShowScreen(0);
+      document.getElementById('xg-overlay').classList.add('xg-open');
+      document.getElementById('xg-modal').classList.add('xg-open');
+      document.body.style.overflow = 'hidden';
+      setTimeout(function(){ document.getElementById('xg-idea-input').focus(); }, 400);
+    };
+
+    window.xgClose = function() {
+      document.getElementById('xg-overlay').classList.remove('xg-open');
+      document.getElementById('xg-modal').classList.remove('xg-open');
+      document.body.style.overflow = '';
+    };
+
+    /* ── screen management ── */
+    function xgShowScreen(n) {
+      document.querySelectorAll('.xg-screen').forEach(function(s){ s.classList.remove('xg-active'); });
+      var el = document.getElementById('xgs-' + n);
+      if (el) el.classList.add('xg-active');
+      // Scroll modal content to top
+      var screens = document.getElementById('xg-screens');
+      if (screens) screens.scrollTop = 0;
+
+      // Progress
+      var pct = n === 5 ? 100 : Math.round((n / TOTAL_STEPS) * 100);
+      document.getElementById('xg-progress-bar').style.width = pct + '%';
+
+      // Step label
+      var labels = ['', 'Step 1 of 3 — Your stage', 'Step 2 of 3 — Your budget', 'Step 3 of 3 — Your skills', '', ''];
+      var lbl = document.getElementById('xg-step-label');
+      if (n === 0) lbl.innerHTML = '<span style="color:#60a5fa;font-weight:700;">Stack Finder</span> &mdash; Describe your idea';
+      else if (n === 5) lbl.innerHTML = '<span style="color:#34d399;">&#10003; Your personalised stack is ready</span>';
+      else if (n === 4) lbl.innerHTML = '<span style="color:#60a5fa;">Stack Finder</span> &mdash; Building your stack';
+      else lbl.innerHTML = '<span style="color:#60a5fa;">Stack Finder</span> &mdash; ' + (labels[n] || '');
+    }
+
+    /* ── next / back ── */
+    window.xgNext = function(from) {
+      if (from === 0) { xgShowScreen(1); }
+      else if (from === 1) { xgShowScreen(2); }
+      else if (from === 2) { xgShowScreen(3); }
+      else if (from === 3) { xgRunGenerate(); }
+    };
+
+    window.xgBack = function(current) {
+      xgShowScreen(current - 1);
+    };
+
+    window.xgReset = function() {
+      xgShowScreen(0);
+      XG.stage = ''; XG.budget = ''; XG.skill = ''; XG.idea = '';
+      document.querySelectorAll('.xg-card').forEach(function(c){ c.classList.remove('xg-selected'); });
+    };
+
+    /* ── pick card ── */
+    window.xgPick = function(el, key, val) {
+      // Deselect siblings
+      var parent = el.closest('.xg-cards');
+      parent.querySelectorAll('.xg-card').forEach(function(c){ c.classList.remove('xg-selected'); });
+      el.classList.add('xg-selected');
+      XG[key] = val;
+      // Enable next button for this screen
+      var screenMap = { stage: 1, budget: 2, skill: 3 };
+      var btn = document.getElementById('xg-btn-' + screenMap[key]);
+      if (btn) btn.disabled = false;
+    };
+
+    /* ── textarea ── */
+    document.addEventListener('DOMContentLoaded', function() {
+      var ta = document.getElementById('xg-idea-input');
+      if (!ta) return;
+      ta.addEventListener('input', function() {
+        var len = ta.value.trim().length;
+        document.getElementById('xg-char-num').textContent = ta.value.length;
+        document.getElementById('xg-btn-0').disabled = len < 10;
+        XG.idea = ta.value.trim();
+      });
+    });
+
+    window.xgFillExample = function(el) {
+      var ta = document.getElementById('xg-idea-input');
+      ta.value = el.getAttribute('data-val');
+      XG.idea = ta.value;
+      document.getElementById('xg-char-num').textContent = ta.value.length;
+      document.getElementById('xg-btn-0').disabled = false;
+      ta.focus();
+    };
+
+    /* ── generate animation ── */
+    window.xgRunGenerate = function() {
+      xgShowScreen(4);
+      var steps = [
+        'Reading your idea…',
+        'Matching your stage and budget…',
+        'Selecting the best tools…',
+        'Building your execution plan…',
+        'Adding personalised tips…'
+      ];
+      var container = document.getElementById('xg-gen-steps');
+      container.innerHTML = steps.map(function(s, i) {
+        return '<div class="xg-gen-step" id="xg-gstep-' + i + '"><div class="xg-gen-step-dot"></div>' + s + '</div>';
+      }).join('');
+
+      var i = 0;
+      function tick() {
+        if (i > 0) {
+          var prev = document.getElementById('xg-gstep-' + (i-1));
+          if (prev) { prev.classList.remove('active'); prev.classList.add('done'); }
+        }
+        var cur = document.getElementById('xg-gstep-' + i);
+        if (cur) cur.classList.add('active');
+        i++;
+        if (i < steps.length) {
+          setTimeout(tick, 520);
+        } else {
+          setTimeout(function() {
+            var last = document.getElementById('xg-gstep-' + (steps.length-1));
+            if (last) { last.classList.remove('active'); last.classList.add('done'); }
+            xgBuildResult();
+          }, 600);
+        }
+      }
+      tick();
+    };
+
+    /* ── build result ── */
+    function xgBuildResult() {
+      var type = GOAL_MAP[XG.goal];
+      if (!type) type = resolveType();
+      var s = STACKS[type] || STACKS['product'];
+
+      // Filter tools by budget
+      var tools = s.tools.slice();
+      if (XG.budget === 'zero') {
+        tools = tools.filter(function(t){ return t.cost && (t.cost.toLowerCase().indexOf('free') !== -1 || t.cost === '$0'); });
+        if (tools.length < 3) tools = s.tools.slice(0, 4); // fallback
+      }
+
+      // Badge
+      document.getElementById('xg-result-badge').textContent = s.badge;
+      document.getElementById('xg-result-title').textContent = s.title;
+      document.getElementById('xg-result-sub').textContent = s.sub;
+
+      // Meta
+      document.getElementById('xg-result-meta').innerHTML =
+        '<div class="xg-meta-row"><span class="xg-meta-label">Timeline</span><span class="xg-meta-val">' + s.meta.timeline + '</span></div>' +
+        '<div class="xg-meta-row"><span class="xg-meta-label">Level</span><span class="xg-meta-val">' + s.meta.difficulty + '</span></div>' +
+        '<div class="xg-meta-row"><span class="xg-meta-label">Cost</span><span class="xg-meta-val">' + s.meta.cost + '</span></div>';
+
+      // Tools tab
+      document.getElementById('xg-tab-tools').innerHTML = tools.map(function(t, i) {
+        return '<div class="xg-tool-row" style="animation-delay:' + (i*0.07) + 's">' +
+          '<div class="xg-tool-num">' + (i+1) + '</div>' +
+          '<div class="xg-tool-info">' +
+            '<div class="xg-tool-name">' + t.name + '</div>' +
+            '<div class="xg-tool-why">' + t.why + '</div>' +
+            '<div class="xg-tool-foot">' +
+              '<span class="xg-tool-when">' + t.when + '</span>' +
+              '<span class="xg-tool-cost">' + t.cost + '</span>' +
+            '</div>' +
+          '</div></div>';
+      }).join('');
+
+      // Plan tab
+      document.getElementById('xg-tab-plan').innerHTML = s.plan.map(function(p, i) {
+        return '<div class="xg-plan-row" style="animation-delay:' + (i*0.07) + 's">' +
+          '<div class="xg-plan-left"><div class="xg-plan-week">' + p.week + '</div>' + (i < s.plan.length-1 ? '<div class="xg-plan-line"></div>' : '') + '</div>' +
+          '<div class="xg-plan-content"><div class="xg-plan-title">' + p.title + '</div><div class="xg-plan-desc">' + p.desc + '</div></div>' +
+          '</div>';
+      }).join('');
+
+      // Tips tab
+      document.getElementById('xg-tab-tips').innerHTML = s.tips.map(function(t, i) {
+        return '<div class="xg-tip-row" style="animation-delay:' + (i*0.07) + 's">' +
+          '<div class="xg-tip-icon">' + t.icon + '</div>' +
+          '<div><div class="xg-tip-title">' + t.title + '</div><div class="xg-tip-body">' + t.body + '</div></div>' +
+          '</div>';
+      }).join('');
+
+      // Reset save button state for new stack
+      var saveBtn = document.getElementById('xg-save-btn');
+      var saveLbl = document.getElementById('xg-save-label');
+      if (saveBtn) { saveBtn.disabled = false; saveBtn.classList.remove('saved'); }
+      if (saveLbl) { saveLbl.textContent = 'Save this stack'; }
+
+      // Notify save logic of current stack
+      if (typeof xgOnStackReady === 'function') {
+        xgOnStackReady(type, XG.idea, XG.stage, XG.budget, XG.skill);
+      }
+
+      xgShowScreen(5);
+    }
+
+    /* ── tabs ── */
+    window.xgTab = function(el, name) {
+      document.querySelectorAll('.xg-tab').forEach(function(t){ t.classList.remove('active'); });
+      el.classList.add('active');
+      ['tools','plan','tips'].forEach(function(t) {
+        var c = document.getElementById('xg-tab-' + t);
+        if (c) c.style.display = t === name ? 'block' : 'none';
+      });
+    };
+
+    /* ── escape key ── */
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && document.getElementById('xg-modal').classList.contains('xg-open')) {
+        xgClose();
+      }
+    });
+  })();
+
+  </script>
+
+  <!-- ═══ SUPABASE + SAVE / UPSELL LOGIC ═══ -->
+  <script>
+  /* ─────────────────────────────────────────
+     SUPABASE CONFIG — replace with your keys
+     Get them from: supabase.com → your project
+     → Settings → API
+  ───────────────────────────────────────── */
+  var SUPABASE_URL  = 'YOUR_SUPABASE_URL';   // e.g. https://xxxx.supabase.co
+  var SUPABASE_ANON = 'YOUR_SUPABASE_ANON_KEY';
+
+  var _sb = null;
+  var _currentStack = null; // stores the last built stack for saving
+
+  function getSupabase() {
+    if (_sb) return _sb;
+    if (typeof supabase !== 'undefined') {
+      _sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+    }
+    return _sb;
   }
-};
 
-// Fallback: if non-business goal opened the drawer, map to best fit
-var GOAL_TYPE_MAP = {
-  'build-app': 'saas',
-  'grow-audience': 'content',
-  'automate-work': 'service',
-  'make-money': 'product',
-  'create-content': 'content',
-  'learn-ai': 'product',
-  'save-time': 'service'
-};
+  /* ── track current stack so we can save it ── */
+  /* Hook into xgBuildResult — store a snapshot after it runs */
+  var _origBuildResult = null;
+  document.addEventListener('DOMContentLoaded', function() {
+    /* We patch after the IIFE sets up xgBuildResult internally.
+       Instead we expose a hook: call xgOnStackBuilt(type, data) from guide JS */
+  });
 
-function openStackDrawer(goal) {
-  _drawerGoal = goal;
-  _drawerStage = '';
+  /* Called by guide JS after result is shown */
+  window.xgOnStackReady = function(type, ideaText, stage, budget, skill) {
+    _currentStack = { type: type, idea: ideaText, stage: stage, budget: budget, skill: skill, savedAt: new Date().toISOString() };
+  };
 
-  // Reset to step 1
-  document.getElementById('dq1').className = 'drawer-q active';
-  document.getElementById('dq2').className = 'drawer-q';
-  document.getElementById('dq3').className = 'drawer-result';
-  document.getElementById('ds1').className = 'd-step active';
-  document.getElementById('ds2').className = 'd-step';
-  document.getElementById('ds3').className = 'd-step';
-  document.getElementById('dl1').className = 'd-line';
-  document.getElementById('dl2').className = 'd-line';
-  document.getElementById('drawer-badge').textContent = 'Find your stack';
-
-  // For non-start-business goals, skip Q2 and show result directly
-  var directTypes = ['build-app','grow-audience','automate-work','make-money','create-content','learn-ai','save-time'];
-  if (directTypes.indexOf(goal) !== -1) {
-    var type = GOAL_TYPE_MAP[goal] || 'product';
-    _drawerStage = 'idea';
-    showDrawerResult(type);
-  } else {
-    // start-business: show full 2-step flow
-    document.getElementById('stack-drawer-overlay').classList.add('open');
-    document.getElementById('stack-drawer').classList.add('open');
-    document.body.style.overflow = 'hidden';
+  /* ── get current firebase user uid ── */
+  function getFirebaseUid() {
+    try {
+      if (typeof firebase !== 'undefined' && firebase.auth && firebase.auth().currentUser) {
+        return firebase.auth().currentUser.uid;
+      }
+    } catch(e) {}
+    return null;
   }
 
-  document.getElementById('stack-drawer-overlay').classList.add('open');
-  document.getElementById('stack-drawer').classList.add('open');
-  document.body.style.overflow = 'hidden';
-  document.getElementById('stack-drawer').focus();
-}
-
-function drawerStep2(stage) {
-  _drawerStage = stage;
-  document.getElementById('dq1').className = 'drawer-q';
-  document.getElementById('dq2').className = 'drawer-q active';
-  document.getElementById('ds1').className = 'd-step done';
-  document.getElementById('ds2').className = 'd-step active';
-  document.getElementById('dl1').className = 'd-line done';
-}
-
-function drawerShowStack(type) {
-  document.getElementById('ds2').className = 'd-step done';
-  document.getElementById('ds3').className = 'd-step done';
-  document.getElementById('dl2').className = 'd-line done';
-  document.getElementById('dq2').className = 'drawer-q';
-  showDrawerResult(type);
-}
-
-function showDrawerResult(type) {
-  var s = DRAWER_STACKS[type] || DRAWER_STACKS['product'];
-  document.getElementById('drawer-badge').textContent = s.badge;
-  document.getElementById('ds1').className = 'd-step done';
-  document.getElementById('ds2').className = 'd-step done';
-  document.getElementById('ds3').className = 'd-step done';
-  document.getElementById('dl1').className = 'd-line done';
-  document.getElementById('dl2').className = 'd-line done';
-
-  var toolsHtml = s.tools.map(function(t, i) {
-    return '<div class="tool-row">' +
-      '<div class="tool-num">' + (i+1) + '</div>' +
-      '<div class="tool-info">' +
-        '<div class="tool-name">' + t.name + '</div>' +
-        '<div class="tool-why">' + t.why + '</div>' +
-        '<span class="tool-when">' + t.when + '</span>' +
-      '</div></div>';
-  }).join('');
-
-  var planHtml = s.plan.map(function(p) {
-    return '<div class="week-row">' +
-      '<span class="week-tag">' + p.week + '</span>' +
-      '<span class="week-task">' + p.task + '</span>' +
-    '</div>';
-  }).join('');
-
-  document.getElementById('drawer-result-content').innerHTML =
-    '<div class="result-title">' + s.title + '</div>' +
-    '<div class="result-sub">' + s.sub + '</div>' +
-    '<div class="result-section-label">Your tools — in order</div>' +
-    toolsHtml +
-    '<div class="result-section-label" style="margin-top:24px;">Your first 4 weeks</div>' +
-    planHtml;
-
-  document.getElementById('dq3').className = 'drawer-result active';
-  document.getElementById('stack-drawer-overlay').classList.add('open');
-  document.getElementById('stack-drawer').classList.add('open');
-  document.body.style.overflow = 'hidden';
-  document.getElementById('drawer-body') && (document.getElementById('drawer-body').scrollTop = 0);
-  document.querySelector('.drawer-body').scrollTop = 0;
-}
-
-function drawerBack(toStep) {
-  if (toStep === 1) {
-    _drawerStage = '';
-    document.getElementById('dq1').className = 'drawer-q active';
-    document.getElementById('dq2').className = 'drawer-q';
-    document.getElementById('dq3').className = 'drawer-result';
-    document.getElementById('ds1').className = 'd-step active';
-    document.getElementById('ds2').className = 'd-step';
-    document.getElementById('ds3').className = 'd-step';
-    document.getElementById('dl1').className = 'd-line';
-    document.getElementById('dl2').className = 'd-line';
-    document.getElementById('drawer-badge').textContent = 'Find your stack';
+  function getFirebaseEmail() {
+    try {
+      if (typeof firebase !== 'undefined' && firebase.auth && firebase.auth().currentUser) {
+        return firebase.auth().currentUser.email;
+      }
+    } catch(e) {}
+    return null;
   }
-}
 
-function closeStackDrawer() {
-  document.getElementById('stack-drawer-overlay').classList.remove('open');
-  document.getElementById('stack-drawer').classList.remove('open');
-  document.body.style.overflow = '';
-}
+  /* ── save stack button ── */
+  window.xgSaveStack = function() {
+    var uid = getFirebaseUid();
+    if (!uid) {
+      // Not signed in — show prompt
+      document.getElementById('xg-signin-prompt').classList.add('show');
+      return;
+    }
+    doSaveStack(uid, getFirebaseEmail());
+  };
 
-// Close on Escape
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape' && document.getElementById('stack-drawer').classList.contains('open')) {
-    closeStackDrawer();
+  async function doSaveStack(uid, email) {
+    var btn = document.getElementById('xg-save-btn');
+    var label = document.getElementById('xg-save-label');
+    if (!btn || !_currentStack) return;
+
+    btn.disabled = true;
+    label.textContent = 'Saving…';
+
+    var sb = getSupabase();
+    if (!sb) {
+      showToast('⚠ Supabase not configured yet', 'warn');
+      btn.disabled = false;
+      label.textContent = 'Save this stack';
+      return;
+    }
+
+    var payload = {
+      user_uid:   uid,
+      user_email: email || '',
+      stack_type: _currentStack.type,
+      idea_text:  _currentStack.idea,
+      stage:      _currentStack.stage,
+      budget:     _currentStack.budget,
+      skill:      _currentStack.skill,
+      saved_at:   _currentStack.savedAt
+    };
+
+    try {
+      var result = await sb.from('saved_stacks').insert([payload]);
+      if (result.error) throw result.error;
+      btn.classList.add('saved');
+      label.textContent = '✓ Stack saved';
+      showToast('✓ Stack saved to your profile', 'success');
+    } catch(err) {
+      console.error('Save failed:', err);
+      showToast('Failed to save — please try again', 'error');
+      btn.disabled = false;
+      label.textContent = 'Save this stack';
+    }
   }
-});
+
+  /* ── sign in then save ── */
+  window.xgSignInAndSave = function() {
+    // Use existing Firebase Google sign-in
+    if (typeof signInWithGoogle === 'function') {
+      signInWithGoogle();
+      // Listen for auth state change then save
+      if (typeof firebase !== 'undefined') {
+        var unsub = firebase.auth().onAuthStateChanged(function(user) {
+          if (user) {
+            unsub();
+            document.getElementById('xg-signin-prompt').classList.remove('show');
+            setTimeout(function() { doSaveStack(user.uid, user.email); }, 300);
+          }
+        });
+      }
+    }
+  };
+
+  window.xgDismissSignin = function() {
+    document.getElementById('xg-signin-prompt').classList.remove('show');
+  };
+
+  /* ── deep plan upsell ── */
+  window.xgDeepPlan = function() {
+    // Redirect to your pricing/pro page
+    // Change this URL to your actual Pricing page
+    window.location.href = 'Pricing.html?ref=stack-finder';
+  };
+
+  /* ── toast helper ── */
+  function showToast(msg, type) {
+    var toast = document.getElementById('xg-toast');
+    if (!toast) return;
+    toast.textContent = msg;
+    toast.style.borderColor = type === 'success' ? 'rgba(52,211,153,0.3)' :
+                              type === 'error'   ? 'rgba(248,113,113,0.3)' :
+                                                   'rgba(251,191,36,0.3)';
+    toast.style.color = type === 'success' ? '#34d399' :
+                        type === 'error'   ? '#f87171' : '#fbbf24';
+    toast.classList.add('show');
+    setTimeout(function(){ toast.classList.remove('show'); }, 3500);
+  }
   </script>
 </body>
 
