@@ -1,0 +1,945 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+
+  <!-- ═══ SEO (title + description set dynamically by JS) ═══ -->
+  <title>AI Tool Details — XEdge</title>
+  <meta name="description" content="Explore this AI tool — features, pricing, pros and cons, screenshots and alternatives. Curated by XEdge."/>
+  <meta name="robots" content="index, follow"/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:image" content="https://xedge.tech/xedge-logo.png"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+
+  <!-- ═══ FAVICON + THEME ═══ -->
+  <link rel="icon" href="xedge-logo.png" type="image/png"/>
+  <meta name="theme-color" content="#0b0f15"/>
+
+  <!-- ═══ FONTS: non-blocking ═══ -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap"/>
+  <link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap"/>
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap"/></noscript>
+
+  <script src="analytics.js" defer></script>
+
+  <style>
+    /* ─── BASE ─── */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; overflow-x: hidden; }
+    body {
+      font-family: 'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif;
+      background: #0b0f15; color: #fff; -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─── NAV ─── */
+    .xe-nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 60; height: 68px;
+      background: rgba(11,15,21,0.92); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(255,255,255,0.07); display: flex; align-items: center;
+    }
+    .xe-nav-inner {
+      max-width: 1200px; width: 100%; margin: 0 auto; padding: 0 24px;
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    }
+    .xe-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0; }
+    .xe-logo img { width: 36px; height: 36px; border-radius: 8px; }
+    .xe-logo span { font-size: 1.25rem; font-weight: 700; color: #60a5fa; letter-spacing: -0.3px; }
+    .xe-nav-links { display: flex; align-items: center; gap: 4px; }
+    .xe-nav-links a { font-size: 0.9rem; font-weight: 500; color: #9ca3af; padding: 6px 14px; border-radius: 8px; text-decoration: none; transition: color .15s, background .15s; }
+    .xe-nav-links a:hover { color: #fff; background: rgba(255,255,255,0.06); }
+    .xe-nav-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    .xe-btn-back {
+      display: flex; align-items: center; gap: 6px;
+      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+      padding: 7px 16px; border-radius: 8px; font-size: 0.85rem; font-weight: 500;
+      color: #9ca3af; cursor: pointer; font-family: inherit; text-decoration: none;
+      transition: color .15s, background .15s;
+    }
+    .xe-btn-back:hover { color: #fff; background: rgba(255,255,255,0.1); }
+    .xe-hamburger { display: none; background: none; border: none; cursor: pointer; padding: 8px; color: #d1d5db; flex-direction: column; gap: 5px; align-items: center; justify-content: center; }
+    .xe-hamburger span { display: block; width: 22px; height: 2px; background: currentColor; border-radius: 2px; transition: transform .25s, opacity .25s; }
+    .xe-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .xe-hamburger.open span:nth-child(2) { opacity: 0; }
+    .xe-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    .xe-mobile-menu { position: fixed; top: 68px; left: 0; right: 0; z-index: 59; background: rgba(11,15,21,0.98); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.07); padding: 12px 16px 20px; display: none; flex-direction: column; gap: 4px; }
+    .xe-mobile-menu.open { display: flex; }
+    .xe-mobile-menu a { padding: 12px 16px; border-radius: 10px; font-size: 1rem; font-weight: 500; color: #9ca3af; text-decoration: none; transition: color .15s, background .15s; }
+    .xe-mobile-menu a:hover { color: #fff; background: rgba(255,255,255,0.06); }
+    .xe-mobile-menu .xe-mobile-cta { background: linear-gradient(135deg, #3b82f6, #6366f1); color: #fff !important; text-align: center; margin-top: 8px; font-weight: 600; }
+    .nav-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 58; opacity: 0; pointer-events: none; transition: opacity .2s; }
+    .nav-backdrop.show { opacity: 1; pointer-events: auto; }
+
+    /* ─── PAGE ─── */
+    main { padding-top: 68px; }
+    .xe-page { max-width: 1200px; margin: 0 auto; padding: 40px 24px 96px; }
+
+    /* ─── LOADING STATE ─── */
+    #loading {
+      text-align: center; padding: 96px 24px; color: #6b7a9a; font-size: 0.95rem;
+    }
+    .xe-spinner {
+      width: 36px; height: 36px; border-radius: 50%;
+      border: 3px solid rgba(59,130,246,0.15);
+      border-top-color: #3b82f6;
+      animation: spin .8s linear infinite;
+      margin: 0 auto 16px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ─── HERO CARD ─── */
+    .tool-hero {
+      background: rgba(13,18,28,0.85);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 22px; padding: 32px;
+      display: flex; gap: 28px; align-items: flex-start;
+      margin-bottom: 32px;
+    }
+    .tool-hero-logo {
+      width: 88px; height: 88px; border-radius: 18px;
+      object-fit: contain; background: #1f2937;
+      flex-shrink: 0;
+    }
+    .tool-hero-body { flex: 1; min-width: 0; }
+    .tool-hero-cat {
+      display: inline-flex; align-items: center;
+      font-size: 0.75rem; font-weight: 700; letter-spacing: 1px;
+      text-transform: uppercase; color: #3b82f6;
+      margin-bottom: 8px;
+    }
+    #tool-name { font-size: clamp(1.6rem, 4vw, 2.4rem); font-weight: 800; letter-spacing: -0.5px; margin: 0 0 10px; }
+    #tool-short { font-size: 0.95rem; color: #8b93b0; line-height: 1.7; margin: 0 0 20px; max-width: 680px; }
+    .tool-hero-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .xe-btn-visit {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: linear-gradient(135deg, #3b82f6, #6366f1);
+      padding: 10px 24px; border-radius: 100px;
+      font-size: 0.9rem; font-weight: 700; color: #fff;
+      text-decoration: none; transition: opacity .15s, transform .15s, box-shadow .15s;
+    }
+    .xe-btn-visit:hover { opacity: .88; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(99,102,241,.35); }
+    .xe-btn-visit svg { width: 14px; height: 14px; }
+
+    /* ─── SECTION CARDS ─── */
+    .xe-card {
+      background: rgba(13,18,28,0.85);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 18px; padding: 28px;
+      margin-bottom: 24px;
+    }
+    .xe-card-title {
+      font-size: 1.1rem; font-weight: 700; margin: 0 0 18px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .xe-card-title-icon {
+      width: 32px; height: 32px; border-radius: 8px;
+      background: rgba(59,130,246,0.12);
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .xe-card-title-icon svg { width: 16px; height: 16px; color: #60a5fa; }
+
+    /* ─── LAYOUT GRID ─── */
+    .xe-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .xe-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+
+    /* ─── PROS / CONS ─── */
+    .pros-list, .cons-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
+    .pros-list li, .cons-list li { display: flex; align-items: flex-start; gap: 10px; font-size: 0.88rem; color: #c4c9dc; line-height: 1.5; }
+    .pros-list li::before { content: "✓"; color: #34d399; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+    .cons-list li::before { content: "✕"; color: #f87171; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+
+    /* ─── MOBILE PROS/CONS TOGGLE ─── */
+    .pc-mobile-toggle { display: none; gap: 8px; margin-bottom: 16px; }
+    .pc-toggle-btn {
+      flex: 1; padding: 10px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.04); color: #9ca3af; font-family: inherit;
+      font-size: 0.88rem; font-weight: 600; cursor: pointer; transition: all .15s;
+    }
+    .pc-toggle-btn.active { background: rgba(59,130,246,0.15); border-color: rgba(59,130,246,0.35); color: #60a5fa; }
+
+    /* ─── ABOUT GRID ─── */
+    .about-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; }
+    .about-list li { font-size: 0.88rem; color: #c4c9dc; padding: 8px 12px; background: rgba(255,255,255,0.04); border-radius: 8px; line-height: 1.5; }
+
+    /* ─── DESCRIPTION / PRICING ─── */
+    #xe-phase1 p { font-size: 0.95rem; color: #9ca3af; line-height: 1.8; margin: 0; }
+    .pricing-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 0.88rem; }
+    .pricing-row:last-child { border-bottom: none; }
+    .pricing-label { color: #6b7a9a; font-weight: 600; text-transform: uppercase; font-size: 0.75rem; letter-spacing: .5px; }
+    .pricing-value { color: #c4c9dc; }
+
+    /* ─── SCREENSHOTS ─── */
+    .screenshots-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .screenshot-wrap { border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.08); background: #111827; aspect-ratio: 16/9; }
+    .screenshot-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    /* ─── RELATED TOOLS ─── */
+    .related-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .related-card {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px; background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07); border-radius: 12px;
+      text-decoration: none; color: #fff; transition: border-color .15s, background .15s;
+    }
+    .related-card:hover { border-color: rgba(59,130,246,0.3); background: rgba(59,130,246,0.05); }
+    .related-card img { width: 40px; height: 40px; border-radius: 8px; object-fit: contain; background: #1f2937; flex-shrink: 0; }
+    .related-card-name { font-size: 0.88rem; font-weight: 600; }
+    .related-card-cat { font-size: 0.75rem; color: #6b7a9a; }
+
+    /* ─── REVIEWS ─── */
+    .review-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 24px; }
+    .review-avg { text-align: right; }
+    .review-avg-num { font-size: 2rem; font-weight: 800; letter-spacing: -1px; color: #fbbf24; }
+    .review-avg-label { font-size: 0.78rem; color: #6b7a9a; }
+    .review-stars { color: #fbbf24; font-size: 1rem; letter-spacing: 2px; }
+
+    /* Write review button */
+    .xe-btn-write-review {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.25);
+      padding: 9px 20px; border-radius: 100px;
+      font-size: 0.85rem; font-weight: 600; color: #60a5fa;
+      cursor: pointer; font-family: inherit; transition: all .15s;
+    }
+    .xe-btn-write-review:hover { background: rgba(59,130,246,0.18); border-color: rgba(59,130,246,0.4); }
+    .xe-btn-write-review svg { width: 14px; height: 14px; }
+
+    /* Write review form */
+    .review-form-wrap {
+      background: rgba(17,24,39,0.8);
+      border: 1px solid rgba(59,130,246,0.2);
+      border-radius: 16px; padding: 24px;
+      margin-bottom: 24px;
+      display: none;
+    }
+    .review-form-wrap.open { display: block; }
+    .review-form-title { font-size: 1rem; font-weight: 700; margin-bottom: 16px; }
+    .xe-form-label { display: block; font-size: 0.8rem; font-weight: 600; color: #9ca3af; margin-bottom: 8px; letter-spacing: .3px; }
+    .xe-form-group { margin-bottom: 16px; }
+    .xe-select, .xe-textarea {
+      width: 100%; background: rgba(11,15,21,0.9);
+      border: 1px solid rgba(255,255,255,0.1); border-radius: 10px;
+      padding: 11px 14px; color: #fff; font-family: inherit; font-size: 0.9rem;
+      outline: none; transition: border-color .15s;
+    }
+    .xe-select:focus, .xe-textarea:focus { border-color: rgba(59,130,246,.5); }
+    .xe-textarea { height: 100px; resize: vertical; line-height: 1.6; }
+    .xe-select { appearance: none; cursor: pointer; }
+    .xe-select option { background: #111827; }
+    .review-form-actions { display: flex; align-items: center; gap: 10px; margin-top: 16px; }
+    .xe-btn-submit-review {
+      background: linear-gradient(135deg, #3b82f6, #6366f1);
+      padding: 10px 24px; border-radius: 100px; border: none;
+      color: #fff; font-family: inherit; font-size: 0.88rem; font-weight: 700;
+      cursor: pointer; transition: opacity .15s;
+    }
+    .xe-btn-submit-review:hover { opacity: .88; }
+    .xe-btn-submit-review:disabled { opacity: .5; cursor: not-allowed; }
+    .xe-btn-cancel-review {
+      background: none; border: 1px solid rgba(255,255,255,0.1);
+      padding: 10px 20px; border-radius: 100px;
+      color: #9ca3af; font-family: inherit; font-size: 0.88rem; cursor: pointer;
+      transition: color .15s, border-color .15s;
+    }
+    .xe-btn-cancel-review:hover { color: #fff; border-color: rgba(255,255,255,.2); }
+    .review-login-prompt { font-size: 0.85rem; color: #6b7a9a; text-align: center; padding: 16px; }
+    .review-login-prompt button { color: #60a5fa; background: none; border: none; cursor: pointer; font-family: inherit; font-size: inherit; font-weight: 600; }
+
+    /* Review items */
+    .reviews-list { display: flex; flex-direction: column; gap: 16px; }
+    .review-item {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 14px; padding: 18px 20px;
+    }
+    .review-item-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+    .review-item-author { display: flex; align-items: center; gap: 10px; }
+    .review-item-avatar {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: linear-gradient(135deg, #3b82f6, #6366f1);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.72rem; font-weight: 700; color: #fff; flex-shrink: 0;
+    }
+    .review-item-avatar img { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; }
+    .review-item-name { font-size: 0.88rem; font-weight: 600; }
+    .review-item-date { font-size: 0.75rem; color: #4b5a72; }
+    .review-item-stars { color: #fbbf24; font-size: 0.85rem; }
+    .review-item-text { font-size: 0.88rem; color: #9ca3af; line-height: 1.65; margin: 0; }
+    .reviews-empty { text-align: center; padding: 32px; color: #4b5a72; font-size: 0.88rem; }
+
+    /* Toggle reviews */
+    .xe-btn-toggle-reviews {
+      display: flex; align-items: center; gap: 6px;
+      background: none; border: none; color: #60a5fa;
+      font-family: inherit; font-size: 0.85rem; font-weight: 600;
+      cursor: pointer; padding: 0; margin-bottom: 16px;
+      transition: color .15s;
+    }
+    .xe-btn-toggle-reviews:hover { color: #93c5fd; }
+
+    /* ─── SKELETON ─── */
+    .xe-skel-block {
+      background: linear-gradient(90deg, rgba(255,255,255,0.04) 25%, rgba(255,255,255,0.07) 50%, rgba(255,255,255,0.04) 75%);
+      background-size: 200% 100%; animation: shimmer 1.4s ease infinite; border-radius: 10px;
+    }
+    @keyframes shimmer { to { background-position: -200% 0; } }
+
+    /* ─── ACCESSIBILITY ─── */
+    a:focus-visible, button:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2px solid #3b82f6; outline-offset: 3px; border-radius: 4px; }
+    a:focus:not(:focus-visible), button:focus:not(:focus-visible) { outline: none; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 767px) {
+      .xe-nav-links { display: none; }
+      .xe-hamburger { display: flex !important; }
+      .tool-hero { flex-direction: column; gap: 16px; padding: 20px; }
+      .tool-hero-logo { width: 64px; height: 64px; }
+      #tool-name { font-size: 1.6rem; }
+      .xe-grid-2, .xe-grid-3 { grid-template-columns: 1fr; }
+      .screenshots-grid { grid-template-columns: 1fr; }
+      .related-grid { grid-template-columns: 1fr; }
+      .pc-mobile-toggle { display: flex; }
+      .pc-cons-card { display: none; }
+      .xe-page { padding: 24px 16px 80px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    }
+  </style>
+</head>
+
+<body>
+  <a href="#main-content" style="position:absolute;top:-100px;left:16px;background:#3b82f6;color:#fff;padding:8px 16px;border-radius:8px;font-weight:600;font-size:.9rem;z-index:9999;text-decoration:none;transition:top .15s;" onfocus="this.style.top='16px'" onblur="this.style.top='-100px'">Skip to main content</a>
+
+  <div class="nav-backdrop" id="nav-backdrop" aria-hidden="true"></div>
+
+  <!-- NAV -->
+  <header>
+    <nav class="xe-nav" role="navigation" aria-label="Main navigation">
+      <div class="xe-nav-inner">
+        <a href="index.html" class="xe-logo" aria-label="XEdge home">
+          <img src="xedge-logo.png" alt="XEdge logo" width="36" height="36" fetchpriority="high"/>
+          <span>XEDGE</span>
+        </a>
+        <div class="xe-nav-links" role="list">
+          <a href="index.html" role="listitem">Home</a>
+          <a href="Explore.html" role="listitem">Explore</a>
+          <a href="Categories.html" role="listitem">Categories</a>
+          <a href="stack.html" role="listitem">Stacks</a>
+          <a href="About.html" role="listitem">About</a>
+        </div>
+        <div class="xe-nav-right">
+          <button type="button" class="xe-btn-back" onclick="history.back()" aria-label="Go back">
+            <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+            </svg>
+            Back
+          </button>
+          <div id="auth-area" style="display:flex;align-items:center;"></div>
+          <button id="mobile-menu-toggle" class="xe-hamburger" aria-label="Toggle menu" aria-expanded="false" type="button">
+            <span></span><span></span><span></span>
+          </button>
+        </div>
+      </div>
+    </nav>
+    <div id="mobileMenu" class="xe-mobile-menu" role="dialog" aria-label="Mobile menu">
+      <a href="index.html">Home</a>
+      <a href="Explore.html">Explore</a>
+      <a href="Categories.html">Categories</a>
+      <a href="stack.html">Stacks</a>
+      <a href="About.html">About</a>
+      <a href="Join.html" class="xe-mobile-cta">Join Beta</a>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main id="main-content">
+    <div class="xe-page">
+
+      <!-- Loading -->
+      <div id="loading" role="status" aria-live="polite">
+        <div class="xe-spinner" aria-hidden="true"></div>
+        Loading tool…
+      </div>
+
+      <!-- Tool content -->
+      <div id="tool-container" style="display:none;">
+
+        <!-- ── HERO ── -->
+        <div class="tool-hero">
+          <img id="tool-logo" class="tool-hero-logo" alt="Tool logo" width="88" height="88"/>
+          <div class="tool-hero-body">
+            <div class="tool-hero-cat">
+              <span id="tool-cat"></span>
+            </div>
+            <h1 id="tool-name"></h1>
+            <p id="tool-short"></p>
+            <div class="tool-hero-actions">
+              <a id="visit-btn" href="#" target="_blank" rel="noopener noreferrer" class="xe-btn-visit">
+                Visit Tool
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── DESCRIPTION + PRICING ── -->
+        <div id="xe-phase1" class="xe-card" style="display:none;"></div>
+
+        <!-- ── ABOUT ── -->
+        <section id="about-tool-section" style="display:none;">
+          <div class="xe-grid-3" style="margin-bottom:24px;">
+            <div class="xe-card" style="margin-bottom:0;">
+              <div class="xe-card-title">
+                <div class="xe-card-title-icon" aria-hidden="true">
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                </div>
+                Key Features
+              </div>
+              <ul id="about-features" class="about-list"></ul>
+            </div>
+            <div class="xe-card" style="margin-bottom:0;">
+              <div class="xe-card-title">
+                <div class="xe-card-title-icon" aria-hidden="true">
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                </div>
+                Best For
+              </div>
+              <ul id="about-bestfor" class="about-list"></ul>
+            </div>
+            <div class="xe-card" style="margin-bottom:0;">
+              <div class="xe-card-title">
+                <div class="xe-card-title-icon" aria-hidden="true">
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
+                </div>
+                Why It Stands Out
+              </div>
+              <p id="about-standout" style="font-size:0.88rem;color:#9ca3af;line-height:1.7;margin:0;"></p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── PROS / CONS ── -->
+        <section aria-label="Pros and cons">
+          <!-- Mobile toggle -->
+          <div class="pc-mobile-toggle" role="group" aria-label="Show pros or cons">
+            <button type="button" class="pc-toggle-btn active" id="btn-pros" onclick="showPros()">✓ Pros</button>
+            <button type="button" class="pc-toggle-btn" id="btn-cons" onclick="showCons()">✕ Cons</button>
+          </div>
+          <div class="xe-grid-2" style="margin-bottom:24px;">
+            <div class="xe-card" style="margin-bottom:0;" id="pros-box">
+              <div class="xe-card-title">
+                <div class="xe-card-title-icon" style="background:rgba(52,211,153,0.1);" aria-hidden="true">
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color:#34d399;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                </div>
+                Pros
+              </div>
+              <ul class="pros-list" aria-label="Pros"></ul>
+            </div>
+            <div class="xe-card pc-cons-card" style="margin-bottom:0;" id="cons-box">
+              <div class="xe-card-title">
+                <div class="xe-card-title-icon" style="background:rgba(248,113,113,0.1);" aria-hidden="true">
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color:#f87171;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </div>
+                Cons
+              </div>
+              <ul class="cons-list" aria-label="Cons"></ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── SCREENSHOTS + RELATED ── -->
+        <div id="xe-phase2" style="display:none;"></div>
+
+        <!-- ── REVIEWS ── -->
+        <section class="xe-card" aria-label="User reviews" id="reviews-section">
+          <div class="review-header">
+            <div class="xe-card-title" style="margin:0;">
+              <div class="xe-card-title-icon" aria-hidden="true">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+              </div>
+              User Reviews
+            </div>
+            <div class="review-avg" id="review-summary" style="display:none;">
+              <div class="review-avg-num" id="avg-rating">—</div>
+              <div class="review-stars" id="avg-stars"></div>
+              <div class="review-avg-label" id="rating-count"></div>
+            </div>
+          </div>
+
+          <!-- Write review button / login prompt -->
+          <div id="review-action-area" style="margin-bottom:20px;"></div>
+
+          <!-- Write review form -->
+          <div class="review-form-wrap" id="review-form" role="form" aria-label="Write a review">
+            <div class="review-form-title">Write your review</div>
+            <div class="xe-form-group">
+              <label class="xe-form-label" for="review-rating">Rating</label>
+              <select id="review-rating" class="xe-select" aria-label="Select rating">
+                <option value="5">★★★★★ — Excellent (5)</option>
+                <option value="4">★★★★☆ — Good (4)</option>
+                <option value="3">★★★☆☆ — Average (3)</option>
+                <option value="2">★★☆☆☆ — Poor (2)</option>
+                <option value="1">★☆☆☆☆ — Terrible (1)</option>
+              </select>
+            </div>
+            <div class="xe-form-group">
+              <label class="xe-form-label" for="review-text">Your experience</label>
+              <textarea id="review-text" class="xe-textarea" placeholder="What did you use this tool for? What worked well? What didn't?" aria-label="Review text"></textarea>
+            </div>
+            <div class="review-form-actions">
+              <button type="button" class="xe-btn-submit-review" id="submit-review-btn" onclick="submitReview()">Post Review</button>
+              <button type="button" class="xe-btn-cancel-review" onclick="closeReviewForm()">Cancel</button>
+            </div>
+            <p id="review-submit-msg" style="font-size:.82rem;margin-top:10px;display:none;"></p>
+          </div>
+
+          <!-- Toggle existing reviews -->
+          <button type="button" class="xe-btn-toggle-reviews" id="toggle-reviews-btn" style="display:none;">
+            <span id="toggle-text">Show reviews</span>
+            <span id="toggle-arrow" aria-hidden="true">▼</span>
+          </button>
+
+          <!-- Reviews list -->
+          <div id="reviews-wrapper" style="display:none;">
+            <div class="reviews-list" id="reviews-list"></div>
+          </div>
+
+        </section>
+
+      </div><!-- /tool-container -->
+    </div>
+  </main>
+
+  <!-- Firebase: deferred -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js" defer></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js" defer></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js" defer></script>
+
+  <!-- tools.js: deferred -->
+  <script src="tools.js" defer></script>
+
+  <script>
+  (function() {
+    "use strict";
+
+    /* ── MOBILE MENU ─── */
+    function initMobileMenu() {
+      const toggle = document.getElementById("mobile-menu-toggle");
+      const menu   = document.getElementById("mobileMenu");
+      const bd     = document.getElementById("nav-backdrop");
+      if (!toggle || !menu) return;
+      let open = false;
+      const openFn  = () => { open=true;  menu.classList.add("open");    bd&&bd.classList.add("show");    toggle.classList.add("open");    toggle.setAttribute("aria-expanded","true");  document.body.style.overflow="hidden"; };
+      const closeFn = () => { open=false; menu.classList.remove("open"); bd&&bd.classList.remove("show"); toggle.classList.remove("open"); toggle.setAttribute("aria-expanded","false"); document.body.style.overflow=""; };
+      toggle.addEventListener("click", () => open ? closeFn() : openFn());
+      bd && bd.addEventListener("click", closeFn);
+      menu.querySelectorAll("a").forEach(a => a.addEventListener("click", closeFn));
+      document.addEventListener("keydown", e => { if (e.key==="Escape"&&open) closeFn(); });
+    }
+
+    /* ── PROS / CONS MOBILE TOGGLE ─── */
+    window.showPros = function() {
+      const pb = document.getElementById("pros-box");
+      const cb = document.getElementById("cons-box");
+      const bp = document.getElementById("btn-pros");
+      const bc = document.getElementById("btn-cons");
+      if (pb) pb.style.display = "";
+      if (cb) cb.style.display = "none";
+      if (bp) bp.classList.add("active");
+      if (bc) bc.classList.remove("active");
+    };
+    window.showCons = function() {
+      const pb = document.getElementById("pros-box");
+      const cb = document.getElementById("cons-box");
+      const bp = document.getElementById("btn-pros");
+      const bc = document.getElementById("btn-cons");
+      if (pb) pb.style.display = "none";
+      if (cb) cb.style.display = "";
+      if (bc) bc.classList.add("active");
+      if (bp) bp.classList.remove("active");
+    };
+
+    /* ── REVIEW FORM TOGGLE ─── */
+    window.openReviewForm = function() {
+      const f = document.getElementById("review-form");
+      if (f) f.classList.add("open");
+    };
+    window.closeReviewForm = function() {
+      const f = document.getElementById("review-form");
+      if (f) f.classList.remove("open");
+      const msg = document.getElementById("review-submit-msg");
+      if (msg) msg.style.display = "none";
+    };
+
+    /* ── REVIEW SUBMISSION ─── */
+    window.submitReview = async function() {
+      const btn  = document.getElementById("submit-review-btn");
+      const text = document.getElementById("review-text");
+      const rating = document.getElementById("review-rating");
+      const msg  = document.getElementById("review-submit-msg");
+
+      if (!text || !text.value.trim()) {
+        if (msg) { msg.textContent = "Please write your review before posting."; msg.style.color="#f87171"; msg.style.display="block"; }
+        return;
+      }
+
+      if (typeof firebase === "undefined" || !firebase.auth().currentUser) {
+        if (msg) { msg.textContent = "Please sign in to post a review."; msg.style.color="#f87171"; msg.style.display="block"; }
+        return;
+      }
+
+      const user = firebase.auth().currentUser;
+      const toolName = document.getElementById("tool-name")?.textContent || "";
+      const toolKey  = new URLSearchParams(location.search).get("tool") || toolName;
+
+      btn.disabled = true;
+      btn.textContent = "Posting…";
+
+      try {
+        const db = firebase.firestore();
+        await db.collection("reviews").add({
+          toolKey:   toolKey.toLowerCase(),
+          toolName:  toolName,
+          rating:    Number(rating?.value || 5),
+          text:      text.value.trim(),
+          userName:  user.displayName || "Anonymous",
+          userPhoto: user.photoURL || "",
+          userId:    user.uid,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+
+        text.value = "";
+        btn.textContent = "Post Review";
+        btn.disabled = false;
+
+        if (msg) { msg.textContent = "✓ Review posted!"; msg.style.color="#34d399"; msg.style.display="block"; }
+
+        // Reload reviews
+        setTimeout(() => { closeReviewForm(); loadReviews(toolKey); }, 1200);
+
+      } catch(e) {
+        console.error("Review error:", e);
+        btn.disabled = false;
+        btn.textContent = "Post Review";
+        if (msg) { msg.textContent = "Something went wrong. Please try again."; msg.style.color="#f87171"; msg.style.display="block"; }
+      }
+    };
+
+    /* ── LOAD REVIEWS ─── */
+    window.loadReviews = async function(toolKey) {
+      if (typeof firebase === "undefined") return;
+      const db = firebase.firestore();
+
+      try {
+        const snap = await db.collection("reviews")
+          .where("toolKey", "==", toolKey.toLowerCase())
+          .orderBy("createdAt", "desc")
+          .limit(20)
+          .get();
+
+        const reviews = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        renderReviews(reviews);
+      } catch(e) {
+        // Firestore index might not exist yet — fail silently
+        console.warn("Reviews load failed:", e.message);
+      }
+    };
+
+    function renderReviews(reviews) {
+      const list    = document.getElementById("reviews-list");
+      const wrapper = document.getElementById("reviews-wrapper");
+      const toggleBtn = document.getElementById("toggle-reviews-btn");
+      const summary   = document.getElementById("review-summary");
+      const avgEl     = document.getElementById("avg-rating");
+      const starsEl   = document.getElementById("avg-stars");
+      const countEl   = document.getElementById("rating-count");
+
+      if (!list) return;
+
+      if (!reviews.length) {
+        list.innerHTML = `<div class="reviews-empty">No reviews yet — be the first to share your experience.</div>`;
+        if (toggleBtn) toggleBtn.style.display = "flex";
+        return;
+      }
+
+      // Average rating
+      const avg = reviews.reduce((sum, r) => sum + (r.rating || 0), 0) / reviews.length;
+      const avgRounded = Math.round(avg * 10) / 10;
+      if (summary) summary.style.display = "block";
+      if (avgEl)   avgEl.textContent = avgRounded.toFixed(1);
+      if (starsEl) starsEl.textContent = "★".repeat(Math.round(avg)) + "☆".repeat(5 - Math.round(avg));
+      if (countEl) countEl.textContent = `${reviews.length} review${reviews.length !== 1 ? "s" : ""}`;
+
+      // Render cards
+      list.innerHTML = reviews.map(r => {
+        const stars = "★".repeat(r.rating || 5) + "☆".repeat(5 - (r.rating || 5));
+        const initials = (r.userName || "?").split(" ").map(w => w[0]).join("").toUpperCase().slice(0, 2);
+        const dateStr = r.createdAt?.toDate ? r.createdAt.toDate().toLocaleDateString("en-US", { month:"short", year:"numeric" }) : "";
+        const avatar = r.userPhoto
+          ? `<img src="${r.userPhoto}" alt="${escapeHtml(r.userName)}" onerror="this.style.display='none'"/>`
+          : initials;
+
+        return `
+          <div class="review-item">
+            <div class="review-item-header">
+              <div class="review-item-author">
+                <div class="review-item-avatar">${avatar}</div>
+                <div>
+                  <div class="review-item-name">${escapeHtml(r.userName || "Anonymous")}</div>
+                  <div class="review-item-date">${dateStr}</div>
+                </div>
+              </div>
+              <div class="review-item-stars" aria-label="${r.rating} out of 5 stars">${stars}</div>
+            </div>
+            <p class="review-item-text">${escapeHtml(r.text || "")}</p>
+          </div>`;
+      }).join("");
+
+      // Show toggle
+      if (toggleBtn) toggleBtn.style.display = "flex";
+    }
+
+    function escapeHtml(s) {
+      return String(s || "").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    }
+
+    /* ── REVIEWS TOGGLE ─── */
+    function initReviewToggle() {
+      const btn     = document.getElementById("toggle-reviews-btn");
+      const wrapper = document.getElementById("reviews-wrapper");
+      const text    = document.getElementById("toggle-text");
+      const arrow   = document.getElementById("toggle-arrow");
+      if (!btn || !wrapper) return;
+
+      btn.addEventListener("click", () => {
+        const showing = wrapper.style.display !== "none" && wrapper.style.display !== "";
+        wrapper.style.display = showing ? "none" : "block";
+        if (text) text.textContent = showing ? "Show reviews" : "Hide reviews";
+        if (arrow) arrow.textContent = showing ? "▼" : "▲";
+      });
+    }
+
+    /* ── FIREBASE + AUTH ─── */
+    function initFirebase() {
+      if (typeof firebase === "undefined") return;
+      if (!firebase.apps.length) {
+        firebase.initializeApp({
+          apiKey:"AIzaSyC-uRePD86sTpCRgjPsjhpOp-lzTNNF8Zg",
+          authDomain:"xedge-1da3a.firebaseapp.com",
+          projectId:"xedge-1da3a",
+          storageBucket:"xedge-1da3a.appspot.com",
+          messagingSenderId:"209657807080",
+          appId:"1:209657807080:web:80180596d966b4667d895d"
+        });
+      }
+
+      const auth = firebase.auth();
+      const prov = new firebase.auth.GoogleAuthProvider();
+      window.signInWithGoogle = () => auth.signInWithPopup(prov).catch(console.error);
+      window.logoutUser = () => auth.signOut();
+
+      auth.onAuthStateChanged(user => {
+        // Nav auth area
+        const nav = document.getElementById("auth-area");
+        if (nav) {
+          if (user) {
+            nav.innerHTML = `<div style="position:relative;">
+              <img id="profileBtn" src="${user.photoURL || ''}" alt="Profile" onerror="this.src='xedge-logo.png'"
+                style="width:36px;height:36px;border-radius:50%;border:2px solid rgba(255,255,255,.1);cursor:pointer;display:block;"/>
+              <div id="profileMenu" style="display:none;position:absolute;right:0;top:calc(100%+8px);min-width:180px;background:#111827;border:1px solid rgba(255,255,255,.1);border-radius:14px;overflow:hidden;box-shadow:0 20px 40px rgba(0,0,0,.5);z-index:100;">
+                <div style="padding:14px 16px;border-bottom:1px solid rgba(255,255,255,.08);">
+                  <div style="font-weight:700;font-size:.9rem;">${user.displayName || ""}</div>
+                  <div style="font-size:.78rem;color:#6b7280;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${user.email}</div>
+                </div>
+                <button onclick="logoutUser()" style="width:100%;text-align:left;padding:12px 16px;background:none;border:none;color:#f87171;cursor:pointer;font-size:.9rem;font-family:inherit;">Sign out</button>
+              </div></div>`;
+            setTimeout(() => {
+              const btn = document.getElementById("profileBtn");
+              const pm  = document.getElementById("profileMenu");
+              if (!btn||!pm) return;
+              btn.onclick = e => { e.stopPropagation(); pm.style.display = pm.style.display==="none"?"block":"none"; };
+              document.addEventListener("click", e => { if (!pm.contains(e.target)&&e.target!==btn) pm.style.display="none"; });
+            }, 0);
+          } else {
+            nav.innerHTML = `<button onclick="signInWithGoogle()" style="border:1px solid rgba(59,130,246,.4);padding:7px 18px;border-radius:100px;background:none;color:#60a5fa;cursor:pointer;font-family:inherit;font-size:.85rem;font-weight:600;">Sign In</button>`;
+          }
+        }
+
+        // Review action area — changes based on auth state
+        updateReviewActionArea(user);
+      });
+    }
+
+    function updateReviewActionArea(user) {
+      const area = document.getElementById("review-action-area");
+      if (!area) return;
+      if (user) {
+        area.innerHTML = `
+          <button type="button" class="xe-btn-write-review" onclick="openReviewForm()" aria-haspopup="true">
+            <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+            </svg>
+            Write a Review
+          </button>`;
+      } else {
+        area.innerHTML = `
+          <div class="review-login-prompt">
+            <button onclick="signInWithGoogle && signInWithGoogle()">Sign in</button> to write a review
+          </div>`;
+      }
+    }
+
+    /* ── PHASE 2 RENDERER OVERRIDE ─────────────────────────────────────────
+       tools.js renderPhase2 uses Tailwind classes for related cards.
+       We override it here to use our design system classes instead.
+    ──────────────────────────────────────────────────────────────────────── */
+    function overridePhase2() {
+      if (typeof window.renderPhase2 !== "function") return;
+      const _orig = window.renderPhase2;
+      window.renderPhase2 = function(tool, merged, toolsList) {
+        const box = document.getElementById("xe-phase2");
+        if (!box) return;
+
+        // Screenshots
+        const shots = merged.screenshots && merged.screenshots.length
+          ? merged.screenshots.slice(0, 2)
+          : [];
+
+        const screenshotHTML = shots.length ? `
+          <div class="xe-card" style="margin-bottom:24px;">
+            <div class="xe-card-title">
+              <div class="xe-card-title-icon" aria-hidden="true">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3" stroke-width="1.8"/><circle cx="8.5" cy="8.5" r="1.5" stroke-width="1.8"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M21 15l-5-5L5 21"/></svg>
+              </div>
+              Screenshots
+            </div>
+            <div class="screenshots-grid">
+              ${shots.map(s => `
+                <div class="screenshot-wrap">
+                  <img data-src="${s}" src="" alt="Screenshot" loading="lazy"/>
+                </div>`).join("")}
+            </div>
+          </div>` : "";
+
+        // Related tools
+        const related = (toolsList || [])
+          .filter(t =>
+            (t.category || "").toLowerCase() === (tool.category || "").toLowerCase() &&
+            t.name.toLowerCase() !== tool.name.toLowerCase()
+          ).slice(0, 4);
+
+        const relatedHTML = `
+          <div class="xe-card">
+            <div class="xe-card-title">
+              <div class="xe-card-title-icon" aria-hidden="true">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
+              </div>
+              Related Tools in ${escapeHtml(tool.category || "this category")}
+            </div>
+            ${related.length
+              ? `<div class="related-grid">
+                  ${related.map(r => `
+                    <a href="tool.html?tool=${encodeURIComponent(r.name)}" class="related-card">
+                      <img data-src="${r.logo_url || ''}" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+                           alt="${escapeHtml(r.name)} logo" width="40" height="40" loading="lazy"
+                           onerror="this.src='xedge-logo.png'"/>
+                      <div>
+                        <div class="related-card-name">${escapeHtml(r.name)}</div>
+                        <div class="related-card-cat">${escapeHtml(r.category)}</div>
+                      </div>
+                    </a>`).join("")}
+                </div>`
+              : `<p style="color:#6b7a9a;font-size:.88rem;margin:0;">No related tools found.</p>`}
+          </div>`;
+
+        box.innerHTML = screenshotHTML + relatedHTML;
+        box.style.display = "block";
+
+        // Lazy load images
+        if (typeof lazyLoadImgs === "function") lazyLoadImgs(box);
+      };
+    }
+
+    function escapeHtml(s) {
+      return String(s || "").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    }
+
+    /* ── PHASE 1 RENDERER OVERRIDE ─── */
+    function overridePhase1() {
+      if (typeof window.renderPhase1 !== "function") return;
+      window.renderPhase1 = function(merged) {
+        const box = document.getElementById("xe-phase1");
+        if (!box) return;
+
+        const p = merged.pricing || {};
+        const hasPricing = p.free || p.plus || p.team;
+
+        box.innerHTML = `
+          ${merged.long_description ? `<p style="font-size:.95rem;color:#9ca3af;line-height:1.8;margin:0${hasPricing?';margin-bottom:20px;':''};">${escapeHtml(merged.long_description)}</p>` : ""}
+          ${hasPricing ? `
+            <div style="border-top:1px solid rgba(255,255,255,0.07);padding-top:20px;">
+              <div style="font-size:.75rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#6b7a9a;margin-bottom:14px;">Pricing</div>
+              ${p.free ? `<div class="pricing-row"><span class="pricing-label">Free</span><span class="pricing-value">${escapeHtml(p.free)}</span></div>` : ""}
+              ${p.plus ? `<div class="pricing-row"><span class="pricing-label">Plus</span><span class="pricing-value">${escapeHtml(p.plus)}</span></div>` : ""}
+              ${p.team ? `<div class="pricing-row"><span class="pricing-label">Team</span><span class="pricing-value">${escapeHtml(p.team)}</span></div>` : ""}
+            </div>` : ""}`;
+
+        if (merged.long_description || hasPricing) box.style.display = "block";
+      };
+    }
+
+    /* ── BOOT ─── */
+    async function init() {
+      initMobileMenu();
+      initReviewToggle();
+
+      // Wait for tools.js
+      let waited = 0;
+      while (typeof renderToolDetailsPageHydrate !== "function" && waited < 5000) {
+        await new Promise(r => setTimeout(r, 50));
+        waited += 50;
+      }
+
+      // Override renderers before hydrate runs
+      overridePhase1();
+      overridePhase2();
+
+      if (typeof renderToolDetailsPageHydrate === "function") {
+        await renderToolDetailsPageHydrate();
+      }
+
+      // Update page SEO title dynamically
+      const toolName = document.getElementById("tool-name")?.textContent;
+      if (toolName) {
+        document.title = `${toolName} — AI Tool Details | XEdge`;
+        document.querySelector('meta[property="og:title"]')?.setAttribute("content", `${toolName} on XEdge`);
+      }
+
+      // Load reviews
+      const toolKey = new URLSearchParams(location.search).get("tool") || "";
+      if (toolKey) loadReviews(toolKey);
+
+      // Firebase poll
+      let tries = 0;
+      const poll = setInterval(() => {
+        if (typeof firebase !== "undefined") { clearInterval(poll); initFirebase(); }
+        if (++tries > 30) clearInterval(poll);
+      }, 300);
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", init);
+    } else {
+      init();
+    }
+
+  })();
+  </script>
+
+</body>
+</html>

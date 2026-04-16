@@ -1,0 +1,1480 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>XEdge — AI Tools, Wired Into Systems That Actually Work</title>
+<meta name="description" content="Most people collect AI tools. The ones winning use systems. XEdge turns scattered AI tools into working stacks — with costs, roadmaps, and proof from people who built it."/>
+<meta name="robots" content="index,follow"/>
+<link rel="canonical" href="https://xedge.tech/"/>
+<meta property="og:title" content="XEdge — AI Tools, Wired Into Systems That Actually Work"/>
+<meta property="og:description" content="Most people collect AI tools. The ones winning use systems."/>
+<meta property="og:type" content="website"/>
+<meta property="og:image" content="https://xedge.tech/xedge-logo.png"/>
+<meta property="og:url" content="https://xedge.tech/"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<link rel="icon" href="xedge-logo.png" type="image/png"/>
+<meta name="theme-color" content="#0a0a08"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400;1,700&family=IBM+Plex+Sans:wght@300;400;500&display=swap"/>
+<link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400;1,700&family=IBM+Plex+Sans:wght@300;400;500&display=swap"/>
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400;1,700&family=IBM+Plex+Sans:wght@300;400;500&display=swap"/></noscript>
+<script src="analytics.js" defer></script>
+<style>
+/* ═══════════════════════════════════════
+   DESIGN TOKENS
+═══════════════════════════════════════ */
+:root{
+  --bg:    #0a0a08;
+  --bg2:   #111110;
+  --bg3:   #191917;
+  --bg4:   #222220;
+  --line:  rgba(255,255,255,.07);
+  --line2: rgba(255,255,255,.13);
+  --ink:   #f0ece4;
+  --ink2:  #888070;
+  --ink3:  #3f3c35;
+  --gold:  #d4a843;
+  --gold2: rgba(212,168,67,.12);
+  --gold3: rgba(212,168,67,.25);
+  --blue:  #4a8fff;
+  --blue2: rgba(74,143,255,.10);
+  --blue3: rgba(74,143,255,.25);
+  --green: #52e07c;
+  --red:   #f06060;
+  --ff-h:  'Playfair Display', Georgia, serif;
+  --ff-b:  'IBM Plex Sans', system-ui, sans-serif;
+  --max:   1240px;
+  --r:     6px;
+}
+
+/* ═══════════════════════════════════════
+   RESET + BASE
+═══════════════════════════════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:16px}
+body{
+  font-family:var(--ff-b);
+  background:var(--bg);
+  color:var(--ink);
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+  line-height:1.65;
+}
+/* Grain texture */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity:.028;
+}
+a{text-decoration:none;color:inherit}
+img{display:block}
+button{font-family:var(--ff-b);cursor:pointer}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+/* ═══════════════════════════════════════
+   FOCUS
+═══════════════════════════════════════ */
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
+  outline:2px solid var(--gold);outline-offset:3px;border-radius:4px;
+}
+a:focus:not(:focus-visible),button:focus:not(:focus-visible){outline:none}
+
+/* ═══════════════════════════════════════
+   SKIP LINK
+═══════════════════════════════════════ */
+.skip-link{
+  position:absolute;top:-100px;left:20px;z-index:9999;
+  background:var(--gold);color:#000;padding:8px 18px;
+  border-radius:var(--r);font-size:.85rem;font-weight:500;
+  transition:top .15s;
+}
+.skip-link:focus{top:16px}
+
+/* ═══════════════════════════════════════
+   NAV
+═══════════════════════════════════════ */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  height:60px;display:flex;align-items:center;
+  background:rgba(10,10,8,.9);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--line);
+}
+.nav-in{
+  max-width:var(--max);width:100%;margin:0 auto;
+  padding:0 28px;display:flex;align-items:center;justify-content:space-between;
+}
+.nav-logo{display:flex;align-items:center;gap:10px;color:var(--ink);font-family:var(--ff-h);font-size:1rem;font-weight:700;letter-spacing:.02em}
+.nav-logo img{width:26px;height:26px;border-radius:5px}
+.nav-links{display:flex;gap:0}
+.nav-links a{font-size:.8rem;font-weight:300;color:var(--ink2);padding:6px 14px;border-radius:4px;transition:color .15s}
+.nav-links a:hover{color:var(--ink)}
+.nav-links a.active{color:var(--gold)}
+.nav-r{display:flex;align-items:center;gap:10px}
+.nav-cta{
+  background:var(--gold);color:#000;
+  font-size:.75rem;font-weight:500;letter-spacing:.04em;
+  padding:7px 18px;border-radius:var(--r);
+  transition:opacity .15s;border:none;
+}
+.nav-cta:hover{opacity:.85}
+[data-auth]{display:flex;align-items:center}
+.btn-signin{
+  border:1px solid var(--line2);background:none;
+  color:var(--ink2);font-size:.78rem;padding:6px 15px;
+  border-radius:var(--r);transition:border-color .15s,color .15s;
+}
+.btn-signin:hover{border-color:var(--gold3);color:var(--gold)}
+/* hamburger */
+.hbg{display:none;background:none;border:none;padding:8px;color:var(--ink2);flex-direction:column;gap:5px;align-items:center}
+.hbg span{display:block;width:20px;height:1.5px;background:currentColor;transition:transform .25s,opacity .25s;border-radius:2px}
+.hbg.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+.hbg.open span:nth-child(2){opacity:0}
+.hbg.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+/* mobile menu */
+.mmenu{
+  position:fixed;top:60px;left:0;right:0;z-index:99;
+  background:rgba(10,10,8,.98);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--line);
+  padding:12px 20px 24px;
+  display:none;flex-direction:column;gap:2px;
+  opacity:0;transform:translateY(-6px);transition:opacity .2s,transform .2s;
+}
+.mmenu.open{display:flex;opacity:1;transform:translateY(0)}
+.mmenu a{padding:11px 14px;font-size:.92rem;color:var(--ink2);border-bottom:1px solid var(--line);transition:color .15s}
+.mmenu a:hover{color:var(--ink)}
+.mmenu .mcta{background:var(--gold);color:#000;text-align:center;margin-top:10px;border-radius:var(--r);border:none;padding:11px;font-weight:500}
+.backdrop{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:98;opacity:0;pointer-events:none;transition:opacity .2s}
+.backdrop.show{opacity:1;pointer-events:auto}
+
+/* ═══════════════════════════════════════
+   SECTION FRAME
+═══════════════════════════════════════ */
+.wrap{max-width:var(--max);margin:0 auto;padding:0 28px}
+.s{padding:96px 0;position:relative;z-index:1}
+.s-alt{background:var(--bg2)}
+.divider{height:1px;background:var(--line);margin:0 28px}
+.eyebrow{font-size:.68rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
+.h2{font-family:var(--ff-h);font-size:clamp(1.9rem,3.5vw,2.8rem);font-weight:700;letter-spacing:-.02em;line-height:1.1;color:var(--ink)}
+.h2 em{font-style:italic;font-weight:400;color:var(--gold)}
+.sub{font-size:.9rem;color:var(--ink2);line-height:1.8;font-weight:300;max-width:460px;margin-top:12px}
+
+/* ═══════════════════════════════════════
+   ANIMATIONS
+═══════════════════════════════════════ */
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.65)}}
+@keyframes shimmer{to{background-position:-200% 0}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .7s cubic-bezier(.2,.8,.2,1),transform .7s cubic-bezier(.2,.8,.2,1)}
+.reveal.in{opacity:1;transform:translateY(0)}
+
+/* ═══════════════════════════════════════
+   ① HERO — the hook
+   "You have 47 AI tools. How many are working?"
+═══════════════════════════════════════ */
+.hero{
+  min-height:100vh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:100px 28px 80px;text-align:center;
+  position:relative;z-index:1;
+}
+/* Radial glow behind headline */
+.hero::before{
+  content:'';position:absolute;top:20%;left:50%;transform:translateX(-50%);
+  width:700px;height:500px;
+  background:radial-gradient(ellipse,rgba(212,168,67,.06) 0%,transparent 66%);
+  pointer-events:none;z-index:-1;
+}
+/* Horizontal rule lines - editorial */
+.hero::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;
+  height:1px;background:linear-gradient(90deg,transparent,var(--gold3),transparent);
+}
+.hero-kicker{
+  display:inline-flex;align-items:center;gap:8px;
+  border:1px solid var(--line2);border-radius:100px;
+  padding:5px 16px 5px 12px;font-size:.7rem;font-weight:400;
+  color:var(--ink2);letter-spacing:.08em;text-transform:uppercase;
+  margin-bottom:40px;animation:fadeUp .6s ease both;
+}
+.kicker-dot{width:5px;height:5px;border-radius:50%;background:var(--green);animation:pulse 2.5s ease infinite}
+.hero-h1{
+  font-family:var(--ff-h);
+  font-size:clamp(3rem,7.5vw,7.2rem);
+  line-height:.92;letter-spacing:-.03em;
+  max-width:920px;margin:0 auto 30px;
+  animation:fadeUp .6s .08s ease both;
+}
+.hero-h1 .l1{display:block;font-weight:900;color:var(--ink)}
+.hero-h1 .l2{display:block;font-weight:400;font-style:italic;color:var(--gold);font-size:.95em}
+.hero-h1 .l3{display:block;font-weight:900;color:var(--ink)}
+.hero-answer{
+  font-size:clamp(.9rem,1.8vw,1.05rem);color:var(--ink2);
+  max-width:480px;margin:0 auto 48px;line-height:1.85;font-weight:300;
+  animation:fadeUp .6s .15s ease both;
+}
+.hero-answer strong{color:var(--ink);font-weight:500}
+/* Search input — the one action */
+.hero-input-wrap{
+  width:100%;max-width:600px;margin:0 auto 20px;
+  position:relative;z-index:10;animation:fadeUp .6s .22s ease both;
+}
+.hero-input-box{
+  display:flex;align-items:center;
+  background:var(--bg2);border:1px solid var(--line2);
+  border-radius:100px;padding:7px 7px 7px 24px;gap:10px;
+  transition:border-color .2s,box-shadow .2s;
+}
+.hero-input-box:focus-within{
+  border-color:var(--gold3);
+  box-shadow:0 0 0 4px rgba(212,168,67,.08);
+}
+.hero-input-box input{
+  flex:1;background:transparent;border:none;outline:none;
+  font-family:var(--ff-b);font-size:.95rem;color:var(--ink);font-weight:300;
+}
+.hero-input-box input::placeholder{color:var(--ink3)}
+.btn-search{
+  background:var(--gold);color:#000;border:none;
+  font-family:var(--ff-b);font-size:.82rem;font-weight:500;
+  padding:11px 26px;border-radius:100px;white-space:nowrap;
+  letter-spacing:.03em;transition:opacity .15s;
+  display:flex;align-items:center;gap:6px;
+}
+.btn-search:hover{opacity:.87}
+.hero-hint{font-size:.72rem;color:var(--ink3);margin-bottom:28px;animation:fadeUp .6s .27s ease both}
+.hero-hint a{color:var(--gold);text-decoration:none}
+.hero-hint a:hover{text-decoration:underline}
+/* Goal chips */
+.chips{
+  display:flex;flex-wrap:wrap;justify-content:center;gap:8px;
+  max-width:620px;margin:0 auto;animation:fadeUp .6s .32s ease both;
+}
+.chip{
+  background:transparent;border:1px solid var(--line2);
+  color:var(--ink2);font-family:var(--ff-b);font-size:.76rem;
+  padding:7px 16px;border-radius:100px;transition:all .15s;
+}
+.chip:hover{border-color:var(--gold3);color:var(--gold);background:var(--gold2)}
+/* Search dropdown */
+.search-drop{
+  position:absolute;top:calc(100% + 8px);left:0;right:0;
+  background:var(--bg2);border:1px solid var(--line2);
+  border-radius:16px;overflow:hidden;z-index:50;
+  box-shadow:0 24px 64px rgba(0,0,0,.6);
+}
+.search-drop.hidden{display:none}
+.search-drop a{
+  display:flex;align-items:center;gap:12px;
+  padding:12px 18px;color:var(--ink);
+  border-bottom:1px solid var(--line);transition:background .15s;
+}
+.search-drop a:last-child{border-bottom:none}
+.search-drop a:hover{background:var(--bg3)}
+.search-drop img{width:32px;height:32px;border-radius:8px;object-fit:contain;background:var(--bg3);flex-shrink:0}
+.search-no{padding:14px 18px;color:var(--ink3);font-size:.82rem}
+/* Stats */
+.hero-stats{
+  display:flex;align-items:center;gap:40px;flex-wrap:wrap;justify-content:center;
+  margin-top:72px;padding-top:40px;border-top:1px solid var(--line);
+  animation:fadeUp .6s .36s ease both;
+}
+.stat-n{font-family:var(--ff-h);font-size:2.1rem;font-weight:700;color:var(--ink);letter-spacing:-.03em}
+.stat-l{font-size:.68rem;color:var(--ink3);text-transform:uppercase;letter-spacing:.1em;margin-top:3px}
+.stat-div{width:1px;height:36px;background:var(--line)}
+
+/* ═══════════════════════════════════════
+   ② TICKER — social proof, always moving
+═══════════════════════════════════════ */
+.ticker-bar{
+  overflow:hidden;border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  background:var(--bg2);padding:13px 0;
+}
+.ticker-track{display:flex;animation:ticker 30s linear infinite;width:max-content}
+.ticker-track:hover{animation-play-state:paused}
+.ti{
+  display:flex;align-items:center;gap:9px;
+  padding:0 32px;border-right:1px solid var(--line);
+  font-size:.74rem;color:var(--ink3);white-space:nowrap;letter-spacing:.04em;
+}
+.ti strong{color:var(--ink2);font-weight:500}
+.ti-dot{width:4px;height:4px;border-radius:50%;background:var(--gold);flex-shrink:0}
+
+/* ═══════════════════════════════════════
+   ③ PROBLEM — "The real reason AI isn't 
+      working for you yet"
+   Beginner trap section
+═══════════════════════════════════════ */
+.problem-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:1px;
+  border:1px solid var(--line);border-radius:12px;overflow:hidden;
+  margin-top:52px;
+}
+.problem-card{
+  background:var(--bg2);padding:36px 32px;
+  border-right:1px solid var(--line);border-bottom:1px solid var(--line);
+  position:relative;overflow:hidden;
+}
+.problem-card:nth-child(even){border-right:none}
+.problem-card:nth-child(3),.problem-card:nth-child(4){border-bottom:none}
+.problem-card::before{
+  content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:var(--red);opacity:.6;
+}
+.problem-n{
+  font-family:var(--ff-h);font-size:3.5rem;font-weight:900;
+  color:var(--line2);line-height:1;margin-bottom:20px;letter-spacing:-.05em;
+}
+.problem-card h3{font-family:var(--ff-h);font-size:1.05rem;font-weight:700;color:var(--ink);margin-bottom:10px}
+.problem-card p{font-size:.83rem;color:var(--ink2);line-height:1.75;font-weight:300}
+.vs-bridge{
+  margin-top:48px;padding:32px;
+  background:linear-gradient(135deg,rgba(212,168,67,.07),rgba(74,143,255,.05));
+  border:1px solid var(--gold3);border-radius:12px;
+  display:grid;grid-template-columns:1fr auto 1fr;gap:24px;align-items:center;
+}
+.vs-side{font-size:.85rem;color:var(--ink2);line-height:1.75;font-weight:300}
+.vs-side h4{font-family:var(--ff-h);font-size:1rem;font-weight:700;margin-bottom:8px}
+.vs-side.before h4{color:var(--red)}
+.vs-side.after h4{color:var(--green)}
+.vs-arrow{width:40px;height:40px;border-radius:50%;background:var(--gold2);border:1px solid var(--gold3);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.vs-arrow svg{width:18px;height:18px;color:var(--gold)}
+
+/* ═══════════════════════════════════════
+   ④ HOW IT WORKS — 3 steps, no fluff
+═══════════════════════════════════════ */
+.how-grid{
+  display:grid;grid-template-columns:1fr 24px 1fr 24px 1fr;
+  align-items:start;margin-top:56px;gap:0;
+}
+.how-step{
+  background:var(--bg2);border:1px solid var(--line);
+  border-radius:10px;padding:36px;
+  transition:border-color .2s;
+}
+.how-step:hover{border-color:var(--line2)}
+.how-n{
+  font-family:var(--ff-h);font-size:3rem;font-weight:900;
+  color:var(--line2);line-height:1;margin-bottom:22px;
+  letter-spacing:-.05em;
+}
+.how-step h3{
+  font-family:var(--ff-h);font-size:1.1rem;font-weight:700;
+  color:var(--ink);margin-bottom:10px;
+}
+.how-step p{font-size:.82rem;color:var(--ink2);line-height:1.75;font-weight:300}
+.how-arrow{
+  display:flex;align-items:center;justify-content:center;
+  color:var(--ink3);padding-top:72px;
+}
+.how-arrow svg{width:20px;height:20px}
+
+/* ═══════════════════════════════════════
+   ⑤ GOAL STACKS — the product showcase
+═══════════════════════════════════════ */
+.stacks-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
+  gap:14px;margin-top:44px;
+}
+.stack-card{
+  background:var(--bg2);border:1px solid var(--line);
+  border-radius:10px;padding:26px;
+  text-decoration:none;display:block;
+  transition:border-color .2s,background .2s,transform .2s;
+  position:relative;overflow:hidden;
+}
+.stack-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--gold),var(--blue));
+  opacity:0;transition:opacity .2s;
+}
+.stack-card:hover{border-color:var(--line2);background:var(--bg3);transform:translateY(-3px)}
+.stack-card:hover::before{opacity:1}
+.stack-logos{display:flex;margin-bottom:18px}
+.stack-logos img{
+  width:28px;height:28px;border-radius:6px;border:2px solid var(--bg2);
+  object-fit:contain;background:#fff;padding:2px;
+  margin-left:-7px;
+}
+.stack-logos img:first-child{margin-left:0}
+.stack-card h3{font-family:var(--ff-h);font-size:1rem;font-weight:700;color:var(--ink);margin-bottom:6px}
+.stack-card p{font-size:.78rem;color:var(--ink2);line-height:1.65;font-weight:300;margin-bottom:16px}
+.stack-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.meta-tag{font-size:.67rem;font-weight:500;padding:3px 9px;border-radius:4px;letter-spacing:.04em;white-space:nowrap}
+.mt-cost{background:rgba(82,224,124,.1);color:var(--green);border:1px solid rgba(82,224,124,.2)}
+.mt-time{background:rgba(212,168,67,.1);color:var(--gold);border:1px solid var(--gold3)}
+.mt-diff{background:rgba(255,255,255,.05);color:var(--ink2);border:1px solid var(--line2)}
+.stacks-cta{text-align:center;margin-top:40px}
+
+/* ═══════════════════════════════════════
+   ⑥ TRUST WALL — real numbers, real proof
+   "Don't take our word for it"
+═══════════════════════════════════════ */
+.trust-numbers{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:1px;background:var(--line);
+  border:1px solid var(--line);border-radius:10px;
+  overflow:hidden;margin-bottom:56px;
+}
+.trust-n-card{background:var(--bg2);padding:36px 28px;text-align:center;transition:background .2s}
+.trust-n-card:hover{background:var(--bg3)}
+.trust-big{font-family:var(--ff-h);font-size:2.8rem;font-weight:700;color:var(--ink);letter-spacing:-.04em;line-height:1}
+.trust-label{font-size:.72rem;color:var(--ink3);text-transform:uppercase;letter-spacing:.1em;margin-top:8px}
+.reviews-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  gap:14px;
+}
+.review-card{
+  background:var(--bg2);border:1px solid var(--line);
+  border-radius:10px;padding:26px;
+}
+.review-stars{color:var(--gold);font-size:.9rem;margin-bottom:12px;letter-spacing:.06em}
+.review-text{font-size:.83rem;color:var(--ink2);line-height:1.75;font-weight:300;margin-bottom:16px;font-style:italic}
+.review-text::before{content:'"';font-family:var(--ff-h);font-size:1.2rem;color:var(--gold);line-height:1}
+.review-author{display:flex;align-items:center;gap:10px}
+.review-avatar{
+  width:34px;height:34px;border-radius:50%;
+  background:var(--gold2);border:1px solid var(--gold3);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.8rem;font-weight:600;color:var(--gold);font-family:var(--ff-h);
+  flex-shrink:0;
+}
+.review-name{font-size:.8rem;font-weight:500;color:var(--ink)}
+.review-role{font-size:.72rem;color:var(--ink3)}
+
+/* ═══════════════════════════════════════
+   ⑦ TOOLS EXPLORER PREVIEW
+═══════════════════════════════════════ */
+.tools-scroller{
+  display:flex;gap:14px;overflow-x:auto;
+  padding-bottom:4px;scroll-snap-type:x mandatory;
+  -ms-overflow-style:none;scrollbar-width:none;
+  margin-top:44px;
+}
+.tools-scroller::-webkit-scrollbar{display:none}
+.tool-card-s{
+  min-width:200px;max-width:200px;flex-shrink:0;scroll-snap-align:start;
+  background:var(--bg2);border:1px solid var(--line);
+  border-radius:10px;padding:22px;
+  display:flex;flex-direction:column;
+  transition:border-color .2s;
+}
+.tool-card-s:hover{border-color:var(--line2)}
+.tool-card-s img{
+  width:42px;height:42px;border-radius:9px;
+  object-fit:contain;background:#fff;margin-bottom:14px;padding:3px;
+}
+.tool-card-s h3{font-family:var(--ff-h);font-size:.9rem;font-weight:700;color:var(--ink);margin-bottom:5px}
+.tool-card-s p{font-size:.74rem;color:var(--ink2);line-height:1.6;flex:1;margin-bottom:14px}
+.tool-link-s{
+  font-size:.72rem;color:var(--ink2);border:1px solid var(--line2);
+  padding:6px 14px;border-radius:4px;text-align:center;
+  transition:border-color .15s,color .15s;
+}
+.tool-link-s:hover{border-color:var(--gold3);color:var(--gold)}
+.scroll-btn{
+  position:absolute;top:50%;transform:translateY(-50%);
+  width:32px;height:32px;background:var(--bg2);
+  border:1px solid var(--line2);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;color:var(--ink2);z-index:10;
+  transition:border-color .15s,color .15s;
+}
+.scroll-btn:hover{border-color:var(--gold3);color:var(--gold)}
+.scroll-btn svg{width:14px;height:14px}
+.skel-tool{min-width:200px;height:180px;flex-shrink:0;border-radius:10px}
+
+/* ═══════════════════════════════════════
+   ⑧ COMMUNITY — the moat section
+   "Built by people who actually use it"
+═══════════════════════════════════════ */
+.community-split{
+  display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;
+}
+.community-left .h2{margin-bottom:16px}
+.community-points{display:flex;flex-direction:column;gap:18px;margin-top:32px}
+.comm-point{display:flex;align-items:flex-start;gap:16px}
+.comm-icon{
+  width:36px;height:36px;border-radius:8px;flex-shrink:0;
+  background:var(--gold2);border:1px solid var(--gold3);
+  display:flex;align-items:center;justify-content:center;
+  margin-top:1px;
+}
+.comm-icon svg{width:17px;height:17px;color:var(--gold)}
+.comm-text h4{font-size:.9rem;font-weight:500;color:var(--ink);margin-bottom:4px}
+.comm-text p{font-size:.8rem;color:var(--ink2);line-height:1.7;font-weight:300}
+.community-right{
+  background:var(--bg3);border:1px solid var(--line);
+  border-radius:14px;padding:32px;
+}
+.activity-feed{display:flex;flex-direction:column;gap:14px}
+.activity-item{
+  display:flex;align-items:flex-start;gap:12px;
+  padding-bottom:14px;border-bottom:1px solid var(--line);
+}
+.activity-item:last-child{border-bottom:none;padding-bottom:0}
+.activity-avatar{
+  width:32px;height:32px;border-radius:50%;flex-shrink:0;
+  background:var(--bg4);border:1px solid var(--line);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.7rem;font-weight:600;color:var(--ink2);font-family:var(--ff-h);
+}
+.activity-body{flex:1;min-width:0}
+.activity-body p{font-size:.78rem;color:var(--ink2);line-height:1.5}
+.activity-body p strong{color:var(--ink);font-weight:500}
+.activity-time{font-size:.68rem;color:var(--ink3);margin-top:3px;white-space:nowrap}
+.live-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:.65rem;color:var(--green);margin-bottom:16px;
+  text-transform:uppercase;letter-spacing:.1em;font-weight:500;
+}
+.live-dot{width:5px;height:5px;border-radius:50%;background:var(--green);animation:pulse 2s ease infinite}
+
+/* ═══════════════════════════════════════
+   ⑨ REVENUE MODEL — transparent pricing
+   Keeps trust
+═══════════════════════════════════════ */
+.pricing-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-top:48px}
+.price-card{
+  background:var(--bg2);border:1px solid var(--line);
+  border-radius:10px;padding:32px;
+  transition:border-color .2s;
+  position:relative;overflow:hidden;
+}
+.price-card.featured{border-color:var(--gold3)}
+.price-card.featured::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--gold),rgba(212,168,67,0));
+}
+.price-tier{font-size:.68rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--ink3);margin-bottom:12px}
+.price-tag{font-family:var(--ff-h);font-size:2.4rem;font-weight:700;color:var(--ink);line-height:1;margin-bottom:6px}
+.price-tag sup{font-size:1.2rem;vertical-align:top;margin-top:6px;font-weight:400}
+.price-tag .period{font-size:.85rem;font-weight:300;color:var(--ink2)}
+.price-desc{font-size:.8rem;color:var(--ink2);font-weight:300;margin-bottom:24px}
+.price-features{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:28px}
+.price-features li{display:flex;align-items:flex-start;gap:9px;font-size:.8rem;color:var(--ink2);line-height:1.5}
+.price-features li::before{
+  content:'';width:14px;height:14px;border-radius:50%;
+  background:var(--gold2);border:1px solid var(--gold3);flex-shrink:0;
+  margin-top:1px;
+}
+.btn-price{
+  width:100%;padding:11px;border-radius:var(--r);
+  font-family:var(--ff-b);font-size:.82rem;font-weight:500;
+  letter-spacing:.02em;transition:opacity .15s,background .15s;
+  border:1px solid var(--line2);background:transparent;color:var(--ink2);
+}
+.btn-price:hover{border-color:var(--gold3);color:var(--gold)}
+.price-card.featured .btn-price{background:var(--gold);color:#000;border-color:var(--gold)}
+.price-card.featured .btn-price:hover{opacity:.87}
+
+/* ═══════════════════════════════════════
+   ⑩ NEWSLETTER — "The Edge"
+═══════════════════════════════════════ */
+.newsletter-wrap{
+  background:var(--bg2);border:1px solid var(--line);
+  border-radius:14px;padding:64px 56px;
+  display:grid;grid-template-columns:1fr 1fr;gap:56px;
+  align-items:center;
+}
+.nl-left .h2{margin-bottom:14px}
+.nl-left p{font-size:.85rem;color:var(--ink2);line-height:1.8;font-weight:300}
+.nl-form{display:flex;flex-direction:column;gap:10px}
+.nl-input{
+  background:var(--bg3);border:1px solid var(--line2);
+  border-radius:var(--r);padding:13px 18px;
+  color:var(--ink);font-family:var(--ff-b);font-size:.88rem;
+  outline:none;transition:border-color .2s;
+}
+.nl-input:focus{border-color:var(--gold)}
+.nl-input::placeholder{color:var(--ink3)}
+.nl-btn{
+  background:var(--gold);color:#000;border:none;
+  padding:13px;border-radius:var(--r);
+  font-family:var(--ff-b);font-size:.88rem;font-weight:500;
+  letter---spacing:.03em;transition:opacity .15s;
+}
+.nl-btn:hover{opacity:.87}
+.nl-success{display:none;color:var(--green);font-size:.85rem;padding:10px 0}
+
+/* ═══════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════ */
+.footer{border-top:1px solid var(--line);padding:64px 0 36px;position:relative;z-index:1}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px}
+.footer-brand img{width:26px;height:26px;border-radius:5px;margin-bottom:12px}
+.footer-logo-text{font-family:var(--ff-h);font-weight:700;font-size:1rem;color:var(--gold);margin-bottom:8px}
+.footer-brand p{font-size:.8rem;color:var(--ink2);line-height:1.7;font-weight:300;max-width:220px}
+.footer-socials{display:flex;gap:10px;margin-top:18px}
+.footer-socials a{
+  width:33px;height:33px;border-radius:7px;
+  background:var(--bg2);border:1px solid var(--line);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--ink2);transition:color .15s,border-color .15s;
+}
+.footer-socials a:hover{color:var(--gold);border-color:var(--gold3)}
+.footer-socials svg{width:14px;height:14px}
+.footer-col h4{font-size:.76rem;font-weight:500;color:var(--ink);letter-spacing:.04em;margin-bottom:14px}
+.footer-col ul{list-style:none;display:flex;flex-direction:column;gap:9px}
+.footer-col a{font-size:.78rem;color:var(--ink2);transition:color .15s}
+.footer-col a:hover{color:var(--gold)}
+.footer-bottom{
+  padding-top:24px;border-top:1px solid var(--line);
+  display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:8px;font-size:.74rem;color:var(--ink3);
+}
+/* AI BUTTON */
+#xe-ai-btn{
+  position:fixed;bottom:24px;right:24px;
+  width:52px;height:52px;border-radius:50%;
+  background:linear-gradient(135deg,var(--gold),var(--blue));
+  color:#fff;font-size:20px;cursor:pointer;z-index:9999;
+  border:none;box-shadow:0 8px 24px rgba(212,168,67,.3);
+  display:flex;align-items:center;justify-content:center;
+  transition:transform .2s;
+}
+#xe-ai-btn:hover{transform:scale(1.1)}
+
+/* ═══════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════ */
+@media(max-width:900px){
+  .footer-grid{grid-template-columns:1fr 1fr;gap:32px}
+  .how-grid{grid-template-columns:1fr;gap:12px}
+  .how-arrow{display:none}
+  .problem-grid{grid-template-columns:1fr}
+  .problem-card{border-right:none}
+  .community-split{grid-template-columns:1fr;gap:36px}
+  .trust-numbers{grid-template-columns:1fr 1fr}
+  .pricing-grid{grid-template-columns:1fr}
+  .newsletter-wrap{grid-template-columns:1fr;padding:40px 28px;gap:32px}
+  .vs-bridge{grid-template-columns:1fr;text-align:center}
+  .vs-arrow{margin:0 auto}
+}
+@media(max-width:600px){
+  .footer-grid{grid-template-columns:1fr;gap:28px}
+  .trust-numbers{grid-template-columns:1fr 1fr}
+  .stacks-grid{grid-template-columns:1fr}
+  .hero-h1{letter-spacing:-.02em}
+  .nav-links,.nav-cta{display:none!important}
+  .hbg{display:flex!important}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
+</style>
+</head>
+
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<!-- BACKDROP + MOBILE MENU -->
+<div id="backdrop" class="backdrop" aria-hidden="true"></div>
+<div id="mmenu" class="mmenu" role="dialog" aria-label="Mobile navigation">
+  <a href="index.html">Home</a>
+  <a href="Explore.html">Explore Tools</a>
+  <a href="Categories.html">Categories</a>
+  <a href="stack.html">Stacks</a>
+  <a href="About.html">About</a>
+  <a href="Join.html" class="mcta">Join Beta — Free</a>
+</div>
+
+<!-- NAV -->
+<nav class="nav" role="navigation" aria-label="Main navigation">
+  <div class="nav-in">
+    <a href="index.html" class="nav-logo">
+      <img src="xedge-logo.png" alt="XEdge logo" width="26" height="26" fetchpriority="high"/>
+      XEDGE
+    </a>
+    <div class="nav-links">
+      <a href="Explore.html">Explore</a>
+      <a href="Categories.html">Categories</a>
+      <a href="stack.html" class="active">Stacks</a>
+      <a href="About.html">About</a>
+    </div>
+    <div class="nav-r">
+      <a href="Join.html" class="nav-cta">Join Beta</a>
+      <div data-auth><button class="btn-signin" onclick="signInWithGoogle()">Sign In</button></div>
+      <button id="hbg" class="hbg" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<main id="main-content">
+
+<!-- ══════════════════════════════════════════
+     ① HERO
+     Hook: The question that calls them out
+══════════════════════════════════════════ -->
+<section class="hero" aria-label="Homepage hero">
+  <div class="hero-kicker">
+    <span class="kicker-dot" aria-hidden="true"></span>
+    The AI wiring layer
+  </div>
+
+  <h1 class="hero-h1">
+    <span class="l1">You have the tools.</span>
+    <span class="l2">Why isn't anything working?</span>
+    <span class="l3">Fix the wiring.</span>
+  </h1>
+
+  <p class="hero-answer">
+    Having ChatGPT, Midjourney, and Notion isn't a strategy.
+    <strong>A system is.</strong> XEdge shows you exactly which tools to combine,
+    in what order, for what goal — with real costs and a step-by-step roadmap.
+  </p>
+
+  <!-- Primary action: search your goal -->
+  <div class="hero-input-wrap">
+    <div class="hero-input-box" role="search">
+      <input
+        type="search" id="hero-search"
+        placeholder="What do you want to build? Try 'newsletter business' or 'AI agency'…"
+        autocomplete="off" aria-label="Search for a stack or goal"
+        oninput="heroSearch()"
+        onkeydown="if(event.key==='Enter')heroSearch(true)"
+      />
+      <button class="btn-search" onclick="heroSearch(true)" aria-label="Search">
+        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        Find my stack
+      </button>
+    </div>
+    <div id="hero-drop" class="search-drop hidden" role="listbox" aria-label="Search suggestions"></div>
+  </div>
+
+  <p class="hero-hint">
+    Or jump straight to a goal:
+    <a href="stack.html?goal=start-business">Start a business</a> ·
+    <a href="stack.html?goal=create-content">Create content</a> ·
+    <a href="stack.html?goal=make-money">Make money with AI</a>
+  </p>
+
+  <div class="chips" role="group" aria-label="Quick goal filters">
+    <button class="chip" onclick="location.href='stack.html?goal=make-money'">💰 Make Money</button>
+    <button class="chip" onclick="location.href='stack.html?goal=start-business'">🚀 Start a Business</button>
+    <button class="chip" onclick="location.href='stack.html?goal=grow-audience'">📈 Grow Audience</button>
+    <button class="chip" onclick="location.href='stack.html?goal=save-time'">⚡ Automate Work</button>
+    <button class="chip" onclick="location.href='stack.html?goal=create-content'">🎬 Create Content</button>
+    <button class="chip" onclick="location.href='stack.html?goal=learn-ai'">🧠 Learn AI Fast</button>
+  </div>
+
+  <div class="hero-stats" aria-label="Platform statistics">
+    <div>
+      <div class="stat-n" data-count="300" data-suffix="+">300+</div>
+      <div class="stat-l">Builders using XEdge</div>
+    </div>
+    <div class="stat-div" aria-hidden="true"></div>
+    <div>
+      <div class="stat-n" data-count="18" data-suffix="+">18+</div>
+      <div class="stat-l">Validated stacks</div>
+    </div>
+    <div class="stat-div" aria-hidden="true"></div>
+    <div>
+      <div class="stat-n" data-count="150" data-suffix="+">150+</div>
+      <div class="stat-l">AI tools indexed</div>
+    </div>
+    <div class="stat-div" aria-hidden="true"></div>
+    <div>
+      <div class="stat-n">£13</div>
+      <div class="stat-l">Avg monthly stack cost</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     ② TICKER — proof always moving
+══════════════════════════════════════════ -->
+<div class="ticker-bar" aria-hidden="true">
+  <div class="ticker-track" id="ticker">
+    <div class="ti"><span class="ti-dot"></span><strong>Newsletter business</strong> stack · 5 tools · £18/mo</div>
+    <div class="ti"><span class="ti-dot"></span><strong>AI Agency</strong> stack · 7 tools · £45/mo</div>
+    <div class="ti"><span class="ti-dot"></span><strong>Solo SaaS</strong> stack · 6 tools · £32/mo</div>
+    <div class="ti"><span class="ti-dot"></span><strong>Content Creator</strong> stack · 4 tools · £0/mo</div>
+    <div class="ti"><span class="ti-dot"></span><strong>Freelance Copywriter</strong> stack · 3 tools · £12/mo</div>
+    <div class="ti"><span class="ti-dot"></span><strong>Dropshipping</strong> stack · 5 tools · £28/mo</div>
+    <div class="ti"><span class="ti-dot"></span><strong>Productivity System</strong> stack · 4 tools · £0/mo</div>
+    <div class="ti"><span class="ti-dot"></span><strong>E-commerce brand</strong> stack · 8 tools · £54/mo</div>
+    <!-- duplicated for seamless loop -->
+    <div class="ti"><span class="ti-dot"></span><strong>Newsletter business</strong> stack · 5 tools · £18/mo</div>
+    <div class="ti"><span class="ti-dot"></span><strong>AI Agency</strong> stack · 7 tools · £45/mo</div>
+    <div class="ti"><span class="ti-dot"></span><strong>Solo SaaS</strong> stack · 6 tools · £32/mo</div>
+    <div class="ti"><span class="ti-dot"></span><strong>Content Creator</strong> stack · 4 tools · £0/mo</div>
+    <div class="ti"><span class="ti-dot"></span><strong>Freelance Copywriter</strong> stack · 3 tools · £12/mo</div>
+    <div class="ti"><span class="ti-dot"></span><strong>Dropshipping</strong> stack · 5 tools · £28/mo</div>
+    <div class="ti"><span class="ti-dot"></span><strong>Productivity System</strong> stack · 4 tools · £0/mo</div>
+    <div class="ti"><span class="ti-dot"></span><strong>E-commerce brand</strong> stack · 8 tools · £54/mo</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     ③ PROBLEM — the beginner trap
+     Makes the reader feel understood
+══════════════════════════════════════════ -->
+<section class="s" aria-labelledby="problem-heading">
+  <div class="wrap">
+    <p class="eyebrow">Why most people fail with AI</p>
+    <h2 class="h2" id="problem-heading">The tools aren't the problem.<br/><em>The missing system is.</em></h2>
+    <p class="sub">Every week another AI tool launches. Every week another person downloads it, plays with it for three days, and quietly gives up. Here's why.</p>
+
+    <div class="problem-grid" role="list">
+      <div class="problem-card reveal" role="listitem">
+        <div class="problem-n" aria-hidden="true">01</div>
+        <h3>They collect tools instead of building systems</h3>
+        <p>ChatGPT for writing. Midjourney for images. Notion for notes. But none of these tools talk to each other. You're doing the integration manually — in your head — every single time.</p>
+      </div>
+      <div class="problem-card reveal" role="listitem">
+        <div class="problem-n" aria-hidden="true">02</div>
+        <h3>They follow tutorial videos, not real users</h3>
+        <p>That influencer reviewing 10 AI tools in 8 minutes hasn't used any of them seriously. The honest information — what actually costs money, what breaks, what works — lives with real builders.</p>
+      </div>
+      <div class="problem-card reveal" role="listitem">
+        <div class="problem-n" aria-hidden="true">03</div>
+        <h3>They don't know what order to build in</h3>
+        <p>Should you set up the automation before the content? The landing page before the email? Get the order wrong and you waste months building on top of something that needs to be rebuilt.</p>
+      </div>
+      <div class="problem-card reveal" role="listitem">
+        <div class="problem-n" aria-hidden="true">04</div>
+        <h3>They don't know what it should actually cost</h3>
+        <p>Tool subscriptions stack up fast. Most people are either overpaying for things they don't need or underpaying and hitting walls they can't debug. The economics matter.</p>
+      </div>
+    </div>
+
+    <div class="vs-bridge reveal">
+      <div class="vs-side before">
+        <h4>Without XEdge</h4>
+        Spending £150/mo on 12 tools you don't understand, watching YouTube tutorials for 3 hours to do a task that should take 20 minutes, rebuilding the same workflow from scratch every project.
+      </div>
+      <div class="vs-arrow" aria-hidden="true">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      </div>
+      <div class="vs-side after">
+        <h4>With XEdge</h4>
+        A curated stack of 4 tools that cost £18/mo total, wired together in a sequence that takes 2 hours to set up, built by 40 other people who already did it and left their notes.
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══════════════════════════════════════════
+     ④ HOW IT WORKS
+══════════════════════════════════════════ -->
+<section class="s s-alt" aria-labelledby="how-heading">
+  <div class="wrap">
+    <p class="eyebrow">How XEdge works</p>
+    <h2 class="h2" id="how-heading">From scattered tools<br/><em>to a working system.</em></h2>
+    <p class="sub">Three steps. No prior experience required. No guessing.</p>
+
+    <div class="how-grid" role="list">
+      <div class="how-step reveal" role="listitem">
+        <div class="how-n" aria-hidden="true">1</div>
+        <h3>Tell us what you're trying to build</h3>
+        <p>Search for a goal — "freelance design business", "newsletter with paid tiers", "AI automation agency". We match it to a stack that's already been built and tested by real people.</p>
+      </div>
+      <div class="how-arrow" aria-hidden="true">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      </div>
+      <div class="how-step reveal" role="listitem">
+        <div class="how-n" aria-hidden="true">2</div>
+        <h3>Get a complete wiring diagram</h3>
+        <p>Every stack shows you exactly which tools, what each one does, how they connect, what it costs per month, how long setup takes, and a step-by-step roadmap to go from zero to live.</p>
+      </div>
+      <div class="how-arrow" aria-hidden="true">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      </div>
+      <div class="how-step reveal" role="listitem">
+        <div class="how-n" aria-hidden="true">3</div>
+        <h3>Build it. Improve it. Share it back.</h3>
+        <p>Follow the roadmap. When you find a better tool, a cheaper alternative, or a smarter sequence — update the stack. The community learns from your real experience, not your guesses.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══════════════════════════════════════════
+     ⑤ GOAL STACKS — the product
+══════════════════════════════════════════ -->
+<section class="s" aria-labelledby="stacks-heading">
+  <div class="wrap">
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:0">
+      <div>
+        <p class="eyebrow">Goal-based stacks</p>
+        <h2 class="h2" id="stacks-heading">Pick your goal.<br/><em>Here's your system.</em></h2>
+      </div>
+      <a href="stack.html" style="font-size:.82rem;color:var(--gold);border-bottom:1px solid var(--gold3);padding-bottom:2px;white-space:nowrap">View all stacks →</a>
+    </div>
+
+    <div class="stacks-grid" id="stacks-preview" role="list">
+      <!-- Filled by JS, with skeleton fallback -->
+      <div class="skel-tool skel" style="height:200px;border-radius:10px" role="presentation"></div>
+      <div class="skel-tool skel" style="height:200px;border-radius:10px" role="presentation"></div>
+      <div class="skel-tool skel" style="height:200px;border-radius:10px" role="presentation"></div>
+      <div class="skel-tool skel" style="height:200px;border-radius:10px" role="presentation"></div>
+      <div class="skel-tool skel" style="height:200px;border-radius:10px" role="presentation"></div>
+      <div class="skel-tool skel" style="height:200px;border-radius:10px" role="presentation"></div>
+    </div>
+
+    <div class="stacks-cta">
+      <a href="stack.html" class="btn-primary" style="display:inline-flex;align-items:center;gap:8px;background:var(--gold);color:#000;padding:13px 32px;border-radius:var(--r);font-size:.88rem;font-weight:500;letter-spacing:.02em;text-decoration:none;transition:opacity .15s" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+        Browse all stacks →
+      </a>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══════════════════════════════════════════
+     ⑥ TRUST WALL
+══════════════════════════════════════════ -->
+<section class="s s-alt" aria-labelledby="trust-heading">
+  <div class="wrap">
+    <p class="eyebrow">Why builders trust XEdge</p>
+    <h2 class="h2" id="trust-heading">Don't take our word for it.<br/><em>Take theirs.</em></h2>
+
+    <div class="trust-numbers reveal" role="list" style="margin-top:44px">
+      <div class="trust-n-card" role="listitem">
+        <div class="trust-big" data-count="300" data-suffix="+">300+</div>
+        <div class="trust-label">Active builders</div>
+      </div>
+      <div class="trust-n-card" role="listitem">
+        <div class="trust-big">£13</div>
+        <div class="trust-label">Avg stack cost / mo</div>
+      </div>
+      <div class="trust-n-card" role="listitem">
+        <div class="trust-big" data-count="18" data-suffix="+">18+</div>
+        <div class="trust-label">Validated stacks</div>
+      </div>
+      <div class="trust-n-card" role="listitem">
+        <div class="trust-big">0</div>
+        <div class="trust-label">Sponsored listings</div>
+      </div>
+    </div>
+
+    <div class="reviews-grid" style="margin-top:14px">
+      <div class="review-card reveal">
+        <div class="review-stars" aria-label="5 stars">★★★★★</div>
+        <p class="review-text">I was paying £200/mo for tools I barely used. XEdge showed me I could do everything I needed for £22. Saved me over £2,000 in the first year.</p>
+        <div class="review-author">
+          <div class="review-avatar" aria-hidden="true">MR</div>
+          <div>
+            <div class="review-name">Marcus R.</div>
+            <div class="review-role">Freelance video editor, London</div>
+          </div>
+        </div>
+      </div>
+      <div class="review-card reveal">
+        <div class="review-stars" aria-label="5 stars">★★★★★</div>
+        <p class="review-text">The newsletter business stack is what I'd been trying to figure out for 6 months. Found it in 3 minutes, followed the roadmap, had paying subscribers in week 4.</p>
+        <div class="review-author">
+          <div class="review-avatar" aria-hidden="true">SP</div>
+          <div>
+            <div class="review-name">Sanya P.</div>
+            <div class="review-role">Content creator, Toronto</div>
+          </div>
+        </div>
+      </div>
+      <div class="review-card reveal">
+        <div class="review-stars" aria-label="5 stars">★★★★★</div>
+        <p class="review-text">Best part? The tool reviews are from people who actually use them, not affiliates. That alone makes XEdge worth bookmarking every single day.</p>
+        <div class="review-author">
+          <div class="review-avatar" aria-hidden="true">JO</div>
+          <div>
+            <div class="review-name">James O.</div>
+            <div class="review-role">Indie hacker, Berlin</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══════════════════════════════════════════
+     ⑦ TOP TOOLS
+══════════════════════════════════════════ -->
+<section class="s" aria-labelledby="tools-heading">
+  <div class="wrap">
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:16px">
+      <div>
+        <p class="eyebrow">Handpicked tools</p>
+        <h2 class="h2" id="tools-heading">The tools inside<br/><em>the best stacks.</em></h2>
+      </div>
+      <a href="Explore.html" style="font-size:.82rem;color:var(--gold);border-bottom:1px solid var(--gold3);padding-bottom:2px;white-space:nowrap">Explore all tools →</a>
+    </div>
+
+    <div style="position:relative">
+      <button type="button" id="t-left" class="scroll-btn" style="left:-14px;display:none" aria-label="Scroll left">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+      </button>
+      <div style="overflow:hidden">
+        <div class="tools-scroller" id="tools-row">
+          <div class="skel-tool skel" style="min-width:200px;height:200px"></div>
+          <div class="skel-tool skel" style="min-width:200px;height:200px"></div>
+          <div class="skel-tool skel" style="min-width:200px;height:200px"></div>
+          <div class="skel-tool skel" style="min-width:200px;height:200px"></div>
+        </div>
+      </div>
+      <button type="button" id="t-right" class="scroll-btn" style="right:-14px;display:none" aria-label="Scroll right">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══════════════════════════════════════════
+     ⑧ COMMUNITY — the moat
+══════════════════════════════════════════ -->
+<section class="s s-alt" aria-labelledby="community-heading">
+  <div class="wrap">
+    <div class="community-split">
+      <div class="community-left">
+        <p class="eyebrow">Community-driven</p>
+        <h2 class="h2" id="community-heading">The stacks get better<br/><em>every single day.</em></h2>
+        <p class="sub">No editorial team deciding what's relevant. Real builders testing real stacks and feeding back what actually works.</p>
+
+        <div class="community-points">
+          <div class="comm-point">
+            <div class="comm-icon" aria-hidden="true">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+            <div class="comm-text">
+              <h4>Stacks are validated before they're published</h4>
+              <p>Every stack goes through a basic sanity check. Costs, tools, and roadmaps are verified against real usage — not invented.</p>
+            </div>
+          </div>
+          <div class="comm-point">
+            <div class="comm-icon" aria-hidden="true">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0"/></svg>
+            </div>
+            <div class="comm-text">
+              <h4>Anyone can submit a stack they've actually built</h4>
+              <p>If you've wired together 4 tools that make you money, that's a stack worth sharing. Submit it. The community will improve it.</p>
+            </div>
+          </div>
+          <div class="comm-point">
+            <div class="comm-icon" aria-hidden="true">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+            </div>
+            <div class="comm-text">
+              <h4>The best stacks rise. The outdated ones get flagged.</h4>
+              <p>When a tool changes pricing or a better alternative emerges, the community updates it. This is a living database, not a static blog post.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+     
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+
+<!-- ══════════════════════════════════════════
+     ⑩ NEWSLETTER
+══════════════════════════════════════════ -->
+<section class="s s-alt" aria-labelledby="newsletter-heading">
+  <div class="wrap">
+    <div class="newsletter-wrap">
+      <div class="nl-left">
+        <p class="eyebrow">The Edge — weekly</p>
+        <h2 class="h2" id="newsletter-heading">New stacks.<br/>Real cost data.<br/><em>Every Friday.</em></h2>
+        <p style="margin-top:14px;font-size:.85rem;color:var(--ink2);font-weight:300;line-height:1.8">
+          One email. No fluff. A new validated stack, a tool that changed this week, and one honest cost comparison from someone who actually built it. That's it.
+        </p>
+      </div>
+      <div>
+        <form id="nl-form" class="nl-form">
+          <label for="nl-email" class="sr-only">Your email address</label>
+          <input id="nl-email" name="email" type="email" placeholder="your@email.com" required autocomplete="email" class="nl-input" aria-label="Email address"/>
+          <button type="submit" class="nl-btn">Send me The Edge →</button>
+        </form>
+        <p id="nl-success" class="nl-success" role="status">✓ You're in. First issue this Friday.</p>
+        <p style="font-size:.7rem;color:var(--ink3);margin-top:10px">No spam. Unsubscribe any time. We've been doing this since 2024.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="footer" aria-label="Site footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <img src="xedge-logo.png" alt="XEdge logo" width="26" height="26"/>
+        <div class="footer-logo-text">XEDGE</div>
+        <p>The AI wiring layer. Real stacks, real costs, built by people who actually use them.</p>
+        <div class="footer-socials">
+          <a href="https://twitter.com/xedgeai" aria-label="XEdge on Twitter">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/></svg>
+          </a>
+          <a href="https://youtube.com/@xedgeai" aria-label="XEdge on YouTube">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M22.54 6.42a2.78 2.78 0 00-1.95-1.97C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 00-1.95 1.96A29 29 0 001 12a29 29 0 00.46 5.58A2.78 2.78 0 003.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 001.95-1.95A29 29 0 0023 12a29 29 0 00-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/></svg>
+          </a>
+          <a href="#" aria-label="Email XEdge" onclick="this.href='mai'+'lto:'+'xedgecorp'+'@'+'gmail.com';return true">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Platform</h4>
+        <ul>
+          <li><a href="Explore.html">All Tools</a></li>
+          <li><a href="Categories.html">Categories</a></li>
+          <li><a href="stack.html">Stacks</a></li>
+          <li><a href="Pricing.html">Pricing</a></li>
+          <li><a href="Blog.html">Blog</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="About.html">About</a></li>
+          <li><a href="Collab.html">Collaborate</a></li>
+          <li><a href="Contact.html">Contact</a></li>
+          <li><a href="Press.html">Press</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="Privacy.html">Privacy Policy</a></li>
+          <li><a href="Terms.html">Terms of Service</a></li>
+          <li><a href="Cookie.html">Cookie Policy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 XEdge. All rights reserved.</span>
+      <span>No sponsored listings. Ever.</span>
+    </div>
+  </div>
+</footer>
+
+<button id="xe-ai-btn" aria-label="Open AI assistant">⚡</button>
+<div id="root"></div>
+
+<!-- FIREBASE — deferred so it never blocks render -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js" defer></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js" defer></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js" defer></script>
+
+<script>
+(function(){
+"use strict";
+
+/* ── CONFIG ── */
+const SHEET = "https://script.google.com/macros/s/AKfycbxXs2ajlwcddAMVEMY5NAMns_ooeEAHSYwDk84nnD6cU2hLjx_k5HKOgFLm-EX_ASSv/exec";
+const CACHE_KEY = "xe_tools_v3";
+const CACHE_TTL = 10 * 60 * 1000;
+const PRIORITY  = ["chatgpt","runway","notion","midjourney","claude","gemini","perplexity","grok","elevenlabs","eleven labs"];
+const safe = v => { try { return JSON.parse(v); } catch { return null; } };
+
+/* ── TOOLS FETCH — singleton, 10-min cache ── */
+let _tp = null;
+function fetchTools() {
+  if (_tp) return _tp;
+  _tp = (async () => {
+    const c = safe(localStorage.getItem(CACHE_KEY));
+    if (c && c.ts && (Date.now()-c.ts < CACHE_TTL) && Array.isArray(c.data) && c.data.length) return c.data;
+    try {
+      const r = await fetch(SHEET + "?t=" + Date.now(), { mode:"cors" });
+      if (!r.ok) throw new Error(r.status);
+      const d = await r.json();
+      if (Array.isArray(d) && d.length) {
+        try { localStorage.setItem(CACHE_KEY, JSON.stringify({ ts:Date.now(), data:d })); } catch {}
+        return d;
+      }
+    } catch(e) { console.warn("XE tools:", e.message); }
+    const s = safe(localStorage.getItem(CACHE_KEY));
+    return (s && s.data) ? s.data : [];
+  })();
+  return _tp;
+}
+fetchTools(); // pre-warm immediately
+
+function normTool(d) {
+  return {
+    name:  d.name||d.title||"",
+    short: (d.short_description||d.short||d.summary||"").split("\n")[0].trim(),
+    cat:   d.category||"",
+    logo:  d.logo_url||d.logo||"",
+    link:  d.Link||d.link||"#",
+  };
+}
+
+/* ── STACKS PREVIEW — goal cards from static data ── */
+const GOAL_STACKS = [
+  { id:"make-money",      h:"Make Money with AI",         d:"Real workflows that generate income. Proven costs, realistic timelines, no hype.",   cost:"£0–£35/mo", time:"2–4 wks", logos:["chat.openai.com","stripe.com","gumroad.com"] },
+  { id:"start-business",  h:"Start an Online Business",   d:"From idea to first customer. Tools to validate, build, and launch without a team.",  cost:"£18–£60/mo", time:"4–8 wks", logos:["vercel.com","supabase.com","framer.com"] },
+  { id:"create-content",  h:"Create Content at Scale",    d:"Write, design, edit, and publish 10× faster. The stack top creators don't talk about.", cost:"£0–£25/mo", time:"1–2 wks", logos:["midjourney.com","descript.com","opus.pro"] },
+  { id:"grow-audience",   h:"Build and Monetise Audience",d:"Email, social, community — the tools that compound. Built from accounts actually growing.",cost:"£0–£20/mo",time:"Ongoing", logos:["beehiiv.com","buffer.com","typefully.com"] },
+  { id:"save-time",       h:"Automate Repetitive Work",   d:"Map every manual task to a tool. Most people save 10+ hours in week one.",           cost:"£0–£40/mo", time:"1–3 wks", logos:["make.com","zapier.com","n8n.io"] },
+  { id:"learn-ai",        h:"Learn AI in 30 Days",        d:"A structured path from zero to actually using AI in your work. No fluff curriculum.", cost:"£0",         time:"30 days", logos:["chat.openai.com","claude.ai","perplexity.ai"] },
+];
+
+function renderStacksPreview() {
+  const grid = document.getElementById("stacks-preview");
+  if (!grid) return;
+  grid.innerHTML = GOAL_STACKS.map(s => `
+    <a href="stack.html?goal=${s.id}" class="stack-card reveal" role="listitem" aria-label="${s.h} stack">
+      <div class="stack-logos" aria-hidden="true">
+        ${s.logos.map((d,i) => `<img src="https://www.google.com/s2/favicons?domain=${d}&sz=64" alt="" width="28" height="28" loading="lazy" style="z-index:${3-i}" onerror="this.style.display='none'"/>`).join("")}
+      </div>
+      <h3>${s.h}</h3>
+      <p>${s.d}</p>
+      <div class="stack-meta">
+        <span class="meta-tag mt-cost">${s.cost}</span>
+        <span class="meta-tag mt-time">⏱ ${s.time}</span>
+      </div>
+    </a>`).join("");
+  initReveal();
+}
+
+/* ── TOP TOOLS ── */
+async function renderTopTools() {
+  const scroller = document.getElementById("tools-row");
+  if (!scroller) return;
+  const raw   = await fetchTools();
+  const tools = raw.map(normTool);
+  const pri   = tools.filter(t => PRIORITY.some(p => t.name.toLowerCase().includes(p)));
+  const list  = (pri.length >= 4 ? pri : tools).slice(0, 8);
+  if (!list.length) return;
+  scroller.innerHTML = list.map(t => {
+    const logo = t.logo || `https://www.google.com/s2/favicons?domain=${encodeURIComponent(t.name)}.com&sz=64`;
+    const name = t.name.split(" ").map(w=>w.charAt(0).toUpperCase()+w.slice(1)).join(" ");
+    const desc = (t.short||"AI tool.").slice(0, 70) + ((t.short||"").length > 70 ? "…" : "");
+    return `<div class="tool-card-s reveal">
+      <img src="${logo}" alt="${name} logo" width="42" height="42" loading="lazy" onerror="this.src='xedge-logo.png'"/>
+      <h3>${name}</h3>
+      <p>${desc}</p>
+      <a href="tool.html?tool=${encodeURIComponent(t.name)}" class="tool-link-s">View tool →</a>
+    </div>`;
+  }).join("");
+  const left = document.getElementById("t-left");
+  const right = document.getElementById("t-right");
+  if (left && right && list.length > 4) {
+    left.style.display = "flex"; right.style.display = "flex";
+    right.onclick = () => scroller.scrollBy({ left:220, behavior:"smooth" });
+    left.onclick  = () => scroller.scrollBy({ left:-220, behavior:"smooth" });
+  }
+  initReveal();
+}
+
+/* ── SEARCH ── */
+const SEARCH_STACKS = GOAL_STACKS;
+let searchTimer = null;
+
+function heroSearch(go) {
+  const val = (document.getElementById("hero-search").value||"").trim().toLowerCase();
+  if (go && val) {
+    window.location.href = "stack.html?q=" + encodeURIComponent(val);
+    return;
+  }
+  clearTimeout(searchTimer);
+  if (!val) { hideSearch(); return; }
+  searchTimer = setTimeout(() => {
+    const matches = SEARCH_STACKS.filter(s =>
+      s.h.toLowerCase().includes(val) || s.d.toLowerCase().includes(val) || s.id.includes(val)
+    ).slice(0, 5);
+    showSearchResults(matches, val);
+  }, 140);
+}
+
+function showSearchResults(items, term) {
+  const drop = document.getElementById("hero-drop");
+  if (!items.length) {
+    drop.innerHTML = `<div class="search-no">No stacks for "${term}" — <a href="stack.html" style="color:var(--gold)">browse all →</a></div>`;
+  } else {
+    drop.innerHTML = items.map(s => `
+      <a href="stack.html?goal=${s.id}" role="option">
+        <div style="width:32px;height:32px;border-radius:7px;background:var(--gold2);border:1px solid var(--gold3);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px" aria-hidden="true">⚡</div>
+        <div>
+          <div style="font-weight:500;font-size:.86rem;color:var(--ink)">${s.h}</div>
+          <div style="font-size:.74rem;color:var(--ink3);margin-top:1px">${s.cost} · ${s.time}</div>
+        </div>
+      </a>`).join("");
+  }
+  drop.classList.remove("hidden");
+}
+
+function hideSearch() { document.getElementById("hero-drop").classList.add("hidden"); }
+
+document.addEventListener("click", e => { if (!e.target.closest(".hero-input-wrap")) hideSearch(); });
+document.getElementById("hero-search").addEventListener("keydown", e => { if (e.key==="Escape") { hideSearch(); e.target.blur(); } });
+
+/* ── SCROLL REVEAL ── */
+function initReveal() {
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); obs.unobserve(e.target); } });
+  }, { rootMargin:"0px 0px -40px 0px" });
+  document.querySelectorAll(".reveal:not(.in)").forEach(el => obs.observe(el));
+}
+
+/* ── COUNTER ANIMATION ── */
+function initCounters() {
+  document.querySelectorAll("[data-count]").forEach(el => {
+    const target = parseInt(el.dataset.count, 10);
+    const suffix = el.dataset.suffix||"";
+    if (isNaN(target)) return;
+    const obs = new IntersectionObserver(entries => {
+      if (!entries[0].isIntersecting) return;
+      obs.disconnect();
+      let start = null;
+      const tick = ts => {
+        if (!start) start = ts;
+        const p = Math.min((ts-start)/1400, 1);
+        el.textContent = Math.floor((1-Math.pow(1-p,3))*target) + suffix;
+        if (p < 1) requestAnimationFrame(tick);
+        else el.textContent = target + suffix;
+      };
+      requestAnimationFrame(tick);
+    }, { threshold:.1 });
+    obs.observe(el);
+  });
+}
+
+/* ── MOBILE NAV ── */
+function initMobileNav() {
+  const btn = document.getElementById("hbg");
+  const menu = document.getElementById("mmenu");
+  const bd   = document.getElementById("backdrop");
+  if (!btn||!menu) return;
+  let open = false;
+  const toggle = () => {
+    open = !open;
+    menu.classList.toggle("open", open);
+    btn.classList.toggle("open", open);
+    btn.setAttribute("aria-expanded", open);
+    if (bd) bd.classList.toggle("show", open);
+    document.body.style.overflow = open ? "hidden" : "";
+  };
+  btn.addEventListener("click", toggle);
+  if (bd) bd.addEventListener("click", toggle);
+  menu.querySelectorAll("a").forEach(a => a.addEventListener("click", () => { if (open) toggle(); }));
+  document.addEventListener("keydown", e => { if (e.key==="Escape"&&open) toggle(); });
+}
+
+/* ── NEWSLETTER ── */
+function initNewsletter() {
+  const form = document.getElementById("nl-form");
+  const msg  = document.getElementById("nl-success");
+  if (!form) return;
+  form.addEventListener("submit", async e => {
+    e.preventDefault();
+    const btn = form.querySelector("button");
+    const orig = btn.textContent;
+    btn.textContent = "Sending…"; btn.disabled = true;
+    try {
+      const res = await fetch("https://weathered-cake-1046.kumarharsha980.workers.dev/", { method:"POST", body:new FormData(form) });
+      if (res.ok) { form.reset(); if(msg) msg.style.display="block"; }
+      else throw new Error();
+    } catch { alert("Something went wrong. Please try again."); btn.textContent=orig; btn.disabled=false; }
+  });
+}
+
+/* ── FIREBASE AUTH ── */
+const FB = {
+  apiKey:"AIzaSyC-uRePD86sTpCRgjPsjhpOp-lzTNNF8Zg",
+  authDomain:"xedge-1da3a.firebaseapp.com",
+  projectId:"xedge-1da3a",
+  storageBucket:"xedge-1da3a.appspot.com",
+  messagingSenderId:"209657807080",
+  appId:"1:209657807080:web:80180596d966b4667d895d"
+};
+function initAuth() {
+  if (typeof firebase==="undefined") {
+    let n=0; const poll=setInterval(()=>{ if(typeof firebase!=="undefined"){clearInterval(poll);_doAuth();} if(++n>50)clearInterval(poll); },120);
+    return;
+  }
+  _doAuth();
+}
+function _doAuth() {
+  if (!firebase.apps.length) firebase.initializeApp(FB);
+  const auth = firebase.auth();
+  const prov = new firebase.auth.GoogleAuthProvider();
+  window.signInWithGoogle = () => auth.signInWithPopup(prov).catch(e=>console.error(e));
+  window.logoutUser       = () => auth.signOut();
+  auth.onAuthStateChanged(user => {
+    document.querySelectorAll("[data-auth]").forEach(area => {
+      if (user) {
+        area.innerHTML = `<div style="position:relative">
+          <button id="pb" style="background:none;border:none;cursor:pointer;padding:0" aria-label="Account menu">
+            <img src="${user.photoURL||'xedge-logo.png'}" alt="${user.displayName}" width="32" height="32" style="border-radius:50%;border:1.5px solid var(--gold3)" onerror="this.src='xedge-logo.png'"/>
+          </button>
+          <div id="pm" style="display:none;position:absolute;right:0;top:calc(100%+8px);min-width:180px;background:var(--bg2);border:1px solid var(--line2);border-radius:10px;overflow:hidden;box-shadow:0 24px 48px rgba(0,0,0,.7);z-index:200">
+            <div style="padding:13px 16px;border-bottom:1px solid var(--line)">
+              <div style="font-weight:500;font-size:.84rem">${user.displayName}</div>
+              <div style="font-size:.74rem;color:var(--ink3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${user.email}</div>
+            </div>
+            <button onclick="logoutUser()" style="width:100%;text-align:left;padding:11px 16px;background:none;border:none;color:#f06060;cursor:pointer;font-family:var(--ff-b);font-size:.82rem" onmouseover="this.style.background='rgba(240,96,96,.07)'" onmouseout="this.style.background='none'">Sign out</button>
+          </div>
+        </div>`;
+        setTimeout(()=>{
+          const pb=document.getElementById("pb"),pm=document.getElementById("pm");
+          if(!pb||!pm)return;
+          pb.onclick=e=>{e.stopPropagation();pm.style.display=pm.style.display==="none"?"block":"none"};
+          document.addEventListener("click",e=>{if(!pm.contains(e.target)&&e.target!==pb)pm.style.display="none"});
+        },0);
+      } else {
+        area.innerHTML = `<button onclick="signInWithGoogle()" class="btn-signin">Sign In</button>`;
+      }
+    });
+  });
+}
+
+/* ── AI CHATBOT BUTTON ── */
+function initChatbot() {
+  const btn = document.getElementById("xe-ai-btn");
+  if (!btn) return;
+  let loaded = false;
+  const load = () => {
+    if (loaded) return; loaded=true;
+    const css=document.createElement("link"); css.rel="stylesheet"; css.href="https://xedge.tech/chatbot/assets/index-TA-7RnnV.css"; document.head.appendChild(css);
+    const s=document.createElement("script"); s.type="module"; s.src="https://xedge.tech/chatbot/assets/index-DOdIsJde.js"; document.body.appendChild(s);
+  };
+  window.addEventListener("load", () => setTimeout(load, 2500));
+  btn.addEventListener("click", () => {
+    if (!loaded) load();
+    const cb=document.querySelector("#root button");
+    if (cb) { cb.click(); return; }
+    btn.style.opacity=".6";
+    const check=setInterval(()=>{ const r=document.querySelector("#root button"); if(r){clearInterval(check);btn.style.opacity="1";r.click();} },300);
+    setTimeout(()=>{clearInterval(check);btn.style.opacity="1";},5000);
+  });
+}
+
+/* ── BOOT ── */
+document.addEventListener("DOMContentLoaded", () => {
+  initMobileNav();
+  initReveal();
+  initCounters();
+  initNewsletter();
+  initChatbot();
+  renderStacksPreview();
+  renderTopTools();
+  initAuth();
+});
+
+})();
+</script>
+</body>
+</html>
