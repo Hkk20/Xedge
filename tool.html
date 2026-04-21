@@ -1,266 +1,1065 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <!-- Firebase v8 -->
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>XEdge — Tool Details</title>
+  <link rel="icon" href="xedge-logo.png" type="image/png"/>
+  <meta name="theme-color" content="#080c14"/>
 
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>X Edge — Tool Details</title>
+  <!-- Firebase deferred -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js" defer></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js" defer></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js" defer></script>
 
-  <link rel="icon" href="xedge-logo.png">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link rel="stylesheet" media="print" onload="this.media='all'"
+    href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=DM+Sans:wght@300;400;500&display=swap"/>
+  <noscript>
+    <link rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=DM+Sans:wght@300;400;500&display=swap"/>
+  </noscript>
 
-  <style>
-    body {
-      background:#0b1116;
-      color:white;
-      font-family:Inter, system-ui, sans-serif;
-    }
-    .container {
-      max-width:1100px;
-      margin:0 auto;
-      padding:1.2rem;
-    }
-  </style>
+<style>
+/* ── UTILS ── */
+.hidden { display: none !important; }
+
+/* ── TOKENS ── */
+:root{
+  --bg:#080c14; --bg2:#0d1220; --bg3:#111828;
+  --card:rgba(13,18,32,0.9); --card2:rgba(17,24,40,0.8);
+  --border:rgba(255,255,255,0.07); --border2:rgba(255,255,255,0.12);
+  --text:#eef1fa; --text2:#8b95b8; --text3:#3d4a68;
+  --accent:#0066ff; --accent2:#3d8bff; --accent-bg:rgba(0,102,255,0.1);
+  --accent-border:rgba(0,102,255,0.22);
+  --green:#00d68f; --green-bg:rgba(0,214,143,0.1); --green-border:rgba(0,214,143,0.22);
+  --amber:#f5a623; --amber-bg:rgba(245,166,35,0.1); --amber-border:rgba(245,166,35,0.22);
+  --red:#f56565; --red-bg:rgba(245,101,101,0.1); --red-border:rgba(245,101,101,0.22);
+  --purple:#a78bfa; --purple-bg:rgba(167,139,250,0.1);
+  --fd:'Bricolage Grotesque',ui-sans-serif,sans-serif;
+  --fb:'DM Sans',ui-sans-serif,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;}
+html,body{margin:0;padding:0;overflow-x:hidden;}
+body{font-family:var(--fb);background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;}
+a{color:inherit;text-decoration:none;}
+button{cursor:pointer;font-family:inherit;}
+
+/* ── NAV ── */
+.nav{position:fixed;top:0;left:0;right:0;z-index:80;height:64px;
+  background:rgba(8,12,20,0.88);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);}
+.nav-inner{max-width:1280px;width:100%;margin:0 auto;padding:0 24px;
+  height:64px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.nav-logo{display:flex;align-items:center;gap:9px;text-decoration:none;}
+.nav-logo img{width:32px;height:32px;border-radius:8px;}
+.nav-logo span{font-family:var(--fd);font-weight:800;font-size:1.05rem;color:var(--accent2);letter-spacing:-.2px;}
+.nav-right{display:flex;align-items:center;gap:10px;}
+.btn-back{display:flex;align-items:center;gap:6px;
+  background:var(--card2);border:1px solid var(--border2);
+  padding:7px 16px;border-radius:8px;font-size:.84rem;font-weight:500;color:var(--text2);
+  transition:color .15s,background .15s;}
+.btn-back:hover{color:var(--text);background:rgba(255,255,255,.07);}
+#auth-area{display:flex;align-items:center;}
+
+/* ── PAGE ── */
+main{padding-top:64px;}
+.page{max-width:1100px;margin:0 auto;padding:36px 24px 96px;}
+
+/* ── LOADING ── */
+#loading{text-align:center;padding:80px 24px;color:var(--text2);}
+.spinner{width:34px;height:34px;border-radius:50%;border:3px solid var(--accent-border);
+  border-top-color:var(--accent);animation:spin .8s linear infinite;margin:0 auto 14px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* ── HERO ── */
+.hero{
+  background:var(--card);border:1px solid var(--border);border-radius:20px;
+  padding:32px;margin-bottom:28px;display:flex;gap:24px;align-items:flex-start;
+  animation:fadeUp .4s ease both;
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.hero-logo{width:80px;height:80px;border-radius:16px;object-fit:contain;
+  background:#1a2236;flex-shrink:0;border:1px solid var(--border);}
+.hero-body{flex:1;min-width:0;}
+.hero-cat{display:inline-flex;align-items:center;gap:5px;
+  font-size:.72rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--accent2);margin-bottom:8px;}
+#tool-name{font-family:var(--fd);font-size:clamp(1.6rem,4vw,2.4rem);
+  font-weight:800;letter-spacing:-.5px;margin:0 0 10px;}
+#tool-short{font-size:.9rem;color:var(--text2);line-height:1.7;margin:0 0 18px;max-width:680px;}
+.hero-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.btn-visit{display:inline-flex;align-items:center;gap:7px;
+  background:linear-gradient(135deg,var(--accent),#3d6bff);
+  padding:10px 24px;border-radius:100px;font-size:.88rem;font-weight:700;color:#fff;border:none;
+  transition:opacity .15s,transform .15s,box-shadow .15s;}
+.btn-visit:hover{opacity:.88;transform:translateY(-1px);box-shadow:0 8px 24px rgba(0,102,255,.35);}
+.btn-compare{display:inline-flex;align-items:center;gap:7px;
+  background:transparent;border:1px solid var(--border2);
+  padding:10px 20px;border-radius:100px;font-size:.88rem;font-weight:600;color:var(--text2);
+  transition:all .15s;}
+.btn-compare:hover{border-color:var(--accent-border);color:var(--accent2);background:var(--accent-bg);}
+.btn-compare svg{width:14px;height:14px;}
+
+/* ── BADGES / QUICK-STATS ── */
+.badges-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;animation:fadeUp .4s .08s ease both;}
+.badge{display:inline-flex;align-items:center;gap:5px;
+  font-size:.72rem;font-weight:700;letter-spacing:.3px;
+  padding:4px 11px;border-radius:100px;}
+.badge-green{background:var(--green-bg);border:1px solid var(--green-border);color:var(--green);}
+.badge-blue{background:var(--accent-bg);border:1px solid var(--accent-border);color:var(--accent2);}
+.badge-amber{background:var(--amber-bg);border:1px solid var(--amber-border);color:var(--amber);}
+.badge-purple{background:var(--purple-bg);border:1px solid rgba(167,139,250,.25);color:var(--purple);}
+.badge-gray{background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--text2);}
+
+/* ── QUICK STATS ── */
+.stats-bar{
+  display:flex;flex-wrap:wrap;gap:0;
+  background:var(--card);border:1px solid var(--border);border-radius:14px;
+  margin-bottom:28px;overflow:hidden;animation:fadeUp .4s .12s ease both;
+}
+.stat-item{flex:1;min-width:120px;padding:14px 20px;border-right:1px solid var(--border);
+  display:flex;flex-direction:column;gap:3px;}
+.stat-item:last-child{border-right:none;}
+.stat-label{font-size:.68rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--text3);}
+.stat-val{font-family:var(--fd);font-size:.95rem;font-weight:700;color:var(--text);}
+
+/* ── SECTION CARD ── */
+.xe-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:20px;}
+.xe-card-title{font-family:var(--fd);font-size:1rem;font-weight:700;margin:0 0 18px;
+  display:flex;align-items:center;gap:9px;color:var(--text);}
+.xe-card-icon{width:28px;height:28px;border-radius:8px;background:var(--accent-bg);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.xe-card-icon svg{width:14px;height:14px;color:var(--accent2);}
+
+/* ── RATINGS BARS ── */
+.ratings-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.rating-row{display:flex;flex-direction:column;gap:6px;}
+.rating-meta{display:flex;justify-content:space-between;align-items:center;}
+.rating-label{font-size:.8rem;color:var(--text2);}
+.rating-score{font-size:.8rem;font-weight:700;color:var(--text);}
+.rating-bar{height:6px;background:rgba(255,255,255,.07);border-radius:100px;overflow:hidden;}
+.rating-fill{height:100%;border-radius:100px;background:linear-gradient(90deg,var(--accent),var(--accent2));
+  transition:width .8s cubic-bezier(.4,0,.2,1);}
+.rating-fill.green{background:linear-gradient(90deg,var(--green),#00f5a0);}
+.rating-fill.amber{background:linear-gradient(90deg,var(--amber),#ffd06b);}
+
+/* ── ABOUT 3-COL ── */
+.about-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
+.about-col{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:18px;}
+.about-col h4{font-size:.8rem;font-weight:700;letter-spacing:.5px;text-transform:uppercase;
+  color:var(--text3);margin:0 0 12px;}
+.about-col ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px;}
+.about-col ul li{font-size:.83rem;color:var(--text2);padding:6px 10px;
+  background:rgba(255,255,255,.03);border-radius:7px;line-height:1.4;}
+.about-col p{font-size:.83rem;color:var(--text2);line-height:1.65;margin:0;}
+
+/* ── PROS / CONS ── */
+.pc-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.pc-box{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:22px;}
+.pc-box h3{font-family:var(--fd);font-size:1rem;font-weight:700;margin:0 0 14px;
+  display:flex;align-items:center;gap:7px;}
+.pc-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:9px;}
+.pc-list li{display:flex;align-items:flex-start;gap:9px;font-size:.84rem;color:var(--text2);line-height:1.5;}
+.pc-list li .icon{flex-shrink:0;margin-top:2px;font-size:.75rem;}
+.pros-icon{color:var(--green);}
+.cons-icon{color:var(--red);}
+.pc-mobile-toggle{display:none;gap:8px;margin-bottom:14px;}
+.pc-toggle-btn{flex:1;padding:9px;border-radius:9px;border:1px solid var(--border);
+  background:rgba(255,255,255,.03);color:var(--text2);font-size:.84rem;font-weight:600;
+  transition:all .15s;}
+.pc-toggle-btn.active{background:var(--accent-bg);border-color:var(--accent-border);color:var(--accent2);}
+
+/* ── DESCRIPTION + PRICING ── */
+#xe-phase1 p{font-size:.9rem;color:var(--text2);line-height:1.8;margin:0;}
+.pricing-table{margin-top:20px;display:flex;flex-direction:column;gap:0;
+  border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+.pricing-row{display:flex;align-items:center;justify-content:space-between;
+  padding:11px 16px;border-bottom:1px solid var(--border);font-size:.84rem;}
+.pricing-row:last-child{border-bottom:none;}
+.pricing-plan{font-weight:700;color:var(--text);text-transform:uppercase;font-size:.72rem;letter-spacing:.5px;}
+.pricing-val{color:var(--text2);}
+
+/* ── SCREENSHOTS ── */
+.shots-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.shot-wrap{border-radius:12px;overflow:hidden;border:1px solid var(--border);
+  background:#0d1220;aspect-ratio:16/9;}
+.shot-wrap img{width:100%;height:100%;object-fit:cover;display:block;}
+
+/* ── RELATED ── */
+.related-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.related-card{display:flex;align-items:center;gap:12px;padding:13px;
+  background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:12px;
+  transition:border-color .15s,background .15s;}
+.related-card:hover{border-color:var(--accent-border);background:var(--accent-bg);}
+.related-card img{width:38px;height:38px;border-radius:8px;object-fit:contain;
+  background:#1a2236;flex-shrink:0;}
+.related-name{font-size:.84rem;font-weight:600;}
+.related-cat{font-size:.72rem;color:var(--text3);}
+
+/* ── REVIEWS ── */
+.review-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px;}
+.review-avg-num{font-family:var(--fd);font-size:2rem;font-weight:800;color:var(--amber);}
+.review-stars{color:var(--amber);font-size:.9rem;letter-spacing:2px;}
+.review-avg-label{font-size:.72rem;color:var(--text3);}
+.btn-write-review{display:inline-flex;align-items:center;gap:6px;
+  background:var(--accent-bg);border:1px solid var(--accent-border);
+  padding:8px 18px;border-radius:100px;font-size:.82rem;font-weight:600;color:var(--accent2);
+  transition:all .15s;}
+.btn-write-review:hover{background:rgba(0,102,255,.18);}
+.review-form-wrap{background:rgba(13,18,32,.9);border:1px solid var(--accent-border);
+  border-radius:14px;padding:22px;margin-bottom:20px;display:none;}
+.review-form-wrap.open{display:block;}
+.xe-label{display:block;font-size:.75rem;font-weight:600;color:var(--text2);
+  margin-bottom:7px;letter-spacing:.3px;}
+.xe-select,.xe-textarea{width:100%;background:rgba(8,12,20,.9);
+  border:1px solid var(--border2);border-radius:9px;padding:10px 13px;
+  color:var(--text);font-family:var(--fb);font-size:.88rem;outline:none;transition:border-color .15s;}
+.xe-select:focus,.xe-textarea:focus{border-color:rgba(0,102,255,.5);}
+.xe-textarea{height:90px;resize:vertical;line-height:1.6;margin-top:0;}
+.xe-select{appearance:none;margin-bottom:14px;}
+.btn-submit-review{background:linear-gradient(135deg,var(--accent),#3d6bff);
+  padding:9px 22px;border-radius:100px;border:none;color:#fff;
+  font-size:.84rem;font-weight:700;transition:opacity .15s;}
+.btn-submit-review:hover{opacity:.88;}
+.btn-cancel-review{background:none;border:1px solid var(--border);padding:9px 18px;
+  border-radius:100px;color:var(--text2);font-size:.84rem;transition:color .15s;}
+.btn-cancel-review:hover{color:var(--text);}
+.login-prompt{font-size:.83rem;color:var(--text3);padding:12px;}
+.login-prompt button{color:var(--accent2);background:none;border:none;font-weight:600;font-size:inherit;}
+.btn-toggle-reviews{background:none;border:none;color:var(--accent2);
+  font-size:.84rem;font-weight:600;padding:0;margin-bottom:14px;
+  display:flex;align-items:center;gap:6px;transition:color .15s;}
+.btn-toggle-reviews:hover{color:#6aaeff;}
+.reviews-list{display:flex;flex-direction:column;gap:14px;}
+.review-item{background:rgba(255,255,255,.02);border:1px solid var(--border);
+  border-radius:12px;padding:16px 18px;}
+.review-author{display:flex;align-items:center;gap:9px;margin-bottom:9px;}
+.review-avatar{width:30px;height:30px;border-radius:50%;
+  background:linear-gradient(135deg,var(--accent),#6d6bff);
+  display:flex;align-items:center;justify-content:center;font-size:.68rem;font-weight:700;flex-shrink:0;}
+.review-avatar img{width:30px;height:30px;border-radius:50%;object-fit:cover;}
+.review-author-name{font-size:.84rem;font-weight:600;}
+.review-date{font-size:.72rem;color:var(--text3);}
+.review-stars-sm{color:var(--amber);font-size:.78rem;}
+.review-text{font-size:.84rem;color:var(--text2);line-height:1.65;margin:0;}
+.reviews-empty{text-align:center;padding:28px;color:var(--text3);font-size:.84rem;}
+#review-submit-msg{font-size:.78rem;margin-top:8px;display:none;}
+
+/* ── COMPARE MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:200;
+  display:none;align-items:center;justify-content:center;padding:20px;}
+.modal-overlay.open{display:flex;}
+.modal{background:#0f1628;border:1px solid var(--border2);border-radius:20px;
+  width:100%;max-width:520px;padding:28px;animation:fadeUp .25s ease both;}
+.modal-title{font-family:var(--fd);font-size:1.1rem;font-weight:700;margin-bottom:16px;}
+.modal-search{width:100%;background:rgba(8,12,20,.9);border:1px solid var(--border2);
+  border-radius:9px;padding:11px 14px;color:var(--text);font-family:var(--fb);
+  font-size:.9rem;outline:none;transition:border-color .15s;margin-bottom:10px;}
+.modal-search:focus{border-color:rgba(0,102,255,.5);}
+.modal-results{max-height:260px;overflow-y:auto;display:flex;flex-direction:column;gap:6px;}
+.modal-result{display:flex;align-items:center;gap:12px;padding:11px 13px;
+  background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;
+  cursor:pointer;transition:border-color .15s,background .15s;}
+.modal-result:hover{border-color:var(--accent-border);background:var(--accent-bg);}
+.modal-result img{width:34px;height:34px;border-radius:8px;object-fit:contain;background:#1a2236;}
+.modal-result-name{font-size:.85rem;font-weight:600;}
+.modal-result-cat{font-size:.72rem;color:var(--text3);}
+.modal-close{background:none;border:none;color:var(--text2);font-size:1.2rem;
+  position:absolute;top:20px;right:24px;}
+
+/* ── COMPARE VIEW ── */
+.compare-section{margin-bottom:28px;}
+.compare-header{display:grid;grid-template-columns:200px 1fr 1fr;gap:0;
+  background:var(--card);border:1px solid var(--border);border-radius:16px 16px 0 0;overflow:hidden;}
+.compare-header-cell{padding:18px;border-right:1px solid var(--border);display:flex;flex-direction:column;gap:8px;}
+.compare-header-cell:last-child{border-right:none;}
+.compare-header-cell img{width:40px;height:40px;border-radius:10px;object-fit:contain;background:#1a2236;}
+.compare-header-cell .ch-name{font-family:var(--fd);font-size:.95rem;font-weight:700;}
+.compare-header-cell .ch-cat{font-size:.72rem;color:var(--text3);}
+.compare-header-cell .ch-label{font-size:.75rem;font-weight:600;color:var(--text3);letter-spacing:.5px;}
+.compare-body{border:1px solid var(--border);border-top:none;border-radius:0 0 16px 16px;overflow:hidden;}
+.compare-row{display:grid;grid-template-columns:200px 1fr 1fr;gap:0;border-bottom:1px solid var(--border);}
+.compare-row:last-child{border-bottom:none;}
+.compare-cell{padding:13px 18px;border-right:1px solid var(--border);font-size:.83rem;color:var(--text2);line-height:1.5;}
+.compare-cell:last-child{border-right:none;}
+.compare-cell.label{color:var(--text3);font-size:.75rem;font-weight:600;letter-spacing:.3px;text-transform:uppercase;}
+.compare-cell.winner{color:var(--green);font-weight:600;}
+.compare-cell.loser{color:var(--text3);}
+.compare-verdict{background:var(--accent-bg);border:1px solid var(--accent-border);
+  border-radius:12px;padding:16px 20px;margin-top:14px;font-size:.84rem;color:var(--text2);line-height:1.65;}
+.compare-verdict strong{color:var(--text);}
+.btn-close-compare{background:none;border:1px solid var(--border);padding:6px 14px;
+  border-radius:100px;color:var(--text2);font-size:.78rem;margin-bottom:12px;transition:color .15s;}
+.btn-close-compare:hover{color:var(--text);}
+
+/* ── SKELETON ── */
+.xe-skel{background:linear-gradient(90deg,rgba(255,255,255,.03) 25%,rgba(255,255,255,.06) 50%,rgba(255,255,255,.03) 75%);
+  background-size:200% 100%;animation:shimmer 1.4s ease infinite;border-radius:12px;}
+@keyframes shimmer{to{background-position:-200% 0;}}
+
+/* ── RESPONSIVE ── */
+@media(max-width:767px){
+  .hero{flex-direction:column;gap:14px;padding:18px;}
+  .about-grid{grid-template-columns:1fr;}
+  .pc-grid{grid-template-columns:1fr;}
+  .pc-mobile-toggle{display:flex;}
+  .pc-cons-col{display:none;}
+  .ratings-grid{grid-template-columns:1fr;}
+  .shots-grid,.related-grid{grid-template-columns:1fr;}
+  .compare-header,.compare-body,.compare-row{grid-template-columns:120px 1fr 1fr;}
+  .stats-bar{flex-wrap:wrap;}
+  .stat-item{min-width:50%;border-bottom:1px solid var(--border);}
+  .page{padding:20px 14px 80px;}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;}}
+</style>
 </head>
-
 <body>
-  <style>
-    .hidden {
-  display: none;
-}
 
-.about-card {
-  background: rgba(15, 23, 42, 0.7);
-  border-radius: 16px;
-  padding: 24px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-.about-card h3 {
-  font-size: 1rem;
-  font-weight: 600;
-  margin-bottom: 10px;
-  color: #f1f5f9;
-}
-
-.about-card ul {
-  padding-left: 16px;
-  font-size: 0.9rem;
-  color: #cbd5f5;
-}
-
-.about-card ul li {
-  margin-bottom: 6px;
-}
-
-.about-card p {
-  font-size: 0.9rem;
-  color: #cbd5f5;
-  line-height: 1.5;
-}
-
-  </style>
-
-<!-- ================= NAV ================= -->
-<nav class="bg-gray-900/80 border-b border-gray-800 fixed top-0 left-0 right-0 z-50">
-  <div class="max-w-6xl mx-auto px-6 py-3 flex justify-between items-center">
-
-    <a href="index.html" class="flex items-center gap-3">
-      <img src="xedge-logo.png" class="w-8 h-8 bg-white p-1 rounded" />
-      <span class="font-bold">X Edge</span>
+<!-- ── NAV ── -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <img src="xedge-logo.png" alt="XEdge" width="32" height="32"/>
+      <span>XEDGE</span>
     </a>
-
-    <div class="flex items-center gap-4">
-      <button onclick="goBack()"
-        class="px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg
-               text-gray-300 hover:bg-gray-700 transition">
-        ← Back
+    <div class="nav-right">
+      <button type="button" class="btn-back" onclick="history.back()">
+        <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+        </svg>
+        Back
       </button>
-
       <div id="auth-area"></div>
     </div>
   </div>
 </nav>
 
-<script>
-function goBack() {
-  if (document.referrer) history.back();
-  else window.location.href = "Categories.html";
-}
-</script>
+<!-- ── COMPARE MODAL ── -->
+<div class="modal-overlay" id="compare-modal">
+  <div class="modal" style="position:relative;">
+    <button class="modal-close" onclick="closeCompareModal()" aria-label="Close">✕</button>
+    <div class="modal-title">Compare </div>
+    <input type="search" class="modal-search" id="compare-search"
+      placeholder="Search tool name…" autocomplete="off"/>
+    <div class="modal-results" id="compare-results"></div>
+  </div>
+</div>
 
-<!-- ================= MAIN ================= -->
-<main class="container pt-24">
+<main>
+<div class="page">
 
   <!-- Loading -->
-  <div id="loading" class="text-center text-gray-400 py-16 text-xl">
-    Loading tool...
+  <div id="loading">
+    <div class="spinner"></div>
+    Loading tool…
   </div>
 
- <!-- ================= TOOL CONTENT ================= -->
-<div id="tool-container" class="hidden">
+  <!-- Tool content -->
+  <div id="tool-container" class="hidden">
 
-  <!-- ================= HERO ================= -->
-  <div class="bg-gray-800/40 border border-gray-700 rounded-xl p-6 mb-10 flex gap-6">
-    <img id="tool-logo" class="w-24 h-24 rounded-lg object-cover bg-gray-900" />
-
-    <div class="flex-1">
-      <h1 id="tool-name" class="text-3xl font-bold"></h1>
-      <p id="tool-cat" class="text-blue-400 font-medium mt-1"></p>
-      <p id="tool-short" class="text-gray-300 mt-3"></p>
-
-      <a id="visit-btn" target="_blank"
-         class="inline-block mt-4 bg-gradient-to-r from-blue-500 to-blue-600
-                px-5 py-2 rounded-full font-medium">
-        Visit Tool
-      </a>
-    </div>
-  </div>
-
-  <!-- ================= REVIEWS ================= -->
-  <section class="mb-14">
-
-    <div class="flex justify-between items-center mb-4">
-      <h2 class="text-2xl font-bold">User Reviews</h2>
-
-      <div class="text-right">
-        <div id="avg-rating" class="text-yellow-400 text-xl font-bold">—</div>
-        <div id="rating-count" class="text-sm text-gray-400">No reviews yet</div>
+    <!-- ── HERO ── -->
+    <div class="hero">
+      <img id="tool-logo" class="hero-logo" alt="Tool logo" width="80" height="80"/>
+      <div class="hero-body">
+        <div class="hero-cat"><span id="tool-cat"></span></div>
+        <h1 id="tool-name"></h1>
+        <p id="tool-short"></p>
+        <div class="hero-actions">
+          <a id="visit-btn" href="#" target="_blank" rel="noopener noreferrer" class="btn-visit">
+            Visit Tool
+            <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+            </svg>
+          </a>
+          <button type="button" class="btn-compare" onclick="openCompareModal()">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+            </svg>
+            Compare with other tool 
+          </button>
+        </div>
       </div>
     </div>
 
-    <div id="review-form"
-         class="hidden mb-6 bg-gray-800 border border-gray-700 rounded-xl p-4">
-      <label class="block mb-2 text-sm text-gray-300">Your Rating</label>
-      <select id="review-rating"
-        class="w-full bg-gray-900 border border-gray-700 rounded-lg p-2 mb-3">
-        <option value="5">★★★★★ (5)</option>
-        <option value="4">★★★★☆ (4)</option>
-        <option value="3">★★★☆☆ (3)</option>
-        <option value="2">★★☆☆☆ (2)</option>
-        <option value="1">★☆☆☆☆ (1)</option>
-      </select>
+    <!-- ── BADGES ── -->
+    <div class="badges-row" id="badges-row"></div>
 
-      <label class="block mb-2 text-sm text-gray-300">Your Review</label>
-      <textarea id="review-text"
-        class="w-full bg-gray-900 border border-gray-700 rounded-lg p-3"
-        rows="4"
-        placeholder="Write your experience with this tool..."></textarea>
+    <!-- ── QUICK STATS ── -->
+    <div class="stats-bar" id="stats-bar"></div>
 
-      <button onclick="submitReview()"
-        class="mt-3 bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg">
-        Submit Review
+    <!-- ── COMPARE VIEW (hidden until compare selected) ── -->
+    <div id="compare-section" class="compare-section" style="display:none;"></div>
+
+    <!-- ── RATINGS ── -->
+    <div class="xe-card" id="ratings-card" style="display:none;">
+      <div class="xe-card-title">
+        <div class="xe-card-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+              d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+          </svg>
+        </div>
+        Performance Ratings
+      </div>
+      <div class="ratings-grid" id="ratings-grid"></div>
+    </div>
+
+    <!-- ── ABOUT ── -->
+    <section id="about-tool-section" class="xe-card hidden">
+      <div class="xe-card-title">
+        <div class="xe-card-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+        </div>
+        About this tool
+      </div>
+      <div class="about-grid">
+        <div class="about-col">
+          <h4>Key Features</h4>
+          <ul id="about-features"></ul>
+        </div>
+        <div class="about-col">
+          <h4>Best For</h4>
+          <ul id="about-bestfor"></ul>
+        </div>
+        <div class="about-col">
+          <h4>Why It Stands Out</h4>
+          <p id="about-standout"></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── PROS / CONS ── -->
+    <section>
+      <div class="pc-mobile-toggle">
+        <button type="button" class="pc-toggle-btn active" id="btn-pros" onclick="showPros()">✓ Pros</button>
+        <button type="button" class="pc-toggle-btn" id="btn-cons" onclick="showCons()">✕ Cons</button>
+      </div>
+      <div class="pc-grid" style="margin-bottom:20px;">
+        <div class="pc-box" id="pros-box">
+          <h3>
+            <span style="color:var(--green);font-size:1rem;">✓</span> Pros
+          </h3>
+          <ul class="pc-list"></ul>
+        </div>
+        <div class="pc-box pc-cons-col" id="cons-box">
+          <h3>
+            <span style="color:var(--red);font-size:1rem;">✕</span> Cons
+          </h3>
+          <ul class="pc-list"></ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── DESCRIPTION + PRICING ── -->
+    <div id="xe-phase1" class="xe-card hidden"></div>
+
+    <!-- ── SCREENSHOTS + RELATED ── -->
+    <div id="xe-phase2" class="hidden"></div>
+
+    <!-- ── REVIEWS ── -->
+    <section class="xe-card" id="reviews-section">
+      <div class="review-header">
+        <div class="xe-card-title" style="margin:0;">
+          <div class="xe-card-icon">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+                d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+            </svg>
+          </div>
+          User Reviews
+        </div>
+        <div id="review-summary" style="display:none;text-align:right;">
+          <div class="review-avg-num" id="avg-rating">—</div>
+          <div class="review-stars" id="avg-stars"></div>
+          <div class="review-avg-label" id="rating-count"></div>
+        </div>
+      </div>
+
+      <div id="review-action-area" style="margin-bottom:16px;"></div>
+
+      <div class="review-form-wrap" id="review-form">
+        <div style="font-family:var(--fd);font-size:.95rem;font-weight:700;margin-bottom:14px;">Write your review</div>
+        <label class="xe-label" for="review-rating">Rating</label>
+        <select id="review-rating" class="xe-select">
+          <option value="5">★★★★★ — Excellent (5)</option>
+          <option value="4">★★★★☆ — Good (4)</option>
+          <option value="3">★★★☆☆ — Average (3)</option>
+          <option value="2">★★☆☆☆ — Poor (2)</option>
+          <option value="1">★☆☆☆☆ — Terrible (1)</option>
+        </select>
+        <label class="xe-label" for="review-text">Your experience</label>
+        <textarea id="review-text" class="xe-textarea"
+          placeholder="What did you use it for? What worked? What didn't?"></textarea>
+        <div style="display:flex;gap:9px;margin-top:14px;">
+          <button type="button" class="btn-submit-review" id="submit-review-btn" onclick="submitReview()">Post Review</button>
+          <button type="button" class="btn-cancel-review" onclick="closeReviewForm()">Cancel</button>
+        </div>
+        <p id="review-submit-msg"></p>
+      </div>
+
+      <button type="button" class="btn-toggle-reviews" id="toggle-reviews-btn" style="display:none;">
+        <span id="toggle-text">Show reviews</span>
+        <span id="toggle-arrow">▼</span>
       </button>
-    </div>
 
-    <button id="toggle-reviews-btn"
-      class="flex items-center gap-2 text-blue-400 hover:text-blue-300 font-medium mb-4">
-      <span id="toggle-text">View all reviews</span>
-      <span id="toggle-arrow">▼</span>
-    </button>
+      <div id="reviews-wrapper" style="display:none;">
+        <div class="reviews-list" id="reviews-list"></div>
+      </div>
+    </section>
 
-    <div id="reviews-wrapper" class="hidden space-y-4">
-      <div id="reviews-list"></div>
-    </div>
-  </section>
-
- <!-- ABOUT SECTION (separate) -->
-<section id="about-tool-section" class="hidden mt-14">
-  <h2 class="text-2xl font-bold mb-6">About this tool</h2>
-  
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-    <!-- Key Features -->
-    <div class="bg-gray-800/40 border border-gray-700 rounded-xl p-6">
-      <h3 class="text-lg font-semibold mb-3">Key Features</h3>
-      <ul id="about-features" class="space-y-2 text-gray-200"></ul>
-    </div>
-
-    <!-- Best For -->
-    <div class="bg-gray-800/40 border border-gray-700 rounded-xl p-6">
-      <h3 class="text-lg font-semibold mb-3">Best For</h3>
-      <ul id="about-bestfor" class="space-y-2 text-gray-200"></ul>
-    </div>
-
-    <!-- Standout -->
-    <div class="bg-gray-800/40 border border-gray-700 rounded-xl p-6">
-      <h3 class="text-lg font-semibold mb-3">Why It Stands Out</h3>
-      <p id="about-standout" class="text-gray-300"></p>
-    </div>
-  </div>
-</section>
-
-<!-- ================= PROS / CONS ================= -->
-<section class="mb-14 mt-14">
-  <!-- Mobile Toggle -->
-  <div class="md:hidden flex gap-2 mb-4">
-    <button id="btn-pros" onclick="showPros()"
-      class="flex-1 py-2 rounded-lg font-semibold bg-blue-600 text-white">
-      Pros
-    </button>
-    <button id="btn-cons" onclick="showCons()"
-      class="flex-1 py-2 rounded-lg font-semibold bg-gray-800 text-gray-300">
-      Cons
-    </button>
-  </div>
-  <div class="grid md:grid-cols-2 gap-6">
-    <!-- PROS -->
-    <div id="pros-box" class="bg-gray-800/40 border border-gray-700 rounded-xl p-6">
-      <h3 class="text-xl font-bold mb-4">Pros</h3>
-      <ul class="space-y-3 text-gray-200"></ul>
-    </div>
-    <!-- CONS - hidden on mobile, visible on desktop -->
-    <div id="cons-box" class=" bg-gray-800/40 border border-gray-700 rounded-xl p-6">
-      <h3 class="text-xl font-bold mb-4">Cons</h3>
-      <ul class="space-y-3 text-gray-200"></ul>
-    </div>
-  </div>
-</section>
-
-  <!-- ================= PHASE 1 ================= -->
-  <div id="xe-phase1"
-    class="bg-gray-800/30 border border-gray-700 p-6 rounded-xl mb-10"></div>
-
-  <!-- ================= PHASE 2 (Screenshots + Related Tools) ================= -->
-  <div id="xe-phase2"
-    class="bg-gray-800/30 border border-gray-700 p-6 rounded-xl mb-10"></div>
-
+  </div><!-- /tool-container -->
 </div>
+</main>
 
+<script src="tools.js" defer></script>
 
-<!-- ================= SCRIPTS ================= -->
-<script src="tools.js"></script>
-  <script src ="auth.js"></script>
-  <script>
-document.addEventListener("DOMContentLoaded", () => {
-  if (typeof renderToolDetailsPageHydrate === "function") {
-    renderToolDetailsPageHydrate();
+<script>
+(function(){
+"use strict";
+
+/* ── GLOBALS ── */
+let _allTools = [];
+let _currentTool = null;
+
+/* ── MOBILE PROS/CONS ── */
+window.showPros = function(){
+  const pb = document.getElementById("pros-box");
+  const cb = document.getElementById("cons-box");
+  if(pb) pb.style.display="";
+  if(cb) cb.style.display="none";
+  document.getElementById("btn-pros")?.classList.add("active");
+  document.getElementById("btn-cons")?.classList.remove("active");
+};
+window.showCons = function(){
+  const pb = document.getElementById("pros-box");
+  const cb = document.getElementById("cons-box");
+  if(pb) pb.style.display="none";
+  if(cb) cb.style.display="";
+  document.getElementById("btn-cons")?.classList.add("active");
+  document.getElementById("btn-pros")?.classList.remove("active");
+};
+
+/* ── BADGES ── */
+function renderBadges(tool){
+  const row = document.getElementById("badges-row");
+  if(!row) return;
+  const b = [];
+  if(tool.has_free_tier)  b.push(['badge-green','✓ Free Tier']);
+  if(tool.has_api)        b.push(['badge-blue','⚡ API Access']);
+  if(tool.open_source)    b.push(['badge-purple','⊛ Open Source']);
+  if(tool.has_mobile_app) b.push(['badge-gray','📱 Mobile App']);
+  if(tool.no_credit_card) b.push(['badge-green','✓ No Credit Card']);
+  if(tool.pricing_free)   b.push(['badge-amber','Free plan available']);
+  if(!b.length){ row.style.display="none"; return; }
+  row.innerHTML = b.map(([cls,txt])=>`<span class="badge ${cls}">${txt}</span>`).join("");
+}
+
+/* ── QUICK STATS ── */
+function renderStats(tool){
+  const bar = document.getElementById("stats-bar");
+  if(!bar) return;
+  const items = [];
+  if(tool.founded)       items.push(['Founded', tool.founded]);
+  if(tool.users_count)   items.push(['Users', tool.users_count]);
+  if(tool.pricing_free)  items.push(['Free Plan', 'Yes']);
+  else if(tool.pricing_plus) items.push(['Starting', tool.pricing_plus]);
+  if(tool.has_api !== undefined) items.push(['API', tool.has_api ? 'Yes' : 'No']);
+  if(tool.has_mobile_app !== undefined) items.push(['Mobile', tool.has_mobile_app ? 'Yes' : 'No']);
+  if(!items.length){ bar.style.display="none"; return; }
+  bar.innerHTML = items.map(([l,v])=>`
+    <div class="stat-item">
+      <span class="stat-label">${l}</span>
+      <span class="stat-val">${v}</span>
+    </div>`).join("");
+}
+
+/* ── RATINGS ── */
+function renderRatings(tool){
+  const card = document.getElementById("ratings-card");
+  const grid = document.getElementById("ratings-grid");
+  if(!card || !grid) return;
+  const metrics = [
+    {key:'rating_ease',    label:'Ease of Use'},
+    {key:'rating_quality', label:'Output Quality'},
+    {key:'rating_value',   label:'Value for Money'},
+    {key:'rating_speed',   label:'Speed'},
+    {key:'rating_beginner',label:'Beginner Friendly'},
+    {key:'rating_features',label:'Feature Depth'}
+  ];
+  const present = metrics.filter(m => tool[m.key] != null && tool[m.key] > 0);
+  if(!present.length){ card.style.display="none"; return; }
+  card.style.display="block";
+  grid.innerHTML = present.map(m => {
+    const score = Math.min(10, Math.max(0, Number(tool[m.key])));
+    const pct = score * 10;
+    const colorClass = score >= 8 ? 'green' : score >= 5 ? '' : 'amber';
+    return `
+      <div class="rating-row">
+        <div class="rating-meta">
+          <span class="rating-label">${m.label}</span>
+          <span class="rating-score">${score}/10</span>
+        </div>
+        <div class="rating-bar">
+          <div class="rating-fill ${colorClass}" style="width:0%" data-w="${pct}%"></div>
+        </div>
+      </div>`;
+  }).join("");
+  requestAnimationFrame(()=>{
+    requestAnimationFrame(()=>{
+      grid.querySelectorAll(".rating-fill").forEach(el=>{
+        el.style.width = el.dataset.w;
+      });
+    });
+  });
+}
+
+/* ── PHASE 1 OVERRIDE — new styling ── */
+window._overridePhase1 = function(merged){
+  const box = document.getElementById("xe-phase1");
+  if(!box) return;
+  const p = merged.pricing || {};
+  const pricingHTML = (p.free||p.plus||p.team) ? `
+    <div class="pricing-table" style="margin-top:18px;">
+      <div style="padding:10px 16px;background:rgba(255,255,255,.02);border-bottom:1px solid var(--border);">
+        <span style="font-size:.72rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3);">Pricing</span>
+      </div>
+      ${p.free?`<div class="pricing-row"><span class="pricing-plan">Free</span><span class="pricing-val">${escHtml(p.free)}</span></div>`:''}
+      ${p.plus?`<div class="pricing-row"><span class="pricing-plan">Plus</span><span class="pricing-val">${escHtml(p.plus)}</span></div>`:''}
+      ${p.team?`<div class="pricing-row"><span class="pricing-plan">Team</span><span class="pricing-val">${escHtml(p.team)}</span></div>`:''}
+    </div>`:'' ;
+  if(merged.long_description || (p.free||p.plus||p.team)){
+    box.innerHTML = `
+      ${merged.long_description?`<p>${escHtml(merged.long_description)}</p>`:''}
+      ${pricingHTML}`;
+    box.classList.remove("hidden");
   }
-  feather.replace();
+};
+
+/* ── PHASE 2 OVERRIDE — new styling ── */
+window._overridePhase2 = function(tool, merged, toolsList){
+  const box = document.getElementById("xe-phase2");
+  if(!box) return;
+  const shots = (merged.screenshots||[]).slice(0,2);
+  const shotsHTML = shots.length ? `
+    <div class="xe-card" style="margin-bottom:20px;">
+      <div class="xe-card-title">
+        <div class="xe-card-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <rect x="3" y="3" width="18" height="18" rx="3" stroke-width="1.8"/>
+            <circle cx="8.5" cy="8.5" r="1.5" stroke-width="1.8"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M21 15l-5-5L5 21"/>
+          </svg>
+        </div>
+        Screenshots
+      </div>
+      <div class="shots-grid">
+        ${shots.map(s=>`<div class="shot-wrap"><img data-src="${s}" src="" alt="screenshot" loading="lazy"/></div>`).join("")}
+      </div>
+    </div>` : "";
+
+  const related = (toolsList||[])
+    .filter(t=>(t.category||"").toLowerCase()===(tool.category||"").toLowerCase()
+      && t.name.toLowerCase()!==tool.name.toLowerCase())
+    .slice(0,4);
+
+  const relatedHTML = `
+    <div class="xe-card">
+      <div class="xe-card-title">
+        <div class="xe-card-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 6h16M4 10h16M4 14h16M4 18h16"/>
+          </svg>
+        </div>
+        Related in ${escHtml(tool.category||"this category")}
+      </div>
+      ${related.length ? `
+        <div class="related-grid">
+          ${related.map(r=>`
+            <a href="tool.html?tool=${encodeURIComponent(r.name)}" class="related-card">
+              <img data-src="${r.logo_url||''}" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+                alt="${escHtml(r.name)}" width="38" height="38" loading="lazy"
+                onerror="this.src='xedge-logo.png'"/>
+              <div>
+                <div class="related-name">${escHtml(r.name)}</div>
+                <div class="related-cat">${escHtml(r.category)}</div>
+              </div>
+            </a>`).join("")}
+        </div>` : `<p style="color:var(--text3);font-size:.83rem;margin:0;">No related tools found.</p>`}
+    </div>`;
+
+  box.innerHTML = shotsHTML + relatedHTML;
+  box.classList.remove("hidden");
+  if(typeof lazyLoadImgs === "function") lazyLoadImgs(box);
+};
+
+function escHtml(s){
+  return String(s||"").replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+/* ── COMPARE ── */
+let _compareTool = null;
+
+window.openCompareModal = function(){
+  const modal = document.getElementById("compare-modal");
+  modal.classList.add("open");
+  document.getElementById("compare-search").focus();
+  renderModalResults("");
+};
+window.closeCompareModal = function(){
+  document.getElementById("compare-modal").classList.remove("open");
+};
+
+function renderModalResults(q){
+  const res = document.getElementById("compare-results");
+  if(!res) return;
+  const term = q.trim().toLowerCase();
+  const pool = _allTools.filter(t =>
+    t.name.toLowerCase() !== (_currentTool?.name||"").toLowerCase() &&
+    (!term || t.name.toLowerCase().includes(term) || (t.category||"").toLowerCase().includes(term))
+  ).slice(0, 8);
+  res.innerHTML = pool.map(t=>`
+    <div class="modal-result" onclick="selectCompareTool('${escHtml(t.name)}')">
+      <img src="${t.logo_url||'xedge-logo.png'}" alt="${escHtml(t.name)}" onerror="this.src='xedge-logo.png'" width="34" height="34"/>
+      <div>
+        <div class="modal-result-name">${escHtml(t.name)}</div>
+        <div class="modal-result-cat">${escHtml(t.category)}</div>
+      </div>
+    </div>`).join("") || `<div style="padding:14px;color:var(--text3);font-size:.83rem;">No tools found</div>`;
+}
+
+document.addEventListener("input", e=>{
+  if(e.target.id==="compare-search") renderModalResults(e.target.value);
 });
-    
-  function showPros() {
-    document.getElementById("pros-box").classList.remove("hidden");
-    document.getElementById("cons-box").classList.add("hidden");
-    document.getElementById("btn-pros").className = "flex-1 py-2 rounded-lg font-semibold bg-blue-600 text-white";
-    document.getElementById("btn-cons").className = "flex-1 py-2 rounded-lg font-semibold bg-gray-800 text-gray-300";
+document.addEventListener("keydown", e=>{
+  if(e.key==="Escape") closeCompareModal();
+});
+document.getElementById("compare-modal")?.addEventListener("click", e=>{
+  if(e.target===e.currentTarget) closeCompareModal();
+});
+
+window.selectCompareTool = function(name){
+  closeCompareModal();
+  _compareTool = _allTools.find(t=>t.name===name)||null;
+  if(_compareTool && _currentTool) renderComparison(_currentTool, _compareTool);
+};
+
+function renderComparison(t1, t2){
+  const sec = document.getElementById("compare-section");
+  if(!sec) return;
+
+  const split = raw => (raw||"").split(/[,;\n]/).map(v=>v.trim()).filter(Boolean);
+
+  const pros1 = split(t1.pros_raw);
+  const pros2 = split(t2.pros_raw);
+  const cons1 = split(t1.cons_raw);
+  const cons2 = split(t2.cons_raw);
+  const feats1 = split(t1.key_features_raw);
+  const feats2 = split(t2.key_features_raw);
+
+  const score = tool => {
+    let s = 0;
+    if(tool.has_free_tier) s += 2;
+    if(tool.has_api) s += 1;
+    if(tool.open_source) s += 1;
+    const rKeys = ['rating_ease','rating_quality','rating_value','rating_speed','rating_beginner'];
+    rKeys.forEach(k=>{ if(tool[k]) s += Number(tool[k])/10; });
+    s += split(tool.pros_raw).length * 0.5;
+    return s;
+  };
+
+  const s1 = score(t1), s2 = score(t2);
+  const overallWinner = s1 >= s2 ? t1.name : t2.name;
+
+  const rows = [
+    {label:'Category', v1: t1.category||'—', v2: t2.category||'—'},
+    {label:'Free Plan', v1: t1.pricing_free?'✓ Yes':'—', v2: t2.pricing_free?'✓ Yes':'—'},
+    {label:'API Access', v1: t1.has_api?'✓ Yes':'—', v2: t2.has_api?'✓ Yes':'—'},
+    {label:'Open Source', v1: t1.open_source?'✓ Yes':'—', v2: t2.open_source?'✓ Yes':'—'},
+    {label:'Mobile App', v1: t1.has_mobile_app?'✓ Yes':'—', v2: t2.has_mobile_app?'✓ Yes':'—'},
+    {label:'Ease of Use', v1: t1.rating_ease?t1.rating_ease+'/10':'—', v2: t2.rating_ease?t2.rating_ease+'/10':'—'},
+    {label:'Output Quality', v1: t1.rating_quality?t1.rating_quality+'/10':'—', v2: t2.rating_quality?t2.rating_quality+'/10':'—'},
+    {label:'Pros Count', v1: pros1.length||'—', v2: pros2.length||'—'},
+    {label:'Why It Stands Out', v1: t1.standout_raw||'—', v2: t2.standout_raw||'—'},
+  ];
+
+  sec.style.display = "block";
+  sec.scrollIntoView({behavior:"smooth", block:"start"});
+
+  sec.innerHTML = `
+    <button type="button" class="btn-close-compare" onclick="closeComparison()">✕ Close comparison</button>
+    <div class="compare-header">
+      <div class="compare-header-cell" style="background:rgba(255,255,255,.02);">
+        <span class="ch-label">Comparing</span>
+      </div>
+      <div class="compare-header-cell">
+        <img src="${t1.logo_url||'xedge-logo.png'}" alt="${escHtml(t1.name)}" onerror="this.src='xedge-logo.png'"/>
+        <span class="ch-name">${escHtml(t1.name)}</span>
+        <span class="ch-cat">${escHtml(t1.category)}</span>
+      </div>
+      <div class="compare-header-cell">
+        <img src="${t2.logo_url||'xedge-logo.png'}" alt="${escHtml(t2.name)}" onerror="this.src='xedge-logo.png'"/>
+        <span class="ch-name">${escHtml(t2.name)}</span>
+        <span class="ch-cat">${escHtml(t2.category)}</span>
+      </div>
+    </div>
+    <div class="compare-body">
+      ${rows.map(r=>`
+        <div class="compare-row">
+          <div class="compare-cell label">${r.label}</div>
+          <div class="compare-cell">${escHtml(String(r.v1))}</div>
+          <div class="compare-cell">${escHtml(String(r.v2))}</div>
+        </div>`).join("")}
+    </div>
+    <div class="compare-verdict">
+      <strong>Bottom line:</strong> ${escHtml(overallWinner)} edges ahead based on ratings, features, and accessibility.
+      ${t1.standout_raw ? `<br/><strong>${escHtml(t1.name)}:</strong> ${escHtml(t1.standout_raw)}` : ''}
+      ${t2.standout_raw ? `<br/><strong>${escHtml(t2.name)}:</strong> ${escHtml(t2.standout_raw)}` : ''}
+    </div>`;
+}
+
+window.closeComparison = function(){
+  const sec = document.getElementById("compare-section");
+  if(sec){ sec.style.display="none"; sec.innerHTML=""; }
+  _compareTool = null;
+};
+
+/* ── REVIEW FORM ── */
+window.openReviewForm = function(){
+  document.getElementById("review-form")?.classList.add("open");
+};
+window.closeReviewForm = function(){
+  document.getElementById("review-form")?.classList.remove("open");
+  const m = document.getElementById("review-submit-msg");
+  if(m) m.style.display="none";
+};
+
+window.submitReview = async function(){
+  const btn  = document.getElementById("submit-review-btn");
+  const text = document.getElementById("review-text");
+  const rating = document.getElementById("review-rating");
+  const msg  = document.getElementById("review-submit-msg");
+  if(!text?.value.trim()){
+    if(msg){msg.textContent="Please write your review first.";msg.style.color="var(--red)";msg.style.display="block";}
+    return;
+  }
+  if(typeof firebase==="undefined"||!firebase.auth().currentUser){
+    if(msg){msg.textContent="Sign in to post a review.";msg.style.color="var(--red)";msg.style.display="block";}
+    return;
+  }
+  const user = firebase.auth().currentUser;
+  const toolName = document.getElementById("tool-name")?.textContent||"";
+  const toolKey  = new URLSearchParams(location.search).get("tool")||toolName;
+  btn.disabled=true; btn.textContent="Posting…";
+  try{
+    await firebase.firestore().collection("reviews").add({
+      toolKey: toolKey.toLowerCase(), toolName,
+      rating: Number(rating?.value||5), text: text.value.trim(),
+      userName: user.displayName||"Anonymous", userPhoto: user.photoURL||"",
+      userId: user.uid, createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    text.value=""; btn.textContent="Post Review"; btn.disabled=false;
+    if(msg){msg.textContent="✓ Posted!";msg.style.color="var(--green)";msg.style.display="block";}
+    setTimeout(()=>{ closeReviewForm(); loadReviews(toolKey); }, 1200);
+  }catch(e){
+    btn.disabled=false; btn.textContent="Post Review";
+    if(msg){msg.textContent="Error. Try again.";msg.style.color="var(--red)";msg.style.display="block";}
+  }
+};
+
+/* ── LOAD REVIEWS ── */
+window.loadReviews = async function(toolKey){
+  if(typeof firebase==="undefined") return;
+  try{
+    const snap = await firebase.firestore().collection("reviews")
+      .where("toolKey","==",toolKey.toLowerCase())
+      .orderBy("createdAt","desc").limit(20).get();
+    renderReviews(snap.docs.map(d=>({id:d.id,...d.data()})));
+  }catch(e){ console.warn("Reviews:",e.message); }
+};
+
+function renderReviews(reviews){
+  const list   = document.getElementById("reviews-list");
+  const wrapper= document.getElementById("reviews-wrapper");
+  const toggle = document.getElementById("toggle-reviews-btn");
+  const summary= document.getElementById("review-summary");
+  if(!list) return;
+  if(!reviews.length){
+    list.innerHTML=`<div class="reviews-empty">No reviews yet — be the first.</div>`;
+    if(toggle) toggle.style.display="flex"; return;
+  }
+  const avg = reviews.reduce((s,r)=>s+(r.rating||0),0)/reviews.length;
+  if(summary){ summary.style.display="block";
+    document.getElementById("avg-rating").textContent = avg.toFixed(1);
+    document.getElementById("avg-stars").textContent = "★".repeat(Math.round(avg))+"☆".repeat(5-Math.round(avg));
+    document.getElementById("rating-count").textContent = `${reviews.length} review${reviews.length!==1?"s":""}`;
+  }
+  list.innerHTML = reviews.map(r=>{
+    const stars="★".repeat(r.rating||5)+"☆".repeat(5-(r.rating||5));
+    const init=(r.userName||"?").split(" ").map(w=>w[0]).join("").toUpperCase().slice(0,2);
+    const date=r.createdAt?.toDate?r.createdAt.toDate().toLocaleDateString("en-US",{month:"short",year:"numeric"}):"";
+    const av = r.userPhoto?`<img src="${r.userPhoto}" alt="${escHtml(r.userName)}" onerror="this.style.display='none'"/>`:`${init}`;
+    return `<div class="review-item">
+      <div class="review-author">
+        <div class="review-avatar">${av}</div>
+        <div>
+          <div class="review-author-name">${escHtml(r.userName||"Anonymous")}</div>
+          <div class="review-date">${date}</div>
+        </div>
+        <div class="review-stars-sm" style="margin-left:auto;">${stars}</div>
+      </div>
+      <p class="review-text">${escHtml(r.text||"")}</p>
+    </div>`;
+  }).join("");
+  if(toggle) toggle.style.display="flex";
+}
+
+/* ── REVIEW TOGGLE ── */
+function initReviewToggle(){
+  const btn   = document.getElementById("toggle-reviews-btn");
+  const wrap  = document.getElementById("reviews-wrapper");
+  const text  = document.getElementById("toggle-text");
+  const arrow = document.getElementById("toggle-arrow");
+  if(!btn||!wrap) return;
+  btn.addEventListener("click",()=>{
+    const show = wrap.style.display==="none"||wrap.style.display==="";
+    wrap.style.display = show?"block":"none";
+    if(text) text.textContent = show?"Hide reviews":"Show reviews";
+    if(arrow) arrow.textContent = show?"▲":"▼";
+  });
+}
+
+/* ── UPDATE REVIEW ACTION AREA ── */
+function updateReviewArea(user){
+  const area = document.getElementById("review-action-area");
+  if(!area) return;
+  if(user){
+    area.innerHTML=`<button type="button" class="btn-write-review" onclick="openReviewForm()">
+      <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+      </svg>
+      Write a Review
+    </button>`;
+  } else {
+    area.innerHTML=`<div class="login-prompt"><button onclick="signInWithGoogle&&signInWithGoogle()">Sign in</button> to write a review</div>`;
+  }
+}
+
+/* ── FIREBASE AUTH ── */
+function initFirebase(){
+  if(typeof firebase==="undefined") return;
+  if(!firebase.apps.length){
+    firebase.initializeApp({
+      apiKey:"AIzaSyC-uRePD86sTpCRgjPsjhpOp-lzTNNF8Zg",
+      authDomain:"xedge-1da3a.firebaseapp.com",
+      projectId:"xedge-1da3a",
+      storageBucket:"xedge-1da3a.appspot.com",
+      messagingSenderId:"209657807080",
+      appId:"1:209657807080:web:80180596d966b4667d895d"
+    });
+  }
+  const auth=firebase.auth();
+  const prov=new firebase.auth.GoogleAuthProvider();
+  window.signInWithGoogle=()=>auth.signInWithPopup(prov).catch(console.error);
+  window.logoutUser=()=>auth.signOut();
+  auth.onAuthStateChanged(user=>{
+    updateReviewArea(user);
+    const nav=document.getElementById("auth-area");
+    if(!nav) return;
+    if(user){
+      nav.innerHTML=`<div style="position:relative;">
+        <img id="profileBtn" src="${user.photoURL||''}" alt="Profile" onerror="this.src='xedge-logo.png'"
+          style="width:34px;height:34px;border-radius:50%;border:2px solid var(--border2);cursor:pointer;display:block;"/>
+        <div id="profileMenu" style="display:none;position:absolute;right:0;top:calc(100%+8px);min-width:172px;background:#111828;border:1px solid var(--border2);border-radius:14px;overflow:hidden;box-shadow:0 20px 40px rgba(0,0,0,.6);z-index:100;">
+          <div style="padding:13px 15px;border-bottom:1px solid var(--border);">
+            <div style="font-weight:700;font-size:.88rem;">${user.displayName||""}</div>
+            <div style="font-size:.74rem;color:var(--text2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${user.email}</div>
+          </div>
+          <button onclick="logoutUser()" style="width:100%;text-align:left;padding:11px 15px;background:none;border:none;color:var(--red);cursor:pointer;font-size:.88rem;font-family:var(--fb);">Sign out</button>
+        </div></div>`;
+      setTimeout(()=>{
+        const b=document.getElementById("profileBtn"),m=document.getElementById("profileMenu");
+        if(!b||!m) return;
+        b.onclick=e=>{e.stopPropagation();m.style.display=m.style.display==="none"?"block":"none";};
+        document.addEventListener("click",e=>{if(!m.contains(e.target)&&e.target!==b)m.style.display="none";});
+      },0);
+    } else {
+      nav.innerHTML=`<button onclick="signInWithGoogle()" style="border:1px solid var(--accent-border);padding:7px 16px;border-radius:100px;background:none;color:var(--accent2);cursor:pointer;font-family:var(--fb);font-size:.83rem;font-weight:600;">Sign In</button>`;
+    }
+  });
+}
+
+/* ── BOOT ── */
+async function init(){
+  initReviewToggle();
+
+  // Wait for tools.js
+  let waited=0;
+  while(typeof renderToolDetailsPageHydrate!=="function"&&waited<5000){
+    await new Promise(r=>setTimeout(r,50)); waited+=50;
   }
 
-  function showCons() {
-    document.getElementById("cons-box").classList.remove("hidden");
-    document.getElementById("pros-box").classList.add("hidden");
-    document.getElementById("btn-cons").className = "flex-1 py-2 rounded-lg font-semibold bg-blue-600 text-white";
-    document.getElementById("btn-pros").className = "flex-1 py-2 rounded-lg font-semibold bg-gray-800 text-gray-300";
+  // Override phase renderers before hydrate
+  if(typeof window.renderPhase1==="function"){
+    window.renderPhase1 = (merged)=>{ window._overridePhase1(merged); };
+  }
+  if(typeof window.renderPhase2==="function"){
+    window.renderPhase2 = (tool,merged,list)=>{ window._overridePhase2(tool,merged,list); };
   }
 
+  if(typeof renderToolDetailsPageHydrate==="function"){
+    await renderToolDetailsPageHydrate();
+  }
+
+  // Grab current tool data after hydration
+  _currentTool = window.__CURRENT_TOOL_DATA__ || null;
+
+  // Load full tool list for compare
+  if(typeof getTools==="function"){
+    const cached = (()=>{
+      try{ const c=JSON.parse(localStorage.getItem("xedge_tools_v2")); return c?.data||null; }catch{ return null; }
+    })();
+    _allTools = cached || await getTools();
+  }
+
+  // Render new sections
+  if(_currentTool){
+    renderBadges(_currentTool);
+    renderStats(_currentTool);
+    renderRatings(_currentTool);
+    // SEO title
+    document.title = `${_currentTool.name} — AI Tool Review | XEdge`;
+  }
+
+  // Load reviews
+  const toolKey = new URLSearchParams(location.search).get("tool")||"";
+  if(toolKey) loadReviews(toolKey);
+
+  // Firebase
+  let tries=0;
+  const poll=setInterval(()=>{
+    if(typeof firebase!=="undefined"){clearInterval(poll);initFirebase();}
+    if(++tries>30) clearInterval(poll);
+  },300);
+}
+
+if(document.readyState==="loading"){
+  document.addEventListener("DOMContentLoaded",init);
+} else {
+  init();
+}
+
+})();
 </script>
-
-
-
 
 </body>
 </html>
