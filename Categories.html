@@ -3,180 +3,604 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>X Edge – Categories</title>
- 
-  <!-- Firebase Core -->
+  <title>Categories — XEdge</title>
+
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
-   <!-- Tailwind -->
-  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://szouczgiuhedynyshpbb.supabase.co" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
-    .loader {
-      width: 50px; height: 50px;
-      border: 5px solid #1e40af;
-      border-top-color: transparent;
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0a0e17;
+      --surface:   #111827;
+      --surface-h: #161e2e;
+      --border:    #1f2937;
+      --border-h:  #374151;
+      --text:      #f9fafb;
+      --sub:       #6b7280;
+      --sub2:      #9ca3af;
+      --accent:    #3b82f6;
+      --accent-s:  rgba(59,130,246,0.1);
     }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(10,14,23,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-wrap {
+      max-width: 1160px; margin: auto;
+      padding: 0 1.5rem; height: 56px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .brand {
+      display: flex; align-items: center; gap: 8px;
+      text-decoration: none; color: white;
+      font-weight: 600; font-size: .9rem; letter-spacing: .01em;
+    }
+    .brand img {
+      width: 26px; height: 26px;
+      background: white; border-radius: 5px; padding: 2px;
+    }
+    .nav-links {
+      display: flex; align-items: center; gap: 1.5rem;
+    }
+    .nav-links a {
+      font-size: .82rem; color: var(--sub2);
+      text-decoration: none; transition: color .15s;
+    }
+    .nav-links a:hover { color: white; }
+    .nav-links a.here { color: white; font-weight: 500; }
+    .nav-join {
+      font-size: .78rem; font-weight: 600;
+      background: var(--accent); color: white;
+      padding: .4rem 1rem; border-radius: 6px;
+      text-decoration: none; transition: opacity .15s;
+    }
+    .nav-join:hover { opacity: .85; }
+    #auth-area { display: flex; align-items: center; }
+
+    /* ── PAGE BODY ── */
+    .page {
+      max-width: 1160px; margin: 0 auto;
+      padding: 3.5rem 1.5rem 5rem;
+    }
+
+    /* ── HEADER ── */
+    .page-head {
+      margin-bottom: 2.5rem;
+      display: flex; align-items: flex-end;
+      justify-content: space-between; gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .page-head h1 {
+      font-size: 1.65rem; font-weight: 700;
+      letter-spacing: -.02em; color: white;
+      line-height: 1.2;
+    }
+    .page-head p {
+      font-size: .875rem; color: var(--sub);
+      margin-top: .35rem; max-width: 380px;
+      line-height: 1.6;
+    }
+
+    /* ── SEARCH ── */
+    .search-bar {
+      display: flex; align-items: center; gap: .75rem;
+      margin-bottom: 2rem; flex-wrap: wrap;
+    }
+    .search-input-wrap {
+      position: relative; flex: 1; max-width: 340px;
+    }
+    .search-input-wrap svg {
+      position: absolute; left: .75rem; top: 50%;
+      transform: translateY(-50%);
+      width: 15px; height: 15px; color: var(--sub);
+      pointer-events: none;
+    }
+    .search-input-wrap input {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: .6rem .75rem .6rem 2.25rem;
+      font-size: .84rem; color: white;
+      font-family: 'Inter', sans-serif;
+      outline: none; transition: border-color .2s;
+    }
+    .search-input-wrap input:focus { border-color: var(--accent); }
+    .search-input-wrap input::placeholder { color: var(--sub); }
+    .result-count {
+      font-size: .8rem; color: var(--sub);
+      white-space: nowrap;
+    }
+    .result-count b { color: var(--sub2); font-weight: 500; }
+
+    /* ── GRID ── */
+    .cat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+      gap: .75rem;
+    }
+
+    /* ── CARD ── */
+    .cat-card {
+      position: relative;
+      background: rgba(17,24,39,0.72);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem;
+      text-decoration: none; color: inherit;
+      cursor: pointer;
+      overflow: hidden;
+      transition: border-color .18s, background .18s, transform .18s;
+      display: flex; flex-direction: column;
+      min-height: 132px;
+      opacity: 0; transform: translateY(10px);
+      animation: up .35s ease forwards;
+    }
+    @keyframes up { to { opacity:1; transform:translateY(0); } }
+
+    /* idle top accent line — thin and subtle */
+    .cat-card::before {
+      content: '';
+      position: absolute; top: 0; left: 1rem; right: 1rem;
+      height: 1.5px; border-radius: 0 0 2px 2px;
+      background: transparent;
+      transition: background .25s;
+    }
+
+    /* hover */
+    .cat-card:hover {
+      background: var(--surface-h);
+      border-color: var(--border-h);
+      transform: translateY(-1px);
+    }
+    .cat-card:hover::before {
+      background: linear-gradient(90deg, transparent, var(--c, #3b82f6), transparent);
+    }
+
+    /* colour themes */
+    .cat-card[data-c="blue"]   { --c: #3b82f6; --cs: rgba(59,130,246,.08); }
+    .cat-card[data-c="indigo"] { --c: #6366f1; --cs: rgba(99,102,241,.08); }
+    .cat-card[data-c="cyan"]   { --c: #06b6d4; --cs: rgba(6,182,212,.08); }
+    .cat-card[data-c="green"]  { --c: #10b981; --cs: rgba(16,185,129,.08); }
+    .cat-card[data-c="amber"]  { --c: #f59e0b; --cs: rgba(245,158,11,.08); }
+    .cat-card[data-c="pink"]   { --c: #ec4899; --cs: rgba(236,72,153,.08); }
+    .cat-card[data-c="purple"] { --c: #8b5cf6; --cs: rgba(139,92,246,.08); }
+
+    /* card icon */
+    .c-icon {
+      font-size: .72rem;
+      line-height: 1;
+      font-weight: 700;
+      letter-spacing: .08em;
+      color: var(--c, #3b82f6);
+    }
+
+    /* card top row */
+    .c-top {
+      flex: 1;
+    }
+    .c-name {
+      font-size: .92rem; font-weight: 600;
+      color: white; line-height: 1.3;
+      margin-bottom: .25rem;
+    }
+    .c-desc {
+      font-size: .76rem; color: var(--sub);
+      line-height: 1.55;
+      min-height: 34px;
+    }
+
+    /* card bottom */
+    .c-bottom {
+      display: flex; align-items: center;
+      justify-content: space-between;
+      margin-top: .65rem;
+      padding-top: .6rem;
+      border-top: 1px solid var(--border);
+      transition: border-color .2s;
+    }
+    .cat-card:hover .c-bottom { border-color: var(--border-h); }
+
+    .c-count {
+      font-size: .72rem; color: var(--sub);
+      font-weight: 400;
+    }
+    .c-count b { color: var(--sub2); font-weight: 500; }
+
+    .c-arrow {
+      font-size: .72rem; color: var(--sub);
+      display: flex; align-items: center; gap: 3px;
+      transition: color .2s, gap .2s;
+    }
+    .cat-card:hover .c-arrow {
+      color: var(--c, #3b82f6); gap: 6px;
+    }
+
+    /* icon pill colour on hover */
+    .c-icon-wrap {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 34px; height: 34px; border-radius: 8px;
+      background: rgba(255,255,255,0.035);
+      border: 1px solid var(--border);
+      margin-bottom: .7rem;
+      transition: background .2s, border-color .2s;
+    }
+    .cat-card:hover .c-icon-wrap { background: var(--cs, rgba(59,130,246,.08)); border-color: rgba(255,255,255,.12); }
+
+    /* ── SKELETON ── */
+    .skel {
+      height: 148px; border-radius: 12px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      overflow: hidden; position: relative;
+    }
+    .skel::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,.03) 50%, transparent 100%);
+      background-size: 200% 100%;
+      animation: skel 1.4s ease infinite;
+    }
+    @keyframes skel { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+
+    /* ── EMPTY ── */
+    .empty {
+      grid-column: 1/-1;
+      padding: 4rem; text-align: center;
+    }
+    .empty p { font-size: .9rem; color: var(--sub); }
+    .empty a { color: var(--accent); text-decoration: none; font-size: .85rem; display: inline-block; margin-top: .5rem; }
+
+    /* ── PAGE LOADER ── */
+    #pg-loader {
+      position: fixed; inset: 0; z-index: 200;
+      background: var(--bg);
+      display: flex; align-items: center; justify-content: center;
+    }
+    #pg-loader.gone { display: none; }
+    .spin { width: 32px; height: 32px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin .6s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── FOOTER ── */
+    .foot {
+      max-width: 1160px; margin: 0 auto;
+      padding: 1.5rem;
+      border-top: 1px solid var(--border);
+      display: flex; gap: 1.5rem; flex-wrap: wrap;
+      font-size: .76rem; color: var(--sub);
+    }
+    .foot a { color: var(--sub); text-decoration: none; transition: color .15s; }
+    .foot a:hover { color: var(--sub2); }
+
+    @media (max-width: 640px) {
+      .cat-grid { grid-template-columns: repeat(2, 1fr); }
+      .nav-links a:not(.nav-join):not([data-keep]) { display: none; }
+    }
   </style>
 </head>
+<body>
 
-<body class="bg-gray-950 text-white">
+<div id="pg-loader"><div class="spin"></div></div>
 
-<!-- ================= NAVBAR ================= -->
-<nav class="bg-gray-900/80 border-b border-gray-800 fixed top-0 left-0 right-0 z-50">
-  <div class="max-w-6xl mx-auto px-6 py-3 flex justify-between items-center">
-
-    <a href="index.html" class="flex items-center gap-3">
-      <img src="xedge-logo.png" class="w-8 h-8 bg-white p-1 rounded" />
-      <span class="font-bold">X Edge</span>
+<nav>
+  <div class="nav-wrap">
+    <a href="index.html" class="brand">
+      <img src="xedge-logo.png" alt="XEdge"> XEdge
     </a>
-
-    <div class="flex items-center gap-6">
-      <a href="index.html" class="text-gray-300 hover:text-white">Home</a>
-      <a href="Explore.html" class="text-gray-300 hover:text-white">Explore</a>
-      <a href="Categories.html" class="text-blue-400 font-semibold">Categories</a>
-      <a href="About.html" class="text-gray-300 hover:text-white">About</a>
-
-      <a href="Join.html"
-         class="hidden md:inline-block bg-gradient-to-r from-blue-500 to-blue-600 px-4 py-2 rounded-full text-sm">
-         Join Beta
-      </a>
-
-      <!-- PROFILE / SIGN-IN AREA -->
-      <div id="auth-area" class="ml-4"></div>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="Explore.html">Explore</a>
+      <a href="Categories.html" class="here">Categories</a>
+      <a href="stack.html">Stacks</a>
+      <a href="About.html">About</a>
+      <a href="Join.html" class="nav-join">Join Beta</a>
+      <div id="auth-area"></div>
     </div>
   </div>
 </nav>
 
-<!-- Prevent navbar overlap -->
-<div class="pt-24"></div>
+<div class="page">
 
-<!-- Loader -->
-<div id="pageLoader" class="fixed inset-0 bg-gray-900/90 flex items-center justify-center z-50 hidden">
-  <div class="loader"></div>
+  <div class="page-head">
+    <div>
+      <h1>Browse by category</h1>
+      <p>Every AI tool organised by what it actually does. Hover a card to see what's inside.</p>
+    </div>
+  </div>
+
+  <div class="search-bar">
+    <div class="search-input-wrap">
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="8.5" cy="8.5" r="5.5"/><path d="m13.5 13.5 3.5 3.5" stroke-linecap="round"/>
+      </svg>
+      <input type="text" id="q" placeholder="Search categories…" autocomplete="off">
+    </div>
+    <p class="result-count"><b id="cnt">—</b> categories</p>
+  </div>
+
+  <div class="cat-grid" id="grid">
+    <div class="skel"></div><div class="skel"></div><div class="skel"></div>
+    <div class="skel"></div><div class="skel"></div><div class="skel"></div>
+    <div class="skel"></div><div class="skel"></div><div class="skel"></div>
+  </div>
+
 </div>
 
-<!-- Categories Grid -->
-<div id="categories-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 p-6"></div>
+<footer class="foot">
+  <span>© 2026 XEdge</span>
+  <a href="index.html">Home</a>
+  <a href="stack.html">Stacks</a>
+  <a href="Blog.html">Blog</a>
+  <a href="Privacy.html">Privacy</a>
+</footer>
 
-
-<!-- ================= FETCH + RENDER CATEGORIES ================= -->
 <script>
-document.addEventListener("DOMContentLoaded", async () => {
+const SUPABASE_URL = "https://szouczgiuhedynyshpbb.supabase.co";
+const SUPABASE_KEY = "sb_publishable_JEvVHrobhuPoU6Z5xkMr2Q_pw8tvzHP";
+const CACHE_KEY = "xedge_tools_v2";
+const CACHE_TTL = 5 * 60 * 1000;
 
-  const RAW_URL = "https://script.google.com/macros/s/AKfycbxXs2ajlwcddAMVEMY5NAMns_ooeEAHSYwDk84nnD6cU2hLjx_k5HKOgFLm-EX_ASSv/exec";
-  const container = document.getElementById("categories-grid");
+const META = {
+  "AI Chatbot":              {c:"blue",   d:"Talk to AI - ask anything, get answers, build chatbots."},
+  "Image Generation":        {c:"pink",   d:"Turn text into images, illustrations, and artwork."},
+  "Productivity":            {c:"amber",  d:"Automate tasks, take notes, and get more done."},
+  "Video Editing":           {c:"purple", d:"Edit, trim, and enhance video with AI assistance."},
+  "Copy Writing":            {c:"cyan",   d:"Write faster - ads, emails, blogs, and more."},
+  "Video Generation":        {c:"indigo", d:"Generate and animate videos from text or images."},
+  "Audio and Voice AI":      {c:"green",  d:"Voice cloning, transcription, and music generation."},
+  "AI Coding":               {c:"blue",   d:"Write, debug, and ship code faster with AI."},
+  "Developer Tools":         {c:"amber",  d:"APIs, infra, and tools built for developers."},
+  "Presentation":            {c:"indigo", d:"Build beautiful slides and decks in minutes."},
+  "Marketing and Ads":       {c:"pink",   d:"Create campaigns, copy, and creatives that convert."},
+  "Health and Fitness":      {c:"green",  d:"AI coaching, tracking, and wellness planning."},
+  "Web Designing":           {c:"cyan",   d:"Design and build websites without writing code."},
+  "Business and Analytics":  {c:"amber",  d:"Turn data into decisions with AI-powered insights."},
+  "Personal Finance and Wealth Management":{c:"green",d:"Smarter budgeting, investing, and money management."},
+  "Scientific Research & Discovery":{c:"cyan",d:"Accelerate research, analysis, and discovery."},
+  "Sales Assistant and Lead Manager":{c:"blue",d:"Find leads, write outreach, and close deals."},
+  "Cybersecurity & Threat Detection":{c:"purple",d:"Protect systems and detect threats in real time."},
+  "Trading":                 {c:"amber",  d:"AI signals, analysis, and automation for traders."},
+};
+const COLS = ["blue","indigo","cyan","green","amber","pink","purple"];
 
-  async function getCachedTools() {
-    const cached = localStorage.getItem("tools_cache");
-    if (cached) return JSON.parse(cached);
+const CATEGORY_ALIASES = {
+  bussinessandanalytics: "businessandanalytics",
+  businessanalytics: "businessandanalytics",
+  aichatbots: "aichatbot",
+  chatbot: "aichatbot",
+  chatbots: "aichatbot"
+};
 
-    const res = await fetch(RAW_URL + "?nocache=" + Date.now());
-    const data = await res.json();
+const CATEGORY_LABELS = {
+  businessandanalytics: "Business and Analytics",
+  aichatbot: "AI Chatbot"
+};
 
-    localStorage.setItem("tools_cache", JSON.stringify(data));
-    return data;
+function normalizeCategory(value) {
+  return String(value || "").toLowerCase().replace(/&/g, "and").replace(/[^a-z0-9]+/g, "");
+}
+
+function categoryKey(value) {
+  const key = normalizeCategory(value);
+  return CATEGORY_ALIASES[key] || key;
+}
+
+function displayCategory(value) {
+  const key = categoryKey(value);
+  const metaName = Object.keys(META).find(name => categoryKey(name) === key);
+  return CATEGORY_LABELS[key] || metaName || String(value || "").trim();
+}
+
+function metaFor(category) {
+  const key = categoryKey(category);
+  const match = Object.keys(META).find(name => categoryKey(name) === key);
+  return match ? META[match] : null;
+}
+
+function escapeHtml(value) {
+  return String(value ?? "").replace(/[&<>"']/g, ch => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#039;"
+  }[ch]));
+}
+
+function categoryMark(value) {
+  const words = String(value || "")
+    .replace(/&/g, " and ")
+    .split(/[^a-zA-Z0-9]+/)
+    .filter(w => w && !["and", "the", "for", "with", "of"].includes(w.toLowerCase()));
+  if (!words.length) return "AI";
+  if (words[0].toLowerCase() === "ai" && words[1]) return ("AI" + words[1][0]).slice(0, 3).toUpperCase();
+  return words.slice(0, 2).map(w => w[0]).join("").toUpperCase();
+}
+
+function mapTool(d) {
+  return {
+    id: d.id || "",
+    name: d.name || d.title || "Unknown",
+    category: d.category || "",
+    logo_url: d.logo_url || "",
+    description: d.description || d.long_description || "",
+    short_description: d.short_description || d.short || ""
+  };
+}
+
+function readToolsCache() {
+  try {
+    const cached = JSON.parse(sessionStorage.getItem(CACHE_KEY) || localStorage.getItem(CACHE_KEY) || "null");
+    if (cached && cached.ts && Date.now() - cached.ts < CACHE_TTL && Array.isArray(cached.data)) {
+      return cached.data;
+    }
+  } catch (_) {}
+  return null;
+}
+
+function readStaleToolsCache() {
+  try {
+    const cached = JSON.parse(localStorage.getItem(CACHE_KEY) || sessionStorage.getItem(CACHE_KEY) || "null");
+    if (cached && Array.isArray(cached.data)) return cached.data;
+  } catch (_) {}
+  try {
+    const old = JSON.parse(localStorage.getItem("tools_cache") || "null");
+    if (Array.isArray(old)) return old;
+  } catch (_) {}
+  return [];
+}
+
+function writeToolsCache(tools) {
+  const payload = JSON.stringify({ ts: Date.now(), data: tools });
+  try { sessionStorage.setItem(CACHE_KEY, payload); } catch (_) {}
+  try { localStorage.setItem(CACHE_KEY, payload); } catch (_) {}
+}
+
+async function getTools() {
+  const forceRefresh = new URLSearchParams(window.location.search).has("refresh");
+  if (!forceRefresh) {
+    const cached = readToolsCache();
+    if (cached && cached.length) return cached;
+    const stale = readStaleToolsCache();
+    if (stale && stale.length) {
+      fetch(
+        `${SUPABASE_URL}/rest/v1/xedge?select=id,name,category,logo_url,short_description,link,goal&order=name.asc&limit=1000`,
+        { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
+      )
+        .then(res => res.ok ? res.json() : [])
+        .then(rows => { if (Array.isArray(rows) && rows.length) writeToolsCache(rows.map(mapTool)); })
+        .catch(() => {});
+      return stale;
+    }
+  } else {
+    try { sessionStorage.removeItem(CACHE_KEY); } catch (_) {}
+    try { localStorage.removeItem(CACHE_KEY); } catch (_) {}
+    try { localStorage.removeItem("tools_cache"); } catch (_) {}
   }
 
   try {
-    const tools = await getCachedTools();
-    const categories = [...new Set(tools.map(t => t.category?.trim()).filter(Boolean))];
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/xedge?select=id,name,category,logo_url,short_description,link,goal&order=name.asc&limit=1000`,
+      { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
+    );
+    if (!res.ok) throw new Error(`Supabase ${res.status}`);
+    const rows = await res.json();
+    const tools = Array.isArray(rows) ? rows.map(mapTool) : [];
+    writeToolsCache(tools);
+    return tools;
+  } catch (_) {
+    return readStaleToolsCache();
+  }
+}
 
-    container.innerHTML = categories.map(cat => `
-      <a href="category.html?cat=${encodeURIComponent(cat)}"
-         class="bg-gray-800/50 border border-gray-700 rounded-xl p-6 text-center 
-                hover:bg-gray-700 transition will-change-transform">
-        <h3 class="font-semibold text-white">${cat}</h3>
-      </a>
-    `).join("");
+function card(cat, count, i) {
+  cat = displayCategory(cat);
+  const m = metaFor(cat) || {c: COLS[i % COLS.length], d:"Discover AI tools in this category."};
+  const safeCat = escapeHtml(cat);
+  const safeDesc = escapeHtml(m.d);
+  const safeMark = escapeHtml(categoryMark(cat));
+  return `
+  <a class="cat-card" href="category.html?cat=${encodeURIComponent(cat)}"
+     data-c="${escapeHtml(m.c)}" data-name="${escapeHtml(cat.toLowerCase())}"
+     style="animation-delay:${i*30}ms">
+    <div class="c-top">
+      <div class="c-icon-wrap"><span class="c-icon">${safeMark}</span></div>
+      <div class="c-name">${safeCat}</div>
+      <div class="c-desc">${safeDesc}</div>
+    </div>
+    <div class="c-bottom">
+      <span class="c-count"><b>${count}</b> tool${count!==1?"s":""}</span>
+      <span class="c-arrow">Explore <span>&rarr;</span></span>
+    </div>
+  </a>`;
+}
 
-  } catch (err) {
-    console.error("Error loading categories:", err);
-    container.innerHTML = `<p class="text-red-400">Cannot load categories.</p>`;
+document.addEventListener("DOMContentLoaded", async () => {
+  const grid = document.getElementById("grid");
+  const cnt  = document.getElementById("cnt");
+  const q    = document.getElementById("q");
+
+  try {
+    const tools = await getTools();
+    const map = {};
+    tools.forEach(t => {
+      const raw = t.category?.trim();
+      if (!raw) return;
+      const c = displayCategory(raw);
+      map[c] = (map[c] || 0) + 1;
+    });
+    const all = Object.keys(map).sort((a, b) => a.localeCompare(b));
+    cnt.textContent = all.length;
+
+    function render(list) {
+      if (!list.length) {
+        grid.innerHTML = `<div class="empty"><p>Nothing matches. <a href="#">Clear search</a></p></div>`;
+        return;
+      }
+      grid.innerHTML = list.map((c,i) => card(c, map[c], i)).join("");
+    }
+
+    render(all);
+
+    q.addEventListener("input", () => {
+      const v = q.value.toLowerCase().trim();
+      const f = v ? all.filter(c => c.toLowerCase().includes(v)) : all;
+      cnt.textContent = f.length;
+      render(f);
+    });
+
+  } catch(e) {
+    grid.innerHTML = `<div class="empty"><p>Couldn't load categories.</p><a href="index.html">Go home</a></div>`;
   }
 
+  document.getElementById("pg-loader").classList.add("gone");
+});
+
+// transition loader
+document.addEventListener("click", e => {
+  const l = e.target.closest("a");
+  if (l && l.href && l.href.includes("category.html"))
+    document.getElementById("pg-loader").classList.remove("gone");
 });
 </script>
 
+<!-- AUTH -->
 <script>
-document.addEventListener("click", (e) => {
-  const link = e.target.closest("a");
-  if (link && link.href.includes("category.html")) {
-    document.getElementById("pageLoader").classList.remove("hidden");
-  }
-});
-</script>
-
-
-<!-- ================= AUTH SYSTEM (WORKS ON ALL PAGES) ================= -->
-<script>
-// Firebase Config
-const firebaseConfig = {
-  apiKey: "AIzaSyBo9cfhTj2W7ikpdrqz6wAtSBisBo78OAc",
-  authDomain: "xedge-1da3a.firebaseapp.com",
-  projectId: "xedge-1da3a",
-  storageBucket: "xedge-1da3a.appspot.com",
-  messagingSenderId: "209657807080",
-  appId: "1:209657807080:web:80180596d966b4667d895d",
-  measurementId: "G-SXW16HCZB8"
-};
-
-firebase.initializeApp(firebaseConfig);
-
+firebase.initializeApp({apiKey:"AIzaSyBo9cfhTj2W7ikpdrqz6wAtSBisBo78OAc",authDomain:"xedge-1da3a.firebaseapp.com",projectId:"xedge-1da3a",storageBucket:"xedge-1da3a.appspot.com",messagingSenderId:"209657807080",appId:"1:209657807080:web:80180596d966b4667d895d"});
 const auth = firebase.auth();
-const provider = new firebase.auth.GoogleAuthProvider();
-
-// LOGIN
-function signInWithGoogle() {
-  auth.signInWithPopup(provider).catch(() => alert("Login failed"));
-}
-
-// LOGOUT
-function logoutUser() {
-  auth.signOut();
-}
-
-// UI Update
-auth.onAuthStateChanged((user) => {
-  const area = document.getElementById("auth-area");
-
-  if (!user) {
-    area.innerHTML = `
-      <button onclick="signInWithGoogle()"
-        class="border border-blue-500 px-6 py-2 rounded-full 
-               font-semibold text-sm text-blue-300 hover:bg-blue-500/10 transition">
-        Sign In
-      </button>
-    `;
+function signInWithGoogle(){ auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).catch(()=>alert("Login failed")); }
+function logoutUser(){ auth.signOut(); }
+auth.onAuthStateChanged(u => {
+  const a = document.getElementById("auth-area");
+  if (!u) {
+    a.innerHTML = `<button onclick="signInWithGoogle()" style="font-size:.78rem;font-weight:500;color:#9ca3af;background:transparent;border:1px solid #1f2937;padding:5px 14px;border-radius:6px;cursor:pointer;font-family:'Inter',sans-serif;transition:border-color .15s;" onmouseover="this.style.borderColor='#374151'" onmouseout="this.style.borderColor='#1f2937'">Sign in</button>`;
     return;
   }
-
-  area.innerHTML = `
-    <div class="relative group">
-      <img src="${user.photoURL}"
-           class="w-10 h-10 rounded-full border border-gray-700 cursor-pointer" />
-
-      <div class="absolute right-0 mt-2 bg-gray-800 border border-gray-700 rounded-xl 
-                  p-3 w-40 opacity-0 pointer-events-none group-hover:opacity-100 
-                  group-hover:pointer-events-auto transition-all duration-200">
-
-        <p class="text-white font-semibold">${user.displayName}</p>
-        <p class="text-gray-400 text-xs mb-3">${user.email}</p>
-
-        <button onclick="logoutUser()"
-          class="w-full bg-red-600/20 hover:bg-red-600/30 text-red-400 p-2 rounded-lg">
-          Logout
-        </button>
-      </div>
-    </div>
-  `;
+  a.innerHTML = `<div style="position:relative;"><img src="${u.photoURL}" title="${u.displayName}" style="width:30px;height:30px;border-radius:50%;border:1.5px solid #1f2937;cursor:pointer;display:block;" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='block'?'none':'block'"/><div style="display:none;position:absolute;right:0;top:38px;background:#111827;border:1px solid #1f2937;border-radius:10px;padding:12px;min-width:160px;z-index:99;"><p style="font-size:.82rem;font-weight:500;color:white;margin-bottom:1px;">${u.displayName}</p><p style="font-size:.72rem;color:#6b7280;margin-bottom:10px;">${u.email}</p><button onclick="logoutUser()" style="width:100%;background:rgba(239,68,68,.08);color:#f87171;border:1px solid rgba(239,68,68,.12);padding:6px;border-radius:6px;cursor:pointer;font-size:.78rem;font-family:'Inter',sans-serif;">Sign out</button></div></div>`;
 });
+document.addEventListener("click", e => { document.querySelectorAll('[style*="display:block"]').forEach(el => { if (!el.previousElementSibling?.contains(e.target)) el.style.display="none"; }); });
 </script>
-
 </body>
 </html>

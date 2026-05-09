@@ -145,6 +145,12 @@ async function getTools(force = false) {
     ) {
       return cached.data;
     }
+    if (cached && Array.isArray(cached.data) && cached.data.length) {
+      fetchFromSupabase()
+        .then(raw => safeSet(XE.CACHE_KEY, { ts: Date.now(), data: raw.map(mapRow) }))
+        .catch(() => {});
+      return cached.data;
+    }
   }
 
   try {

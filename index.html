@@ -49,6 +49,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="dns-prefetch" href="https://script.google.com" />
   <link rel="dns-prefetch" href="https://www.gstatic.com" />
+  <link rel="preconnect" href="https://szouczgiuhedynyshpbb.supabase.co" crossorigin />
 
   <!-- ═══ FONTS: Non-blocking (print trick) ═══ -->
   <link rel="preload" as="style"
@@ -62,10 +63,6 @@
 
   <!-- ═══ ANALYTICS ═══ -->
   <script src="analytics.js" defer></script>
-
-  <!-- ═══ VANTA: Fast Visual Load via Defer ═══ -->
-  <script src="https://cdn.jsdelivr.net/npm/three@0.134.0/build/three.min.js" defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.net.min.js" defer></script>
 
   <style>
     /* ─── RESET & BASE ─── */
@@ -2036,11 +2033,7 @@
     <main id="main-content">
       <section class="xe-hero" aria-label="Hero">
 
-        <!-- Live badge -->
-        <div class="xe-hero-badge" role="status">
-          <span class="xe-hero-badge-dot" aria-hidden="true"></span>
-          200+ builders already on XEdge
-        </div>
+        
 
         <!-- Headline -->
         <h1>
@@ -2101,7 +2094,7 @@
         <!-- Stats -->
         <div class="xe-hero-stats" aria-label="Platform stats">
           <div>
-            <div class="xe-stat-num">300+</div>
+            <div class="xe-stat-num">500+</div>
             <div class="xe-stat-label">Active Users</div>
           </div>
           <div class="xe-stat-divider" aria-hidden="true"></div>
@@ -2111,7 +2104,7 @@
           </div>
           <div class="xe-stat-divider" aria-hidden="true"></div>
           <div>
-            <div class="xe-stat-num">15+</div>
+            <div class="xe-stat-num">24+</div>
             <div class="xe-stat-label">AI Categories</div>
           </div>
           <div class="xe-stat-divider" aria-hidden="true"></div>
@@ -2143,7 +2136,7 @@
               <h3>AI Image</h3>
             </a>
 
-            <a href="category.html?cat=Ai chatbot" class="xe-cat-card">
+            <a href="category.html?cat=AI%20Chatbot" class="xe-cat-card">
               <div class="xe-cat-icon">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
@@ -2153,7 +2146,7 @@
               <h3>Chatbot</h3>
             </a>
 
-            <a href="category.html?cat=Bussiness%20and%20Analytics" class="xe-cat-card">
+            <a href="category.html?cat=Business%20and%20Analytics" class="xe-cat-card">
               <div class="xe-cat-icon">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
@@ -2163,7 +2156,7 @@
               <h3>Business</h3>
             </a>
 
-            <a href="category.html?cat=Video generation" class="xe-cat-card">
+            <a href="category.html?cat=Video%20Generation" class="xe-cat-card">
               <div class="xe-cat-icon">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
@@ -2459,11 +2452,6 @@
   <!-- ═══════════════════════════════════════
        FIREBASE v8
   ═══════════════════════════════════════ -->
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js" defer></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js" defer></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js" defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js" defer></script>
-
   <!-- ═══════════════════════════════════════
        ALL JAVASCRIPT — single DOMContentLoaded
   ═══════════════════════════════════════ -->
@@ -2472,8 +2460,9 @@
       "use strict";
 
       /* ─── CONFIG ─── */
-      const SHEET_URL = "https://script.google.com/macros/s/AKfycbxXs2ajlwcddAMVEMY5NAMns_ooeEAHSYwDk84nnD6cU2hLjx_k5HKOgFLm-EX_ASSv/exec";
-      const CACHE_KEY = "xedge_tools_cache_v2";
+      const SUPABASE_URL = "https://szouczgiuhedynyshpbb.supabase.co";
+      const SUPABASE_KEY = "sb_publishable_JEvVHrobhuPoU6Z5xkMr2Q_pw8tvzHP";
+      const CACHE_KEY = "xedge_tools_v2";
       const CACHE_TTL = 5 * 60 * 1000; // 5 min
       const PRIORITY = ["chatgpt", "chat gpt", "runway", "notion", "leonardo", "copilot", "midjourney", "mid journey", "perplexity", "claude", "gemini", "grok"];
 
@@ -2482,48 +2471,80 @@
       const safeParse = v => { try { return JSON.parse(v); } catch { return null; } };
       const makePlaceholder = (name) =>
         `https://dummyimage.com/160x160/1e293b/ffffff&text=${encodeURIComponent(String(name || "Tool").slice(0, 12))}`;
+      const idle = (fn, timeout) => {
+        if ("requestIdleCallback" in window) requestIdleCallback(fn, { timeout: timeout || 2500 });
+        else setTimeout(fn, timeout || 1200);
+      };
+      const loadScript = (src) => new Promise((resolve, reject) => {
+        const existing = document.querySelector(`script[src="${src}"]`);
+        if (existing) {
+          existing.addEventListener("load", resolve, { once: true });
+          existing.addEventListener("error", reject, { once: true });
+          return;
+        }
+        const s = document.createElement("script");
+        s.src = src;
+        s.async = true;
+        s.onload = resolve;
+        s.onerror = reject;
+        document.head.appendChild(s);
+      });
 
       /* ─── SINGLE TOOL FETCH — with TTL cache ─── */
       let _toolsPromise = null;
+      function readToolCache(freshOnly) {
+        const cached = safeParse(sessionStorage.getItem(CACHE_KEY)) || safeParse(localStorage.getItem(CACHE_KEY));
+        if (!cached || !Array.isArray(cached.data) || !cached.data.length) return null;
+        if (freshOnly && (!cached.ts || Date.now() - cached.ts >= CACHE_TTL)) return null;
+        return cached.data;
+      }
+      function writeToolCache(data) {
+        const payload = JSON.stringify({ ts: Date.now(), data });
+        try { sessionStorage.setItem(CACHE_KEY, payload); } catch (_) {}
+        try { localStorage.setItem(CACHE_KEY, payload); } catch (_) {}
+      }
+      function mapToolRow(d) {
+        return {
+          name: d.name || d.title || "",
+          short: d.short_description || d.short || d.summary || "",
+          category: d.category || "",
+          goal: d.goal || d.goals || d.use_case || "",
+          logo: d.logo_url || d.logo || "",
+          link: d.Link || d.link || "#"
+        };
+      }
+      async function fetchFreshTools() {
+        const res = await fetch(
+          `${SUPABASE_URL}/rest/v1/xedge?select=id,name,category,goal,logo_url,short_description,link&order=name.asc&limit=1000`,
+          { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
+        );
+        if (!res.ok) throw new Error("Supabase " + res.status);
+        const raw = await res.json();
+        const tools = Array.isArray(raw) ? raw.map(mapToolRow) : [];
+        writeToolCache(tools);
+        return tools;
+      }
       function fetchTools() {
         if (_toolsPromise) return _toolsPromise;
         _toolsPromise = (async () => {
           // Migrate old v1 cache to v2 format if present
           const oldCache = safeParse(localStorage.getItem("xedge_tools_cache_v1"));
-          if (oldCache && Array.isArray(oldCache) && oldCache.length) {
-            localStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now() - 60000, data: oldCache }));
-          }
+          if (oldCache && Array.isArray(oldCache) && oldCache.length) writeToolCache(normalizeTools(oldCache));
 
-          const cached = safeParse(localStorage.getItem(CACHE_KEY));
-          if (cached && cached.ts && (Date.now() - cached.ts < CACHE_TTL) && Array.isArray(cached.data) && cached.data.length) {
-            console.log("XEdge: using cached tools:", cached.data.length);
-            return cached.data;
+          const fresh = readToolCache(true);
+          if (fresh) return fresh;
+
+          const stale = readToolCache(false);
+          if (stale) {
+            fetchFreshTools().catch(() => {});
+            return stale;
           }
 
           try {
-            const res = await fetch(SHEET_URL + "?t=" + Date.now(), {
-              method: "GET",
-              mode: "cors"
-            });
-            if (!res.ok) throw new Error("HTTP " + res.status);
-            const raw = await res.json();
-            if (Array.isArray(raw) && raw.length) {
-              localStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data: raw }));
-              console.log("XEdge: fetched fresh tools:", raw.length);
-              return raw;
-            }
+            return await fetchFreshTools();
           } catch (e) {
-            console.warn("XEdge: fetch failed, checking cache:", e.message);
+            return readToolCache(false) || [];
           }
-
-          // Last resort: any cache regardless of TTL
-          const stale = safeParse(localStorage.getItem(CACHE_KEY));
-          if (stale && Array.isArray(stale.data) && stale.data.length) {
-            console.log("XEdge: using stale cache:", stale.data.length);
-            return stale.data;
-          }
-          console.warn("XEdge: no tools available");
-          return [];
         })();
         return _toolsPromise;
       }
@@ -2898,6 +2919,39 @@
       }
 
       /* ─── MAIN INIT ─── */
+      function initVantaWhenIdle() {
+        if (window.innerWidth <= 900) return;
+        idle(async () => {
+          try {
+            await loadScript("https://cdn.jsdelivr.net/npm/three@0.134.0/build/three.min.js");
+            await loadScript("https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.net.min.js");
+            if (typeof VANTA !== "undefined") {
+              VANTA.NET({
+                el: "#vanta-bg", color: 0x1d4ed8, backgroundColor: 0x0b0f15,
+                points: 5, maxDistance: 16, spacing: 22, mouseControls: false, touchControls: false
+              });
+            }
+          } catch (_) {}
+        }, 3500);
+      }
+
+      function initFirebaseWhenIdle() {
+        idle(() => { loadFirebaseNow().catch(() => {}); }, 3000);
+      }
+
+      async function loadFirebaseNow() {
+        await loadScript("https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js");
+        await loadScript("https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js");
+        await loadScript("https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js");
+        initFirebase();
+      }
+
+      async function signInFallback() {
+        await loadFirebaseNow();
+        if (window.signInWithGoogle !== signInFallback) return window.signInWithGoogle();
+      }
+      window.signInWithGoogle = signInFallback;
+
       async function init() {
         // Non-data inits — DOM is guaranteed ready here
         initMobileMenu();
@@ -2905,23 +2959,7 @@
         // Init Chatbot lazy payload
         initChatbot();
 
-        // Init Vanta background natively after DOM parses
-        if (window.innerWidth > 900 && typeof VANTA !== 'undefined') {
-          VANTA.NET({
-            el: "#vanta-bg", color: 0x1d4ed8, backgroundColor: 0x0b0f15,
-            points: 5, maxDistance: 16, spacing: 22, mouseControls: false, touchControls: false
-          });
-        }
-        else if (window.innerWidth > 900) {
-          // If defer script heavily delayed, poll for it
-          const vantaPoll = setInterval(() => {
-            if (typeof VANTA !== 'undefined') {
-              clearInterval(vantaPoll);
-              VANTA.NET({ el: "#vanta-bg", color: 0x1d4ed8, backgroundColor: 0x0b0f15, points: 5, maxDistance: 16, spacing: 22, mouseControls: false, touchControls: false });
-            }
-          }, 100);
-          setTimeout(() => clearInterval(vantaPoll), 5000);
-        }
+        initVantaWhenIdle();
 
         // Render static sections immediately
         renderBrowseByGoal();
@@ -3009,11 +3047,7 @@
         }
 
         // Firebase loads async via defer — poll until ready
-        let fbRetries = 0;
-        const fbPoll = setInterval(() => {
-          if (typeof firebase !== "undefined") { clearInterval(fbPoll); initFirebase(); }
-          if (++fbRetries > 30) clearInterval(fbPoll); // 9 seconds max
-        }, 300);
+        initFirebaseWhenIdle();
       }
 
 
@@ -3632,8 +3666,27 @@
   var _sb = null;
   var _currentStack = null; // stores the last built stack for saving
 
-  function getSupabase() {
+  function loadSupabaseScript() {
+    return new Promise(function(resolve, reject) {
+      if (typeof supabase !== 'undefined') { resolve(); return; }
+      var existing = document.querySelector('script[src*="supabase-js"]');
+      if (existing) {
+        existing.addEventListener('load', resolve, { once: true });
+        existing.addEventListener('error', reject, { once: true });
+        return;
+      }
+      var script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';
+      script.async = true;
+      script.onload = resolve;
+      script.onerror = reject;
+      document.head.appendChild(script);
+    });
+  }
+
+  async function getSupabase() {
     if (_sb) return _sb;
+    await loadSupabaseScript();
     if (typeof supabase !== 'undefined') {
       _sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
     }
@@ -3691,7 +3744,7 @@
     btn.disabled = true;
     label.textContent = 'Saving…';
 
-    var sb = getSupabase();
+    var sb = await getSupabase();
     if (!sb) {
       showToast('⚠ Supabase not configured yet', 'warn');
       btn.disabled = false;
