@@ -1045,8 +1045,10 @@
       align-items: flex-end;
       justify-content: flex-end;
       padding: 24px;
+      padding: max(24px, env(safe-area-inset-top)) max(24px, env(safe-area-inset-right)) max(24px, env(safe-area-inset-bottom)) max(24px, env(safe-area-inset-left));
       background: rgba(2, 6, 23, 0.42);
       backdrop-filter: blur(3px);
+      overflow-y: auto;
     }
 
     .xe-playbook-overlay.is-open {
@@ -1055,6 +1057,8 @@
 
     .xe-playbook-card {
       width: min(100%, 410px);
+      max-height: calc(100dvh - 48px);
+      overflow-y: auto;
       background: rgba(9, 13, 22, 0.96);
       border: 1px solid rgba(255, 255, 255, 0.12);
       border-radius: 16px;
@@ -1098,7 +1102,7 @@
       padding: 12px 14px;
       color: #fff;
       font-family: inherit;
-      font-size: .94rem;
+      font-size: 16px;
       outline: none;
     }
 
@@ -1157,9 +1161,12 @@
         align-items: flex-end;
         justify-content: center;
         padding: 14px;
+        padding: max(14px, env(safe-area-inset-top)) max(14px, env(safe-area-inset-right)) max(14px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
       }
 
       .xe-playbook-card {
+        width: 100%;
+        max-height: calc(100dvh - 28px);
         padding: 20px;
       }
     }
@@ -2938,8 +2945,10 @@
         const status = document.getElementById("xe-playbook-status");
         if (!overlay || !form || !input || !submit || !dismiss || !status) return;
 
-        const claimedKey = "xedge_startup_playbook_claimed";
+        const claimedKey = "xedge_startup_playbook_claimed_session";
         const dismissedKey = "xedge_startup_playbook_dismissed_session";
+        const popupParams = new URLSearchParams(window.location.search);
+        const forcePopup = popupParams.get("playbook") === "show" || popupParams.get("popup") === "show";
 
         function setStatus(message, isError) {
           status.textContent = message;
@@ -2961,8 +2970,8 @@
         }
 
         function openPopup() {
-          if (localStorage.getItem(claimedKey) === "true") return;
-          if (sessionStorage.getItem(dismissedKey) === "true") return;
+          if (!forcePopup && sessionStorage.getItem(claimedKey) === "true") return;
+          if (!forcePopup && sessionStorage.getItem(dismissedKey) === "true") return;
           overlay.classList.add("is-open");
           overlay.setAttribute("aria-hidden", "false");
           if (isExpired()) markExpired();
@@ -3017,7 +3026,7 @@
             if (!res.ok) throw new Error("Server error");
 
             startupPlaybookClaimCount += 1;
-            localStorage.setItem(claimedKey, "true");
+            sessionStorage.setItem(claimedKey, "true");
             localStorage.setItem("xedge_startup_playbook_email", input.value.trim());
             form.reset();
             setStatus("You're in. Your access code is on its way.", false);
