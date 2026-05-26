@@ -1036,6 +1036,134 @@
     }
 
     /* ─── REVIEW SECTION ─── */
+    /* Startup playbook popup */
+    .xe-playbook-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 9998;
+      display: none;
+      align-items: flex-end;
+      justify-content: flex-end;
+      padding: 24px;
+      background: rgba(2, 6, 23, 0.42);
+      backdrop-filter: blur(3px);
+    }
+
+    .xe-playbook-overlay.is-open {
+      display: flex;
+    }
+
+    .xe-playbook-card {
+      width: min(100%, 410px);
+      background: rgba(9, 13, 22, 0.96);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 16px;
+      box-shadow: 0 22px 70px rgba(0, 0, 0, 0.42);
+      padding: 24px;
+    }
+
+    .xe-playbook-kicker {
+      color: #60a5fa;
+      font-size: .76rem;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .xe-playbook-card h2 {
+      font-size: 1.35rem;
+      line-height: 1.2;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    .xe-playbook-card p {
+      color: #a7b0c0;
+      font-size: .93rem;
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    .xe-playbook-form {
+      display: grid;
+      gap: 10px;
+    }
+
+    .xe-playbook-form input {
+      width: 100%;
+      background: rgba(15, 23, 42, .95);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 10px;
+      padding: 12px 14px;
+      color: #fff;
+      font-family: inherit;
+      font-size: .94rem;
+      outline: none;
+    }
+
+    .xe-playbook-form input:focus {
+      border-color: rgba(96, 165, 250, .62);
+    }
+
+    .xe-playbook-form input:disabled {
+      color: #94a3b8;
+      cursor: not-allowed;
+    }
+
+    .xe-playbook-submit {
+      background: #fff;
+      color: #0f172a;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-family: inherit;
+      font-size: .92rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: opacity .15s, transform .15s;
+    }
+
+    .xe-playbook-submit:hover {
+      opacity: .9;
+      transform: translateY(-1px);
+    }
+
+    .xe-playbook-dismiss {
+      width: 100%;
+      background: transparent;
+      border: none;
+      color: #7f8aa0;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: .86rem;
+      padding: 8px 0 0;
+      text-align: center;
+    }
+
+    .xe-playbook-status {
+      display: none;
+      color: #34d399;
+      font-size: .86rem;
+      margin: 2px 0 0;
+    }
+
+    .xe-playbook-status.is-error {
+      color: #f87171;
+    }
+
+    @media (max-width: 560px) {
+      .xe-playbook-overlay {
+        align-items: flex-end;
+        justify-content: center;
+        padding: 14px;
+      }
+
+      .xe-playbook-card {
+        padding: 20px;
+      }
+    }
+
     .xe-review-box {
       max-width: 700px;
       margin: 0 auto;
@@ -1977,6 +2105,21 @@
   <!-- Vanta background -->
   <div id="vanta-bg" aria-hidden="true"></div>
 
+  <div id="xe-playbook-overlay" class="xe-playbook-overlay" aria-hidden="true">
+    <div class="xe-playbook-card" role="dialog" aria-modal="true" aria-labelledby="xe-playbook-title">
+      <div class="xe-playbook-kicker">Free launch bonus</div>
+      <h2 id="xe-playbook-title">Get the Startup Execution Playbook</h2>
+      <p>Claim the free playbook and we will send your private access code by email. Limited to the first 50 founders.</p>
+      <form id="xe-playbook-form" class="xe-playbook-form">
+        <label for="xe-playbook-email" class="xe-sr-only">Email address</label>
+        <input id="xe-playbook-email" name="email" type="email" placeholder="your@email.com" autocomplete="email" required />
+        <button id="xe-playbook-submit" class="xe-playbook-submit" type="submit">Send me the code</button>
+        <p id="xe-playbook-status" class="xe-playbook-status" role="status"></p>
+      </form>
+      <button id="xe-playbook-dismiss" class="xe-playbook-dismiss" type="button">No, thanks</button>
+    </div>
+  </div>
+
   <!-- Nav backdrop -->
   <div id="nav-backdrop" class="nav-backdrop" aria-hidden="true"></div>
 
@@ -2780,6 +2923,116 @@
       }
 
       /* ─── CHATBOT BUTTON ─── */
+      /* --- STARTUP PLAYBOOK POPUP --- */
+      // Replace this with your backend/global count when the Worker tracks total claims.
+      let startupPlaybookClaimCount = 0;
+      const STARTUP_PLAYBOOK_LIMIT = 50;
+      const STARTUP_PLAYBOOK_ENDPOINT = "https://discount.kumarharsha980.workers.dev/";
+
+      function initStartupPlaybookPopup() {
+        const overlay = document.getElementById("xe-playbook-overlay");
+        const form = document.getElementById("xe-playbook-form");
+        const input = document.getElementById("xe-playbook-email");
+        const submit = document.getElementById("xe-playbook-submit");
+        const dismiss = document.getElementById("xe-playbook-dismiss");
+        const status = document.getElementById("xe-playbook-status");
+        if (!overlay || !form || !input || !submit || !dismiss || !status) return;
+
+        const claimedKey = "xedge_startup_playbook_claimed";
+        const dismissedKey = "xedge_startup_playbook_dismissed_session";
+
+        function setStatus(message, isError) {
+          status.textContent = message;
+          status.classList.toggle("is-error", !!isError);
+          status.style.display = message ? "block" : "none";
+        }
+
+        function markExpired() {
+          input.value = "";
+          input.placeholder = "Offer expired";
+          input.disabled = true;
+          submit.disabled = true;
+          submit.textContent = "Offer expired";
+          setStatus("All 50 free playbooks have been claimed.", true);
+        }
+
+        function isExpired() {
+          return startupPlaybookClaimCount >= STARTUP_PLAYBOOK_LIMIT;
+        }
+
+        function openPopup() {
+          if (localStorage.getItem(claimedKey) === "true") return;
+          if (sessionStorage.getItem(dismissedKey) === "true") return;
+          overlay.classList.add("is-open");
+          overlay.setAttribute("aria-hidden", "false");
+          if (isExpired()) markExpired();
+        }
+
+        function closePopup() {
+          overlay.classList.remove("is-open");
+          overlay.setAttribute("aria-hidden", "true");
+        }
+
+        dismiss.addEventListener("click", () => {
+          sessionStorage.setItem(dismissedKey, "true");
+          closePopup();
+        });
+
+        overlay.addEventListener("click", (event) => {
+          if (event.target === overlay) {
+            sessionStorage.setItem(dismissedKey, "true");
+            closePopup();
+          }
+        });
+
+        document.addEventListener("keydown", (event) => {
+          if (event.key === "Escape" && overlay.classList.contains("is-open")) {
+            sessionStorage.setItem(dismissedKey, "true");
+            closePopup();
+          }
+        });
+
+        form.addEventListener("submit", async (event) => {
+          event.preventDefault();
+          if (isExpired()) {
+            markExpired();
+            return;
+          }
+
+          const original = submit.textContent;
+          submit.textContent = "Sending...";
+          submit.disabled = true;
+          setStatus("", false);
+
+          const payload = new FormData(form);
+          payload.append("source", "startup_execution_playbook_popup");
+          payload.append("offer", "Startup Execution Playbook");
+          payload.append("send_code_by_email", "true");
+
+          try {
+            const res = await fetch(STARTUP_PLAYBOOK_ENDPOINT, {
+              method: "POST",
+              body: payload
+            });
+            if (!res.ok) throw new Error("Server error");
+
+            startupPlaybookClaimCount += 1;
+            localStorage.setItem(claimedKey, "true");
+            localStorage.setItem("xedge_startup_playbook_email", input.value.trim());
+            form.reset();
+            setStatus("You're in. Your access code is on its way.", false);
+            submit.textContent = "Claimed";
+            setTimeout(closePopup, 1600);
+          } catch (error) {
+            submit.textContent = original;
+            submit.disabled = false;
+            setStatus("Something went wrong. Please try again.", true);
+          }
+        });
+
+        setTimeout(openPopup, 900);
+      }
+
       function initChatbot() {
         const btn = document.getElementById("xedge-ai-button");
         if (!btn) return;
@@ -2957,6 +3210,7 @@
         // Non-data inits — DOM is guaranteed ready here
         initMobileMenu();
         initNewsletter();
+        initStartupPlaybookPopup();
         // Init Chatbot lazy payload
         initChatbot();
 
