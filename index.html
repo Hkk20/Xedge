@@ -919,6 +919,123 @@
       color: #9ca3af;
     }
 
+    .xe-saved-stacks {
+      display: none;
+    }
+
+    .xe-saved-stacks.has-stacks {
+      display: block;
+    }
+
+    .xe-saved-grid,
+    .xe-testimonial-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+    }
+
+    .xe-saved-card,
+    .xe-weekly-stack,
+    .xe-testimonial-card {
+      background: rgba(17, 24, 39, 0.62);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 18px;
+      padding: 22px;
+    }
+
+    .xe-saved-card h3,
+    .xe-weekly-stack h3 {
+      font-size: 1rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+      color: #f0f4ff;
+    }
+
+    .xe-saved-card p {
+      font-size: .84rem;
+      line-height: 1.6;
+      color: #9ca3af;
+      margin-bottom: 14px;
+    }
+
+    .xe-saved-card-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      color: #60a5fa;
+      font-size: .72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+
+    .xe-weekly-stack {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 20px;
+      border-color: rgba(59, 130, 246, 0.22);
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.12), rgba(17, 24, 39, 0.62));
+    }
+
+    .xe-weekly-tools {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .xe-weekly-tools span {
+      border: 1px solid rgba(96, 165, 250, 0.22);
+      background: rgba(59, 130, 246, 0.1);
+      color: #bfdbfe;
+      border-radius: 100px;
+      padding: 5px 10px;
+      font-size: .78rem;
+      font-weight: 700;
+    }
+
+    .xe-weekly-stack p {
+      color: #9ca3af;
+      line-height: 1.6;
+      font-size: .9rem;
+    }
+
+    .xe-testimonial-card {
+      border-left: 3px solid #3b82f6;
+      border-radius: 12px;
+    }
+
+    .xe-testimonial-card blockquote {
+      margin: 0 0 18px;
+      color: #e5e7eb;
+      line-height: 1.65;
+      font-size: .94rem;
+    }
+
+    .xe-testimonial-name {
+      color: #fff;
+      font-weight: 800;
+      font-size: .9rem;
+    }
+
+    .xe-testimonial-role {
+      color: #8b93b0;
+      font-size: .8rem;
+      margin-top: 3px;
+    }
+
+    @media (max-width: 640px) {
+      .xe-weekly-stack {
+        grid-template-columns: 1fr;
+      }
+
+      .xe-weekly-stack .xe-btn-primary {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+
     /* ─── WHY XEDGE ─── */
     .xe-why-card {
       background: rgba(15, 20, 26, 0.6);
@@ -1910,9 +2027,27 @@
       background: none; border: none; color: #6b7a9a;
       font-size: 0.82rem; font-weight: 600; cursor: pointer;
       font-family: inherit; transition: background .15s, color .15s;
+      display: flex; align-items: center; justify-content: center; gap: 6px;
     }
     .xg-tab.active { background: rgba(59,130,246,0.15); color: #60a5fa; }
     .xg-tab:hover:not(.active) { color: #9ca3af; }
+
+    .xg-pro-badge {
+      display: inline-flex; align-items: center; gap: 3px;
+      border: 1px solid rgba(251,191,36,0.28);
+      background: rgba(251,191,36,0.12);
+      color: #fbbf24;
+      border-radius: 100px;
+      padding: 2px 6px;
+      font-size: .58rem;
+      font-weight: 900;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+
+    .xg-tab-end {
+      height: 1px;
+    }
 
     /* ── tool rows ── */
     .xg-tool-row {
@@ -1991,9 +2126,18 @@
       #xg-modal.xg-open { transform: translateY(0) scale(1); }
       .xg-result-layout { grid-template-columns: 1fr; }
       .xg-result-left { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.06); padding: 24px 20px; }
-      .xg-result-right { padding: 20px; }
+      .xg-result-right { padding: 20px 20px 92px; }
       .xg-cards-3 { grid-template-columns: 1fr; }
       .xg-screen-inner { padding: 24px 20px 28px; }
+      .xg-sticky-playbook {
+        bottom: 88px;
+        width: calc(100vw - 20px);
+        align-items: stretch;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .xg-sticky-btn { width: 100%; }
+      .xg-playbook-modal { padding: 24px 20px; }
     }
 
 
@@ -2043,7 +2187,155 @@
     .xg-btn-save.saved { color: #34d399; background: rgba(52,211,153,0.1); border-color: rgba(52,211,153,0.3); }
     .xg-btn-save:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
+    .xg-sticky-playbook {
+      position: fixed;
+      left: 50%;
+      bottom: 18px;
+      transform: translate(-50%, 140%);
+      z-index: 903;
+      width: min(860px, calc(100vw - 28px));
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      background: rgba(7, 11, 18, 0.96);
+      border: 1px solid rgba(96,165,250,0.24);
+      box-shadow: 0 20px 70px rgba(0,0,0,.55);
+      border-radius: 16px;
+      padding: 14px 16px 14px 18px;
+      opacity: 0;
+      pointer-events: none;
+      transition: transform .25s ease, opacity .25s ease;
+    }
+
+    .xg-sticky-playbook.show {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translate(-50%, 0);
+    }
+
+    .xg-sticky-title {
+      font-size: .92rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 2px;
+    }
+
+    .xg-sticky-sub {
+      color: #9ca3af;
+      font-size: .78rem;
+      line-height: 1.45;
+    }
+
+    .xg-sticky-btn,
+    .xg-playbook-primary,
+    .xg-playbook-secondary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      font-family: inherit;
+      font-weight: 800;
+      border-radius: 10px;
+      white-space: nowrap;
+    }
+
+    .xg-sticky-btn,
+    .xg-playbook-primary {
+      background: linear-gradient(135deg, #3b82f6, #6366f1);
+      color: #fff;
+      padding: 11px 15px;
+      font-size: .84rem;
+    }
+
+    .xg-playbook-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 920;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(4, 6, 10, 0.72);
+      backdrop-filter: blur(8px);
+    }
+
+    .xg-playbook-overlay.show {
+      display: flex;
+    }
+
+    .xg-playbook-modal {
+      width: min(100%, 430px);
+      background: #0b0f15;
+      border: 1px solid rgba(96,165,250,0.22);
+      border-radius: 18px;
+      box-shadow: 0 32px 100px rgba(0,0,0,.7);
+      padding: 26px;
+      position: relative;
+    }
+
+    .xg-playbook-modal h2 {
+      font-size: 1.35rem;
+      line-height: 1.2;
+      margin: 0 0 12px;
+      color: #f0f4ff;
+    }
+
+    .xg-playbook-modal p {
+      color: #9ca3af;
+      line-height: 1.65;
+      font-size: .92rem;
+      margin-bottom: 18px;
+    }
+
+    .xg-playbook-price {
+      color: #fff;
+      font-size: 1.9rem;
+      font-weight: 900;
+      margin-bottom: 18px;
+    }
+
+    .xg-playbook-actions {
+      display: grid;
+      gap: 10px;
+    }
+
+    .xg-playbook-secondary {
+      color: #bfdbfe;
+      border: 1px solid rgba(96,165,250,0.28);
+      background: rgba(59,130,246,0.08);
+      padding: 11px 15px;
+      font-size: .84rem;
+    }
+
+    .xg-playbook-close {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,.1);
+      background: rgba(255,255,255,.05);
+      color: #9ca3af;
+      cursor: pointer;
+      font-size: 18px;
+      line-height: 1;
+    }
+
     /* ── sign-in prompt overlay ── */
+    @media (max-width: 680px) {
+      .xg-sticky-playbook {
+        bottom: 88px;
+        width: calc(100vw - 20px);
+        align-items: stretch;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .xg-sticky-btn { width: 100%; }
+      .xg-playbook-modal { padding: 24px 20px; }
+    }
+
     #xg-signin-prompt {
       position: absolute; inset: 0; z-index: 10;
       background: rgba(11,15,21,0.92);
@@ -2148,9 +2440,10 @@
           <!-- Desktop links -->
           <div class="xe-nav-links" role="list">
             <a href="index.html" role="listitem">Home</a>
-            <a href="Explore.html" role="listitem">Explore</a>
-            <a href="Categories.html" role="listitem">Categories</a>
             <a href="stack.html" role="listitem">Stacks</a>
+            <a href="Templates.html" role="listitem">Templates</a>
+            <a href="Explore.html" role="listitem">Explore Tools</a>
+            <a href="Categories.html" role="listitem">Categories</a>
             <a href="About.html" role="listitem">About</a>
           </div>
 
@@ -2170,9 +2463,10 @@
       <!-- Mobile menu -->
       <div id="mobileMenu" class="xe-mobile-menu" role="dialog" aria-label="Mobile menu">
         <a href="index.html">Home</a>
-        <a href="Explore.html">Explore</a>
-        <a href="Categories.html">Categories</a>
         <a href="stack.html">Stacks</a>
+        <a href="Templates.html">Templates</a>
+        <a href="Explore.html">Explore Tools</a>
+        <a href="Categories.html">Categories</a>
         <a href="About.html">About</a>
         <a href="Join.html" class="xe-mobile-cta">Join Beta</a>
       </div>
@@ -2237,31 +2531,31 @@
 
         <!-- CTAs -->
         <div class="xe-hero-btns">
-          <a href="Explore.html" class="xe-btn-primary">Explore Tools →</a>
-          <a href="stack.html" class="xe-btn-ghost">Browse Stacks</a>
+          <button type="button" onclick="openGuide('start-business')" class="xe-btn-primary">Build My Stack &rarr;</button>
+          <a href="https://gumroad.com/[your-link]" class="xe-btn-ghost">Browse Playbooks</a>
           <button id="hero-signin-btn" onclick="signInWithGoogle()" class="xe-btn-ghost">Sign In</button>
         </div>
 
         <!-- Stats -->
         <div class="xe-hero-stats" aria-label="Platform stats">
           <div>
-            <div class="xe-stat-num">500+</div>
-            <div class="xe-stat-label">Active Users</div>
+            <div class="xe-stat-num">600+</div>
+            <div class="xe-stat-label">Founders</div>
           </div>
           <div class="xe-stat-divider" aria-hidden="true"></div>
           <div>
-            <div class="xe-stat-num">18+</div>
-            <div class="xe-stat-label">Goal Stacks</div>
+            <div class="xe-stat-num">200+</div>
+            <div class="xe-stat-label">Curated Tools</div>
           </div>
           <div class="xe-stat-divider" aria-hidden="true"></div>
           <div>
-            <div class="xe-stat-num">24+</div>
-            <div class="xe-stat-label">AI Categories</div>
+            <div class="xe-stat-num">18</div>
+            <div class="xe-stat-label">Execution Playbooks</div>
           </div>
           <div class="xe-stat-divider" aria-hidden="true"></div>
           <div>
-            <div class="xe-stat-num">30s</div>
-            <div class="xe-stat-label">To Find Your Stack</div>
+            <div class="xe-stat-num">$0</div>
+            <div class="xe-stat-label">Marketing Spend</div>
           </div>
         </div>
 
@@ -2272,6 +2566,41 @@
       <!-- ═══════════════════════════════════════
            CATEGORIES
       ═══════════════════════════════════════ -->
+      <section id="xe-saved-stacks-section" class="xe-section xe-saved-stacks" aria-label="Your saved stacks">
+        <div class="xe-max">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px;">
+            <div>
+              <div class="xe-section-label">Local saves</div>
+              <h2 class="xe-section-title">Your Saved Stacks</h2>
+            </div>
+            <button type="button" onclick="openGuide('start-business')" class="xe-btn-primary">Build another stack</button>
+          </div>
+          <div id="xe-saved-stacks-grid" class="xe-saved-grid"></div>
+        </div>
+      </section>
+
+      <div id="xe-saved-stacks-divider" class="xe-divider xe-saved-stacks"></div>
+
+      <section class="xe-section" aria-label="Stack of the week">
+        <div class="xe-max">
+          <div class="xe-section-label">Stack of the Week</div>
+          <article class="xe-weekly-stack">
+            <div>
+              <h3>Zero-Budget Startup Validation Stack</h3>
+              <p>Validate demand, collect emails, and take the first pre-order before spending on ads or development.</p>
+              <div class="xe-weekly-tools" aria-label="Featured tools">
+                <span>Notion</span>
+                <span>Framer</span>
+                <span>Gumroad</span>
+              </div>
+            </div>
+            <button type="button" onclick="openGuide('start-business')" class="xe-btn-primary">View Full Stack &rarr;</button>
+          </article>
+        </div>
+      </section>
+
+      <div class="xe-divider"></div>
+
       <section class="xe-section-sm" aria-label="Browse categories">
         <div class="xe-max">
           <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:16px;">
@@ -2475,13 +2804,13 @@
         <div class="xe-max">
           <div class="xe-newsletter">
             <div class="xe-section-label" style="text-align:center;">Stay sharp</div>
-            <h3>Get the Edge every week</h3>
-            <p>New AI tools, stack updates, and builder strategies — delivered free.</p>
+            <h3>Get the free AI Startup Execution Playbook</h3>
+            <p>Plus weekly stack updates. Free forever.</p>
             <form id="newsletter-form" class="xe-newsletter-form">
               <label for="newsletter-email" class="xe-sr-only">Email address</label>
               <input id="newsletter-email" name="email" type="email" placeholder="your@email.com" required
                 autocomplete="email" aria-label="Email address" />
-              <button type="submit">Subscribe</button>
+              <button type="submit">Send it to me &rarr;</button>
             </form>
             <p id="newsletter-success" style="display:none;color:#34d399;margin-top:14px;font-size:.9rem;"
               role="status">
@@ -2496,21 +2825,28 @@
       <!-- ═══════════════════════════════════════
            REVIEW
       ═══════════════════════════════════════ -->
-      <section class="xe-section" aria-label="Submit a review">
+      <section class="xe-section" aria-label="Testimonials">
         <div class="xe-max">
-          <div class="xe-review-box">
-            <h2>Share Your Experience</h2>
-            <p>Your review helps other builders find the right stack. Leave a thought — get featured.</p>
-            <form action="https://formspree.io/f/mblzvykd" method="POST">
-              <label for="review-name" class="xe-sr-only">Your name</label>
-              <input id="review-name" type="text" name="name" placeholder="Your name" required autocomplete="name"
-                class="xe-review-input" />
-              <label for="review-text" class="xe-sr-only">Your review</label>
-              <textarea id="review-text" name="review" placeholder="What's working for you on XEdge?" required
-                class="xe-review-textarea"></textarea>
-              <button type="submit" class="xe-btn-primary"
-                style="width:100%;justify-content:center;display:flex;">Submit Review</button>
-            </form>
+          <div style="text-align:center;margin-bottom:34px;">
+            <div class="xe-section-label" style="text-align:center;">Builder proof</div>
+            <h2 class="xe-section-title">What users are saying</h2>
+          </div>
+          <div class="xe-testimonial-grid">
+            <article class="xe-testimonial-card">
+              <blockquote>"Saved me 3 hours of tool research in 10 minutes."</blockquote>
+              <div class="xe-testimonial-name">Alex K.</div>
+              <div class="xe-testimonial-role">Solo Founder</div>
+            </article>
+            <article class="xe-testimonial-card">
+              <blockquote>"Finally a tool that doesn't just list tools - it tells me what to actually use."</blockquote>
+              <div class="xe-testimonial-name">Priya M.</div>
+              <div class="xe-testimonial-role">Freelancer</div>
+            </article>
+            <article class="xe-testimonial-card">
+              <blockquote>"The startup stack was exactly what I needed at zero budget."</blockquote>
+              <div class="xe-testimonial-name">James T.</div>
+              <div class="xe-testimonial-role">Student Founder</div>
+            </article>
           </div>
         </div>
       </section>
@@ -2606,6 +2942,27 @@
   <!-- ═══════════════════════════════════════
        ALL JAVASCRIPT — single DOMContentLoaded
   ═══════════════════════════════════════ -->
+  <div id="xg-sticky-playbook" class="xg-sticky-playbook" aria-hidden="true">
+    <div>
+      <div class="xg-sticky-title">Want the full execution plan for this stack?</div>
+      <div class="xg-sticky-sub">Step-by-step guide, AI prompts, and psychology - $29</div>
+    </div>
+    <a class="xg-sticky-btn" href="https://gumroad.com/[your-link]">Get the Playbook &rarr;</a>
+  </div>
+
+  <div id="xg-playbook-overlay" class="xg-playbook-overlay" role="dialog" aria-modal="true" aria-label="Execution playbook">
+    <div class="xg-playbook-modal">
+      <button type="button" class="xg-playbook-close" onclick="xgClosePlaybookModal()" aria-label="Close playbook modal">&times;</button>
+      <h2>Get the full execution playbook</h2>
+      <p>The 4-week plan, prompts, and psychology behind this stack - in a single PDF. Built by someone actually doing it.</p>
+      <div class="xg-playbook-price">$29</div>
+      <div class="xg-playbook-actions">
+        <a class="xg-playbook-primary" href="https://gumroad.com/[your-link]">Get it on Gumroad &rarr;</a>
+        <a class="xg-playbook-secondary" href="https://gumroad.com/[your-link]">Get all 15 playbooks for $99 &rarr;</a>
+      </div>
+    </div>
+  </div>
+
   <script>
     (function () {
       "use strict";
@@ -3239,6 +3596,7 @@
         /* ─── NUMBER COUNTER ANIMATION ─── */
         document.querySelectorAll('.xe-stat-num').forEach(el => {
           const text = el.innerText;
+          if (text.trim().startsWith('$')) return;
           const target = parseInt(text.replace(/\D/g, ''), 10);
           const suffix = text.replace(/[0-9]/g, '');
           if (isNaN(target)) return;
@@ -3530,7 +3888,7 @@
             </button>
             <button class="xg-btn-save" id="xg-save-btn" onclick="xgSaveStack()">
               <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="15" height="15"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
-              <span id="xg-save-label">Save this stack</span>
+              <span id="xg-save-label">Save Stack</span>
             </button>
             <button class="xg-btn-ghost" onclick="window.location.href='stack.html'">
               Explore all stacks →
@@ -3543,11 +3901,12 @@
         <div class="xg-result-right">
           <div class="xg-tabs">
             <button class="xg-tab active" onclick="xgTab(this,'tools')">Your tools</button>
-            <button class="xg-tab" onclick="xgTab(this,'plan')">4-week plan</button>
-            <button class="xg-tab" onclick="xgTab(this,'tips')">Pro tips</button>
+            <button class="xg-tab" onclick="xgTab(this,'plan')">4-week plan <span class="xg-pro-badge" onclick="event.stopPropagation();xgOpenPlaybookModal()">Lock Pro</span></button>
+            <button class="xg-tab" onclick="xgTab(this,'tips')">Pro tips <span class="xg-pro-badge" onclick="event.stopPropagation();xgOpenPlaybookModal()">Lock Pro</span></button>
           </div>
 
           <div class="xg-tab-content" id="xg-tab-tools"></div>
+          <div class="xg-tab-end" id="xg-tools-end" aria-hidden="true"></div>
           <div class="xg-tab-content" id="xg-tab-plan" style="display:none;"></div>
           <div class="xg-tab-content" id="xg-tab-tips" style="display:none;"></div>
         </div>
@@ -3715,6 +4074,8 @@
     window.xgClose = function() {
       document.getElementById('xg-overlay').classList.remove('xg-open');
       document.getElementById('xg-modal').classList.remove('xg-open');
+      var sticky = document.getElementById('xg-sticky-playbook');
+      if (sticky) { sticky.classList.remove('show'); sticky.setAttribute('aria-hidden', 'true'); }
       document.body.style.overflow = '';
     };
 
@@ -3732,9 +4093,9 @@
       document.getElementById('xg-progress-bar').style.width = pct + '%';
 
       // Step label
-      var labels = ['', 'Step 1 of 3 — Your stage', 'Step 2 of 3 — Your budget', 'Step 3 of 3 — Your skills', '', ''];
+      var labels = ['Step 1 of 4 - Your idea', 'Step 2 of 4 - Your stage', 'Step 3 of 4 - Your budget', 'Step 4 of 4 - Your skills', '', ''];
       var lbl = document.getElementById('xg-step-label');
-      if (n === 0) lbl.innerHTML = '<span style="color:#60a5fa;font-weight:700;">Stack Finder</span> &mdash; Describe your idea';
+      if (n === 0) lbl.innerHTML = '<span style="color:#60a5fa;font-weight:700;">Stack Finder</span> &mdash; ' + labels[0];
       else if (n === 5) lbl.innerHTML = '<span style="color:#34d399;">&#10003; Your personalised stack is ready</span>';
       else if (n === 4) lbl.innerHTML = '<span style="color:#60a5fa;">Stack Finder</span> &mdash; Building your stack';
       else lbl.innerHTML = '<span style="color:#60a5fa;">Stack Finder</span> &mdash; ' + (labels[n] || '');
@@ -3755,6 +4116,8 @@
     window.xgReset = function() {
       xgShowScreen(0);
       XG.stage = ''; XG.budget = ''; XG.skill = ''; XG.idea = '';
+      var sticky = document.getElementById('xg-sticky-playbook');
+      if (sticky) { sticky.classList.remove('show'); sticky.setAttribute('aria-hidden', 'true'); }
       document.querySelectorAll('.xg-card').forEach(function(c){ c.classList.remove('xg-selected'); });
     };
 
@@ -3887,14 +4250,17 @@
       var saveBtn = document.getElementById('xg-save-btn');
       var saveLbl = document.getElementById('xg-save-label');
       if (saveBtn) { saveBtn.disabled = false; saveBtn.classList.remove('saved'); }
-      if (saveLbl) { saveLbl.textContent = 'Save this stack'; }
+      if (saveLbl) { saveLbl.textContent = 'Save Stack'; }
 
       // Notify save logic of current stack
       if (typeof xgOnStackReady === 'function') {
-        xgOnStackReady(type, XG.idea, XG.stage, XG.budget, XG.skill);
+        xgOnStackReady(type, XG.idea, XG.stage, XG.budget, XG.skill, s, tools);
       }
 
       xgShowScreen(5);
+      if (typeof xgInitStickyPlaybook === 'function') {
+        setTimeout(xgInitStickyPlaybook, 80);
+      }
     }
 
     /* ── tabs ── */
@@ -3929,6 +4295,7 @@
 
   var _sb = null;
   var _currentStack = null; // stores the last built stack for saving
+  var XG_LOCAL_STACKS_KEY = 'xedge_saved_stacks_v1';
 
   function loadSupabaseScript() {
     return new Promise(function(resolve, reject) {
@@ -3966,8 +4333,20 @@
   });
 
   /* Called by guide JS after result is shown */
-  window.xgOnStackReady = function(type, ideaText, stage, budget, skill) {
-    _currentStack = { type: type, idea: ideaText, stage: stage, budget: budget, skill: skill, savedAt: new Date().toISOString() };
+  window.xgOnStackReady = function(type, ideaText, stage, budget, skill, stackData, tools) {
+    _currentStack = {
+      id: [type, ideaText || '', stage || '', budget || '', skill || ''].join('|'),
+      type: type,
+      title: stackData && stackData.title ? stackData.title : 'Your AI stack',
+      badge: stackData && stackData.badge ? stackData.badge : 'Saved stack',
+      idea: ideaText,
+      stage: stage,
+      budget: budget,
+      skill: skill,
+      tools: (tools || []).slice(0, 5).map(function(t){ return t.name; }),
+      savedAt: new Date().toISOString()
+    };
+    updateSaveButtonState();
   };
 
   /* ── get current firebase user uid ── */
@@ -3991,14 +4370,66 @@
 
   /* ── save stack button ── */
   window.xgSaveStack = function() {
-    var uid = getFirebaseUid();
-    if (!uid) {
-      // Not signed in — show prompt
-      document.getElementById('xg-signin-prompt').classList.add('show');
-      return;
-    }
-    doSaveStack(uid, getFirebaseEmail());
+    var btn = document.getElementById('xg-save-btn');
+    var label = document.getElementById('xg-save-label');
+    if (!btn || !_currentStack) return;
+
+    var stacks = getLocalStacks();
+    var existingIndex = stacks.findIndex(function(item) { return item.id === _currentStack.id; });
+    if (existingIndex >= 0) stacks[existingIndex] = _currentStack;
+    else stacks.unshift(_currentStack);
+    localStorage.setItem(XG_LOCAL_STACKS_KEY, JSON.stringify(stacks.slice(0, 12)));
+
+    btn.classList.add('saved');
+    if (label) label.textContent = 'Saved \u2713';
+    showToast('Saved \u2713 Stack saved on this device', 'success');
+    renderSavedStacks();
   };
+
+  function getLocalStacks() {
+    try {
+      return JSON.parse(localStorage.getItem(XG_LOCAL_STACKS_KEY) || '[]');
+    } catch(e) {
+      return [];
+    }
+  }
+
+  function updateSaveButtonState() {
+    var btn = document.getElementById('xg-save-btn');
+    var label = document.getElementById('xg-save-label');
+    if (!btn || !label || !_currentStack) return;
+    var saved = getLocalStacks().some(function(item) { return item.id === _currentStack.id; });
+    btn.disabled = false;
+    btn.classList.toggle('saved', saved);
+    label.textContent = saved ? 'Saved \u2713' : 'Save Stack';
+  }
+
+  function renderSavedStacks() {
+    var section = document.getElementById('xe-saved-stacks-section');
+    var divider = document.getElementById('xe-saved-stacks-divider');
+    var grid = document.getElementById('xe-saved-stacks-grid');
+    if (!section || !grid) return;
+    var stacks = getLocalStacks();
+    section.classList.toggle('has-stacks', stacks.length > 0);
+    if (divider) divider.classList.toggle('has-stacks', stacks.length > 0);
+    grid.innerHTML = stacks.slice(0, 3).map(function(stack) {
+      var tools = (stack.tools || []).slice(0, 3).join(' + ');
+      var idea = stack.idea ? stack.idea : stack.badge;
+      return '<article class="xe-saved-card">' +
+        '<h3>' + escapeHtml(stack.title || 'Your AI stack') + '</h3>' +
+        '<p>' + escapeHtml(idea).slice(0, 140) + '</p>' +
+        '<div class="xe-saved-card-meta"><span>' + escapeHtml(stack.badge || 'Saved') + '</span><span>' + escapeHtml(tools || 'AI tools') + '</span></div>' +
+      '</article>';
+    }).join('');
+  }
+
+  function escapeHtml(value) {
+    return String(value || '').replace(/[&<>"']/g, function(ch) {
+      return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[ch];
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', renderSavedStacks);
 
   async function doSaveStack(uid, email) {
     var btn = document.getElementById('xg-save-btn');
@@ -4012,7 +4443,7 @@
     if (!sb) {
       showToast('⚠ Supabase not configured yet', 'warn');
       btn.disabled = false;
-      label.textContent = 'Save this stack';
+      label.textContent = 'Save Stack';
       return;
     }
 
@@ -4037,7 +4468,7 @@
       console.error('Save failed:', err);
       showToast('Failed to save — please try again', 'error');
       btn.disabled = false;
-      label.textContent = 'Save this stack';
+      label.textContent = 'Save Stack';
     }
   }
 
@@ -4065,10 +4496,49 @@
 
   /* ── deep plan upsell ── */
   window.xgDeepPlan = function() {
-    // Redirect to your pricing/pro page
-    // Change this URL to your actual Pricing page
-    window.location.href = 'Pricing.html?ref=stack-finder';
+    xgOpenPlaybookModal();
   };
+
+  window.xgOpenPlaybookModal = function() {
+    var overlay = document.getElementById('xg-playbook-overlay');
+    if (overlay) overlay.classList.add('show');
+  };
+
+  window.xgClosePlaybookModal = function() {
+    var overlay = document.getElementById('xg-playbook-overlay');
+    if (overlay) overlay.classList.remove('show');
+  };
+
+  window.xgInitStickyPlaybook = function() {
+    var sticky = document.getElementById('xg-sticky-playbook');
+    var screens = document.getElementById('xg-screens');
+    var end = document.getElementById('xg-tools-end');
+    if (!sticky || !screens || !end) return;
+    sticky.classList.remove('show');
+    sticky.setAttribute('aria-hidden', 'true');
+
+    function update() {
+      var modalOpen = document.getElementById('xg-modal').classList.contains('xg-open');
+      var resultOpen = document.getElementById('xgs-5').classList.contains('xg-active');
+      var passedTools = screens.scrollTop > 24 && end.getBoundingClientRect().top < screens.getBoundingClientRect().bottom;
+      var show = modalOpen && resultOpen && passedTools;
+      sticky.classList.toggle('show', show);
+      sticky.setAttribute('aria-hidden', show ? 'false' : 'true');
+    }
+
+    screens.removeEventListener('scroll', update);
+    screens.addEventListener('scroll', update, { passive: true });
+    update();
+  };
+
+  document.addEventListener('click', function(e) {
+    var overlay = document.getElementById('xg-playbook-overlay');
+    if (overlay && e.target === overlay) xgClosePlaybookModal();
+  });
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') xgClosePlaybookModal();
+  });
 
   /* ── toast helper ── */
   function showToast(msg, type) {

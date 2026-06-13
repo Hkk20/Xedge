@@ -1,0 +1,1194 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Templates & Automations — XEdge</title>
+  <meta name="description" content="Free AI templates and automation workflows curated by the XEdge community. Copy, adapt, and build faster."/>
+  <link rel="icon" href="xedge-logo.png" type="image/png"/>
+  <meta name="theme-color" content="#0b0f15"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap"/>
+  <script src="analytics.js" defer></script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; width: 100%; overflow-x: hidden; }
+    body {
+      font-family: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+      background: #0b0f15; color: #fff;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── NAV (same as index) ── */
+    .xe-nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 60;
+      height: 68px;
+      background: rgba(11,15,21,0.9);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      display: flex; align-items: center;
+    }
+    .xe-nav-inner {
+      max-width: 1400px; width: 100%; margin: 0 auto;
+      padding: 0 24px; display: flex; align-items: center;
+      justify-content: space-between; gap: 16px;
+    }
+    .xe-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .xe-logo img { width: 36px; height: 36px; border-radius: 8px; }
+    .xe-logo span { font-size: 1.25rem; font-weight: 700; color: #60a5fa; letter-spacing: -0.3px; }
+    .xe-nav-links { display: flex; align-items: center; gap: 4px; }
+    .xe-nav-links a {
+      font-size: 0.9rem; font-weight: 500; color: #9ca3af;
+      padding: 6px 14px; border-radius: 8px; text-decoration: none;
+      transition: color .15s, background .15s;
+    }
+    .xe-nav-links a:hover { color: #fff; background: rgba(255,255,255,0.06); }
+    .xe-nav-links a.active { color: #60a5fa; }
+    .xe-nav-right { display: flex; align-items: center; gap: 10px; }
+    .xe-btn-beta {
+      background: linear-gradient(135deg, #3b82f6, #6366f1);
+      padding: 8px 20px; border-radius: 100px;
+      font-size: 0.85rem; font-weight: 600; color: #fff;
+      text-decoration: none; transition: opacity .15s, transform .15s;
+    }
+    .xe-btn-beta:hover { opacity: .88; transform: translateY(-1px); }
+    .xe-hamburger {
+      display: none; background: none; border: none; cursor: pointer;
+      padding: 8px; color: #d1d5db;
+      flex-direction: column; gap: 5px; align-items: center; justify-content: center;
+    }
+    .xe-hamburger span { display: block; width: 22px; height: 2px; background: currentColor; border-radius: 2px; transition: transform .25s, opacity .25s; }
+    .xe-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .xe-hamburger.open span:nth-child(2) { opacity: 0; }
+    .xe-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    .xe-mobile-menu {
+      position: fixed; top: 68px; left: 0; right: 0; z-index: 59;
+      background: rgba(11,15,21,0.98); backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      padding: 12px 16px 20px; display: none; flex-direction: column; gap: 4px;
+    }
+    .xe-mobile-menu.open { display: flex; }
+    .xe-mobile-menu a { padding: 12px 16px; border-radius: 10px; font-size: 1rem; font-weight: 500; color: #9ca3af; text-decoration: none; transition: color .15s, background .15s; }
+    .xe-mobile-menu a:hover { color: #fff; background: rgba(255,255,255,0.06); }
+    .xe-mobile-menu .xe-mobile-cta { background: linear-gradient(135deg,#3b82f6,#6366f1); color:#fff !important; text-align:center; margin-top:8px; font-weight:600; }
+
+    /* ── PAGE SHELL ── */
+    .page-wrap { padding-top: 68px; }
+
+    /* ── HERO BANNER ── */
+    .tmpl-hero {
+      padding: 64px 24px 48px;
+      text-align: center;
+      background: radial-gradient(ellipse 80% 40% at 50% 0%, rgba(59,130,246,0.1) 0%, transparent 70%);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .tmpl-hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.25);
+      border-radius: 100px; padding: 5px 14px;
+      font-size: 0.75rem; font-weight: 700; color: #60a5fa;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    .tmpl-hero h1 {
+      font-size: clamp(2rem, 5vw, 3.4rem);
+      font-weight: 800; letter-spacing: -1.5px; line-height: 1.1;
+      margin: 0 0 14px;
+    }
+    .tmpl-hero h1 span {
+      background: linear-gradient(135deg, #60a5fa, #a78bfa);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .tmpl-hero p {
+      font-size: 1rem; color: #8b93b0; max-width: 520px;
+      margin: 0 auto 28px; line-height: 1.75;
+    }
+    .tmpl-hero-actions { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; }
+    .btn-submit {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: linear-gradient(135deg, #3b82f6, #6366f1);
+      border: none; border-radius: 100px; padding: 12px 28px;
+      font-size: 0.92rem; font-weight: 700; color: #fff;
+      cursor: pointer; font-family: inherit;
+      transition: opacity .15s, transform .15s, box-shadow .15s;
+    }
+    .btn-submit:hover { opacity: .88; transform: translateY(-2px); box-shadow: 0 10px 28px rgba(59,130,246,0.3); }
+    .btn-ghost {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: transparent; border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 100px; padding: 12px 28px;
+      font-size: 0.92rem; font-weight: 500; color: #9ca3af;
+      cursor: pointer; font-family: inherit; text-decoration: none;
+      transition: border-color .15s, color .15s, background .15s;
+    }
+    .btn-ghost:hover { border-color: rgba(255,255,255,0.3); color: #fff; background: rgba(255,255,255,0.05); }
+
+    /* ── STATS ROW ── */
+    .tmpl-stats {
+      display: flex; align-items: center; justify-content: center;
+      gap: 32px; flex-wrap: wrap;
+      padding: 20px 24px 0; margin-top: 12px;
+    }
+    .tmpl-stat { text-align: center; }
+    .tmpl-stat-num { font-size: 1.5rem; font-weight: 800; color: #fff; }
+    .tmpl-stat-label { font-size: 0.75rem; color: #6b7a9a; margin-top: 2px; }
+    .tmpl-stat-div { width: 1px; height: 28px; background: rgba(255,255,255,0.07); }
+
+    /* ── MAIN CONTENT ── */
+    .tmpl-main { max-width: 1400px; margin: 0 auto; padding: 40px 24px 80px; }
+
+    /* ── TAB BAR ── */
+    .tmpl-tabs {
+      display: flex; align-items: center; gap: 4px;
+      background: rgba(17,24,39,0.6); border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 14px; padding: 5px; width: fit-content;
+      margin-bottom: 32px;
+    }
+    .tmpl-tab {
+      display: flex; align-items: center; gap: 8px;
+      padding: 9px 20px; border-radius: 10px;
+      background: none; border: none; cursor: pointer; font-family: inherit;
+      font-size: 0.88rem; font-weight: 600; color: #6b7a9a;
+      transition: background .2s, color .2s;
+    }
+    .tmpl-tab.active { background: rgba(59,130,246,0.15); color: #60a5fa; }
+    .tmpl-tab:hover:not(.active) { color: #9ca3af; }
+    .tmpl-tab-count {
+      background: rgba(255,255,255,0.08); border-radius: 100px;
+      padding: 2px 8px; font-size: 0.72rem; font-weight: 700;
+    }
+    .tmpl-tab.active .tmpl-tab-count { background: rgba(59,130,246,0.2); color: #93c5fd; }
+
+    /* ── TOOLBAR ── */
+    .tmpl-toolbar {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 28px; flex-wrap: wrap;
+    }
+    .tmpl-search-wrap {
+      position: relative; flex: 1; min-width: 200px; max-width: 340px;
+    }
+    .tmpl-search-wrap svg {
+      position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+      width: 16px; height: 16px; color: #6b7a9a; pointer-events: none;
+    }
+    .tmpl-search {
+      width: 100%; background: rgba(17,24,39,0.8);
+      border: 1px solid rgba(255,255,255,0.08); border-radius: 100px;
+      padding: 10px 16px 10px 40px; color: #fff; font-family: inherit;
+      font-size: 0.88rem; outline: none; transition: border-color .2s;
+    }
+    .tmpl-search:focus { border-color: rgba(59,130,246,0.4); }
+    .tmpl-search::placeholder { color: #4b5a75; }
+    .tmpl-filters { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .filter-chip {
+      padding: 7px 16px; border-radius: 100px;
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07);
+      font-size: 0.8rem; font-weight: 600; color: #6b7a9a;
+      cursor: pointer; font-family: inherit; transition: all .2s;
+      white-space: nowrap;
+    }
+    .filter-chip:hover { border-color: rgba(59,130,246,0.3); color: #9ca3af; }
+    .filter-chip.active { background: rgba(59,130,246,0.12); border-color: rgba(59,130,246,0.35); color: #60a5fa; }
+    .tmpl-sort {
+      margin-left: auto; background: rgba(17,24,39,0.8);
+      border: 1px solid rgba(255,255,255,0.08); border-radius: 100px;
+      padding: 8px 16px; color: #9ca3af; font-family: inherit;
+      font-size: 0.82rem; outline: none; cursor: pointer;
+      transition: border-color .2s;
+    }
+    .tmpl-sort:focus { border-color: rgba(59,130,246,0.4); }
+
+    /* ── GRID ── */
+    .tmpl-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    /* ── CARD ── */
+    .tmpl-card {
+      background: rgba(15,20,28,0.7);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 18px; overflow: hidden;
+      transition: border-color .2s, transform .2s, box-shadow .2s;
+      display: flex; flex-direction: column;
+      animation: cardIn .35s ease both;
+    }
+    @keyframes cardIn { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:none; } }
+    .tmpl-card:hover {
+      border-color: rgba(59,130,246,0.3);
+      transform: translateY(-4px);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.35);
+    }
+
+    /* card header band */
+    .tmpl-card-band {
+      height: 6px;
+      background: linear-gradient(90deg, #3b82f6, #6366f1);
+    }
+    .tmpl-card-band.automation { background: linear-gradient(90deg, #8b5cf6, #ec4899); }
+    .tmpl-card-band.prompt    { background: linear-gradient(90deg, #10b981, #3b82f6); }
+    .tmpl-card-band.workflow  { background: linear-gradient(90deg, #f59e0b, #ef4444); }
+
+    .tmpl-card-body { padding: 22px 22px 16px; flex: 1; }
+
+    .tmpl-card-meta {
+      display: flex; align-items: center; gap: 8px; margin-bottom: 12px; flex-wrap: wrap;
+    }
+    .tmpl-tag {
+      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 3px 10px; border-radius: 100px;
+    }
+    .tmpl-tag-type  { background: rgba(59,130,246,0.12); color: #60a5fa; border: 1px solid rgba(59,130,246,0.2); }
+    .tmpl-tag-auto  { background: rgba(139,92,246,0.12); color: #a78bfa; border: 1px solid rgba(139,92,246,0.2); }
+    .tmpl-tag-cat   { background: rgba(255,255,255,0.05); color: #9ca3af; border: 1px solid rgba(255,255,255,0.08); }
+    .tmpl-card-community { margin-left: auto; font-size: 0.68rem; color: #6b7a9a; display: flex; align-items: center; gap: 4px; }
+
+    .tmpl-card h3 { font-size: 1rem; font-weight: 700; margin: 0 0 8px; line-height: 1.3; color: #f0f4ff; }
+    .tmpl-card p  { font-size: 0.82rem; color: #8b93b0; line-height: 1.6; margin: 0 0 16px; }
+
+    /* tools used chips */
+    .tmpl-tools { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+    .tmpl-tool-chip {
+      font-size: 0.72rem; font-weight: 600;
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 6px; padding: 3px 9px; color: #9ca3af;
+    }
+
+    /* card footer */
+    .tmpl-card-footer {
+      padding: 14px 22px;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .tmpl-action-btn {
+      display: flex; align-items: center; gap: 6px;
+      background: none; border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 8px; padding: 7px 12px;
+      font-size: 0.78rem; font-weight: 600; color: #6b7a9a;
+      cursor: pointer; font-family: inherit;
+      transition: all .2s; white-space: nowrap;
+    }
+    .tmpl-action-btn:hover { border-color: rgba(59,130,246,0.3); color: #9ca3af; }
+    .tmpl-action-btn.liked { color: #f87171; border-color: rgba(248,113,113,0.3); background: rgba(248,113,113,0.06); }
+    .tmpl-action-btn.liked svg { fill: #f87171; }
+    .tmpl-action-btn svg { width: 14px; height: 14px; transition: transform .2s; }
+    .tmpl-action-btn:hover svg { transform: scale(1.2); }
+
+    .tmpl-dl-btn {
+      margin-left: auto;
+      display: flex; align-items: center; gap: 6px;
+      background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.2);
+      border-radius: 8px; padding: 7px 14px;
+      font-size: 0.78rem; font-weight: 700; color: #60a5fa;
+      cursor: pointer; font-family: inherit; text-decoration: none;
+      transition: background .2s, border-color .2s, transform .15s;
+    }
+    .tmpl-dl-btn:hover { background: rgba(59,130,246,0.2); border-color: rgba(59,130,246,0.4); transform: translateY(-1px); }
+    .tmpl-dl-btn svg { width: 13px; height: 13px; }
+
+    /* ── EMPTY STATE ── */
+    .tmpl-empty {
+      grid-column: 1/-1; text-align: center;
+      padding: 80px 24px;
+    }
+    .tmpl-empty-icon { font-size: 3rem; margin-bottom: 16px; }
+    .tmpl-empty h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 8px; }
+    .tmpl-empty p  { color: #6b7a9a; font-size: 0.9rem; }
+
+    /* ── SKELETON ── */
+    .tmpl-skel {
+      background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.06) 50%, rgba(255,255,255,0.03) 75%);
+      background-size: 200% 100%; animation: shimmer 1.4s ease infinite;
+      border-radius: 18px; height: 240px;
+    }
+    @keyframes shimmer { to { background-position: -200% 0; } }
+
+    /* ── SUBMIT MODAL ── */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 900;
+      background: rgba(4,6,10,0.88); backdrop-filter: blur(8px);
+      display: none; align-items: center; justify-content: center;
+      padding: 20px; overflow-y: auto;
+    }
+    .modal-overlay.open { display: flex; }
+
+    .modal {
+      background: #0d1117;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 22px; width: min(100%, 560px);
+      max-height: 90vh; overflow-y: auto;
+      box-shadow: 0 40px 100px rgba(0,0,0,0.7);
+      position: relative;
+      animation: modalIn .25s cubic-bezier(.4,0,.2,1) both;
+    }
+    @keyframes modalIn { from { opacity:0; transform:scale(0.96) translateY(10px); } to { opacity:1; transform:none; } }
+
+    .modal-header {
+      padding: 26px 28px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      display: flex; align-items: flex-start; gap: 16px;
+    }
+    .modal-type-toggle {
+      display: flex; gap: 6px;
+      background: rgba(255,255,255,0.04); border-radius: 10px; padding: 4px;
+    }
+    .modal-type-btn {
+      padding: 7px 16px; border-radius: 8px; background: none; border: none;
+      cursor: pointer; font-family: inherit; font-size: 0.82rem; font-weight: 600;
+      color: #6b7a9a; transition: background .2s, color .2s;
+    }
+    .modal-type-btn.active { background: rgba(59,130,246,0.15); color: #60a5fa; }
+
+    .modal-close {
+      margin-left: auto; width: 32px; height: 32px; border-radius: 50%;
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);
+      color: #6b7a9a; cursor: pointer; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .15s, color .15s;
+    }
+    .modal-close:hover { background: rgba(255,255,255,0.1); color: #fff; }
+
+    .modal-body { padding: 24px 28px 28px; }
+
+    .form-row { margin-bottom: 18px; }
+    .form-label {
+      display: block; font-size: 0.78rem; font-weight: 700;
+      color: #9ca3af; letter-spacing: 0.05em; text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .form-input, .form-textarea, .form-select {
+      width: 100%; background: rgba(17,24,39,0.8);
+      border: 1px solid rgba(255,255,255,0.1); border-radius: 12px;
+      padding: 12px 16px; color: #f0f4ff; font-family: inherit;
+      font-size: 0.92rem; outline: none; transition: border-color .2s;
+      display: block;
+    }
+    .form-input:focus, .form-textarea:focus, .form-select:focus { border-color: rgba(59,130,246,0.5); }
+    .form-input::placeholder, .form-textarea::placeholder { color: #4b5a75; }
+    .form-textarea { height: 100px; resize: vertical; }
+    .form-select { appearance: none; cursor: pointer; }
+    .form-select option { background: #111827; }
+
+    .form-hint { font-size: 0.76rem; color: #4b5a75; margin-top: 6px; }
+
+    .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    @media (max-width: 480px) { .form-row-2 { grid-template-columns: 1fr; } }
+
+    /* tools tag input */
+    .tools-tag-wrap {
+      display: flex; flex-wrap: wrap; gap: 6px;
+      background: rgba(17,24,39,0.8); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px; padding: 10px 12px; min-height: 46px;
+      cursor: text; transition: border-color .2s;
+    }
+    .tools-tag-wrap:focus-within { border-color: rgba(59,130,246,0.5); }
+    .tool-tag {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: rgba(59,130,246,0.12); border: 1px solid rgba(59,130,246,0.2);
+      border-radius: 6px; padding: 3px 8px;
+      font-size: 0.78rem; font-weight: 600; color: #60a5fa;
+    }
+    .tool-tag button {
+      background: none; border: none; color: #60a5fa; cursor: pointer;
+      padding: 0; line-height: 1; font-size: 14px;
+    }
+    .tag-input {
+      background: none; border: none; outline: none; color: #fff;
+      font-family: inherit; font-size: 0.88rem; min-width: 80px; flex: 1;
+    }
+    .tag-input::placeholder { color: #4b5a75; }
+
+    .modal-footer { padding: 0 28px 28px; display: flex; flex-direction: column; gap: 10px; }
+    .btn-submit-form {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      background: linear-gradient(135deg, #3b82f6, #6366f1);
+      border: none; border-radius: 12px; padding: 14px;
+      font-size: 0.95rem; font-weight: 700; color: #fff;
+      cursor: pointer; font-family: inherit;
+      transition: opacity .15s, transform .15s;
+    }
+    .btn-submit-form:hover:not(:disabled) { opacity: .88; transform: translateY(-1px); }
+    .btn-submit-form:disabled { opacity: .4; cursor: not-allowed; }
+    .form-note { font-size: 0.76rem; color: #4b5a75; text-align: center; line-height: 1.6; }
+    .form-status { font-size: 0.85rem; font-weight: 600; text-align: center; display: none; padding: 10px; border-radius: 8px; }
+    .form-status.success { display: block; color: #34d399; background: rgba(52,211,153,0.1); border: 1px solid rgba(52,211,153,0.2); }
+    .form-status.error   { display: block; color: #f87171; background: rgba(248,113,113,0.08); border: 1px solid rgba(248,113,113,0.2); }
+
+    /* ── FOOTER ── */
+    .xe-footer { border-top: 1px solid rgba(255,255,255,0.07); padding: 40px 24px 28px; }
+    .xe-footer-inner { max-width: 1400px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+    .xe-footer-brand { display: flex; align-items: center; gap: 10px; }
+    .xe-footer-brand img { width: 28px; height: 28px; border-radius: 6px; }
+    .xe-footer-brand span { font-weight: 700; color: #60a5fa; }
+    .xe-footer-bottom { font-size: .8rem; color: #4b5a75; }
+
+    /* ── TOAST ── */
+    #tmpl-toast {
+      position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(20px);
+      background: #111827; border: 1px solid rgba(52,211,153,0.3);
+      border-radius: 100px; padding: 12px 24px;
+      font-size: 0.85rem; font-weight: 600; color: #34d399;
+      z-index: 9999; opacity: 0;
+      transition: opacity .3s, transform .3s; pointer-events: none;
+    }
+    #tmpl-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 767px) {
+      .xe-nav-links, .xe-btn-beta { display: none !important; }
+      .xe-hamburger { display: flex !important; }
+      .tmpl-toolbar { gap: 8px; }
+      .tmpl-sort { margin-left: 0; }
+    }
+    @media (max-width: 560px) {
+      .tmpl-tabs { width: 100%; }
+      .tmpl-tab { flex: 1; justify-content: center; }
+    }
+
+    a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+      outline: 2px solid #3b82f6; outline-offset: 3px; border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<header>
+  <nav class="xe-nav" role="navigation" aria-label="Main navigation">
+    <div class="xe-nav-inner">
+      <a href="index.html" class="xe-logo" aria-label="XEdge home">
+        <img src="xedge-logo.png" alt="XEdge" width="36" height="36"/>
+        <span>XEDGE</span>
+      </a>
+      <div class="xe-nav-links">
+        <a href="index.html">Home</a>
+        <a href="stack.html">Stacks</a>
+        <a href="Templates.html" class="active">Templates</a>
+        <a href="Explore.html">Explore Tools</a>
+        <a href="Categories.html">Categories</a>
+        <a href="About.html">About</a>
+      </div>
+      <div class="xe-nav-right">
+        <a href="Join.html" class="xe-btn-beta">Join Beta</a>
+        <div id="auth-area" style="display:flex;align-items:center;"></div>
+        <button id="mobile-menu-toggle" class="xe-hamburger" aria-label="Toggle menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+  <div id="mobileMenu" class="xe-mobile-menu">
+    <a href="index.html">Home</a>
+    <a href="stack.html">Stacks</a>
+    <a href="Templates.html">Templates</a>
+    <a href="Explore.html">Explore Tools</a>
+    <a href="Categories.html">Categories</a>
+    <a href="About.html">About</a>
+    <a href="Join.html" class="xe-mobile-cta">Join Beta</a>
+  </div>
+</header>
+
+<div class="page-wrap">
+
+  <!-- HERO -->
+  <section class="tmpl-hero">
+    <div class="tmpl-hero-eyebrow">
+      <span style="width:7px;height:7px;background:#34d399;border-radius:50%;animation:pulse 2s infinite;display:inline-block;"></span>
+      Community-built
+    </div>
+    <h1>Templates &amp; <span>Automations</span></h1>
+    <p>Copy-paste AI templates, Notion setups, and automation flows — built by founders who actually use them.</p>
+    <div class="tmpl-hero-actions">
+      <button class="btn-submit" onclick="openSubmitModal()">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+        </svg>
+        Add yours
+      </button>
+      <a href="#tmpl-content" class="btn-ghost">Browse all →</a>
+    </div>
+    <div class="tmpl-stats">
+      <div class="tmpl-stat">
+        <div class="tmpl-stat-num" id="stat-total">—</div>
+        <div class="tmpl-stat-label">Templates</div>
+      </div>
+      <div class="tmpl-stat-div"></div>
+      <div class="tmpl-stat">
+        <div class="tmpl-stat-num" id="stat-downloads">—</div>
+        <div class="tmpl-stat-label">Downloads</div>
+      </div>
+      <div class="tmpl-stat-div"></div>
+      <div class="tmpl-stat">
+        <div class="tmpl-stat-num" id="stat-contributors">—</div>
+        <div class="tmpl-stat-label">Contributors</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN -->
+  <main class="tmpl-main" id="tmpl-content">
+
+    <!-- TAB BAR -->
+    <div class="tmpl-tabs" role="tablist">
+      <button class="tmpl-tab active" role="tab" aria-selected="true" onclick="switchTab('all', this)">
+        All
+        <span class="tmpl-tab-count" id="count-all">0</span>
+      </button>
+      <button class="tmpl-tab" role="tab" aria-selected="false" onclick="switchTab('template', this)">
+        Templates
+        <span class="tmpl-tab-count" id="count-template">0</span>
+      </button>
+      <button class="tmpl-tab" role="tab" aria-selected="false" onclick="switchTab('automation', this)">
+        Automations
+        <span class="tmpl-tab-count" id="count-automation">0</span>
+      </button>
+      <button class="tmpl-tab" role="tab" aria-selected="false" onclick="switchTab('prompt', this)">
+        Prompts
+        <span class="tmpl-tab-count" id="count-prompt">0</span>
+      </button>
+    </div>
+
+    <!-- TOOLBAR -->
+    <div class="tmpl-toolbar">
+      <div class="tmpl-search-wrap">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+        </svg>
+        <input type="search" class="tmpl-search" id="tmpl-search" placeholder="Search templates…" autocomplete="off" aria-label="Search templates"/>
+      </div>
+      <div class="tmpl-filters" id="tmpl-filters">
+        <button class="filter-chip active" onclick="setFilter('', this)">All</button>
+        <button class="filter-chip" onclick="setFilter('Content', this)">Content</button>
+        <button class="filter-chip" onclick="setFilter('Business', this)">Business</button>
+        <button class="filter-chip" onclick="setFilter('Marketing', this)">Marketing</button>
+        <button class="filter-chip" onclick="setFilter('Dev', this)">Dev</button>
+        <button class="filter-chip" onclick="setFilter('Research', this)">Research</button>
+      </div>
+      <select class="tmpl-sort" id="tmpl-sort" onchange="renderGrid()" aria-label="Sort templates">
+        <option value="newest">Newest</option>
+        <option value="popular">Most liked</option>
+        <option value="downloads">Most downloaded</option>
+      </select>
+    </div>
+
+    <!-- GRID -->
+    <div class="tmpl-grid" id="tmpl-grid">
+      <!-- skeletons -->
+      <div class="tmpl-skel"></div>
+      <div class="tmpl-skel"></div>
+      <div class="tmpl-skel"></div>
+      <div class="tmpl-skel"></div>
+      <div class="tmpl-skel"></div>
+      <div class="tmpl-skel"></div>
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="xe-footer">
+    <div class="xe-footer-inner">
+      <div class="xe-footer-brand">
+        <img src="xedge-logo.png" alt="XEdge" width="28" height="28"/>
+        <span>XEDGE</span>
+      </div>
+      <div class="xe-footer-bottom">© 2026 XEdge. All rights reserved.</div>
+    </div>
+  </footer>
+
+</div><!-- page-wrap -->
+
+<!-- ════════ SUBMIT MODAL ════════ -->
+<div class="modal-overlay" id="submit-modal" role="dialog" aria-modal="true" aria-label="Submit a template or automation">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-type-toggle" id="modal-type-toggle">
+        <button class="modal-type-btn active" onclick="setModalType('template', this)">Template</button>
+        <button class="modal-type-btn" onclick="setModalType('automation', this)">Automation</button>
+        <button class="modal-type-btn" onclick="setModalType('prompt', this)">Prompt</button>
+      </div>
+      <button class="modal-close" onclick="closeSubmitModal()" aria-label="Close">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <div class="form-row">
+        <label class="form-label" for="f-title">Title *</label>
+        <input class="form-input" id="f-title" type="text" placeholder="e.g. Cold outreach sequence for SaaS founders" maxlength="80"/>
+      </div>
+      <div class="form-row">
+        <label class="form-label" for="f-desc">Description *</label>
+        <textarea class="form-textarea" id="f-desc" placeholder="What does it do? Who is it for? What problem does it solve?"></textarea>
+      </div>
+      <div class="form-row-2">
+        <div class="form-row" style="margin-bottom:0">
+          <label class="form-label" for="f-category">Category *</label>
+          <select class="form-select" id="f-category">
+            <option value="">Pick a category</option>
+            <option value="Content">Content</option>
+            <option value="Business">Business</option>
+            <option value="Marketing">Marketing</option>
+            <option value="Dev">Dev</option>
+            <option value="Research">Research</option>
+            <option value="Finance">Finance</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="form-row" style="margin-bottom:0">
+          <label class="form-label" for="f-author">Your name</label>
+          <input class="form-input" id="f-author" type="text" placeholder="e.g. Harsha" maxlength="40"/>
+        </div>
+      </div>
+
+      <div class="form-row" style="margin-top:18px;">
+        <label class="form-label">Tools used</label>
+        <div class="tools-tag-wrap" id="tools-tag-wrap" onclick="document.getElementById('tag-input').focus()">
+          <input class="tag-input" id="tag-input" type="text" placeholder="Type a tool name and press Enter…" autocomplete="off"/>
+        </div>
+        <p class="form-hint">Press Enter or comma after each tool name</p>
+      </div>
+
+      <div class="form-row" id="f-content-wrap">
+        <label class="form-label" for="f-content">Content / instructions *</label>
+        <textarea class="form-textarea" id="f-content" style="height:130px;" placeholder="Paste your template, prompt, or automation steps here. Markdown is fine."></textarea>
+      </div>
+
+      <div class="form-row">
+        <label class="form-label" for="f-link">Link (optional)</label>
+        <input class="form-input" id="f-link" type="url" placeholder="Notion page, GitHub repo, video walkthrough, etc."/>
+        <p class="form-hint">Where can people get the full version?</p>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <div id="form-status" class="form-status"></div>
+      <button class="btn-submit-form" id="form-submit-btn" onclick="submitTemplate()">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+        </svg>
+        <span id="form-submit-label">Submit for review</span>
+      </button>
+      <p class="form-note">All submissions are reviewed before going live. Spam gets you banned permanently.</p>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="tmpl-toast"></div>
+
+<style>
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)} }
+</style>
+
+<script>
+(function() {
+  "use strict";
+
+  /* ── CONFIG ── */
+  const SB_URL  = "https://szouczgiuhedynyshpbb.supabase.co";
+  const SB_KEY  = "sb_publishable_JEvVHrobhuPoU6Z5xkMr2Q_pw8tvzHP";
+  const LIKED_KEY = "xedge_tmpl_liked_v1";
+
+  /* ── STATE ── */
+  let allItems = [];
+  let activeTab = "all";
+  let activeFilter = "";
+  let searchTerm = "";
+  let modalType = "template";
+  let tagTools = [];
+
+  /* ── SUPABASE CALL ── */
+  async function sbFetch(path, opts = {}) {
+    const res = await fetch(SB_URL + path, {
+      ...opts,
+      headers: {
+        "apikey": SB_KEY,
+        "Authorization": "Bearer " + SB_KEY,
+        "Content-Type": "application/json",
+        "Prefer": opts.prefer || "return=representation",
+        ...(opts.headers || {})
+      }
+    });
+    if (!res.ok) {
+      const txt = await res.text().catch(() => "");
+      throw new Error("Supabase " + res.status + ": " + txt);
+    }
+    const text = await res.text();
+    return text ? JSON.parse(text) : null;
+  }
+
+  /* ── LOAD ITEMS ── */
+  async function loadItems() {
+    try {
+      const data = await sbFetch(
+        "/rest/v1/templates?select=*&order=created_at.desc&limit=100"
+      );
+      allItems = Array.isArray(data) ? data : [];
+    } catch (err) {
+      console.warn("Could not load from Supabase:", err);
+      // Seed with demo data so page isn't empty on first deploy
+      allItems = DEMO_ITEMS;
+    }
+    updateCounts();
+    renderGrid();
+    renderStats();
+  }
+
+  /* ── DEMO SEED DATA (shown until real submissions exist) ── */
+  const DEMO_ITEMS = [
+    {
+      id: "demo-1", type: "template", category: "Content",
+      title: "LinkedIn Thought-Leader Post Formula",
+      description: "Emotional story opener → insight → CTA. The exact format behind XEdge's 2,400-impression posts.",
+      tools: ["Claude AI", "Typefully"],
+      content: "Hook: [1-line emotional moment]\nContext: [2-3 lines of background]\nInsight: [The lesson/pattern]\nCTA: [soft ask — link in comments]",
+      link: "", author: "Harsha", likes: 14, downloads: 38,
+      created_at: new Date(Date.now() - 86400000 * 2).toISOString(), is_community: false
+    },
+    {
+      id: "demo-2", type: "automation", category: "Marketing",
+      title: "New blog post → LinkedIn + Threads auto-share",
+      description: "Zapier workflow that triggers when a new Beehiiv issue goes live and posts summaries to LinkedIn and Threads automatically.",
+      tools: ["Zapier", "Beehiiv", "Claude AI"],
+      content: "Trigger: Beehiiv new post\nStep 1: Claude AI — summarise to 150 words\nStep 2: Post to LinkedIn via LinkedIn API\nStep 3: Post to Threads via custom webhook",
+      link: "", author: "Harsha", likes: 9, downloads: 22,
+      created_at: new Date(Date.now() - 86400000 * 5).toISOString(), is_community: false
+    },
+    {
+      id: "demo-3", type: "prompt", category: "Business",
+      title: "Cold DM that gets replies (non-cringe version)",
+      description: "A short, human-sounding DM template for reaching out to potential customers or collaborators on LinkedIn.",
+      tools: ["Claude AI"],
+      content: "Hey [Name], [1 genuine specific thing about their work]. I'm building [XEdge — 1 line]. Curious if you've run into [specific problem]. No pitch — just exploring if it's a real thing for people like you.",
+      link: "", author: "Harsha", likes: 21, downloads: 55,
+      created_at: new Date(Date.now() - 86400000 * 1).toISOString(), is_community: false
+    },
+    {
+      id: "demo-4", type: "template", category: "Dev",
+      title: "Supabase row-level security starter (SaaS)",
+      description: "Copy-paste RLS policies for a multi-tenant SaaS with users, teams, and data isolation.",
+      tools: ["Supabase"],
+      content: "-- users can only see their own rows\nCREATE POLICY \"own rows\" ON public.items\n  FOR ALL USING (auth.uid() = user_id);",
+      link: "", author: "Harsha", likes: 7, downloads: 31,
+      created_at: new Date(Date.now() - 86400000 * 7).toISOString(), is_community: false
+    },
+    {
+      id: "demo-5", type: "automation", category: "Research",
+      title: "Competitor monitoring — weekly digest to email",
+      description: "Make.com flow that scrapes competitor blog RSS feeds, runs a Claude summary, and emails you every Monday morning.",
+      tools: ["Make.com", "Claude AI", "Brevo"],
+      content: "1. Schedule: Every Monday 8AM\n2. RSS module: pull from 3 competitor blogs\n3. Claude: summarise key points and flag anything new\n4. Brevo: send digest email to yourself",
+      link: "", author: "Harsha", likes: 12, downloads: 27,
+      created_at: new Date(Date.now() - 86400000 * 3).toISOString(), is_community: false
+    },
+    {
+      id: "demo-6", type: "prompt", category: "Marketing",
+      title: "Landing page copy from scratch — Claude prompt",
+      description: "One prompt that generates a complete hero section, 3 feature blocks, and a CTA for any product.",
+      tools: ["Claude AI"],
+      content: "You are a conversion copywriter. Write landing page copy for: [product description]. Include: hero headline + subheading, 3 benefit sections (problem → solution format), and a closing CTA. Tone: direct, no hype, builder audience.",
+      link: "", author: "Harsha", likes: 18, downloads: 63,
+      created_at: new Date(Date.now() - 86400000 * 0).toISOString(), is_community: false
+    }
+  ];
+
+  /* ── RENDER STATS ── */
+  function renderStats() {
+    const total = allItems.length;
+    const downloads = allItems.reduce((s, i) => s + (i.downloads || 0), 0);
+    const contributors = new Set(allItems.map(i => i.author).filter(Boolean)).size;
+    animateNum("stat-total", total);
+    animateNum("stat-downloads", downloads);
+    animateNum("stat-contributors", contributors);
+  }
+
+  function animateNum(id, target) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    let start = 0;
+    const dur = 900;
+    const t0 = performance.now();
+    const tick = (now) => {
+      const p = Math.min((now - t0) / dur, 1);
+      const ease = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.floor(ease * target);
+      if (p < 1) requestAnimationFrame(tick);
+      else el.textContent = target;
+    };
+    requestAnimationFrame(tick);
+  }
+
+  /* ── UPDATE TAB COUNTS ── */
+  function updateCounts() {
+    const counts = { all: allItems.length, template: 0, automation: 0, prompt: 0 };
+    allItems.forEach(i => { if (counts[i.type] !== undefined) counts[i.type]++; });
+    Object.entries(counts).forEach(([k, v]) => {
+      const el = document.getElementById("count-" + k);
+      if (el) el.textContent = v;
+    });
+  }
+
+  /* ── FILTER + SORT ── */
+  function getFiltered() {
+    let items = allItems.slice();
+    if (activeTab !== "all") items = items.filter(i => i.type === activeTab);
+    if (activeFilter) items = items.filter(i => i.category === activeFilter);
+    if (searchTerm) {
+      const t = searchTerm.toLowerCase();
+      items = items.filter(i =>
+        (i.title || "").toLowerCase().includes(t) ||
+        (i.description || "").toLowerCase().includes(t) ||
+        (i.tools || []).some(tl => tl.toLowerCase().includes(t))
+      );
+    }
+    const sort = document.getElementById("tmpl-sort")?.value || "newest";
+    if (sort === "popular")   items.sort((a, b) => (b.likes || 0) - (a.likes || 0));
+    if (sort === "downloads") items.sort((a, b) => (b.downloads || 0) - (a.downloads || 0));
+    if (sort === "newest")    items.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    return items;
+  }
+
+  /* ── RENDER GRID ── */
+  function renderGrid() {
+    const grid = document.getElementById("tmpl-grid");
+    if (!grid) return;
+    const items = getFiltered();
+    if (!items.length) {
+      grid.innerHTML = `<div class="tmpl-empty">
+        <div class="tmpl-empty-icon">🔍</div>
+        <h3>Nothing here yet</h3>
+        <p>Be the first to submit something in this category.</p>
+      </div>`;
+      return;
+    }
+    const liked = getLiked();
+    grid.innerHTML = items.map((item, idx) => buildCard(item, liked, idx)).join("");
+  }
+
+  /* ── BUILD CARD ── */
+  function buildCard(item, liked, idx) {
+    const bandClass = item.type === "automation" ? "automation" : item.type === "prompt" ? "prompt" : "";
+    const tagClass  = item.type === "automation" ? "tmpl-tag-auto" : "tmpl-tag-type";
+    const typeLabel = item.type === "automation" ? "Automation" : item.type === "prompt" ? "Prompt" : "Template";
+    const tools = (item.tools || []).slice(0, 4).map(t =>
+      `<span class="tmpl-tool-chip">${esc(t)}</span>`
+    ).join("");
+    const isLiked = liked.has(item.id);
+    const delay = Math.min(idx * 0.04, 0.3);
+    const community = item.is_community ? `<span class="tmpl-card-community">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="11" height="11"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0"/></svg>
+      Community
+    </span>` : "";
+
+    return `<article class="tmpl-card" style="animation-delay:${delay}s" data-id="${esc(item.id)}">
+      <div class="tmpl-card-band ${bandClass}"></div>
+      <div class="tmpl-card-body">
+        <div class="tmpl-card-meta">
+          <span class="tmpl-tag ${tagClass}">${typeLabel}</span>
+          <span class="tmpl-tag tmpl-tag-cat">${esc(item.category || "")}</span>
+          ${community}
+        </div>
+        <h3>${esc(item.title)}</h3>
+        <p>${esc(item.description || "").slice(0, 120)}${(item.description || "").length > 120 ? "…" : ""}</p>
+        ${tools ? `<div class="tmpl-tools">${tools}</div>` : ""}
+      </div>
+      <div class="tmpl-card-footer">
+        <button class="tmpl-action-btn ${isLiked ? "liked" : ""}" onclick="toggleLike('${esc(item.id)}', this)" aria-label="Like" title="Like">
+          <svg fill="${isLiked ? "currentColor" : "none"}" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+          </svg>
+          <span class="like-count">${item.likes || 0}</span>
+        </button>
+        <button class="tmpl-action-btn" onclick="trackCopy('${esc(item.id)}', this)" aria-label="Copy" title="Copy content">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+          </svg>
+          Copy
+        </button>
+        ${item.link
+          ? `<a class="tmpl-dl-btn" href="${esc(item.link)}" target="_blank" rel="noopener" onclick="trackDownload('${esc(item.id)}', this)">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+              Open
+            </a>`
+          : `<button class="tmpl-dl-btn" onclick="trackDownload('${esc(item.id)}', this)">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+              <span class="dl-count">${item.downloads || 0}</span>
+            </button>`
+        }
+      </div>
+    </article>`;
+  }
+
+  function esc(str) {
+    return String(str || "").replace(/[&<>"']/g, c =>
+      ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[c]
+    );
+  }
+
+  /* ── LIKES ── */
+  function getLiked() {
+    try { return new Set(JSON.parse(localStorage.getItem(LIKED_KEY) || "[]")); }
+    catch { return new Set(); }
+  }
+  function saveLiked(set) {
+    localStorage.setItem(LIKED_KEY, JSON.stringify([...set]));
+  }
+
+  window.toggleLike = async function(id, btn) {
+    const liked = getLiked();
+    const isLiked = liked.has(id);
+    const countEl = btn.querySelector(".like-count");
+    const item = allItems.find(i => i.id === id);
+    if (!item) return;
+
+    if (isLiked) {
+      liked.delete(id);
+      item.likes = Math.max(0, (item.likes || 0) - 1);
+      btn.classList.remove("liked");
+      btn.querySelector("svg").setAttribute("fill", "none");
+    } else {
+      liked.add(id);
+      item.likes = (item.likes || 0) + 1;
+      btn.classList.add("liked");
+      btn.querySelector("svg").setAttribute("fill", "currentColor");
+    }
+    if (countEl) countEl.textContent = item.likes;
+    saveLiked(liked);
+
+    // Persist to Supabase (fire and forget, demo items fail silently)
+    if (!id.startsWith("demo-")) {
+      try {
+        await sbFetch(`/rest/v1/templates?id=eq.${id}`, {
+          method: "PATCH",
+          prefer: "return=minimal",
+          body: JSON.stringify({ likes: item.likes })
+        });
+      } catch (e) { /* silent */ }
+    }
+  };
+
+  /* ── COPY ── */
+  window.trackCopy = async function(id, btn) {
+    const item = allItems.find(i => i.id === id);
+    if (!item) return;
+    const text = item.content || item.description || item.title;
+    try {
+      await navigator.clipboard.writeText(text);
+      const orig = btn.innerHTML;
+      btn.innerHTML = `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="14" height="14"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Copied!`;
+      btn.style.color = "#34d399";
+      setTimeout(() => { btn.innerHTML = orig; btn.style.color = ""; }, 1800);
+    } catch { showToast("Copy failed — try again", "error"); }
+  };
+
+  /* ── DOWNLOAD / OPEN TRACKING ── */
+  window.trackDownload = async function(id, btn) {
+    const item = allItems.find(i => i.id === id);
+    if (!item) return;
+    item.downloads = (item.downloads || 0) + 1;
+    const countEl = btn.querySelector(".dl-count");
+    if (countEl) countEl.textContent = item.downloads;
+    if (!id.startsWith("demo-")) {
+      try {
+        await sbFetch(`/rest/v1/templates?id=eq.${id}`, {
+          method: "PATCH",
+          prefer: "return=minimal",
+          body: JSON.stringify({ downloads: item.downloads })
+        });
+      } catch (e) { /* silent */ }
+    }
+  };
+
+  /* ── TAB / FILTER / SEARCH ── */
+  window.switchTab = function(tab, el) {
+    activeTab = tab;
+    document.querySelectorAll(".tmpl-tab").forEach(t => {
+      t.classList.remove("active");
+      t.setAttribute("aria-selected", "false");
+    });
+    el.classList.add("active");
+    el.setAttribute("aria-selected", "true");
+    renderGrid();
+  };
+
+  window.setFilter = function(cat, el) {
+    activeFilter = cat;
+    document.querySelectorAll(".filter-chip").forEach(c => c.classList.remove("active"));
+    el.classList.add("active");
+    renderGrid();
+  };
+
+  document.getElementById("tmpl-search").addEventListener("input", e => {
+    searchTerm = e.target.value.trim();
+    renderGrid();
+  });
+
+  /* ── MODAL ── */
+  window.openSubmitModal = function() {
+    document.getElementById("submit-modal").classList.add("open");
+    document.body.style.overflow = "hidden";
+    setTimeout(() => document.getElementById("f-title")?.focus(), 200);
+  };
+  window.closeSubmitModal = function() {
+    document.getElementById("submit-modal").classList.remove("open");
+    document.body.style.overflow = "";
+  };
+  document.getElementById("submit-modal").addEventListener("click", e => {
+    if (e.target === e.currentTarget) closeSubmitModal();
+  });
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape") closeSubmitModal();
+  });
+
+  window.setModalType = function(type, btn) {
+    modalType = type;
+    document.querySelectorAll(".modal-type-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+  };
+
+  /* ── TAG INPUT ── */
+  const tagInput = document.getElementById("tag-input");
+  tagInput.addEventListener("keydown", e => {
+    if (e.key === "Enter" || e.key === ",") {
+      e.preventDefault();
+      const val = tagInput.value.trim().replace(/,/g, "");
+      if (val && !tagTools.includes(val)) {
+        tagTools.push(val);
+        renderTags();
+        tagInput.value = "";
+      }
+    } else if (e.key === "Backspace" && !tagInput.value && tagTools.length) {
+      tagTools.pop();
+      renderTags();
+    }
+  });
+
+  function renderTags() {
+    const wrap = document.getElementById("tools-tag-wrap");
+    wrap.querySelectorAll(".tool-tag").forEach(t => t.remove());
+    tagTools.forEach((t, i) => {
+      const tag = document.createElement("span");
+      tag.className = "tool-tag";
+      tag.innerHTML = `${esc(t)}<button type="button" onclick="removeTag(${i})" aria-label="Remove ${esc(t)}">&times;</button>`;
+      wrap.insertBefore(tag, tagInput);
+    });
+  }
+
+  window.removeTag = function(i) {
+    tagTools.splice(i, 1);
+    renderTags();
+  };
+
+  /* ── SUBMIT FORM ── */
+  window.submitTemplate = async function() {
+    const title   = document.getElementById("f-title").value.trim();
+    const desc    = document.getElementById("f-desc").value.trim();
+    const cat     = document.getElementById("f-category").value;
+    const author  = document.getElementById("f-author").value.trim() || "Anonymous";
+    const content = document.getElementById("f-content").value.trim();
+    const link    = document.getElementById("f-link").value.trim();
+
+    if (!title || !desc || !cat || !content) {
+      showFormStatus("Fill in all required fields (*).", "error");
+      return;
+    }
+
+    const btn = document.getElementById("form-submit-btn");
+    const lbl = document.getElementById("form-submit-label");
+    btn.disabled = true;
+    lbl.textContent = "Submitting…";
+
+    const payload = {
+      type: modalType,
+      category: cat,
+      title,
+      description: desc,
+      tools: tagTools.slice(),
+      content,
+      link: link || null,
+      author,
+      likes: 0,
+      downloads: 0,
+      status: "pending",       // reviewed before going live
+      is_community: true,
+      created_at: new Date().toISOString()
+    };
+
+    try {
+      await sbFetch("/rest/v1/templates", {
+        method: "POST",
+        prefer: "return=minimal",
+        body: JSON.stringify(payload)
+      });
+      showFormStatus("✓ Submitted! We'll review it and it'll go live within 24 hours.", "success");
+      showToast("✓ Submission received — thank you!", "success");
+      setTimeout(() => {
+        closeSubmitModal();
+        resetForm();
+      }, 2400);
+    } catch (err) {
+      showFormStatus("Something went wrong. Try again.", "error");
+      btn.disabled = false;
+      lbl.textContent = "Submit for review";
+    }
+  };
+
+  function showFormStatus(msg, type) {
+    const el = document.getElementById("form-status");
+    el.textContent = msg;
+    el.className = "form-status " + type;
+  }
+
+  function resetForm() {
+    ["f-title","f-desc","f-author","f-content","f-link"].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.value = "";
+    });
+    document.getElementById("f-category").value = "";
+    tagTools = [];
+    renderTags();
+    document.getElementById("form-status").className = "form-status";
+    const btn = document.getElementById("form-submit-btn");
+    btn.disabled = false;
+    document.getElementById("form-submit-label").textContent = "Submit for review";
+  }
+
+  /* ── TOAST ── */
+  function showToast(msg, type) {
+    const toast = document.getElementById("tmpl-toast");
+    toast.textContent = msg;
+    toast.style.borderColor = type === "error" ? "rgba(248,113,113,0.3)" : "rgba(52,211,153,0.3)";
+    toast.style.color = type === "error" ? "#f87171" : "#34d399";
+    toast.classList.add("show");
+    setTimeout(() => toast.classList.remove("show"), 3000);
+  }
+
+  /* ── MOBILE MENU ── */
+  const toggle = document.getElementById("mobile-menu-toggle");
+  const menu   = document.getElementById("mobileMenu");
+  let menuOpen = false;
+  toggle.addEventListener("click", () => {
+    menuOpen = !menuOpen;
+    menu.classList.toggle("open", menuOpen);
+    toggle.classList.toggle("open", menuOpen);
+    toggle.setAttribute("aria-expanded", menuOpen);
+    document.body.style.overflow = menuOpen ? "hidden" : "";
+  });
+  menu.querySelectorAll("a").forEach(a => a.addEventListener("click", () => {
+    menuOpen = false; menu.classList.remove("open"); toggle.classList.remove("open");
+    document.body.style.overflow = "";
+  }));
+
+  /* ── BOOT ── */
+  loadItems();
+
+})();
+</script>
+
+</body>
+</html>
