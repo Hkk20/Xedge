@@ -16,7 +16,7 @@ const XE = {
   SUPABASE_KEY:  "sb_publishable_JEvVHrobhuPoU6Z5xkMr2Q_pw8tvzHP",
   TABLE:         "xedge",
 
-  CACHE_KEY:     "xedge_tools_v2",       // bumped — auto-clears old Sheets cache
+  CACHE_KEY:     "xedge_tools_v3",       // bumped — auto-clears old Sheets cache
   CACHE_TTL:     5 * 60 * 1000,          // 5 minutes
   SELECTED_KEY:  "xedge_selected_tool",
 

@@ -220,33 +220,7 @@
        This bridge primes sessionStorage from localStorage so Explore never
        hits Google Sheets cold if index already fetched the data.
     ─────────────────────────────────────────────────────────────────────── */
-    function primeSessionCache() {
-      try {
-        if (sessionStorage.getItem("xedge_tools_v1")) return;
-        const raw = localStorage.getItem("xedge_tools_cache_v2");
-        if (!raw) return;
-        const parsed = JSON.parse(raw);
-        if (!parsed || !Array.isArray(parsed.data) || !parsed.data.length) return;
-        const mapped = parsed.data.map(d => ({
-          name:              d.name || "",
-          category:          d.category || "",
-          short_description: d.short || d.short_description || "",
-          long_description:  d.long_description || "",
-          logo_url:          d.logo_url || d.logo || "",
-          link:              d.link || d.Link || "#",
-          pros_raw:          d.pros || "",
-          cons_raw:          d.cons || "",
-          key_features_raw:  d.key_features || "",
-          best_for_raw:      d.best_for || "",
-          standout_raw:      d.standout || "",
-          screenshots_raw:   d.screenshots || "",
-          pricing_free:      d.pricing_free || "",
-          pricing_plus:      d.pricing_plus || "",
-          pricing_team:      d.pricing_team || ""
-        }));
-        sessionStorage.setItem("xedge_tools_v1", JSON.stringify(mapped));
-      } catch(e) { /* non-critical */ }
-    }
+    
 
     /* ── MOBILE MENU ─────────────────────────────────────────────────────── */
     function initMobileMenu() {
@@ -309,7 +283,7 @@
 
     /* ── BOOT ────────────────────────────────────────────────────────────── */
     function boot() {
-      primeSessionCache(); // runs synchronously before app.js DOMContentLoaded fires
+       // runs synchronously before app.js DOMContentLoaded fires
       initMobileMenu();
       let tries = 0;
       const poll = setInterval(() => {
