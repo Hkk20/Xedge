@@ -4,465 +4,246 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Templates & Automations — XEdge</title>
-  <meta name="description" content="Free AI templates and automation workflows curated by the XEdge community. Copy, adapt, and build faster."/>
+  <meta name="description" content="Downloadable n8n and Make.com automation blueprints, plus copy-paste AI templates, built by the XEdge community."/>
   <link rel="icon" href="xedge-logo.png" type="image/png"/>
-  <meta name="theme-color" content="#0b0f15"/>
+  <meta name="theme-color" content="#080c12"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap"/>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"/>
   <script src="analytics.js" defer></script>
-
   <style>
-    *, *::before, *::after { box-sizing: border-box; }
-    html, body { margin: 0; padding: 0; width: 100%; overflow-x: hidden; }
-    body {
-      font-family: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
-      background: #0b0f15; color: #fff;
-      -webkit-font-smoothing: antialiased;
-    }
+    *,*::before,*::after{box-sizing:border-box;}
+    html,body{margin:0;padding:0;width:100%;overflow-x:hidden;}
+    body{font-family:'Space Grotesk',ui-sans-serif,system-ui,sans-serif;background:#080c12;color:#e8edf5;-webkit-font-smoothing:antialiased;}
 
-    /* ── NAV (same as index) ── */
-    .xe-nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 60;
-      height: 68px;
-      background: rgba(11,15,21,0.9);
-      backdrop-filter: blur(18px);
-      border-bottom: 1px solid rgba(255,255,255,0.07);
-      display: flex; align-items: center;
-    }
-    .xe-nav-inner {
-      max-width: 1400px; width: 100%; margin: 0 auto;
-      padding: 0 24px; display: flex; align-items: center;
-      justify-content: space-between; gap: 16px;
-    }
-    .xe-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-    .xe-logo img { width: 36px; height: 36px; border-radius: 8px; }
-    .xe-logo span { font-size: 1.25rem; font-weight: 700; color: #60a5fa; letter-spacing: -0.3px; }
-    .xe-nav-links { display: flex; align-items: center; gap: 4px; }
-    .xe-nav-links a {
-      font-size: 0.9rem; font-weight: 500; color: #9ca3af;
-      padding: 6px 14px; border-radius: 8px; text-decoration: none;
-      transition: color .15s, background .15s;
-    }
-    .xe-nav-links a:hover { color: #fff; background: rgba(255,255,255,0.06); }
-    .xe-nav-links a.active { color: #60a5fa; }
-    .xe-nav-right { display: flex; align-items: center; gap: 10px; }
-    .xe-btn-beta {
-      background: linear-gradient(135deg, #3b82f6, #6366f1);
-      padding: 8px 20px; border-radius: 100px;
-      font-size: 0.85rem; font-weight: 600; color: #fff;
-      text-decoration: none; transition: opacity .15s, transform .15s;
-    }
-    .xe-btn-beta:hover { opacity: .88; transform: translateY(-1px); }
-    .xe-hamburger {
-      display: none; background: none; border: none; cursor: pointer;
-      padding: 8px; color: #d1d5db;
-      flex-direction: column; gap: 5px; align-items: center; justify-content: center;
-    }
-    .xe-hamburger span { display: block; width: 22px; height: 2px; background: currentColor; border-radius: 2px; transition: transform .25s, opacity .25s; }
-    .xe-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-    .xe-hamburger.open span:nth-child(2) { opacity: 0; }
-    .xe-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-    .xe-mobile-menu {
-      position: fixed; top: 68px; left: 0; right: 0; z-index: 59;
-      background: rgba(11,15,21,0.98); backdrop-filter: blur(20px);
-      border-bottom: 1px solid rgba(255,255,255,0.07);
-      padding: 12px 16px 20px; display: none; flex-direction: column; gap: 4px;
-    }
-    .xe-mobile-menu.open { display: flex; }
-    .xe-mobile-menu a { padding: 12px 16px; border-radius: 10px; font-size: 1rem; font-weight: 500; color: #9ca3af; text-decoration: none; transition: color .15s, background .15s; }
-    .xe-mobile-menu a:hover { color: #fff; background: rgba(255,255,255,0.06); }
-    .xe-mobile-menu .xe-mobile-cta { background: linear-gradient(135deg,#3b82f6,#6366f1); color:#fff !important; text-align:center; margin-top:8px; font-weight:600; }
+    /* NAV */
+    .xe-nav{position:fixed;top:0;left:0;right:0;z-index:60;height:68px;background:rgba(8,12,18,0.92);backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;}
+    .xe-nav-inner{max-width:1400px;width:100%;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;}
+    .xe-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+    .xe-logo img{width:36px;height:36px;border-radius:8px;}
+    .xe-logo span{font-size:1.25rem;font-weight:700;color:#60a5fa;letter-spacing:-0.3px;}
+    .xe-nav-links{display:flex;align-items:center;gap:4px;}
+    .xe-nav-links a{font-size:0.9rem;font-weight:500;color:#6b7a9a;padding:6px 14px;border-radius:8px;text-decoration:none;transition:color .15s,background .15s;}
+    .xe-nav-links a:hover{color:#e8edf5;background:rgba(255,255,255,0.05);}
+    .xe-nav-links a.active{color:#60a5fa;}
+    .xe-nav-right{display:flex;align-items:center;gap:10px;}
+    .xe-btn-beta{background:linear-gradient(135deg,#3b82f6,#6366f1);padding:8px 20px;border-radius:100px;font-size:0.85rem;font-weight:600;color:#fff;text-decoration:none;transition:opacity .15s,transform .15s;}
+    .xe-btn-beta:hover{opacity:.88;transform:translateY(-1px);}
+    .xe-hamburger{display:none;background:none;border:none;cursor:pointer;padding:8px;color:#9ca3af;flex-direction:column;gap:5px;align-items:center;justify-content:center;}
+    .xe-hamburger span{display:block;width:22px;height:2px;background:currentColor;border-radius:2px;transition:transform .25s,opacity .25s;}
+    .xe-hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+    .xe-hamburger.open span:nth-child(2){opacity:0;}
+    .xe-hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+    .xe-mobile-menu{position:fixed;top:68px;left:0;right:0;z-index:59;background:rgba(8,12,18,0.98);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.06);padding:12px 16px 20px;display:none;flex-direction:column;gap:4px;}
+    .xe-mobile-menu.open{display:flex;}
+    .xe-mobile-menu a{padding:12px 16px;border-radius:10px;font-size:1rem;font-weight:500;color:#6b7a9a;text-decoration:none;transition:color .15s,background .15s;}
+    .xe-mobile-menu a:hover{color:#fff;background:rgba(255,255,255,0.05);}
+    .xe-mobile-menu .xe-mobile-cta{background:linear-gradient(135deg,#3b82f6,#6366f1);color:#fff !important;text-align:center;margin-top:8px;font-weight:600;border-radius:10px;}
 
-    /* ── PAGE SHELL ── */
-    .page-wrap { padding-top: 68px; }
+    .page-wrap{padding-top:68px;min-height:100vh;display:flex;flex-direction:column;}
 
-    /* ── HERO BANNER ── */
-    .tmpl-hero {
-      padding: 64px 24px 48px;
-      text-align: center;
-      background: radial-gradient(ellipse 80% 40% at 50% 0%, rgba(59,130,246,0.1) 0%, transparent 70%);
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-    }
-    .tmpl-hero-eyebrow {
-      display: inline-flex; align-items: center; gap: 8px;
-      background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.25);
-      border-radius: 100px; padding: 5px 14px;
-      font-size: 0.75rem; font-weight: 700; color: #60a5fa;
-      letter-spacing: 0.08em; text-transform: uppercase;
-      margin-bottom: 20px;
-    }
-    .tmpl-hero h1 {
-      font-size: clamp(2rem, 5vw, 3.4rem);
-      font-weight: 800; letter-spacing: -1.5px; line-height: 1.1;
-      margin: 0 0 14px;
-    }
-    .tmpl-hero h1 span {
-      background: linear-gradient(135deg, #60a5fa, #a78bfa);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-    }
-    .tmpl-hero p {
-      font-size: 1rem; color: #8b93b0; max-width: 520px;
-      margin: 0 auto 28px; line-height: 1.75;
-    }
-    .tmpl-hero-actions { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; }
-    .btn-submit {
-      display: inline-flex; align-items: center; gap: 8px;
-      background: linear-gradient(135deg, #3b82f6, #6366f1);
-      border: none; border-radius: 100px; padding: 12px 28px;
-      font-size: 0.92rem; font-weight: 700; color: #fff;
-      cursor: pointer; font-family: inherit;
-      transition: opacity .15s, transform .15s, box-shadow .15s;
-    }
-    .btn-submit:hover { opacity: .88; transform: translateY(-2px); box-shadow: 0 10px 28px rgba(59,130,246,0.3); }
-    .btn-ghost {
-      display: inline-flex; align-items: center; gap: 8px;
-      background: transparent; border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 100px; padding: 12px 28px;
-      font-size: 0.92rem; font-weight: 500; color: #9ca3af;
-      cursor: pointer; font-family: inherit; text-decoration: none;
-      transition: border-color .15s, color .15s, background .15s;
-    }
-    .btn-ghost:hover { border-color: rgba(255,255,255,0.3); color: #fff; background: rgba(255,255,255,0.05); }
+    /* HERO — static, no motion, clear single value prop */
+    .t-hero{padding:48px 24px 28px;background:radial-gradient(ellipse 60% 50% at 50% -10%,rgba(59,130,246,0.12) 0%,transparent 65%);border-bottom:1px solid rgba(255,255,255,0.05);}
+    .t-hero-inner{max-width:1400px;margin:0 auto;display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;}
+    .t-hero-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:0.72rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#60a5fa;margin-bottom:12px;}
+    .t-hero h1{font-size:clamp(1.7rem,3.6vw,2.5rem);font-weight:800;letter-spacing:-1.2px;line-height:1.1;margin:0 0 8px;color:#f0f4ff;}
+    .t-hero h1 em{font-style:normal;background:linear-gradient(135deg,#60a5fa 0%,#818cf8 60%,#34d399 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .t-hero-sub{font-size:0.92rem;color:#6b7a9a;max-width:460px;line-height:1.65;margin:0;}
+    .t-hero-stats{display:flex;align-items:center;gap:24px;flex-wrap:wrap;}
+    .t-stat{text-align:right;}
+    .t-stat-num{font-size:1.4rem;font-weight:800;color:#f0f4ff;letter-spacing:-0.5px;}
+    .t-stat-label{font-size:0.7rem;color:#4b5a75;text-transform:uppercase;letter-spacing:0.07em;margin-top:1px;}
+    .t-stat-div{width:1px;height:28px;background:rgba(255,255,255,0.06);}
 
-    /* ── STATS ROW ── */
-    .tmpl-stats {
-      display: flex; align-items: center; justify-content: center;
-      gap: 32px; flex-wrap: wrap;
-      padding: 20px 24px 0; margin-top: 12px;
-    }
-    .tmpl-stat { text-align: center; }
-    .tmpl-stat-num { font-size: 1.5rem; font-weight: 800; color: #fff; }
-    .tmpl-stat-label { font-size: 0.75rem; color: #6b7a9a; margin-top: 2px; }
-    .tmpl-stat-div { width: 1px; height: 28px; background: rgba(255,255,255,0.07); }
+    /* HOW IT WORKS — removes confusion: 3 plain steps, always visible under hero */
+    .t-how{max-width:1400px;margin:0 auto;padding:0 24px 20px;display:flex;gap:14px;flex-wrap:wrap;}
+    .t-how-step{flex:1;min-width:200px;display:flex;align-items:flex-start;gap:10px;background:rgba(15,20,30,0.55);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:12px 14px;}
+    .t-how-num{width:22px;height:22px;border-radius:50%;background:rgba(59,130,246,0.15);border:1px solid rgba(59,130,246,0.3);color:#60a5fa;font-size:0.74rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+    .t-how-text{font-size:0.8rem;color:#9ca3af;line-height:1.5;}
+    .t-how-text b{color:#e8edf5;font-weight:700;}
 
-    /* ── MAIN CONTENT ── */
-    .tmpl-main { max-width: 1400px; margin: 0 auto; padding: 40px 24px 80px; }
+    /* CONTROL BAR — single row, sticky, matches prompt page pattern */
+    .p-controlbar{position:sticky;top:68px;z-index:40;background:rgba(8,12,18,0.97);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,0.06);padding:14px 24px;}
+    .p-controlbar-inner{max-width:1400px;margin:0 auto;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+    .p-search-wrap{position:relative;flex:1;min-width:200px;max-width:320px;}
+    .p-search-wrap svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);width:15px;height:15px;color:#4b5a75;pointer-events:none;}
+    .p-search{width:100%;background:rgba(17,24,39,0.7);border:1px solid rgba(255,255,255,0.08);border-radius:9px;padding:9px 14px 9px 36px;color:#e8edf5;font-family:inherit;font-size:0.85rem;outline:none;transition:border-color .2s;}
+    .p-search:focus{border-color:rgba(99,102,241,0.4);}
+    .p-search::placeholder{color:#3a4560;}
+    .p-control-div{width:1px;height:24px;background:rgba(255,255,255,0.07);flex-shrink:0;}
+    .p-dropdown{position:relative;flex-shrink:0;}
+    .p-dropdown-btn{display:flex;align-items:center;gap:6px;background:rgba(17,24,39,0.7);border:1px solid rgba(255,255,255,0.08);border-radius:9px;padding:9px 12px;font-size:0.83rem;font-weight:600;color:#9ca3af;cursor:pointer;font-family:inherit;transition:border-color .15s,color .15s;white-space:nowrap;}
+    .p-dropdown-btn:hover{border-color:rgba(99,102,241,0.3);color:#e8edf5;}
+    .p-dropdown-btn.has-filter{border-color:rgba(99,102,241,0.35);color:#818cf8;background:rgba(99,102,241,0.07);}
+    .p-dropdown-btn svg.chev{width:12px;height:12px;transition:transform .2s;}
+    .p-dropdown.open .p-dropdown-btn svg.chev{transform:rotate(180deg);}
+    .p-dropdown-menu{position:absolute;top:calc(100% + 8px);left:0;z-index:50;min-width:190px;background:#0d1117;border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:6px;box-shadow:0 16px 40px rgba(0,0,0,0.5);display:none;}
+    .p-dropdown.open .p-dropdown-menu{display:block;}
+    .p-dropdown-item{display:flex;align-items:center;justify-content:space-between;width:100%;background:none;border:none;cursor:pointer;font-family:inherit;padding:8px 10px;border-radius:8px;font-size:0.83rem;font-weight:600;color:#9ca3af;transition:background .15s,color .15s;text-align:left;}
+    .p-dropdown-item:hover{background:rgba(255,255,255,0.05);color:#e8edf5;}
+    .p-dropdown-item.active{background:rgba(99,102,241,0.12);color:#818cf8;}
+    .p-dropdown-item-count{font-size:0.7rem;font-weight:700;background:rgba(255,255,255,0.06);border-radius:100px;padding:1px 7px;color:#4b5a75;}
+    .p-dropdown-item.active .p-dropdown-item-count{background:rgba(99,102,241,0.18);color:#818cf8;}
+    .p-clear-btn{display:none;align-items:center;gap:5px;background:none;border:none;cursor:pointer;font-family:inherit;font-size:0.8rem;font-weight:600;color:#f87171;padding:9px 10px;flex-shrink:0;}
+    .p-clear-btn.show{display:flex;}
+    .p-clear-btn:hover{color:#fca5a5;}
+    .p-controlbar-right{margin-left:auto;display:flex;align-items:center;gap:10px;}
+    .p-result-count{font-size:0.82rem;color:#4b5a75;white-space:nowrap;}
+    .btn-primary-sm{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,#6366f1,#3b82f6);border:none;border-radius:9px;padding:9px 16px;font-size:0.83rem;font-weight:700;color:#fff;cursor:pointer;font-family:inherit;transition:opacity .15s,transform .15s;white-space:nowrap;}
+    .btn-primary-sm:hover{opacity:.88;transform:translateY(-1px);}
 
-    /* ── TAB BAR ── */
-    .tmpl-tabs {
-      display: flex; align-items: center; gap: 4px;
-      background: rgba(17,24,39,0.6); border: 1px solid rgba(255,255,255,0.07);
-      border-radius: 14px; padding: 5px; width: fit-content;
-      margin-bottom: 32px;
-    }
-    .tmpl-tab {
-      display: flex; align-items: center; gap: 8px;
-      padding: 9px 20px; border-radius: 10px;
-      background: none; border: none; cursor: pointer; font-family: inherit;
-      font-size: 0.88rem; font-weight: 600; color: #6b7a9a;
-      transition: background .2s, color .2s;
-    }
-    .tmpl-tab.active { background: rgba(59,130,246,0.15); color: #60a5fa; }
-    .tmpl-tab:hover:not(.active) { color: #9ca3af; }
-    .tmpl-tab-count {
-      background: rgba(255,255,255,0.08); border-radius: 100px;
-      padding: 2px 8px; font-size: 0.72rem; font-weight: 700;
-    }
-    .tmpl-tab.active .tmpl-tab-count { background: rgba(59,130,246,0.2); color: #93c5fd; }
+    /* MAIN */
+    .p-main{max-width:1400px;margin:0 auto;width:100%;padding:24px 24px 80px;flex:1;}
+    .p-split{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;}
+    .p-list{display:flex;flex-direction:column;gap:10px;}
 
-    /* ── TOOLBAR ── */
-    .tmpl-toolbar {
-      display: flex; align-items: center; gap: 12px;
-      margin-bottom: 28px; flex-wrap: wrap;
-    }
-    .tmpl-search-wrap {
-      position: relative; flex: 1; min-width: 200px; max-width: 340px;
-    }
-    .tmpl-search-wrap svg {
-      position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
-      width: 16px; height: 16px; color: #6b7a9a; pointer-events: none;
-    }
-    .tmpl-search {
-      width: 100%; background: rgba(17,24,39,0.8);
-      border: 1px solid rgba(255,255,255,0.08); border-radius: 100px;
-      padding: 10px 16px 10px 40px; color: #fff; font-family: inherit;
-      font-size: 0.88rem; outline: none; transition: border-color .2s;
-    }
-    .tmpl-search:focus { border-color: rgba(59,130,246,0.4); }
-    .tmpl-search::placeholder { color: #4b5a75; }
-    .tmpl-filters { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-    .filter-chip {
-      padding: 7px 16px; border-radius: 100px;
-      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07);
-      font-size: 0.8rem; font-weight: 600; color: #6b7a9a;
-      cursor: pointer; font-family: inherit; transition: all .2s;
-      white-space: nowrap;
-    }
-    .filter-chip:hover { border-color: rgba(59,130,246,0.3); color: #9ca3af; }
-    .filter-chip.active { background: rgba(59,130,246,0.12); border-color: rgba(59,130,246,0.35); color: #60a5fa; }
-    .tmpl-sort {
-      margin-left: auto; background: rgba(17,24,39,0.8);
-      border: 1px solid rgba(255,255,255,0.08); border-radius: 100px;
-      padding: 8px 16px; color: #9ca3af; font-family: inherit;
-      font-size: 0.82rem; outline: none; cursor: pointer;
-      transition: border-color .2s;
-    }
-    .tmpl-sort:focus { border-color: rgba(59,130,246,0.4); }
+    .p-card{background:rgba(13,18,28,0.8);border:1px solid rgba(255,255,255,0.06);border-radius:14px;overflow:hidden;cursor:pointer;transition:border-color .2s,background .2s;animation:cardIn .3s ease both;}
+    @keyframes cardIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+    .p-card:hover{border-color:rgba(99,102,241,0.3);background:rgba(13,18,28,1);}
+    .p-card.selected{border-color:#6366f1;background:rgba(99,102,241,0.06);}
+    .p-card-band{height:3px;}
+    .p-card-band.template{background:linear-gradient(90deg,#3b82f6,#6366f1);}
+    .p-card-band.automation{background:linear-gradient(90deg,#8b5cf6,#ec4899);}
+    .p-card-body{padding:16px 18px 12px;}
+    .p-card-top{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px;}
+    .p-card-icon{width:34px;height:34px;border-radius:9px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1rem;background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.15);}
+    .p-card-meta{flex:1;min-width:0;}
+    .p-card-title{font-size:0.9rem;font-weight:700;color:#f0f4ff;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .p-card-tags{display:flex;gap:5px;flex-wrap:wrap;}
+    .p-tag{font-size:0.66rem;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;padding:2px 8px;border-radius:100px;}
+    .p-tag-type{background:rgba(59,130,246,0.1);color:#60a5fa;border:1px solid rgba(59,130,246,0.15);}
+    .p-tag-auto{background:rgba(139,92,246,0.1);color:#a78bfa;border:1px solid rgba(139,92,246,0.15);}
+    .p-tag-cat{background:rgba(255,255,255,0.04);color:#6b7a9a;border:1px solid rgba(255,255,255,0.07);}
+    /* platform badges — visually distinct from category tags so users instantly see which tool a flow needs */
+    .p-tag-platform{display:inline-flex;align-items:center;gap:4px;font-size:0.66rem;font-weight:800;letter-spacing:0.04em;padding:2px 9px;border-radius:100px;}
+    .p-tag-platform.n8n{background:rgba(234,67,53,0.12);color:#f47174;border:1px solid rgba(234,67,53,0.28);}
+    .p-tag-platform.make{background:rgba(110,66,229,0.14);color:#a78bfa;border:1px solid rgba(110,66,229,0.3);}
+    .p-tag-platform.zapier{background:rgba(255,79,64,0.12);color:#ff8a7a;border:1px solid rgba(255,79,64,0.28);}
+    .p-card-desc{font-size:0.8rem;color:#6b7a9a;line-height:1.55;margin-bottom:10px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
+    .p-card-tools{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px;}
+    .p-tool-chip{font-size:0.7rem;font-weight:600;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:5px;padding:2px 8px;color:#6b7a9a;}
+    .p-card-footer{padding:10px 18px 14px;display:flex;align-items:center;gap:6px;}
+    .p-card-action{display:flex;align-items:center;gap:5px;background:none;border:1px solid rgba(255,255,255,0.06);border-radius:7px;padding:5px 10px;font-size:0.74rem;font-weight:600;color:#4b5a75;cursor:pointer;font-family:inherit;transition:all .15s;}
+    .p-card-action:hover{border-color:rgba(99,102,241,0.25);color:#818cf8;}
+    .p-card-action.liked{color:#f87171;border-color:rgba(248,113,113,0.25);}
+    .p-card-action.liked svg{fill:#f87171;}
+    .p-card-action svg{width:12px;height:12px;}
+    .p-card-copy-btn{margin-left:auto;display:flex;align-items:center;gap:5px;background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.2);border-radius:7px;padding:5px 12px;font-size:0.74rem;font-weight:700;color:#818cf8;cursor:pointer;font-family:inherit;transition:all .15s;}
+    .p-card-copy-btn:hover{background:rgba(99,102,241,0.18);}
+    .p-card-copy-btn svg{width:11px;height:11px;}
 
-    /* ── GRID ── */
-    .tmpl-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 20px;
-    }
+    /* PREVIEW */
+    .p-preview{position:sticky;top:calc(68px + 64px + 16px);background:rgba(10,14,22,0.95);border:1px solid rgba(255,255,255,0.07);border-radius:16px;overflow:hidden;max-height:calc(100vh - 200px);display:flex;flex-direction:column;transition:border-color .2s;}
+    .p-preview.has-content{border-color:rgba(99,102,241,0.25);}
+    .p-preview-header{padding:16px 18px;border-bottom:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;gap:10px;flex-shrink:0;}
+    .p-preview-dots{display:flex;gap:6px;}
+    .p-preview-dot{width:11px;height:11px;border-radius:50%;}
+    .p-preview-dot:nth-child(1){background:#ff5f57;}
+    .p-preview-dot:nth-child(2){background:#febc2e;}
+    .p-preview-dot:nth-child(3){background:#28c840;}
+    .p-preview-title-wrap{flex:1;min-width:0;}
+    .p-preview-title{font-size:0.82rem;font-weight:700;color:#9ca3af;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .p-preview-sub{font-size:0.7rem;color:#34d399;font-family:'JetBrains Mono',monospace;}
+    .p-preview-actions{display:flex;gap:6px;flex-shrink:0;}
+    .p-preview-copy-btn,.p-preview-dl-btn{display:flex;align-items:center;gap:6px;border:none;border-radius:8px;padding:7px 14px;font-size:0.78rem;font-weight:700;cursor:pointer;font-family:inherit;transition:opacity .15s,transform .15s;}
+    .p-preview-copy-btn{background:rgba(255,255,255,0.06);color:#e8edf5;border:1px solid rgba(255,255,255,0.1);}
+    .p-preview-copy-btn:hover{background:rgba(255,255,255,0.1);}
+    .p-preview-dl-btn{background:linear-gradient(135deg,#6366f1,#3b82f6);color:#fff;}
+    .p-preview-dl-btn:hover{opacity:.88;transform:translateY(-1px);}
+    .p-preview-copy-btn svg,.p-preview-dl-btn svg{width:13px;height:13px;}
+    .p-preview-body{flex:1;overflow-y:auto;padding:20px;}
+    .p-preview-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;min-height:280px;text-align:center;padding:40px;}
+    .p-preview-empty-icon{font-size:2.5rem;margin-bottom:14px;opacity:.5;}
+    .p-preview-empty-title{font-size:0.95rem;font-weight:700;color:#4b5a75;margin-bottom:6px;}
+    .p-preview-empty-sub{font-size:0.8rem;color:#3a4560;line-height:1.6;}
+    .p-content-text{font-family:'JetBrains Mono',monospace;font-size:0.8rem;line-height:1.75;color:#c4cfe8;white-space:pre-wrap;word-break:break-word;}
+    .p-content-text .ph-step{color:#60a5fa;font-weight:600;}
+    .p-content-text .ph-label{color:#34d399;font-weight:600;}
+    .p-content-text .ph-bracket{color:#818cf8;}
+    .p-content-text .ph-comment{color:#4b5a75;font-style:italic;}
+    .p-detail-section{margin-bottom:18px;}
+    .p-detail-label{font-size:0.7rem;font-weight:700;color:#4b5a75;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:10px;}
+    .p-detail-tools{display:flex;flex-wrap:wrap;gap:7px;}
+    .p-detail-tool{display:flex;align-items:center;gap:6px;background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.15);border-radius:8px;padding:5px 10px;font-size:0.78rem;font-weight:600;color:#60a5fa;}
+    .p-setup-box{background:rgba(52,211,153,0.05);border:1px solid rgba(52,211,153,0.15);border-radius:10px;padding:14px;font-size:0.8rem;color:#9ca3af;line-height:1.7;margin-bottom:18px;}
+    .p-setup-box b{color:#34d399;}
+    .p-preview-footer{padding:14px 18px;border-top:1px solid rgba(255,255,255,0.05);display:flex;gap:8px;flex-shrink:0;}
+    .p-use-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:7px;background:linear-gradient(135deg,#6366f1,#3b82f6);border:none;border-radius:10px;padding:12px;font-size:0.88rem;font-weight:700;color:#fff;cursor:pointer;font-family:inherit;transition:opacity .15s,transform .15s;}
+    .p-use-btn:hover{opacity:.88;transform:translateY(-1px);}
+    .p-share-btn{display:flex;align-items:center;justify-content:center;gap:7px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:12px 16px;font-size:0.88rem;font-weight:600;color:#6b7a9a;cursor:pointer;font-family:inherit;transition:all .15s;}
+    .p-share-btn:hover{background:rgba(255,255,255,0.07);color:#9ca3af;}
+    .p-share-btn svg{width:15px;height:15px;}
 
-    /* ── CARD ── */
-    .tmpl-card {
-      background: rgba(15,20,28,0.7);
-      border: 1px solid rgba(255,255,255,0.07);
-      border-radius: 18px; overflow: hidden;
-      transition: border-color .2s, transform .2s, box-shadow .2s;
-      display: flex; flex-direction: column;
-      animation: cardIn .35s ease both;
-    }
-    @keyframes cardIn { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:none; } }
-    .tmpl-card:hover {
-      border-color: rgba(59,130,246,0.3);
-      transform: translateY(-4px);
-      box-shadow: 0 16px 40px rgba(0,0,0,0.35);
-    }
+    .p-empty{grid-column:1/-1;text-align:center;padding:80px 24px;}
+    .p-empty-icon{font-size:3rem;margin-bottom:16px;}
+    .p-empty h3{font-size:1.1rem;font-weight:700;margin-bottom:8px;color:#4b5a75;}
+    .p-empty p{color:#3a4560;font-size:0.85rem;}
+    .p-skel{height:110px;border-radius:14px;background:linear-gradient(90deg,rgba(255,255,255,0.02) 25%,rgba(255,255,255,0.045) 50%,rgba(255,255,255,0.02) 75%);background-size:200% 100%;animation:shimmer 1.4s ease infinite;}
+    @keyframes shimmer{to{background-position:-200% 0;}}
 
-    /* card header band */
-    .tmpl-card-band {
-      height: 6px;
-      background: linear-gradient(90deg, #3b82f6, #6366f1);
-    }
-    .tmpl-card-band.automation { background: linear-gradient(90deg, #8b5cf6, #ec4899); }
-    .tmpl-card-band.prompt    { background: linear-gradient(90deg, #10b981, #3b82f6); }
-    .tmpl-card-band.workflow  { background: linear-gradient(90deg, #f59e0b, #ef4444); }
+    /* MODAL */
+    .modal-overlay{position:fixed;inset:0;z-index:900;background:rgba(4,6,10,0.9);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:20px;overflow-y:auto;}
+    .modal-overlay.open{display:flex;}
+    .modal{background:#0d1117;border:1px solid rgba(255,255,255,0.09);border-radius:20px;width:min(100%,540px);max-height:90vh;overflow-y:auto;box-shadow:0 40px 100px rgba(0,0,0,0.7);animation:modalIn .22s cubic-bezier(.4,0,.2,1) both;}
+    @keyframes modalIn{from{opacity:0;transform:scale(0.96) translateY(12px)}to{opacity:1;transform:none}}
+    .modal-header{padding:24px 26px 18px;border-bottom:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:space-between;}
+    .modal-type-toggle{display:flex;gap:5px;background:rgba(255,255,255,0.04);border-radius:10px;padding:4px;}
+    .modal-type-btn{padding:7px 14px;border-radius:7px;background:none;border:none;cursor:pointer;font-family:inherit;font-size:0.82rem;font-weight:600;color:#6b7a9a;transition:background .2s,color .2s;}
+    .modal-type-btn.active{background:rgba(59,130,246,0.15);color:#60a5fa;}
+    .modal-close{width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);color:#6b7a9a;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s,color .15s;margin-left:12px;}
+    .modal-close:hover{background:rgba(255,255,255,0.1);color:#fff;}
+    .modal-body{padding:22px 26px;}
+    .modal-footer{padding:0 26px 24px;}
+    .f-row{margin-bottom:16px;}
+    .f-label{display:block;font-size:0.75rem;font-weight:700;color:#6b7a9a;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:7px;}
+    .f-input,.f-textarea,.f-select{width:100%;background:rgba(15,20,30,0.9);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:11px 14px;color:#e8edf5;font-family:inherit;font-size:0.9rem;outline:none;transition:border-color .2s;display:block;}
+    .f-input:focus,.f-textarea:focus,.f-select:focus{border-color:rgba(99,102,241,0.45);}
+    .f-input::placeholder,.f-textarea::placeholder{color:#3a4560;}
+    .f-textarea{height:110px;resize:vertical;}
+    .f-textarea.mono{font-family:'JetBrains Mono',monospace;font-size:0.82rem;line-height:1.7;}
+    .f-select{appearance:none;cursor:pointer;}
+    .f-select option{background:#0d1117;}
+    .f-row-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;}
+    @media(max-width:480px){.f-row-2{grid-template-columns:1fr;}}
+    .f-hint{font-size:0.73rem;color:#3a4560;margin-top:5px;}
+    .tag-wrap{display:flex;flex-wrap:wrap;gap:6px;background:rgba(15,20,30,0.9);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:10px 12px;min-height:46px;cursor:text;transition:border-color .2s;}
+    .tag-wrap:focus-within{border-color:rgba(99,102,241,0.45);}
+    .tag-pill{display:inline-flex;align-items:center;gap:5px;background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.2);border-radius:6px;padding:3px 8px;font-size:0.78rem;font-weight:600;color:#818cf8;}
+    .tag-pill button{background:none;border:none;color:#818cf8;cursor:pointer;padding:0;line-height:1;font-size:14px;}
+    .tag-input-field{background:none;border:none;outline:none;color:#e8edf5;font-family:inherit;font-size:0.88rem;min-width:80px;flex:1;}
+    .tag-input-field::placeholder{color:#3a4560;}
+    .btn-submit-form{width:100%;display:flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,#6366f1,#3b82f6);border:none;border-radius:10px;padding:13px;font-size:0.92rem;font-weight:700;color:#fff;cursor:pointer;font-family:inherit;transition:opacity .15s;}
+    .btn-submit-form:disabled{opacity:.4;cursor:not-allowed;}
+    .btn-submit-form:hover:not(:disabled){opacity:.88;}
+    .f-note{font-size:0.74rem;color:#3a4560;text-align:center;margin-top:10px;line-height:1.6;}
+    .f-status{font-size:0.83rem;font-weight:600;text-align:center;padding:10px;border-radius:8px;display:none;margin-bottom:12px;}
+    .f-status.success{display:block;color:#34d399;background:rgba(52,211,153,0.08);border:1px solid rgba(52,211,153,0.2);}
+    .f-status.error{display:block;color:#f87171;background:rgba(248,113,113,0.06);border:1px solid rgba(248,113,113,0.2);}
 
-    .tmpl-card-body { padding: 22px 22px 16px; flex: 1; }
+    #t-toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);background:#111827;border-radius:100px;padding:11px 22px;font-size:0.83rem;font-weight:600;z-index:9999;opacity:0;pointer-events:none;transition:opacity .3s,transform .3s;border:1px solid transparent;}
+    #t-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 
-    .tmpl-card-meta {
-      display: flex; align-items: center; gap: 8px; margin-bottom: 12px; flex-wrap: wrap;
+    @media(max-width:1024px){.p-split{grid-template-columns:1fr;}.p-preview{position:static;max-height:none;}}
+    @media(max-width:767px){
+      .xe-nav-links,.xe-btn-beta{display:none !important;}
+      .xe-hamburger{display:flex !important;}
+      .t-hero{padding:36px 16px 20px;}
+      .t-hero-inner{flex-direction:column;align-items:flex-start;}
+      .t-how{padding:0 16px 16px;flex-direction:column;}
+      .p-controlbar{padding:12px 16px;}
+      .p-search-wrap{max-width:none;width:100%;}
+      .p-controlbar-right{margin-left:0;width:100%;justify-content:space-between;}
+      .p-main{padding:20px 16px 60px;}
     }
-    .tmpl-tag {
-      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
-      padding: 3px 10px; border-radius: 100px;
-    }
-    .tmpl-tag-type  { background: rgba(59,130,246,0.12); color: #60a5fa; border: 1px solid rgba(59,130,246,0.2); }
-    .tmpl-tag-auto  { background: rgba(139,92,246,0.12); color: #a78bfa; border: 1px solid rgba(139,92,246,0.2); }
-    .tmpl-tag-cat   { background: rgba(255,255,255,0.05); color: #9ca3af; border: 1px solid rgba(255,255,255,0.08); }
-    .tmpl-card-community { margin-left: auto; font-size: 0.68rem; color: #6b7a9a; display: flex; align-items: center; gap: 4px; }
-
-    .tmpl-card h3 { font-size: 1rem; font-weight: 700; margin: 0 0 8px; line-height: 1.3; color: #f0f4ff; }
-    .tmpl-card p  { font-size: 0.82rem; color: #8b93b0; line-height: 1.6; margin: 0 0 16px; }
-
-    /* tools used chips */
-    .tmpl-tools { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
-    .tmpl-tool-chip {
-      font-size: 0.72rem; font-weight: 600;
-      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 6px; padding: 3px 9px; color: #9ca3af;
-    }
-
-    /* card footer */
-    .tmpl-card-footer {
-      padding: 14px 22px;
-      border-top: 1px solid rgba(255,255,255,0.05);
-      display: flex; align-items: center; gap: 8px;
-    }
-    .tmpl-action-btn {
-      display: flex; align-items: center; gap: 6px;
-      background: none; border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 8px; padding: 7px 12px;
-      font-size: 0.78rem; font-weight: 600; color: #6b7a9a;
-      cursor: pointer; font-family: inherit;
-      transition: all .2s; white-space: nowrap;
-    }
-    .tmpl-action-btn:hover { border-color: rgba(59,130,246,0.3); color: #9ca3af; }
-    .tmpl-action-btn.liked { color: #f87171; border-color: rgba(248,113,113,0.3); background: rgba(248,113,113,0.06); }
-    .tmpl-action-btn.liked svg { fill: #f87171; }
-    .tmpl-action-btn svg { width: 14px; height: 14px; transition: transform .2s; }
-    .tmpl-action-btn:hover svg { transform: scale(1.2); }
-
-    .tmpl-dl-btn {
-      margin-left: auto;
-      display: flex; align-items: center; gap: 6px;
-      background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.2);
-      border-radius: 8px; padding: 7px 14px;
-      font-size: 0.78rem; font-weight: 700; color: #60a5fa;
-      cursor: pointer; font-family: inherit; text-decoration: none;
-      transition: background .2s, border-color .2s, transform .15s;
-    }
-    .tmpl-dl-btn:hover { background: rgba(59,130,246,0.2); border-color: rgba(59,130,246,0.4); transform: translateY(-1px); }
-    .tmpl-dl-btn svg { width: 13px; height: 13px; }
-
-    /* ── EMPTY STATE ── */
-    .tmpl-empty {
-      grid-column: 1/-1; text-align: center;
-      padding: 80px 24px;
-    }
-    .tmpl-empty-icon { font-size: 3rem; margin-bottom: 16px; }
-    .tmpl-empty h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 8px; }
-    .tmpl-empty p  { color: #6b7a9a; font-size: 0.9rem; }
-
-    /* ── SKELETON ── */
-    .tmpl-skel {
-      background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.06) 50%, rgba(255,255,255,0.03) 75%);
-      background-size: 200% 100%; animation: shimmer 1.4s ease infinite;
-      border-radius: 18px; height: 240px;
-    }
-    @keyframes shimmer { to { background-position: -200% 0; } }
-
-    /* ── SUBMIT MODAL ── */
-    .modal-overlay {
-      position: fixed; inset: 0; z-index: 900;
-      background: rgba(4,6,10,0.88); backdrop-filter: blur(8px);
-      display: none; align-items: center; justify-content: center;
-      padding: 20px; overflow-y: auto;
-    }
-    .modal-overlay.open { display: flex; }
-
-    .modal {
-      background: #0d1117;
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 22px; width: min(100%, 560px);
-      max-height: 90vh; overflow-y: auto;
-      box-shadow: 0 40px 100px rgba(0,0,0,0.7);
-      position: relative;
-      animation: modalIn .25s cubic-bezier(.4,0,.2,1) both;
-    }
-    @keyframes modalIn { from { opacity:0; transform:scale(0.96) translateY(10px); } to { opacity:1; transform:none; } }
-
-    .modal-header {
-      padding: 26px 28px 20px;
-      border-bottom: 1px solid rgba(255,255,255,0.07);
-      display: flex; align-items: flex-start; gap: 16px;
-    }
-    .modal-type-toggle {
-      display: flex; gap: 6px;
-      background: rgba(255,255,255,0.04); border-radius: 10px; padding: 4px;
-    }
-    .modal-type-btn {
-      padding: 7px 16px; border-radius: 8px; background: none; border: none;
-      cursor: pointer; font-family: inherit; font-size: 0.82rem; font-weight: 600;
-      color: #6b7a9a; transition: background .2s, color .2s;
-    }
-    .modal-type-btn.active { background: rgba(59,130,246,0.15); color: #60a5fa; }
-
-    .modal-close {
-      margin-left: auto; width: 32px; height: 32px; border-radius: 50%;
-      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);
-      color: #6b7a9a; cursor: pointer; flex-shrink: 0;
-      display: flex; align-items: center; justify-content: center;
-      transition: background .15s, color .15s;
-    }
-    .modal-close:hover { background: rgba(255,255,255,0.1); color: #fff; }
-
-    .modal-body { padding: 24px 28px 28px; }
-
-    .form-row { margin-bottom: 18px; }
-    .form-label {
-      display: block; font-size: 0.78rem; font-weight: 700;
-      color: #9ca3af; letter-spacing: 0.05em; text-transform: uppercase;
-      margin-bottom: 8px;
-    }
-    .form-input, .form-textarea, .form-select {
-      width: 100%; background: rgba(17,24,39,0.8);
-      border: 1px solid rgba(255,255,255,0.1); border-radius: 12px;
-      padding: 12px 16px; color: #f0f4ff; font-family: inherit;
-      font-size: 0.92rem; outline: none; transition: border-color .2s;
-      display: block;
-    }
-    .form-input:focus, .form-textarea:focus, .form-select:focus { border-color: rgba(59,130,246,0.5); }
-    .form-input::placeholder, .form-textarea::placeholder { color: #4b5a75; }
-    .form-textarea { height: 100px; resize: vertical; }
-    .form-select { appearance: none; cursor: pointer; }
-    .form-select option { background: #111827; }
-
-    .form-hint { font-size: 0.76rem; color: #4b5a75; margin-top: 6px; }
-
-    .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-    @media (max-width: 480px) { .form-row-2 { grid-template-columns: 1fr; } }
-
-    /* tools tag input */
-    .tools-tag-wrap {
-      display: flex; flex-wrap: wrap; gap: 6px;
-      background: rgba(17,24,39,0.8); border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 12px; padding: 10px 12px; min-height: 46px;
-      cursor: text; transition: border-color .2s;
-    }
-    .tools-tag-wrap:focus-within { border-color: rgba(59,130,246,0.5); }
-    .tool-tag {
-      display: inline-flex; align-items: center; gap: 5px;
-      background: rgba(59,130,246,0.12); border: 1px solid rgba(59,130,246,0.2);
-      border-radius: 6px; padding: 3px 8px;
-      font-size: 0.78rem; font-weight: 600; color: #60a5fa;
-    }
-    .tool-tag button {
-      background: none; border: none; color: #60a5fa; cursor: pointer;
-      padding: 0; line-height: 1; font-size: 14px;
-    }
-    .tag-input {
-      background: none; border: none; outline: none; color: #fff;
-      font-family: inherit; font-size: 0.88rem; min-width: 80px; flex: 1;
-    }
-    .tag-input::placeholder { color: #4b5a75; }
-
-    .modal-footer { padding: 0 28px 28px; display: flex; flex-direction: column; gap: 10px; }
-    .btn-submit-form {
-      display: flex; align-items: center; justify-content: center; gap: 8px;
-      background: linear-gradient(135deg, #3b82f6, #6366f1);
-      border: none; border-radius: 12px; padding: 14px;
-      font-size: 0.95rem; font-weight: 700; color: #fff;
-      cursor: pointer; font-family: inherit;
-      transition: opacity .15s, transform .15s;
-    }
-    .btn-submit-form:hover:not(:disabled) { opacity: .88; transform: translateY(-1px); }
-    .btn-submit-form:disabled { opacity: .4; cursor: not-allowed; }
-    .form-note { font-size: 0.76rem; color: #4b5a75; text-align: center; line-height: 1.6; }
-    .form-status { font-size: 0.85rem; font-weight: 600; text-align: center; display: none; padding: 10px; border-radius: 8px; }
-    .form-status.success { display: block; color: #34d399; background: rgba(52,211,153,0.1); border: 1px solid rgba(52,211,153,0.2); }
-    .form-status.error   { display: block; color: #f87171; background: rgba(248,113,113,0.08); border: 1px solid rgba(248,113,113,0.2); }
-
-    /* ── FOOTER ── */
-    .xe-footer { border-top: 1px solid rgba(255,255,255,0.07); padding: 40px 24px 28px; }
-    .xe-footer-inner { max-width: 1400px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
-    .xe-footer-brand { display: flex; align-items: center; gap: 10px; }
-    .xe-footer-brand img { width: 28px; height: 28px; border-radius: 6px; }
-    .xe-footer-brand span { font-weight: 700; color: #60a5fa; }
-    .xe-footer-bottom { font-size: .8rem; color: #4b5a75; }
-
-    /* ── TOAST ── */
-    #tmpl-toast {
-      position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(20px);
-      background: #111827; border: 1px solid rgba(52,211,153,0.3);
-      border-radius: 100px; padding: 12px 24px;
-      font-size: 0.85rem; font-weight: 600; color: #34d399;
-      z-index: 9999; opacity: 0;
-      transition: opacity .3s, transform .3s; pointer-events: none;
-    }
-    #tmpl-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-
-    /* ── RESPONSIVE ── */
-    @media (max-width: 767px) {
-      .xe-nav-links, .xe-btn-beta { display: none !important; }
-      .xe-hamburger { display: flex !important; }
-      .tmpl-toolbar { gap: 8px; }
-      .tmpl-sort { margin-left: 0; }
-    }
-    @media (max-width: 560px) {
-      .tmpl-tabs { width: 100%; }
-      .tmpl-tab { flex: 1; justify-content: center; }
-    }
-
-    a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
-      outline: 2px solid #3b82f6; outline-offset: 3px; border-radius: 4px;
-    }
+    a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid #6366f1;outline-offset:3px;border-radius:4px;}
   </style>
 </head>
 <body>
 
-<!-- NAV -->
 <header>
   <nav class="xe-nav" role="navigation" aria-label="Main navigation">
     <div class="xe-nav-inner">
-      <a href="index.html" class="xe-logo" aria-label="XEdge home">
-        <img src="xedge-logo.png" alt="XEdge" width="36" height="36"/>
-        <span>XEDGE</span>
-      </a>
+      <a href="index.html" class="xe-logo"><img src="xedge-logo.png" alt="XEdge" width="36" height="36"/><span>XEDGE</span></a>
       <div class="xe-nav-links">
         <a href="index.html">Home</a>
         <a href="stack.html">Stacks</a>
@@ -470,725 +251,679 @@
         <a href="Explore.html">Explore Tools</a>
         <a href="Categories.html">Categories</a>
         <a href="About.html">About</a>
+        <a href="prompts.html">Prompts</a>
       </div>
       <div class="xe-nav-right">
         <a href="Join.html" class="xe-btn-beta">Join Beta</a>
         <div id="auth-area" style="display:flex;align-items:center;"></div>
-        <button id="mobile-menu-toggle" class="xe-hamburger" aria-label="Toggle menu" aria-expanded="false">
-          <span></span><span></span><span></span>
-        </button>
+        <button id="mobile-menu-toggle" class="xe-hamburger" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
       </div>
     </div>
   </nav>
   <div id="mobileMenu" class="xe-mobile-menu">
-    <a href="index.html">Home</a>
-    <a href="stack.html">Stacks</a>
-    <a href="Templates.html">Templates</a>
-    <a href="Explore.html">Explore Tools</a>
-    <a href="Categories.html">Categories</a>
-    <a href="About.html">About</a>
-    <a href="Join.html" class="xe-mobile-cta">Join Beta</a>
+    <a href="index.html">Home</a><a href="stack.html">Stacks</a><a href="Templates.html">Templates</a>
+    <a href="Explore.html">Explore Tools</a><a href="Categories.html">Categories</a><a href="About.html">About</a>
+    <a href="prompt.html">Prompts</a><a href="Join.html" class="xe-mobile-cta">Join Beta</a>
   </div>
 </header>
 
 <div class="page-wrap">
 
   <!-- HERO -->
-  <section class="tmpl-hero">
-    <div class="tmpl-hero-eyebrow">
-      <span style="width:7px;height:7px;background:#34d399;border-radius:50%;animation:pulse 2s infinite;display:inline-block;"></span>
-      Community-built
-    </div>
-    <h1>Templates &amp; <span>Automations</span></h1>
-    <p>Copy-paste AI templates, Notion setups, and automation flows — built by founders who actually use them.</p>
-    <div class="tmpl-hero-actions">
-      <button class="btn-submit" onclick="openSubmitModal()">
-        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-        </svg>
-        Add yours
-      </button>
-      <a href="#tmpl-content" class="btn-ghost">Browse all →</a>
-    </div>
-    <div class="tmpl-stats">
-      <div class="tmpl-stat">
-        <div class="tmpl-stat-num" id="stat-total">—</div>
-        <div class="tmpl-stat-label">Templates</div>
+  <section class="t-hero">
+    <div class="t-hero-inner">
+      <div>
+        <div class="t-hero-eyebrow">Templates &amp; Automations</div>
+        <h1>Copy a template,<br/><em>download an automation</em></h1>
+        <p class="t-hero-sub">Templates are copy-paste text. Automations are ready-to-import workflow files for n8n or Make.com. Click any card to see exactly what you're getting.</p>
       </div>
-      <div class="tmpl-stat-div"></div>
-      <div class="tmpl-stat">
-        <div class="tmpl-stat-num" id="stat-downloads">—</div>
-        <div class="tmpl-stat-label">Downloads</div>
-      </div>
-      <div class="tmpl-stat-div"></div>
-      <div class="tmpl-stat">
-        <div class="tmpl-stat-num" id="stat-contributors">—</div>
-        <div class="tmpl-stat-label">Contributors</div>
+      <div class="t-hero-stats">
+        <div class="t-stat"><div class="t-stat-num" id="stat-total">—</div><div class="t-stat-label">Items</div></div>
+        <div class="t-stat-div"></div>
+        <div class="t-stat"><div class="t-stat-num" id="stat-downloads">—</div><div class="t-stat-label">Downloads</div></div>
+        <div class="t-stat-div"></div>
+        <div class="t-stat"><div class="t-stat-num" id="stat-contributors">—</div><div class="t-stat-label">Contributors</div></div>
       </div>
     </div>
   </section>
 
+  <!-- HOW IT WORKS — removes ambiguity about what to do on this page -->
+  <div class="t-how">
+    <div class="t-how-step">
+      <div class="t-how-num">1</div>
+      <div class="t-how-text"><b>Templates</b> — click a card, then "Copy content." Paste straight into Claude, ChatGPT, Notion, wherever.</div>
+    </div>
+    <div class="t-how-step">
+      <div class="t-how-num">2</div>
+      <div class="t-how-text"><b>Automations</b> — click a card, then "Download JSON." Import that file directly into n8n or Make.com — the platform badge tells you which.</div>
+    </div>
+    <div class="t-how-step">
+      <div class="t-how-num">3</div>
+      <div class="t-how-text"><b>Have your own?</b> Use "Submit" in the top bar — templates and automations both welcome, reviewed within 24h.</div>
+    </div>
+  </div>
+
+  <!-- CONTROL BAR -->
+  <div class="p-controlbar">
+    <div class="p-controlbar-inner">
+      <div class="p-search-wrap">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        <input type="search" class="p-search" id="t-search" placeholder="Search templates & automations…" autocomplete="off" aria-label="Search"/>
+      </div>
+      <div class="p-control-div"></div>
+
+      <div class="p-dropdown" id="dd-type">
+        <button class="p-dropdown-btn" onclick="toggleDropdown('dd-type')">
+          <span id="dd-type-label">Type</span>
+          <svg class="chev" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        <div class="p-dropdown-menu" id="dd-type-menu"></div>
+      </div>
+
+      <div class="p-dropdown" id="dd-category">
+        <button class="p-dropdown-btn" onclick="toggleDropdown('dd-category')">
+          <span id="dd-category-label">Category</span>
+          <svg class="chev" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        <div class="p-dropdown-menu" id="dd-category-menu"></div>
+      </div>
+
+      <div class="p-dropdown" id="dd-platform">
+        <button class="p-dropdown-btn" onclick="toggleDropdown('dd-platform')">
+          <span id="dd-platform-label">Platform</span>
+          <svg class="chev" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        <div class="p-dropdown-menu" id="dd-platform-menu"></div>
+      </div>
+
+      <div class="p-dropdown" id="dd-sort">
+        <button class="p-dropdown-btn" onclick="toggleDropdown('dd-sort')">
+          <span id="dd-sort-label">Newest</span>
+          <svg class="chev" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        <div class="p-dropdown-menu" id="dd-sort-menu"></div>
+      </div>
+
+      <button class="p-clear-btn" id="p-clear-btn" onclick="clearFilters()">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="13" height="13"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        Clear filters
+      </button>
+
+      <div class="p-controlbar-right">
+        <span class="p-result-count" id="p-result-count"></span>
+        <button class="btn-primary-sm" onclick="openSubmitModal()">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="13" height="13"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+          Submit
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- MAIN -->
-  <main class="tmpl-main" id="tmpl-content">
-
-    <!-- TAB BAR -->
-    <div class="tmpl-tabs" role="tablist">
-      <button class="tmpl-tab active" role="tab" aria-selected="true" onclick="switchTab('all', this)">
-        All
-        <span class="tmpl-tab-count" id="count-all">0</span>
-      </button>
-      <button class="tmpl-tab" role="tab" aria-selected="false" onclick="switchTab('template', this)">
-        Templates
-        <span class="tmpl-tab-count" id="count-template">0</span>
-      </button>
-      <button class="tmpl-tab" role="tab" aria-selected="false" onclick="switchTab('automation', this)">
-        Automations
-        <span class="tmpl-tab-count" id="count-automation">0</span>
-      </button>
-      <button class="tmpl-tab" role="tab" aria-selected="false" onclick="switchTab('prompt', this)">
-        Prompts
-        <span class="tmpl-tab-count" id="count-prompt">0</span>
-      </button>
-    </div>
-
-    <!-- TOOLBAR -->
-    <div class="tmpl-toolbar">
-      <div class="tmpl-search-wrap">
-        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-        </svg>
-        <input type="search" class="tmpl-search" id="tmpl-search" placeholder="Search templates…" autocomplete="off" aria-label="Search templates"/>
+  <main class="p-main">
+    <div class="p-split">
+      <div class="p-list" id="p-list">
+        <div class="p-skel"></div><div class="p-skel"></div>
+        <div class="p-skel"></div><div class="p-skel"></div>
       </div>
-      <div class="tmpl-filters" id="tmpl-filters">
-        <button class="filter-chip active" onclick="setFilter('', this)">All</button>
-        <button class="filter-chip" onclick="setFilter('Content', this)">Content</button>
-        <button class="filter-chip" onclick="setFilter('Business', this)">Business</button>
-        <button class="filter-chip" onclick="setFilter('Marketing', this)">Marketing</button>
-        <button class="filter-chip" onclick="setFilter('Dev', this)">Dev</button>
-        <button class="filter-chip" onclick="setFilter('Research', this)">Research</button>
+
+      <div class="p-preview" id="p-preview">
+        <div class="p-preview-header">
+          <div class="p-preview-dots"><div class="p-preview-dot"></div><div class="p-preview-dot"></div><div class="p-preview-dot"></div></div>
+          <div class="p-preview-title-wrap">
+            <div class="p-preview-title" id="preview-title">Nothing selected</div>
+            <div class="p-preview-sub" id="preview-sub"></div>
+          </div>
+          <div class="p-preview-actions" id="preview-actions"></div>
+        </div>
+        <div class="p-preview-body" id="preview-body">
+          <div class="p-preview-empty">
+            <div class="p-preview-empty-icon">📋</div>
+            <div class="p-preview-empty-title">Select an item to preview</div>
+            <div class="p-preview-empty-sub">Click any card on the left. Templates show copyable text — automations show setup steps and a download button.</div>
+          </div>
+        </div>
+        <div class="p-preview-footer" id="preview-footer" style="display:none;"></div>
       </div>
-      <select class="tmpl-sort" id="tmpl-sort" onchange="renderGrid()" aria-label="Sort templates">
-        <option value="newest">Newest</option>
-        <option value="popular">Most liked</option>
-        <option value="downloads">Most downloaded</option>
-      </select>
     </div>
-
-    <!-- GRID -->
-    <div class="tmpl-grid" id="tmpl-grid">
-      <!-- skeletons -->
-      <div class="tmpl-skel"></div>
-      <div class="tmpl-skel"></div>
-      <div class="tmpl-skel"></div>
-      <div class="tmpl-skel"></div>
-      <div class="tmpl-skel"></div>
-      <div class="tmpl-skel"></div>
-    </div>
-
   </main>
 
-  <!-- FOOTER -->
-  <footer class="xe-footer">
-    <div class="xe-footer-inner">
-      <div class="xe-footer-brand">
-        <img src="xedge-logo.png" alt="XEdge" width="28" height="28"/>
-        <span>XEDGE</span>
-      </div>
-      <div class="xe-footer-bottom">© 2026 XEdge. All rights reserved.</div>
-    </div>
+  <footer style="border-top:1px solid rgba(255,255,255,0.05);padding:28px 24px;text-align:center;">
+    <span style="font-size:.8rem;color:#3a4560;">© 2026 XEdge. All rights reserved.</span>
   </footer>
+</div>
 
-</div><!-- page-wrap -->
-
-<!-- ════════ SUBMIT MODAL ════════ -->
-<div class="modal-overlay" id="submit-modal" role="dialog" aria-modal="true" aria-label="Submit a template or automation">
+<!-- SUBMIT MODAL -->
+<div class="modal-overlay" id="submit-modal" role="dialog" aria-modal="true">
   <div class="modal">
     <div class="modal-header">
-      <div class="modal-type-toggle" id="modal-type-toggle">
-        <button class="modal-type-btn active" onclick="setModalType('template', this)">Template</button>
-        <button class="modal-type-btn" onclick="setModalType('automation', this)">Automation</button>
-        <button class="modal-type-btn" onclick="setModalType('prompt', this)">Prompt</button>
+      <div class="modal-type-toggle" id="modal-types">
+        <button class="modal-type-btn active" onclick="setModalType('template',this)">Template</button>
+        <button class="modal-type-btn" onclick="setModalType('automation',this)">Automation</button>
       </div>
-      <button class="modal-close" onclick="closeSubmitModal()" aria-label="Close">
-        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-        </svg>
-      </button>
+      <button class="modal-close" onclick="closeSubmitModal()"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="14" height="14"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
     </div>
-
     <div class="modal-body">
-      <div class="form-row">
-        <label class="form-label" for="f-title">Title *</label>
-        <input class="form-input" id="f-title" type="text" placeholder="e.g. Cold outreach sequence for SaaS founders" maxlength="80"/>
+      <div class="f-row">
+        <label class="f-label" for="f-title">Title *</label>
+        <input class="f-input" id="f-title" type="text" placeholder="e.g. Cold outreach sequence for SaaS founders" maxlength="80"/>
       </div>
-      <div class="form-row">
-        <label class="form-label" for="f-desc">Description *</label>
-        <textarea class="form-textarea" id="f-desc" placeholder="What does it do? Who is it for? What problem does it solve?"></textarea>
+      <div class="f-row">
+        <label class="f-label" for="f-desc">What does it do? *</label>
+        <input class="f-input" id="f-desc" type="text" placeholder="One sentence describing the outcome" maxlength="120"/>
       </div>
-      <div class="form-row-2">
-        <div class="form-row" style="margin-bottom:0">
-          <label class="form-label" for="f-category">Category *</label>
-          <select class="form-select" id="f-category">
-            <option value="">Pick a category</option>
-            <option value="Content">Content</option>
-            <option value="Business">Business</option>
-            <option value="Marketing">Marketing</option>
-            <option value="Dev">Dev</option>
-            <option value="Research">Research</option>
-            <option value="Finance">Finance</option>
-            <option value="Other">Other</option>
+
+      <div class="f-row-2" id="platform-row" style="display:none;">
+        <div>
+          <label class="f-label" for="f-platform">Platform *</label>
+          <select class="f-select" id="f-platform">
+            <option value="n8n">n8n</option>
+            <option value="make">Make.com</option>
+            <option value="zapier">Zapier</option>
           </select>
         </div>
-        <div class="form-row" style="margin-bottom:0">
-          <label class="form-label" for="f-author">Your name</label>
-          <input class="form-input" id="f-author" type="text" placeholder="e.g. Harsha" maxlength="40"/>
+        <div>
+          <label class="f-label" for="f-cat-auto">Category *</label>
+          <select class="f-select" id="f-cat-auto">
+            <option value="">Pick one</option>
+            <option>Content</option><option>Business</option><option>Marketing</option>
+            <option>Dev</option><option>Research</option><option>Other</option>
+          </select>
         </div>
       </div>
 
-      <div class="form-row" style="margin-top:18px;">
-        <label class="form-label">Tools used</label>
-        <div class="tools-tag-wrap" id="tools-tag-wrap" onclick="document.getElementById('tag-input').focus()">
-          <input class="tag-input" id="tag-input" type="text" placeholder="Type a tool name and press Enter…" autocomplete="off"/>
+      <div class="f-row" id="content-row">
+        <label class="f-label" for="f-content">Content / steps *</label>
+        <textarea class="f-textarea mono" id="f-content" placeholder="Paste the template content here. Use [brackets] for fill-in variables."></textarea>
+        <p class="f-hint" id="content-hint">Wrap fillable parts in [square brackets] — e.g. [your product name]</p>
+      </div>
+
+      <div class="f-row-2" id="cat-template-row">
+        <div>
+          <label class="f-label" for="f-cat">Category *</label>
+          <select class="f-select" id="f-cat">
+            <option value="">Pick one</option>
+            <option>Content</option><option>Business</option><option>Marketing</option>
+            <option>Dev</option><option>Research</option><option>Other</option>
+          </select>
         </div>
-        <p class="form-hint">Press Enter or comma after each tool name</p>
+        <div>
+          <label class="f-label" for="f-author">Your name</label>
+          <input class="f-input" id="f-author" type="text" placeholder="e.g. Harsha" maxlength="40"/>
+        </div>
       </div>
 
-      <div class="form-row" id="f-content-wrap">
-        <label class="form-label" for="f-content">Content / instructions *</label>
-        <textarea class="form-textarea" id="f-content" style="height:130px;" placeholder="Paste your template, prompt, or automation steps here. Markdown is fine."></textarea>
+      <div class="f-row" id="author-auto-row" style="display:none;">
+        <label class="f-label" for="f-author-auto">Your name</label>
+        <input class="f-input" id="f-author-auto" type="text" placeholder="e.g. Harsha" maxlength="40"/>
       </div>
 
-      <div class="form-row">
-        <label class="form-label" for="f-link">Link (optional)</label>
-        <input class="form-input" id="f-link" type="url" placeholder="Notion page, GitHub repo, video walkthrough, etc."/>
-        <p class="form-hint">Where can people get the full version?</p>
+      <div class="f-row">
+        <label class="f-label">Tools used</label>
+        <div class="tag-wrap" id="tag-wrap" onclick="document.getElementById('tag-field').focus()">
+          <input class="tag-input-field" id="tag-field" type="text" placeholder="Type a tool name, press Enter…" autocomplete="off"/>
+        </div>
+      </div>
+      <div class="f-row">
+        <label class="f-label" for="f-link">Link (optional)</label>
+        <input class="f-input" id="f-link" type="url" placeholder="Notion page, GitHub repo, video walkthrough…"/>
       </div>
     </div>
-
     <div class="modal-footer">
-      <div id="form-status" class="form-status"></div>
-      <button class="btn-submit-form" id="form-submit-btn" onclick="submitTemplate()">
-        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-        </svg>
-        <span id="form-submit-label">Submit for review</span>
+      <div class="f-status" id="f-status"></div>
+      <button class="btn-submit-form" id="f-submit-btn" onclick="submitItem()">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="15" height="15"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+        <span id="f-submit-label">Submit for review</span>
       </button>
-      <p class="form-note">All submissions are reviewed before going live. Spam gets you banned permanently.</p>
+      <p class="f-note">Reviewed before going live. Usually within 24 hours.</p>
     </div>
   </div>
 </div>
 
-<!-- TOAST -->
-<div id="tmpl-toast"></div>
-
-<style>
-  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)} }
-</style>
+<div id="t-toast"></div>
 
 <script>
-(function() {
+(function(){
   "use strict";
+  const SB_URL="https://szouczgiuhedynyshpbb.supabase.co";
+  const SB_KEY="sb_publishable_JEvVHrobhuPoU6Z5xkMr2Q_pw8tvzHP";
+  const LIKED_KEY="xedge_tmpl_liked_v3";
 
-  /* ── CONFIG ── */
-  const SB_URL  = "https://szouczgiuhedynyshpbb.supabase.co";
-  const SB_KEY  = "sb_publishable_JEvVHrobhuPoU6Z5xkMr2Q_pw8tvzHP";
-  const LIKED_KEY = "xedge_tmpl_liked_v1";
+  let allItems=[], activeType="All", activeCat="All", activePlatform="All", activeSort="newest", searchTerm="", selectedId=null;
+  let modalType="template", tagTools=[];
 
-  /* ── STATE ── */
-  let allItems = [];
-  let activeTab = "all";
-  let activeFilter = "";
-  let searchTerm = "";
-  let modalType = "template";
-  let tagTools = [];
-
-  /* ── SUPABASE CALL ── */
-  async function sbFetch(path, opts = {}) {
-    const res = await fetch(SB_URL + path, {
-      ...opts,
-      headers: {
-        "apikey": SB_KEY,
-        "Authorization": "Bearer " + SB_KEY,
-        "Content-Type": "application/json",
-        "Prefer": opts.prefer || "return=representation",
-        ...(opts.headers || {})
-      }
-    });
-    if (!res.ok) {
-      const txt = await res.text().catch(() => "");
-      throw new Error("Supabase " + res.status + ": " + txt);
-    }
-    const text = await res.text();
-    return text ? JSON.parse(text) : null;
+  async function sbFetch(path,opts={}){
+    const res=await fetch(SB_URL+path,{...opts,headers:{apikey:SB_KEY,Authorization:"Bearer "+SB_KEY,"Content-Type":"application/json",Prefer:opts.prefer||"return=representation",...(opts.headers||{})}});
+    const t=await res.text(); return t?JSON.parse(t):null;
   }
 
-  /* ── LOAD ITEMS ── */
-  async function loadItems() {
-    try {
-      const data = await sbFetch(
-        "/rest/v1/templates?select=*&order=created_at.desc&limit=100"
-      );
-      allItems = Array.isArray(data) ? data : [];
-    } catch (err) {
-      console.warn("Could not load from Supabase:", err);
-      // Seed with demo data so page isn't empty on first deploy
-      allItems = DEMO_ITEMS;
-    }
-    updateCounts();
-    renderGrid();
-    renderStats();
-  }
-
-  /* ── DEMO SEED DATA (shown until real submissions exist) ── */
-  const DEMO_ITEMS = [
+  /* ── DEMO DATA — 4 real downloadable automation JSONs + 4 templates ── */
+  const DEMO=[
     {
-      id: "demo-1", type: "template", category: "Content",
-      title: "LinkedIn Thought-Leader Post Formula",
-      description: "Emotional story opener → insight → CTA. The exact format behind XEdge's 2,400-impression posts.",
-      tools: ["Claude AI", "Typefully"],
-      content: "Hook: [1-line emotional moment]\nContext: [2-3 lines of background]\nInsight: [The lesson/pattern]\nCTA: [soft ask — link in comments]",
-      link: "", author: "Harsha", likes: 14, downloads: 38,
-      created_at: new Date(Date.now() - 86400000 * 2).toISOString(), is_community: false
+      id:"a1", type:"automation", category:"Research", platform:"n8n", icon:"📡",
+      title:"Competitor RSS digest → weekly email",
+      description:"Pulls competitor blog RSS feeds, runs a Claude summary, and emails you every Monday morning.",
+      tools:["n8n","Claude AI","SMTP"],
+      setupSteps:"1. Replace the RSS feed URL with your competitors' blog feeds\n2. Add your Anthropic API key as an HTTP Header Auth credential\n3. Add SMTP credentials for the email step\n4. In n8n: Workflows → Import from File → select the downloaded JSON",
+      fileName:"n8n-competitor-rss-digest.json",
+      likes:14, downloads:38, author:"Harsha", created_at:new Date(Date.now()-86400000*2).toISOString()
     },
     {
-      id: "demo-2", type: "automation", category: "Marketing",
-      title: "New blog post → LinkedIn + Threads auto-share",
-      description: "Zapier workflow that triggers when a new Beehiiv issue goes live and posts summaries to LinkedIn and Threads automatically.",
-      tools: ["Zapier", "Beehiiv", "Claude AI"],
-      content: "Trigger: Beehiiv new post\nStep 1: Claude AI — summarise to 150 words\nStep 2: Post to LinkedIn via LinkedIn API\nStep 3: Post to Threads via custom webhook",
-      link: "", author: "Harsha", likes: 9, downloads: 22,
-      created_at: new Date(Date.now() - 86400000 * 5).toISOString(), is_community: false
+      id:"a2", type:"automation", category:"Marketing", platform:"n8n", icon:"📣",
+      title:"New newsletter post → auto-share to LinkedIn",
+      description:"Watches your newsletter RSS feed, rewrites new posts for LinkedIn with Claude, and posts automatically.",
+      tools:["n8n","Claude AI","LinkedIn API"],
+      setupSteps:"1. Set NEWSLETTER_RSS_URL as an n8n environment variable (your Beehiiv/Substack feed)\n2. Add your Anthropic API key as a credential\n3. Connect your LinkedIn account via OAuth2\n4. Import the JSON into n8n and activate the workflow",
+      fileName:"n8n-newsletter-to-linkedin.json",
+      likes:11, downloads:29, author:"Harsha", created_at:new Date(Date.now()-86400000*4).toISOString()
     },
     {
-      id: "demo-3", type: "prompt", category: "Business",
-      title: "Cold DM that gets replies (non-cringe version)",
-      description: "A short, human-sounding DM template for reaching out to potential customers or collaborators on LinkedIn.",
-      tools: ["Claude AI"],
-      content: "Hey [Name], [1 genuine specific thing about their work]. I'm building [XEdge — 1 line]. Curious if you've run into [specific problem]. No pitch — just exploring if it's a real thing for people like you.",
-      link: "", author: "Harsha", likes: 21, downloads: 55,
-      created_at: new Date(Date.now() - 86400000 * 1).toISOString(), is_community: false
+      id:"a3", type:"automation", category:"Business", platform:"make", icon:"🎯",
+      title:"Cold lead enrichment → Claude DM draft",
+      description:"Enriches a new lead's profile data and drafts a personalized cold DM with Claude — saved to a sheet for you to review before sending.",
+      tools:["Make.com","Claude AI","Google Sheets"],
+      setupSteps:"1. Create a webhook in Make.com and connect it to your lead form\n2. (Optional) Connect People Data Labs or Clearbit for enrichment\n3. Add your Anthropic API key as a Make.com connection\n4. Connect Google Sheets — drafts land there for review, this automation never auto-sends",
+      fileName:"make-cold-lead-dm-draft.json",
+      likes:9, downloads:21, author:"Harsha", created_at:new Date(Date.now()-86400000*6).toISOString()
     },
     {
-      id: "demo-4", type: "template", category: "Dev",
-      title: "Supabase row-level security starter (SaaS)",
-      description: "Copy-paste RLS policies for a multi-tenant SaaS with users, teams, and data isolation.",
-      tools: ["Supabase"],
-      content: "-- users can only see their own rows\nCREATE POLICY \"own rows\" ON public.items\n  FOR ALL USING (auth.uid() = user_id);",
-      link: "", author: "Harsha", likes: 7, downloads: 31,
-      created_at: new Date(Date.now() - 86400000 * 7).toISOString(), is_community: false
+      id:"a4", type:"automation", category:"Business", platform:"make", icon:"💰",
+      title:"Gumroad sale → Brevo welcome sequence",
+      description:"Triggers instantly on every Gumroad sale — adds the buyer to your Brevo list, sends a welcome email, and logs revenue to a sheet.",
+      tools:["Make.com","Gumroad","Brevo","Google Sheets"],
+      setupSteps:"1. Connect your Gumroad account in Make.com\n2. Connect Brevo and set your buyers list ID\n3. Create a welcome email template in Brevo first, then add its template ID\n4. Connect Google Sheets for a simple running revenue log",
+      fileName:"make-gumroad-to-brevo.json",
+      likes:16, downloads:44, author:"Harsha", created_at:new Date(Date.now()-86400000*1).toISOString()
     },
     {
-      id: "demo-5", type: "automation", category: "Research",
-      title: "Competitor monitoring — weekly digest to email",
-      description: "Make.com flow that scrapes competitor blog RSS feeds, runs a Claude summary, and emails you every Monday morning.",
-      tools: ["Make.com", "Claude AI", "Brevo"],
-      content: "1. Schedule: Every Monday 8AM\n2. RSS module: pull from 3 competitor blogs\n3. Claude: summarise key points and flag anything new\n4. Brevo: send digest email to yourself",
-      link: "", author: "Harsha", likes: 12, downloads: 27,
-      created_at: new Date(Date.now() - 86400000 * 3).toISOString(), is_community: false
+      id:"t1", type:"template", category:"Content", platform:null, icon:"✍️",
+      title:"LinkedIn thought-leader post formula",
+      description:"The exact hook → insight → CTA structure behind XEdge's 2,400-impression posts.",
+      tools:["Claude AI","Typefully"],
+      content:"Hook: [1-line emotional moment — no 'I' opener]\n\nContext:\n[2-3 lines of background — what led to this moment]\n\nInsight:\n[The pattern or lesson. Be specific, not generic.]\n\nCTA:\n[Soft ask — link in comments, not in the post]",
+      likes:14, downloads:38, author:"Harsha", created_at:new Date(Date.now()-86400000*2).toISOString()
     },
     {
-      id: "demo-6", type: "prompt", category: "Marketing",
-      title: "Landing page copy from scratch — Claude prompt",
-      description: "One prompt that generates a complete hero section, 3 feature blocks, and a CTA for any product.",
-      tools: ["Claude AI"],
-      content: "You are a conversion copywriter. Write landing page copy for: [product description]. Include: hero headline + subheading, 3 benefit sections (problem → solution format), and a closing CTA. Tone: direct, no hype, builder audience.",
-      link: "", author: "Harsha", likes: 18, downloads: 63,
-      created_at: new Date(Date.now() - 86400000 * 0).toISOString(), is_community: false
+      id:"t2", type:"template", category:"Business", platform:null, icon:"💼",
+      title:"Cold DM that gets replies (non-cringe)",
+      description:"A short, human-sounding outreach message for LinkedIn or Twitter. Under 4 lines. No pitch.",
+      tools:["Claude AI"],
+      content:"Hey [Name],\n\n[1 genuine specific observation about their work — not 'love your content'].\n\nI'm building [XEdge — 1 sentence, no hype]. Curious if you've run into [specific problem].\n\nNo pitch — just exploring if it's real for people like you.",
+      likes:21, downloads:55, author:"Harsha", created_at:new Date(Date.now()-86400000*1).toISOString()
+    },
+    {
+      id:"t3", type:"template", category:"Dev", platform:null, icon:"🔧",
+      title:"Supabase RLS starter — multi-tenant SaaS",
+      description:"Copy-paste row-level security policies for a multi-tenant app. Users only see their own rows.",
+      tools:["Supabase"],
+      content:"-- 1. Users can only read/write their own rows\nCREATE POLICY \"own_rows\" ON public.items\n  FOR ALL\n  USING (auth.uid() = user_id)\n  WITH CHECK (auth.uid() = user_id);\n\n-- 2. Enable RLS on the table\nALTER TABLE public.items ENABLE ROW LEVEL SECURITY;",
+      likes:7, downloads:31, author:"Harsha", created_at:new Date(Date.now()-86400000*7).toISOString()
+    },
+    {
+      id:"t4", type:"template", category:"Marketing", platform:null, icon:"📣",
+      title:"Landing page copy from scratch",
+      description:"Full hero section — headline, subheading, 3 benefit blocks, and CTA — for any product.",
+      tools:["Claude AI"],
+      content:"You are a conversion copywriter. Write landing page copy for:\n\nProduct: [product name]\nWhat it does: [1 sentence — what and for whom]\nMain outcome: [e.g. Save 3 hours per week]\nTarget user: [e.g. Solo founders with no marketing background]\nTone: [Direct and confident / Friendly]\n\nDeliver:\n1. Three headline options (under 10 words each)\n2. One subheading (1-2 sentences, outcome-focused)\n3. Three feature/benefit blocks (problem → solution format)\n4. Two CTA button options\n\nNo hype words. No 'revolutionary'. Write like a smart human.",
+      likes:18, downloads:63, author:"Harsha", created_at:new Date(Date.now()-86400000*0).toISOString()
     }
   ];
 
-  /* ── RENDER STATS ── */
-  function renderStats() {
-    const total = allItems.length;
-    const downloads = allItems.reduce((s, i) => s + (i.downloads || 0), 0);
-    const contributors = new Set(allItems.map(i => i.author).filter(Boolean)).size;
-    animateNum("stat-total", total);
-    animateNum("stat-downloads", downloads);
-    animateNum("stat-contributors", contributors);
+  async function load(){
+    try{
+      const data=await sbFetch("/rest/v1/templates?select=*&status=eq.approved&order=created_at.desc&limit=100");
+      allItems=Array.isArray(data)&&data.length?data:DEMO;
+    }catch{ allItems=DEMO; }
+    buildDropdowns();
+    renderList();
+    renderStats();
   }
 
-  function animateNum(id, target) {
-    const el = document.getElementById(id);
-    if (!el) return;
-    let start = 0;
-    const dur = 900;
-    const t0 = performance.now();
-    const tick = (now) => {
-      const p = Math.min((now - t0) / dur, 1);
-      const ease = 1 - Math.pow(1 - p, 3);
-      el.textContent = Math.floor(ease * target);
-      if (p < 1) requestAnimationFrame(tick);
-      else el.textContent = target;
-    };
+  function renderStats(){
+    const dl=allItems.reduce((s,i)=>s+(i.downloads||0),0);
+    const contributors=new Set(allItems.map(i=>i.author).filter(Boolean)).size;
+    anim("stat-total",allItems.length); anim("stat-downloads",dl); anim("stat-contributors",contributors);
+  }
+  function anim(id,target){
+    const el=document.getElementById(id); if(!el)return;
+    const t0=performance.now();
+    const tick=now=>{const p=Math.min((now-t0)/800,1);el.textContent=Math.floor((1-Math.pow(1-p,3))*target);if(p<1)requestAnimationFrame(tick);else el.textContent=target;};
     requestAnimationFrame(tick);
   }
 
-  /* ── UPDATE TAB COUNTS ── */
-  function updateCounts() {
-    const counts = { all: allItems.length, template: 0, automation: 0, prompt: 0 };
-    allItems.forEach(i => { if (counts[i.type] !== undefined) counts[i.type]++; });
-    Object.entries(counts).forEach(([k, v]) => {
-      const el = document.getElementById("count-" + k);
-      if (el) el.textContent = v;
-    });
+  function buildDropdowns(){
+    const types=["All","template","automation"];
+    const typeLabels={All:"All",template:"Templates",automation:"Automations"};
+    const typeCounts={template:0,automation:0};
+    allItems.forEach(i=>{if(typeCounts[i.type]!==undefined)typeCounts[i.type]++;});
+    document.getElementById("dd-type-menu").innerHTML=types.map(t=>
+      `<button class="p-dropdown-item ${t===activeType?"active":""}" onclick="setType('${t}')">${typeLabels[t]}<span class="p-dropdown-item-count">${t==="All"?allItems.length:typeCounts[t]}</span></button>`
+    ).join("");
+
+    const cats=["All",...new Set(allItems.map(i=>i.category))];
+    const catCounts={}; allItems.forEach(i=>{catCounts[i.category]=(catCounts[i.category]||0)+1;});
+    document.getElementById("dd-category-menu").innerHTML=cats.map(c=>
+      `<button class="p-dropdown-item ${c===activeCat?"active":""}" onclick="setCategory('${c}')">${c}<span class="p-dropdown-item-count">${c==="All"?allItems.length:(catCounts[c]||0)}</span></button>`
+    ).join("");
+
+    const platforms=["All","n8n","make","zapier"];
+    const platformLabels={All:"All",n8n:"n8n",make:"Make.com",zapier:"Zapier"};
+    document.getElementById("dd-platform-menu").innerHTML=platforms.map(p=>
+      `<button class="p-dropdown-item ${p===activePlatform?"active":""}" onclick="setPlatform('${p}')">${platformLabels[p]}</button>`
+    ).join("");
+
+    const sorts=[["newest","Newest"],["popular","Most liked"],["downloads","Most downloaded"]];
+    document.getElementById("dd-sort-menu").innerHTML=sorts.map(([v,l])=>
+      `<button class="p-dropdown-item ${v===activeSort?"active":""}" onclick="setSort('${v}')">${l}</button>`
+    ).join("");
+
+    updateLabels();
+  }
+  function updateLabels(){
+    const typeLabels={All:"Type",template:"Templates",automation:"Automations"};
+    document.getElementById("dd-type-label").textContent=typeLabels[activeType];
+    document.getElementById("dd-type").querySelector(".p-dropdown-btn").classList.toggle("has-filter",activeType!=="All");
+
+    document.getElementById("dd-category-label").textContent=activeCat==="All"?"Category":activeCat;
+    document.getElementById("dd-category").querySelector(".p-dropdown-btn").classList.toggle("has-filter",activeCat!=="All");
+
+    const platformLabels={All:"Platform",n8n:"n8n",make:"Make.com",zapier:"Zapier"};
+    document.getElementById("dd-platform-label").textContent=platformLabels[activePlatform];
+    document.getElementById("dd-platform").querySelector(".p-dropdown-btn").classList.toggle("has-filter",activePlatform!=="All");
+
+    const sortLabels={newest:"Newest",popular:"Most liked",downloads:"Most downloaded"};
+    document.getElementById("dd-sort-label").textContent=sortLabels[activeSort];
+
+    document.getElementById("p-clear-btn").classList.toggle("show", activeType!=="All"||activeCat!=="All"||activePlatform!=="All"||searchTerm!=="");
   }
 
-  /* ── FILTER + SORT ── */
-  function getFiltered() {
-    let items = allItems.slice();
-    if (activeTab !== "all") items = items.filter(i => i.type === activeTab);
-    if (activeFilter) items = items.filter(i => i.category === activeFilter);
-    if (searchTerm) {
-      const t = searchTerm.toLowerCase();
-      items = items.filter(i =>
-        (i.title || "").toLowerCase().includes(t) ||
-        (i.description || "").toLowerCase().includes(t) ||
-        (i.tools || []).some(tl => tl.toLowerCase().includes(t))
-      );
+  window.toggleDropdown=function(id){
+    const isOpen=document.getElementById(id).classList.contains("open");
+    document.querySelectorAll(".p-dropdown").forEach(d=>d.classList.remove("open"));
+    if(!isOpen) document.getElementById(id).classList.add("open");
+  };
+  document.addEventListener("click",e=>{ if(!e.target.closest(".p-dropdown")) document.querySelectorAll(".p-dropdown").forEach(d=>d.classList.remove("open")); });
+
+  window.setType=function(t){ activeType=t; selectedId=null; buildDropdowns(); renderList(); resetPreview(); closeAll(); };
+  window.setCategory=function(c){ activeCat=c; selectedId=null; buildDropdowns(); renderList(); resetPreview(); closeAll(); };
+  window.setPlatform=function(p){ activePlatform=p; selectedId=null; buildDropdowns(); renderList(); resetPreview(); closeAll(); };
+  window.setSort=function(s){ activeSort=s; buildDropdowns(); renderList(); closeAll(); };
+  function closeAll(){ document.querySelectorAll(".p-dropdown").forEach(d=>d.classList.remove("open")); }
+  window.clearFilters=function(){
+    activeType="All"; activeCat="All"; activePlatform="All"; searchTerm="";
+    document.getElementById("t-search").value="";
+    selectedId=null; buildDropdowns(); renderList(); resetPreview();
+  };
+
+  function getFiltered(){
+    let items=allItems.slice();
+    if(activeType!=="All") items=items.filter(i=>i.type===activeType);
+    if(activeCat!=="All") items=items.filter(i=>i.category===activeCat);
+    if(activePlatform!=="All") items=items.filter(i=>i.platform===activePlatform);
+    if(searchTerm){
+      const t=searchTerm.toLowerCase();
+      items=items.filter(i=>(i.title||"").toLowerCase().includes(t)||(i.description||"").toLowerCase().includes(t)||(i.tools||[]).some(tl=>tl.toLowerCase().includes(t)));
     }
-    const sort = document.getElementById("tmpl-sort")?.value || "newest";
-    if (sort === "popular")   items.sort((a, b) => (b.likes || 0) - (a.likes || 0));
-    if (sort === "downloads") items.sort((a, b) => (b.downloads || 0) - (a.downloads || 0));
-    if (sort === "newest")    items.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    if(activeSort==="popular") items.sort((a,b)=>(b.likes||0)-(a.likes||0));
+    if(activeSort==="downloads") items.sort((a,b)=>(b.downloads||0)-(a.downloads||0));
+    if(activeSort==="newest") items.sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
     return items;
   }
 
-  /* ── RENDER GRID ── */
-  function renderGrid() {
-    const grid = document.getElementById("tmpl-grid");
-    if (!grid) return;
-    const items = getFiltered();
-    if (!items.length) {
-      grid.innerHTML = `<div class="tmpl-empty">
-        <div class="tmpl-empty-icon">🔍</div>
-        <h3>Nothing here yet</h3>
-        <p>Be the first to submit something in this category.</p>
-      </div>`;
+  function renderList(){
+    const list=document.getElementById("p-list");
+    const items=getFiltered();
+    document.getElementById("p-result-count").textContent=items.length+" item"+(items.length!==1?"s":"");
+    const liked=getLiked();
+    if(!items.length){
+      list.innerHTML=`<div class="p-empty"><div class="p-empty-icon">🔍</div><h3>Nothing here yet</h3><p>Try a different filter or <button onclick="openSubmitModal()" style="background:none;border:none;color:#818cf8;cursor:pointer;font-family:inherit;font-size:inherit;padding:0;text-decoration:underline;">submit one</button>.</p></div>`;
       return;
     }
-    const liked = getLiked();
-    grid.innerHTML = items.map((item, idx) => buildCard(item, liked, idx)).join("");
+    list.innerHTML=items.map((item,i)=>buildCard(item,liked,i)).join("");
   }
 
-  /* ── BUILD CARD ── */
-  function buildCard(item, liked, idx) {
-    const bandClass = item.type === "automation" ? "automation" : item.type === "prompt" ? "prompt" : "";
-    const tagClass  = item.type === "automation" ? "tmpl-tag-auto" : "tmpl-tag-type";
-    const typeLabel = item.type === "automation" ? "Automation" : item.type === "prompt" ? "Prompt" : "Template";
-    const tools = (item.tools || []).slice(0, 4).map(t =>
-      `<span class="tmpl-tool-chip">${esc(t)}</span>`
-    ).join("");
-    const isLiked = liked.has(item.id);
-    const delay = Math.min(idx * 0.04, 0.3);
-    const community = item.is_community ? `<span class="tmpl-card-community">
-      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="11" height="11"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0"/></svg>
-      Community
-    </span>` : "";
+  function platformBadge(platform){
+    if(!platform) return "";
+    const labels={n8n:"n8n",make:"Make.com",zapier:"Zapier"};
+    return `<span class="p-tag-platform ${platform}">${labels[platform]||platform}</span>`;
+  }
 
-    return `<article class="tmpl-card" style="animation-delay:${delay}s" data-id="${esc(item.id)}">
-      <div class="tmpl-card-band ${bandClass}"></div>
-      <div class="tmpl-card-body">
-        <div class="tmpl-card-meta">
-          <span class="tmpl-tag ${tagClass}">${typeLabel}</span>
-          <span class="tmpl-tag tmpl-tag-cat">${esc(item.category || "")}</span>
-          ${community}
+  function buildCard(item,liked,idx){
+    const isLiked=liked.has(item.id), isSelected=item.id===selectedId, delay=Math.min(idx*0.04,0.25);
+    const bandClass=item.type==="automation"?"automation":"template";
+    const tagClass=item.type==="automation"?"p-tag-auto":"p-tag-type";
+    const typeLabel=item.type==="automation"?"Automation":"Template";
+    const tools=(item.tools||[]).slice(0,3).map(t=>`<span class="p-tool-chip">${esc(t)}</span>`).join("");
+    return `<article class="p-card ${isSelected?"selected":""}" style="animation-delay:${delay}s" onclick="selectItem('${item.id}')" data-id="${item.id}" role="button" tabindex="0" onkeydown="if(event.key==='Enter')selectItem('${item.id}')">
+      <div class="p-card-band ${bandClass}"></div>
+      <div class="p-card-body">
+        <div class="p-card-top">
+          <div class="p-card-icon">${item.icon||"📋"}</div>
+          <div class="p-card-meta">
+            <div class="p-card-title">${esc(item.title)}</div>
+            <div class="p-card-tags">
+              <span class="p-tag ${tagClass}">${typeLabel}</span>
+              ${platformBadge(item.platform)}
+              <span class="p-tag p-tag-cat">${esc(item.category||"")}</span>
+            </div>
+          </div>
         </div>
-        <h3>${esc(item.title)}</h3>
-        <p>${esc(item.description || "").slice(0, 120)}${(item.description || "").length > 120 ? "…" : ""}</p>
-        ${tools ? `<div class="tmpl-tools">${tools}</div>` : ""}
+        <div class="p-card-desc">${esc(item.description||"")}</div>
+        ${tools?`<div class="p-card-tools">${tools}</div>`:""}
       </div>
-      <div class="tmpl-card-footer">
-        <button class="tmpl-action-btn ${isLiked ? "liked" : ""}" onclick="toggleLike('${esc(item.id)}', this)" aria-label="Like" title="Like">
-          <svg fill="${isLiked ? "currentColor" : "none"}" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
-          </svg>
-          <span class="like-count">${item.likes || 0}</span>
+      <div class="p-card-footer">
+        <button class="p-card-action ${isLiked?"liked":""}" onclick="event.stopPropagation();toggleLike('${item.id}',this)" aria-label="Like">
+          <svg fill="${isLiked?"currentColor":"none"}" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+          <span class="lc">${item.likes||0}</span>
         </button>
-        <button class="tmpl-action-btn" onclick="trackCopy('${esc(item.id)}', this)" aria-label="Copy" title="Copy content">
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
-          </svg>
-          Copy
+        <button class="p-card-action" aria-label="Downloads">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+          ${item.downloads||0}
         </button>
-        ${item.link
-          ? `<a class="tmpl-dl-btn" href="${esc(item.link)}" target="_blank" rel="noopener" onclick="trackDownload('${esc(item.id)}', this)">
-              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
-              Open
-            </a>`
-          : `<button class="tmpl-dl-btn" onclick="trackDownload('${esc(item.id)}', this)">
-              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-              <span class="dl-count">${item.downloads || 0}</span>
-            </button>`
-        }
+        <button class="p-card-copy-btn" onclick="event.stopPropagation();quickAction('${item.id}')">
+          ${item.type==="automation"
+            ? `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg> Download`
+            : `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg> Copy`
+          }
+        </button>
       </div>
     </article>`;
   }
 
-  function esc(str) {
-    return String(str || "").replace(/[&<>"']/g, c =>
-      ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[c]
-    );
-  }
+  window.selectItem=function(id){
+    selectedId=id;
+    const item=allItems.find(x=>x.id===id); if(!item)return;
+    document.querySelectorAll(".p-card").forEach(c=>c.classList.toggle("selected",c.dataset.id===id));
 
-  /* ── LIKES ── */
-  function getLiked() {
-    try { return new Set(JSON.parse(localStorage.getItem(LIKED_KEY) || "[]")); }
-    catch { return new Set(); }
-  }
-  function saveLiked(set) {
-    localStorage.setItem(LIKED_KEY, JSON.stringify([...set]));
-  }
+    const typeLabel=item.type==="automation"?"Automation":"Template";
+    const platLabel=item.platform?" · "+({n8n:"n8n",make:"Make.com",zapier:"Zapier"}[item.platform]||item.platform):"";
+    document.getElementById("preview-title").textContent=item.title;
+    document.getElementById("preview-sub").textContent=typeLabel+platLabel+" · "+(item.category||"");
+    document.getElementById("p-preview").classList.add("has-content");
 
-  window.toggleLike = async function(id, btn) {
-    const liked = getLiked();
-    const isLiked = liked.has(id);
-    const countEl = btn.querySelector(".like-count");
-    const item = allItems.find(i => i.id === id);
-    if (!item) return;
-
-    if (isLiked) {
-      liked.delete(id);
-      item.likes = Math.max(0, (item.likes || 0) - 1);
-      btn.classList.remove("liked");
-      btn.querySelector("svg").setAttribute("fill", "none");
+    const actions=document.getElementById("preview-actions");
+    if(item.type==="automation"){
+      actions.innerHTML=`<button class="p-preview-dl-btn" onclick="downloadAutomation('${item.id}')">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+        Download JSON
+      </button>`;
     } else {
-      liked.add(id);
-      item.likes = (item.likes || 0) + 1;
-      btn.classList.add("liked");
-      btn.querySelector("svg").setAttribute("fill", "currentColor");
+      actions.innerHTML=`<button class="p-preview-copy-btn" onclick="copyContent('${item.id}')">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+        Copy
+      </button>`;
     }
-    if (countEl) countEl.textContent = item.likes;
-    saveLiked(liked);
 
-    // Persist to Supabase (fire and forget, demo items fail silently)
-    if (!id.startsWith("demo-")) {
-      try {
-        await sbFetch(`/rest/v1/templates?id=eq.${id}`, {
-          method: "PATCH",
-          prefer: "return=minimal",
-          body: JSON.stringify({ likes: item.likes })
-        });
-      } catch (e) { /* silent */ }
+    const toolsHtml=(item.tools||[]).length
+      ? `<div class="p-detail-section"><div class="p-detail-label">Tools used</div><div class="p-detail-tools">${(item.tools||[]).map(t=>`<div class="p-detail-tool">⚡ ${esc(t)}</div>`).join("")}</div></div>`
+      : "";
+
+    let bodyHtml=toolsHtml;
+    if(item.type==="automation"){
+      bodyHtml+=`<div class="p-setup-box"><b>Setup steps:</b><br/>${esc(item.setupSteps||"").replace(/\n/g,"<br/>")}</div>`;
+      bodyHtml+=`<div class="p-detail-label">What's inside the file</div><div class="p-content-text">${esc(item.fileName||"workflow.json")} — a ready-to-import ${item.platform==="n8n"?"n8n":"Make.com"} workflow. Click "Download JSON" above, then import it directly in your ${item.platform==="n8n"?"n8n":"Make.com"} dashboard.</div>`;
+    } else {
+      bodyHtml+=`<div class="p-content-text">${highlightContent(item.content||item.description||"")}</div>`;
     }
+    const date=item.created_at?new Date(item.created_at).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}):"";
+    bodyHtml+=`<div style="margin-top:16px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.05);font-size:0.74rem;color:#3a4560;">By ${esc(item.author||"Anonymous")} · ${date}</div>`;
+
+    document.getElementById("preview-body").innerHTML=bodyHtml;
+    document.getElementById("preview-footer").style.display="none";
   };
 
-  /* ── COPY ── */
-  window.trackCopy = async function(id, btn) {
-    const item = allItems.find(i => i.id === id);
-    if (!item) return;
-    const text = item.content || item.description || item.title;
-    try {
-      await navigator.clipboard.writeText(text);
-      const orig = btn.innerHTML;
-      btn.innerHTML = `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="14" height="14"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Copied!`;
-      btn.style.color = "#34d399";
-      setTimeout(() => { btn.innerHTML = orig; btn.style.color = ""; }, 1800);
-    } catch { showToast("Copy failed — try again", "error"); }
-  };
+  function highlightContent(text){
+    return esc(text)
+      .replace(/\[([^\]]+)\]/g,'<span class="ph-bracket">[$1]</span>')
+      .replace(/(Step \d+:|Trigger:|Schedule:)/g,'<span class="ph-step">$1</span>')
+      .replace(/(Hook:|Context:|Insight:|CTA:|Prompt:|Input:)/g,'<span class="ph-label">$1</span>')
+      .replace(/(--[^\n]+)/g,'<span class="ph-comment">$1</span>');
+  }
 
-  /* ── DOWNLOAD / OPEN TRACKING ── */
-  window.trackDownload = async function(id, btn) {
-    const item = allItems.find(i => i.id === id);
-    if (!item) return;
-    item.downloads = (item.downloads || 0) + 1;
-    const countEl = btn.querySelector(".dl-count");
-    if (countEl) countEl.textContent = item.downloads;
-    if (!id.startsWith("demo-")) {
-      try {
-        await sbFetch(`/rest/v1/templates?id=eq.${id}`, {
-          method: "PATCH",
-          prefer: "return=minimal",
-          body: JSON.stringify({ downloads: item.downloads })
-        });
-      } catch (e) { /* silent */ }
+  /* ── REAL JSON DOWNLOAD ── */
+  window.downloadAutomation=function(id){
+    const item=allItems.find(x=>x.id===id); if(!item)return;
+    const url="automations/"+(item.fileName||"workflow.json");
+    const a=document.createElement("a");
+    a.href=url; a.download=item.fileName||"workflow.json";
+    document.body.appendChild(a); a.click(); a.remove();
+    item.downloads=(item.downloads||0)+1;
+    showToast("✓ Downloading "+item.fileName,"success");
+    if(!item.id.startsWith("a")&&!item.id.startsWith("t")) {
+      sbFetch(`/rest/v1/templates?id=eq.${item.id}`,{method:"PATCH",prefer:"return=minimal",body:JSON.stringify({downloads:item.downloads})}).catch(()=>{});
     }
+    renderList();
   };
 
-  /* ── TAB / FILTER / SEARCH ── */
-  window.switchTab = function(tab, el) {
-    activeTab = tab;
-    document.querySelectorAll(".tmpl-tab").forEach(t => {
-      t.classList.remove("active");
-      t.setAttribute("aria-selected", "false");
-    });
-    el.classList.add("active");
-    el.setAttribute("aria-selected", "true");
-    renderGrid();
+  window.copyContent=async function(id){
+    const item=allItems.find(x=>x.id===id); if(!item)return;
+    try{
+      await navigator.clipboard.writeText(item.content||item.description||"");
+      item.downloads=(item.downloads||0)+1;
+      showToast("✓ Copied to clipboard","success");
+      renderList();
+    }catch{ showToast("Copy failed — try again","error"); }
   };
 
-  window.setFilter = function(cat, el) {
-    activeFilter = cat;
-    document.querySelectorAll(".filter-chip").forEach(c => c.classList.remove("active"));
-    el.classList.add("active");
-    renderGrid();
+  window.quickAction=function(id){
+    const item=allItems.find(x=>x.id===id); if(!item)return;
+    if(item.type==="automation") downloadAutomation(id);
+    else copyContent(id);
   };
 
-  document.getElementById("tmpl-search").addEventListener("input", e => {
-    searchTerm = e.target.value.trim();
-    renderGrid();
-  });
-
-  /* ── MODAL ── */
-  window.openSubmitModal = function() {
-    document.getElementById("submit-modal").classList.add("open");
-    document.body.style.overflow = "hidden";
-    setTimeout(() => document.getElementById("f-title")?.focus(), 200);
+  function getLiked(){ try{return new Set(JSON.parse(localStorage.getItem(LIKED_KEY)||"[]"));}catch{return new Set();} }
+  window.toggleLike=async function(id,btn){
+    const liked=getLiked(); const item=allItems.find(x=>x.id===id); if(!item)return;
+    const was=liked.has(id);
+    if(was){liked.delete(id);item.likes=Math.max(0,(item.likes||0)-1);} else {liked.add(id);item.likes=(item.likes||0)+1;}
+    localStorage.setItem(LIKED_KEY,JSON.stringify([...liked]));
+    btn.querySelector(".lc").textContent=item.likes;
+    btn.classList.toggle("liked",!was);
+    btn.querySelector("svg").setAttribute("fill",was?"none":"currentColor");
   };
-  window.closeSubmitModal = function() {
-    document.getElementById("submit-modal").classList.remove("open");
-    document.body.style.overflow = "";
-  };
-  document.getElementById("submit-modal").addEventListener("click", e => {
-    if (e.target === e.currentTarget) closeSubmitModal();
-  });
-  document.addEventListener("keydown", e => {
-    if (e.key === "Escape") closeSubmitModal();
-  });
 
-  window.setModalType = function(type, btn) {
-    modalType = type;
-    document.querySelectorAll(".modal-type-btn").forEach(b => b.classList.remove("active"));
+  document.getElementById("t-search").addEventListener("input",e=>{ searchTerm=e.target.value.trim(); updateLabels(); renderList(); });
+
+  function resetPreview(){
+    document.getElementById("p-preview").classList.remove("has-content");
+    document.getElementById("preview-title").textContent="Nothing selected";
+    document.getElementById("preview-sub").textContent="";
+    document.getElementById("preview-actions").innerHTML="";
+    document.getElementById("preview-footer").style.display="none";
+    document.getElementById("preview-body").innerHTML=`<div class="p-preview-empty"><div class="p-preview-empty-icon">📋</div><div class="p-preview-empty-title">Select an item to preview</div><div class="p-preview-empty-sub">Click any card on the left. Templates show copyable text — automations show setup steps and a download button.</div></div>`;
+  }
+
+  /* ── SUBMIT MODAL ── */
+  window.openSubmitModal=function(){ document.getElementById("submit-modal").classList.add("open"); document.body.style.overflow="hidden"; setTimeout(()=>document.getElementById("f-title")?.focus(),150); };
+  window.closeSubmitModal=function(){ document.getElementById("submit-modal").classList.remove("open"); document.body.style.overflow=""; };
+  document.getElementById("submit-modal").addEventListener("click",e=>{ if(e.target===e.currentTarget)closeSubmitModal(); });
+  document.addEventListener("keydown",e=>{ if(e.key==="Escape")closeSubmitModal(); });
+
+  window.setModalType=function(type,btn){
+    modalType=type;
+    document.querySelectorAll(".modal-type-btn").forEach(b=>b.classList.remove("active"));
     btn.classList.add("active");
+    const isAuto=type==="automation";
+    document.getElementById("platform-row").style.display=isAuto?"grid":"none";
+    document.getElementById("cat-template-row").style.display=isAuto?"none":"grid";
+    document.getElementById("author-auto-row").style.display=isAuto?"block":"none";
+    document.getElementById("content-hint").textContent=isAuto
+      ? "Describe the workflow steps in plain language — we'll help format it, or paste your own n8n/Make.com JSON export."
+      : "Wrap fillable parts in [square brackets] — e.g. [your product name]";
   };
 
-  /* ── TAG INPUT ── */
-  const tagInput = document.getElementById("tag-input");
-  tagInput.addEventListener("keydown", e => {
-    if (e.key === "Enter" || e.key === ",") {
+  const tagField=document.getElementById("tag-field");
+  tagField.addEventListener("keydown",e=>{
+    if(e.key==="Enter"||e.key===","){
       e.preventDefault();
-      const val = tagInput.value.trim().replace(/,/g, "");
-      if (val && !tagTools.includes(val)) {
-        tagTools.push(val);
-        renderTags();
-        tagInput.value = "";
-      }
-    } else if (e.key === "Backspace" && !tagInput.value && tagTools.length) {
-      tagTools.pop();
-      renderTags();
-    }
+      const v=tagField.value.trim().replace(/,/g,"");
+      if(v&&!tagTools.includes(v)){tagTools.push(v);renderTags();tagField.value="";}
+    } else if(e.key==="Backspace"&&!tagField.value&&tagTools.length){tagTools.pop();renderTags();}
   });
-
-  function renderTags() {
-    const wrap = document.getElementById("tools-tag-wrap");
-    wrap.querySelectorAll(".tool-tag").forEach(t => t.remove());
-    tagTools.forEach((t, i) => {
-      const tag = document.createElement("span");
-      tag.className = "tool-tag";
-      tag.innerHTML = `${esc(t)}<button type="button" onclick="removeTag(${i})" aria-label="Remove ${esc(t)}">&times;</button>`;
-      wrap.insertBefore(tag, tagInput);
+  function renderTags(){
+    document.querySelectorAll(".tag-pill").forEach(t=>t.remove());
+    const wrap=document.getElementById("tag-wrap");
+    tagTools.forEach((t,i)=>{
+      const pill=document.createElement("span");
+      pill.className="tag-pill";
+      pill.innerHTML=`${esc(t)}<button type="button" onclick="removeTag(${i})">&times;</button>`;
+      wrap.insertBefore(pill,tagField);
     });
   }
+  window.removeTag=function(i){ tagTools.splice(i,1); renderTags(); };
 
-  window.removeTag = function(i) {
-    tagTools.splice(i, 1);
-    renderTags();
-  };
+  window.submitItem=async function(){
+    const title=document.getElementById("f-title").value.trim();
+    const desc=document.getElementById("f-desc").value.trim();
+    const content=document.getElementById("f-content").value.trim();
+    const link=document.getElementById("f-link").value.trim();
+    const isAuto=modalType==="automation";
+    const cat=isAuto?document.getElementById("f-cat-auto").value:document.getElementById("f-cat").value;
+    const platform=isAuto?document.getElementById("f-platform").value:null;
+    const author=(isAuto?document.getElementById("f-author-auto").value:document.getElementById("f-author").value).trim()||"Anonymous";
 
-  /* ── SUBMIT FORM ── */
-  window.submitTemplate = async function() {
-    const title   = document.getElementById("f-title").value.trim();
-    const desc    = document.getElementById("f-desc").value.trim();
-    const cat     = document.getElementById("f-category").value;
-    const author  = document.getElementById("f-author").value.trim() || "Anonymous";
-    const content = document.getElementById("f-content").value.trim();
-    const link    = document.getElementById("f-link").value.trim();
-
-    if (!title || !desc || !cat || !content) {
-      showFormStatus("Fill in all required fields (*).", "error");
-      return;
-    }
-
-    const btn = document.getElementById("form-submit-btn");
-    const lbl = document.getElementById("form-submit-label");
-    btn.disabled = true;
-    lbl.textContent = "Submitting…";
-
-    const payload = {
-      type: modalType,
-      category: cat,
-      title,
-      description: desc,
-      tools: tagTools.slice(),
-      content,
-      link: link || null,
-      author,
-      likes: 0,
-      downloads: 0,
-      status: "pending",       // reviewed before going live
-      is_community: true,
-      created_at: new Date().toISOString()
-    };
-
-    try {
-      await sbFetch("/rest/v1/templates", {
-        method: "POST",
-        prefer: "return=minimal",
-        body: JSON.stringify(payload)
+    if(!title||!desc||!content||!cat){ showFStatus("Fill in all required fields (*).","error"); return; }
+    const btn=document.getElementById("f-submit-btn"), lbl=document.getElementById("f-submit-label");
+    btn.disabled=true; lbl.textContent="Submitting…";
+    try{
+      await sbFetch("/rest/v1/templates",{
+        method:"POST", prefer:"return=minimal",
+        body:JSON.stringify({type:modalType,category:cat,platform,title,description:desc,content,tools:tagTools.slice(),link:link||null,author,likes:0,downloads:0,status:"pending",created_at:new Date().toISOString()})
       });
-      showFormStatus("✓ Submitted! We'll review it and it'll go live within 24 hours.", "success");
-      showToast("✓ Submission received — thank you!", "success");
-      setTimeout(() => {
-        closeSubmitModal();
-        resetForm();
-      }, 2400);
-    } catch (err) {
-      showFormStatus("Something went wrong. Try again.", "error");
-      btn.disabled = false;
-      lbl.textContent = "Submit for review";
-    }
+      showFStatus("✓ Submitted — goes live after review, usually within 24h.","success");
+      showToast("✓ Submission received — thank you!","success");
+      setTimeout(()=>{closeSubmitModal();resetForm();},2200);
+    }catch{ showFStatus("Something went wrong. Try again.","error"); btn.disabled=false; lbl.textContent="Submit for review"; }
   };
-
-  function showFormStatus(msg, type) {
-    const el = document.getElementById("form-status");
-    el.textContent = msg;
-    el.className = "form-status " + type;
+  function showFStatus(msg,type){ const el=document.getElementById("f-status"); el.textContent=msg; el.className="f-status "+type; }
+  function resetForm(){
+    ["f-title","f-desc","f-content","f-author","f-author-auto","f-link"].forEach(id=>{const el=document.getElementById(id);if(el)el.value="";});
+    document.getElementById("f-cat").value=""; document.getElementById("f-cat-auto").value="";
+    tagTools=[]; renderTags();
+    document.getElementById("f-status").className="f-status";
+    document.getElementById("f-submit-btn").disabled=false;
+    document.getElementById("f-submit-label").textContent="Submit for review";
   }
 
-  function resetForm() {
-    ["f-title","f-desc","f-author","f-content","f-link"].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.value = "";
-    });
-    document.getElementById("f-category").value = "";
-    tagTools = [];
-    renderTags();
-    document.getElementById("form-status").className = "form-status";
-    const btn = document.getElementById("form-submit-btn");
-    btn.disabled = false;
-    document.getElementById("form-submit-label").textContent = "Submit for review";
+  function showToast(msg,type){
+    const t=document.getElementById("t-toast");
+    t.textContent=msg; t.style.borderColor=type==="error"?"rgba(248,113,113,0.3)":"rgba(52,211,153,0.3)";
+    t.style.color=type==="error"?"#f87171":"#34d399"; t.classList.add("show");
+    setTimeout(()=>t.classList.remove("show"),2800);
   }
 
-  /* ── TOAST ── */
-  function showToast(msg, type) {
-    const toast = document.getElementById("tmpl-toast");
-    toast.textContent = msg;
-    toast.style.borderColor = type === "error" ? "rgba(248,113,113,0.3)" : "rgba(52,211,153,0.3)";
-    toast.style.color = type === "error" ? "#f87171" : "#34d399";
-    toast.classList.add("show");
-    setTimeout(() => toast.classList.remove("show"), 3000);
-  }
-
-  /* ── MOBILE MENU ── */
-  const toggle = document.getElementById("mobile-menu-toggle");
-  const menu   = document.getElementById("mobileMenu");
-  let menuOpen = false;
-  toggle.addEventListener("click", () => {
-    menuOpen = !menuOpen;
-    menu.classList.toggle("open", menuOpen);
-    toggle.classList.toggle("open", menuOpen);
-    toggle.setAttribute("aria-expanded", menuOpen);
-    document.body.style.overflow = menuOpen ? "hidden" : "";
+  const toggle=document.getElementById("mobile-menu-toggle"), menu=document.getElementById("mobileMenu");
+  let menuOpen=false;
+  toggle.addEventListener("click",()=>{
+    menuOpen=!menuOpen; menu.classList.toggle("open",menuOpen); toggle.classList.toggle("open",menuOpen);
+    toggle.setAttribute("aria-expanded",menuOpen); document.body.style.overflow=menuOpen?"hidden":"";
   });
-  menu.querySelectorAll("a").forEach(a => a.addEventListener("click", () => {
-    menuOpen = false; menu.classList.remove("open"); toggle.classList.remove("open");
-    document.body.style.overflow = "";
-  }));
+  menu.querySelectorAll("a").forEach(a=>a.addEventListener("click",()=>{ menuOpen=false; menu.classList.remove("open"); toggle.classList.remove("open"); document.body.style.overflow=""; }));
 
-  /* ── BOOT ── */
-  loadItems();
+  function esc(s){ return String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[c]); }
 
+  load();
 })();
 </script>
-
 </body>
 </html>

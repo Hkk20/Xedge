@@ -1,0 +1,735 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Prompt Library — XEdge</title>
+  <meta name="description" content="Browse and copy AI prompts for every goal — content, business, dev, research. Built by the XEdge community."/>
+  <link rel="icon" href="xedge-logo.png" type="image/png"/>
+  <meta name="theme-color" content="#080c12"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"/>
+  <script src="analytics.js" defer></script>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;}
+    html,body{margin:0;padding:0;width:100%;overflow-x:hidden;}
+    body{font-family:'Space Grotesk',ui-sans-serif,system-ui,sans-serif;background:#080c12;color:#e8edf5;-webkit-font-smoothing:antialiased;}
+
+    /* NAV */
+    .xe-nav{position:fixed;top:0;left:0;right:0;z-index:60;height:68px;background:rgba(8,12,18,0.92);backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;}
+    .xe-nav-inner{max-width:1400px;width:100%;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;}
+    .xe-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+    .xe-logo img{width:36px;height:36px;border-radius:8px;}
+    .xe-logo span{font-size:1.25rem;font-weight:700;color:#60a5fa;letter-spacing:-0.3px;}
+    .xe-nav-links{display:flex;align-items:center;gap:4px;}
+    .xe-nav-links a{font-size:0.9rem;font-weight:500;color:#6b7a9a;padding:6px 14px;border-radius:8px;text-decoration:none;transition:color .15s,background .15s;}
+    .xe-nav-links a:hover{color:#e8edf5;background:rgba(255,255,255,0.05);}
+    .xe-nav-links a.active{color:#60a5fa;}
+    .xe-nav-right{display:flex;align-items:center;gap:10px;}
+    .xe-btn-beta{background:linear-gradient(135deg,#3b82f6,#6366f1);padding:8px 20px;border-radius:100px;font-size:0.85rem;font-weight:600;color:#fff;text-decoration:none;transition:opacity .15s,transform .15s;}
+    .xe-btn-beta:hover{opacity:.88;transform:translateY(-1px);}
+    .xe-hamburger{display:none;background:none;border:none;cursor:pointer;padding:8px;color:#9ca3af;flex-direction:column;gap:5px;align-items:center;justify-content:center;}
+    .xe-hamburger span{display:block;width:22px;height:2px;background:currentColor;border-radius:2px;transition:transform .25s,opacity .25s;}
+    .xe-hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+    .xe-hamburger.open span:nth-child(2){opacity:0;}
+    .xe-hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+    .xe-mobile-menu{position:fixed;top:68px;left:0;right:0;z-index:59;background:rgba(8,12,18,0.98);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.06);padding:12px 16px 20px;display:none;flex-direction:column;gap:4px;}
+    .xe-mobile-menu.open{display:flex;}
+    .xe-mobile-menu a{padding:12px 16px;border-radius:10px;font-size:1rem;font-weight:500;color:#6b7a9a;text-decoration:none;transition:color .15s,background .15s;}
+    .xe-mobile-menu a:hover{color:#fff;background:rgba(255,255,255,0.05);}
+    .xe-mobile-menu .xe-mobile-cta{background:linear-gradient(135deg,#3b82f6,#6366f1);color:#fff !important;text-align:center;margin-top:8px;font-weight:600;border-radius:10px;}
+
+    .page-wrap{padding-top:68px;min-height:100vh;display:flex;flex-direction:column;}
+
+    /* HERO — compact, single purpose: title + value prop + primary action */
+    .p-hero{padding:48px 24px 28px;background:radial-gradient(ellipse 60% 50% at 50% -10%,rgba(99,102,241,0.12) 0%,transparent 65%);border-bottom:1px solid rgba(255,255,255,0.05);}
+    .p-hero-inner{max-width:1400px;margin:0 auto;display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;}
+    .p-hero-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:0.72rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#818cf8;margin-bottom:12px;}
+    .p-hero-eyebrow-dot{width:6px;height:6px;background:#818cf8;border-radius:50%;animation:pulse-dot 2s infinite;}
+    @keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
+    .p-hero h1{font-size:clamp(1.7rem,3.6vw,2.5rem);font-weight:800;letter-spacing:-1.2px;line-height:1.1;margin:0 0 8px;color:#f0f4ff;}
+    .p-hero h1 em{font-style:normal;background:linear-gradient(135deg,#818cf8 0%,#60a5fa 60%,#34d399 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .p-hero-sub{font-size:0.92rem;color:#6b7a9a;max-width:460px;line-height:1.65;margin:0;}
+    .p-hero-stats{display:flex;align-items:center;gap:24px;flex-wrap:wrap;}
+    .p-stat{text-align:right;}
+    .p-stat-num{font-size:1.4rem;font-weight:800;color:#f0f4ff;letter-spacing:-0.5px;}
+    .p-stat-label{font-size:0.7rem;color:#4b5a75;text-transform:uppercase;letter-spacing:0.07em;margin-top:1px;}
+    .p-stat-div{width:1px;height:28px;background:rgba(255,255,255,0.06);}
+
+    /* SINGLE CONTROL BAR — everything to filter/sort/search lives here, one row, sticky */
+    .p-controlbar{
+      position:sticky; top:68px; z-index:40;
+      background:rgba(8,12,18,0.97); backdrop-filter:blur(14px);
+      border-bottom:1px solid rgba(255,255,255,0.06);
+      padding:14px 24px;
+    }
+    .p-controlbar-inner{
+      max-width:1400px; margin:0 auto;
+      display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+    }
+    .p-search-wrap{position:relative;flex:1;min-width:200px;max-width:320px;}
+    .p-search-wrap svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);width:15px;height:15px;color:#4b5a75;pointer-events:none;}
+    .p-search{width:100%;background:rgba(17,24,39,0.7);border:1px solid rgba(255,255,255,0.08);border-radius:9px;padding:9px 14px 9px 36px;color:#e8edf5;font-family:inherit;font-size:0.85rem;outline:none;transition:border-color .2s;}
+    .p-search:focus{border-color:rgba(99,102,241,0.4);}
+    .p-search::placeholder{color:#3a4560;}
+
+    .p-control-div{width:1px;height:24px;background:rgba(255,255,255,0.07);flex-shrink:0;}
+
+    /* dropdown-style selects, consistent look, all same row */
+    .p-dropdown{position:relative;flex-shrink:0;}
+    .p-dropdown-btn{
+      display:flex;align-items:center;gap:6px;
+      background:rgba(17,24,39,0.7);border:1px solid rgba(255,255,255,0.08);
+      border-radius:9px;padding:9px 12px;
+      font-size:0.83rem;font-weight:600;color:#9ca3af;
+      cursor:pointer;font-family:inherit;transition:border-color .15s,color .15s;
+      white-space:nowrap;
+    }
+    .p-dropdown-btn:hover{border-color:rgba(99,102,241,0.3);color:#e8edf5;}
+    .p-dropdown-btn.has-filter{border-color:rgba(99,102,241,0.35);color:#818cf8;background:rgba(99,102,241,0.07);}
+    .p-dropdown-btn svg.chev{width:12px;height:12px;transition:transform .2s;}
+    .p-dropdown.open .p-dropdown-btn svg.chev{transform:rotate(180deg);}
+    .p-dropdown-menu{
+      position:absolute;top:calc(100% + 8px);left:0;z-index:50;
+      min-width:180px;background:#0d1117;border:1px solid rgba(255,255,255,0.1);
+      border-radius:12px;padding:6px;box-shadow:0 16px 40px rgba(0,0,0,0.5);
+      display:none;
+    }
+    .p-dropdown.open .p-dropdown-menu{display:block;}
+    .p-dropdown-item{
+      display:flex;align-items:center;justify-content:space-between;
+      width:100%;background:none;border:none;cursor:pointer;font-family:inherit;
+      padding:8px 10px;border-radius:8px;font-size:0.83rem;font-weight:600;color:#9ca3af;
+      transition:background .15s,color .15s;text-align:left;
+    }
+    .p-dropdown-item:hover{background:rgba(255,255,255,0.05);color:#e8edf5;}
+    .p-dropdown-item.active{background:rgba(99,102,241,0.12);color:#818cf8;}
+    .p-dropdown-item-count{font-size:0.7rem;font-weight:700;background:rgba(255,255,255,0.06);border-radius:100px;padding:1px 7px;color:#4b5a75;}
+    .p-dropdown-item.active .p-dropdown-item-count{background:rgba(99,102,241,0.18);color:#818cf8;}
+
+    .p-clear-btn{
+      display:none; align-items:center; gap:5px;
+      background:none; border:none; cursor:pointer; font-family:inherit;
+      font-size:0.8rem; font-weight:600; color:#f87171; padding:9px 10px;
+      flex-shrink:0;
+    }
+    .p-clear-btn.show{display:flex;}
+    .p-clear-btn:hover{color:#fca5a5;}
+
+    .p-controlbar-right{margin-left:auto;display:flex;align-items:center;gap:10px;}
+    .p-result-count{font-size:0.82rem;color:#4b5a75;white-space:nowrap;}
+    .btn-primary-sm{
+      display:inline-flex;align-items:center;gap:6px;
+      background:linear-gradient(135deg,#6366f1,#3b82f6);
+      border:none;border-radius:9px;padding:9px 16px;
+      font-size:0.83rem;font-weight:700;color:#fff;
+      cursor:pointer;font-family:inherit;transition:opacity .15s,transform .15s;
+      white-space:nowrap;
+    }
+    .btn-primary-sm:hover{opacity:.88;transform:translateY(-1px);}
+
+    /* MAIN */
+    .p-main{max-width:1400px;margin:0 auto;width:100%;padding:24px 24px 80px;flex:1;}
+    .p-split{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;}
+    .p-list{display:flex;flex-direction:column;gap:10px;}
+
+    .p-card{background:rgba(13,18,28,0.8);border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:18px 20px;cursor:pointer;transition:border-color .2s,background .2s;animation:cardIn .3s ease both;}
+    @keyframes cardIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+    .p-card:hover{border-color:rgba(99,102,241,0.3);background:rgba(13,18,28,1);}
+    .p-card.selected{border-color:#6366f1;background:rgba(99,102,241,0.06);}
+    .p-card-top{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px;}
+    .p-card-icon{width:34px;height:34px;border-radius:9px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1rem;background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.15);}
+    .p-card-meta{flex:1;min-width:0;}
+    .p-card-title{font-size:0.9rem;font-weight:700;color:#f0f4ff;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .p-card-tags{display:flex;gap:5px;flex-wrap:wrap;}
+    .p-tag{font-size:0.66rem;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;padding:2px 8px;border-radius:100px;}
+    .p-tag-cat{background:rgba(99,102,241,0.1);color:#818cf8;border:1px solid rgba(99,102,241,0.15);}
+    .p-tag-model{background:rgba(52,211,153,0.08);color:#34d399;border:1px solid rgba(52,211,153,0.15);}
+    .p-card-desc{font-size:0.8rem;color:#6b7a9a;line-height:1.55;margin-bottom:12px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
+    .p-card-footer{display:flex;align-items:center;gap:6px;}
+    .p-card-action{display:flex;align-items:center;gap:5px;background:none;border:1px solid rgba(255,255,255,0.06);border-radius:7px;padding:5px 10px;font-size:0.74rem;font-weight:600;color:#4b5a75;cursor:pointer;font-family:inherit;transition:all .15s;}
+    .p-card-action:hover{border-color:rgba(99,102,241,0.25);color:#818cf8;}
+    .p-card-action.liked{color:#f87171;border-color:rgba(248,113,113,0.25);}
+    .p-card-action.liked svg{fill:#f87171;}
+    .p-card-action svg{width:12px;height:12px;}
+    .p-card-copy-btn{margin-left:auto;display:flex;align-items:center;gap:5px;background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.2);border-radius:7px;padding:5px 12px;font-size:0.74rem;font-weight:700;color:#818cf8;cursor:pointer;font-family:inherit;transition:all .15s;}
+    .p-card-copy-btn:hover{background:rgba(99,102,241,0.18);}
+    .p-card-copy-btn svg{width:11px;height:11px;}
+
+    .p-preview{position:sticky;top:calc(68px + 64px + 16px);background:rgba(10,14,22,0.95);border:1px solid rgba(255,255,255,0.07);border-radius:16px;overflow:hidden;max-height:calc(100vh - 200px);display:flex;flex-direction:column;transition:border-color .2s;}
+    .p-preview.has-content{border-color:rgba(99,102,241,0.25);}
+    .p-preview-header{padding:16px 18px;border-bottom:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;gap:10px;flex-shrink:0;}
+    .p-preview-dots{display:flex;gap:6px;}
+    .p-preview-dot{width:11px;height:11px;border-radius:50%;}
+    .p-preview-dot:nth-child(1){background:#ff5f57;}
+    .p-preview-dot:nth-child(2){background:#febc2e;}
+    .p-preview-dot:nth-child(3){background:#28c840;}
+    .p-preview-title-wrap{flex:1;min-width:0;}
+    .p-preview-title{font-size:0.82rem;font-weight:700;color:#9ca3af;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .p-preview-model{font-size:0.7rem;color:#34d399;font-family:'JetBrains Mono',monospace;}
+    .p-preview-copy-all{display:flex;align-items:center;gap:6px;background:linear-gradient(135deg,#6366f1,#3b82f6);border:none;border-radius:8px;padding:7px 14px;font-size:0.78rem;font-weight:700;color:#fff;cursor:pointer;font-family:inherit;flex-shrink:0;transition:opacity .15s,transform .15s;}
+    .p-preview-copy-all:hover{opacity:.88;transform:translateY(-1px);}
+    .p-preview-copy-all svg{width:13px;height:13px;}
+    .p-preview-body{flex:1;overflow-y:auto;padding:20px;}
+    .p-preview-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;min-height:280px;text-align:center;padding:40px;}
+    .p-preview-empty-icon{font-size:2.5rem;margin-bottom:14px;opacity:.5;}
+    .p-preview-empty-title{font-size:0.95rem;font-weight:700;color:#4b5a75;margin-bottom:6px;}
+    .p-preview-empty-sub{font-size:0.8rem;color:#3a4560;line-height:1.6;}
+    .p-prompt-text{font-family:'JetBrains Mono',monospace;font-size:0.82rem;line-height:1.8;color:#c4cfe8;white-space:pre-wrap;word-break:break-word;}
+    .p-prompt-text .ph-bracket{color:#818cf8;}
+    .p-prompt-text .ph-keyword{color:#34d399;font-weight:600;}
+    .p-prompt-text .ph-comment{color:#4b5a75;font-style:italic;}
+    .p-preview-variables{margin-top:18px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.05);}
+    .p-preview-var-label{font-size:0.7rem;font-weight:700;color:#4b5a75;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:10px;}
+    .p-var-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+    .p-var-name{font-family:'JetBrains Mono',monospace;font-size:0.76rem;color:#818cf8;width:120px;flex-shrink:0;}
+    .p-var-input{flex:1;background:rgba(17,24,39,0.6);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:6px 12px;color:#e8edf5;font-family:'Space Grotesk',sans-serif;font-size:0.82rem;outline:none;transition:border-color .15s;}
+    .p-var-input:focus{border-color:rgba(99,102,241,0.4);}
+    .p-var-input::placeholder{color:#3a4560;}
+    .p-preview-footer{padding:14px 18px;border-top:1px solid rgba(255,255,255,0.05);display:flex;gap:8px;flex-shrink:0;}
+    .p-use-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:7px;background:linear-gradient(135deg,#6366f1,#3b82f6);border:none;border-radius:10px;padding:12px;font-size:0.88rem;font-weight:700;color:#fff;cursor:pointer;font-family:inherit;transition:opacity .15s,transform .15s;}
+    .p-use-btn:hover{opacity:.88;transform:translateY(-1px);}
+    .p-share-btn{display:flex;align-items:center;justify-content:center;gap:7px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:12px 16px;font-size:0.88rem;font-weight:600;color:#6b7a9a;cursor:pointer;font-family:inherit;transition:all .15s;}
+    .p-share-btn:hover{background:rgba(255,255,255,0.07);color:#9ca3af;}
+    .p-share-btn svg{width:15px;height:15px;}
+
+    .p-empty{grid-column:1/-1;text-align:center;padding:80px 24px;}
+    .p-empty-icon{font-size:3rem;margin-bottom:16px;}
+    .p-empty h3{font-size:1.1rem;font-weight:700;margin-bottom:8px;color:#4b5a75;}
+    .p-empty p{color:#3a4560;font-size:0.85rem;}
+    .p-skel{height:110px;border-radius:14px;background:linear-gradient(90deg,rgba(255,255,255,0.02) 25%,rgba(255,255,255,0.045) 50%,rgba(255,255,255,0.02) 75%);background-size:200% 100%;animation:shimmer 1.4s ease infinite;}
+    @keyframes shimmer{to{background-position:-200% 0;}}
+
+    .modal-overlay{position:fixed;inset:0;z-index:900;background:rgba(4,6,10,0.9);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:20px;}
+    .modal-overlay.open{display:flex;}
+    .modal{background:#0d1117;border:1px solid rgba(255,255,255,0.09);border-radius:20px;width:min(100%,540px);max-height:90vh;overflow-y:auto;box-shadow:0 40px 100px rgba(0,0,0,0.7);animation:modalIn .22s cubic-bezier(.4,0,.2,1) both;}
+    @keyframes modalIn{from{opacity:0;transform:scale(0.96) translateY(12px)}to{opacity:1;transform:none}}
+    .modal-header{padding:24px 26px 18px;border-bottom:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:space-between;}
+    .modal-header h2{font-size:1.1rem;font-weight:800;margin:0;color:#f0f4ff;}
+    .modal-close{width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);color:#6b7a9a;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s,color .15s;}
+    .modal-close:hover{background:rgba(255,255,255,0.1);color:#fff;}
+    .modal-body{padding:22px 26px;}
+    .modal-footer{padding:0 26px 24px;}
+    .f-row{margin-bottom:16px;}
+    .f-label{display:block;font-size:0.75rem;font-weight:700;color:#6b7a9a;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:7px;}
+    .f-input,.f-textarea,.f-select{width:100%;background:rgba(15,20,30,0.9);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:11px 14px;color:#e8edf5;font-family:inherit;font-size:0.9rem;outline:none;transition:border-color .2s;display:block;}
+    .f-input:focus,.f-textarea:focus,.f-select:focus{border-color:rgba(99,102,241,0.45);}
+    .f-input::placeholder,.f-textarea::placeholder{color:#3a4560;}
+    .f-textarea{height:110px;resize:vertical;font-family:'JetBrains Mono',monospace;font-size:0.82rem;line-height:1.7;}
+    .f-select{appearance:none;cursor:pointer;}
+    .f-select option{background:#0d1117;}
+    .f-row-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;}
+    @media(max-width:480px){.f-row-2{grid-template-columns:1fr;}}
+    .f-hint{font-size:0.73rem;color:#3a4560;margin-top:5px;}
+    .btn-submit-form{width:100%;display:flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,#6366f1,#3b82f6);border:none;border-radius:10px;padding:13px;font-size:0.92rem;font-weight:700;color:#fff;cursor:pointer;font-family:inherit;transition:opacity .15s;}
+    .btn-submit-form:disabled{opacity:.4;cursor:not-allowed;}
+    .btn-submit-form:hover:not(:disabled){opacity:.88;}
+    .f-note{font-size:0.74rem;color:#3a4560;text-align:center;margin-top:10px;line-height:1.6;}
+    .f-status{font-size:0.83rem;font-weight:600;text-align:center;padding:10px;border-radius:8px;display:none;margin-bottom:12px;}
+    .f-status.success{display:block;color:#34d399;background:rgba(52,211,153,0.08);border:1px solid rgba(52,211,153,0.2);}
+    .f-status.error{display:block;color:#f87171;background:rgba(248,113,113,0.06);border:1px solid rgba(248,113,113,0.2);}
+
+    #p-toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);background:#111827;border-radius:100px;padding:11px 22px;font-size:0.83rem;font-weight:600;z-index:9999;opacity:0;pointer-events:none;transition:opacity .3s,transform .3s;border:1px solid transparent;}
+    #p-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+    @media(max-width:1024px){.p-split{grid-template-columns:1fr;}.p-preview{position:static;max-height:none;}}
+    @media(max-width:767px){
+      .xe-nav-links,.xe-btn-beta{display:none !important;}
+      .xe-hamburger{display:flex !important;}
+      .p-hero{padding:36px 16px 24px;}
+      .p-hero-inner{flex-direction:column;align-items:flex-start;}
+      .p-controlbar{padding:12px 16px;}
+      .p-controlbar-inner{gap:8px;}
+      .p-search-wrap{max-width:none;width:100%;order:1;}
+      .p-controlbar-right{margin-left:0;width:100%;order:2;justify-content:space-between;}
+      .p-main{padding:20px 16px 60px;}
+    }
+    a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid #6366f1;outline-offset:3px;border-radius:4px;}
+  </style>
+</head>
+<body>
+
+<header>
+  <nav class="xe-nav" role="navigation" aria-label="Main navigation">
+    <div class="xe-nav-inner">
+      <a href="index.html" class="xe-logo"><img src="xedge-logo.png" alt="XEdge" width="36" height="36"/><span>XEDGE</span></a>
+      <div class="xe-nav-links">
+        <a href="index.html">Home</a>
+        <a href="stack.html">Stacks</a>
+        <a href="Templates.html">Templates</a>
+        <a href="Explore.html">Explore Tools</a>
+        <a href="Categories.html">Categories</a>
+        <a href="About.html">About</a>
+        <a href="prompt.html" class="active">Prompts</a>
+      </div>
+      <div class="xe-nav-right">
+        <a href="Join.html" class="xe-btn-beta">Join Beta</a>
+        <div id="auth-area" style="display:flex;align-items:center;"></div>
+        <button id="mobile-menu-toggle" class="xe-hamburger" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+  </nav>
+  <div id="mobileMenu" class="xe-mobile-menu">
+    <a href="index.html">Home</a><a href="stack.html">Stacks</a><a href="Templates.html">Templates</a>
+    <a href="Explore.html">Explore Tools</a><a href="Categories.html">Categories</a><a href="About.html">About</a>
+    <a href="prompt.html">Prompts</a><a href="Join.html" class="xe-mobile-cta">Join Beta</a>
+  </div>
+</header>
+
+<div class="page-wrap">
+
+  <!-- HERO -->
+  <section class="p-hero">
+    <div class="p-hero-inner">
+      <div>
+        <div class="p-hero-eyebrow"><span class="p-hero-eyebrow-dot"></span>Prompt Library</div>
+        <h1>The right prompt,<br/><em>ready to copy</em></h1>
+        <p class="p-hero-sub">Click any prompt to preview it, fill in your variables, and copy it straight to Claude, ChatGPT, or Gemini.</p>
+      </div>
+      <div class="p-hero-stats">
+        <div class="p-stat"><div class="p-stat-num" id="stat-total">—</div><div class="p-stat-label">Prompts</div></div>
+        <div class="p-stat-div"></div>
+        <div class="p-stat"><div class="p-stat-num" id="stat-copies">—</div><div class="p-stat-label">Copied</div></div>
+        <div class="p-stat-div"></div>
+        <div class="p-stat"><div class="p-stat-num" id="stat-cats">—</div><div class="p-stat-label">Categories</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SINGLE CONTROL BAR — search, category, model, sort all live here -->
+  <div class="p-controlbar">
+    <div class="p-controlbar-inner">
+      <div class="p-search-wrap">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        <input type="search" class="p-search" id="p-search" placeholder="Search prompts…" autocomplete="off" aria-label="Search prompts"/>
+      </div>
+
+      <div class="p-control-div"></div>
+
+      <div class="p-dropdown" id="dd-category">
+        <button class="p-dropdown-btn" onclick="toggleDropdown('dd-category')">
+          <span id="dd-category-label">Category</span>
+          <svg class="chev" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        <div class="p-dropdown-menu" id="dd-category-menu"></div>
+      </div>
+
+      <div class="p-dropdown" id="dd-model">
+        <button class="p-dropdown-btn" onclick="toggleDropdown('dd-model')">
+          <span id="dd-model-label">Model</span>
+          <svg class="chev" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        <div class="p-dropdown-menu" id="dd-model-menu"></div>
+      </div>
+
+      <div class="p-dropdown" id="dd-sort">
+        <button class="p-dropdown-btn" onclick="toggleDropdown('dd-sort')">
+          <span id="dd-sort-label">Most liked</span>
+          <svg class="chev" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        <div class="p-dropdown-menu" id="dd-sort-menu"></div>
+      </div>
+
+      <button class="p-clear-btn" id="p-clear-btn" onclick="clearFilters()">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="13" height="13"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        Clear filters
+      </button>
+
+      <div class="p-controlbar-right">
+        <span class="p-result-count" id="p-result-count"></span>
+        <button class="btn-primary-sm" onclick="openSubmitModal()">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="13" height="13"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+          Submit
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <main class="p-main">
+    <div class="p-split">
+      <div class="p-list" id="p-list">
+        <div class="p-skel"></div><div class="p-skel"></div>
+        <div class="p-skel"></div><div class="p-skel"></div>
+      </div>
+
+      <div class="p-preview" id="p-preview">
+        <div class="p-preview-header">
+          <div class="p-preview-dots"><div class="p-preview-dot"></div><div class="p-preview-dot"></div><div class="p-preview-dot"></div></div>
+          <div class="p-preview-title-wrap">
+            <div class="p-preview-title" id="preview-title">No prompt selected</div>
+            <div class="p-preview-model" id="preview-model"></div>
+          </div>
+          <button class="p-preview-copy-all" id="preview-copy-btn" onclick="copyPreview()" style="display:none;">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+            Copy all
+          </button>
+        </div>
+        <div class="p-preview-body" id="preview-body">
+          <div class="p-preview-empty">
+            <div class="p-preview-empty-icon">⚡</div>
+            <div class="p-preview-empty-title">Select a prompt to preview</div>
+            <div class="p-preview-empty-sub">Click any card on the left to see the full prompt, fill in variables, and copy it ready-to-use.</div>
+          </div>
+        </div>
+        <div class="p-preview-footer" id="preview-footer" style="display:none;">
+          <button class="p-use-btn" onclick="copyPreview()">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="15" height="15"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+            Copy prompt
+          </button>
+          <button class="p-share-btn" onclick="sharePrompt()">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer style="border-top:1px solid rgba(255,255,255,0.05);padding:28px 24px;text-align:center;">
+    <span style="font-size:.8rem;color:#3a4560;">© 2026 XEdge. All rights reserved.</span>
+  </footer>
+</div>
+
+<!-- SUBMIT MODAL -->
+<div class="modal-overlay" id="submit-modal" role="dialog" aria-modal="true" aria-label="Submit a prompt">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>Submit a prompt</h2>
+      <button class="modal-close" onclick="closeSubmitModal()"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="14" height="14"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="f-row">
+        <label class="f-label" for="f-title">Title *</label>
+        <input class="f-input" id="f-title" type="text" placeholder="e.g. Cold outreach DM that gets replies" maxlength="80"/>
+      </div>
+      <div class="f-row">
+        <label class="f-label" for="f-prompt">Prompt *</label>
+        <textarea class="f-textarea" id="f-prompt" placeholder="Paste your full prompt here. Use [SQUARE BRACKETS] for variables the user should fill in."></textarea>
+        <p class="f-hint">Wrap user-fillable parts in [brackets] — e.g. [your product name], [target audience]</p>
+      </div>
+      <div class="f-row">
+        <label class="f-label" for="f-desc">What does it do? *</label>
+        <input class="f-input" id="f-desc" type="text" placeholder="One sentence describing what this prompt produces" maxlength="120"/>
+      </div>
+      <div class="f-row-2">
+        <div>
+          <label class="f-label" for="f-cat">Category *</label>
+          <select class="f-select" id="f-cat">
+            <option value="">Pick one</option>
+            <option>Content</option><option>Business</option><option>Marketing</option>
+            <option>Dev</option><option>Research</option><option>Sales</option><option>Productivity</option><option>Other</option>
+          </select>
+        </div>
+        <div>
+          <label class="f-label" for="f-model">Best model</label>
+          <select class="f-select" id="f-model">
+            <option value="Any">Any</option><option value="Claude">Claude</option><option value="ChatGPT">ChatGPT</option><option value="Gemini">Gemini</option>
+          </select>
+        </div>
+      </div>
+      <div class="f-row">
+        <label class="f-label" for="f-author">Your name</label>
+        <input class="f-input" id="f-author" type="text" placeholder="e.g. Harsha" maxlength="40"/>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <div class="f-status" id="f-status"></div>
+      <button class="btn-submit-form" id="f-submit-btn" onclick="submitPrompt()">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="15" height="15"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+        <span id="f-submit-label">Submit for review</span>
+      </button>
+      <p class="f-note">All prompts are reviewed before going live. Usually within 24 hours.</p>
+    </div>
+  </div>
+</div>
+
+<div id="p-toast"></div>
+
+<script>
+(function(){
+  "use strict";
+  const SB_URL="https://szouczgiuhedynyshpbb.supabase.co";
+  const SB_KEY="sb_publishable_JEvVHrobhuPoU6Z5xkMr2Q_pw8tvzHP";
+  const LIKED_KEY="xedge_prompts_liked_v1";
+
+  let allPrompts=[], activeCategory="All", activeModel="All", activeSort="popular", searchTerm="", selectedId=null;
+
+  async function sbFetch(path,opts={}){
+    const res=await fetch(SB_URL+path,{...opts,headers:{apikey:SB_KEY,Authorization:"Bearer "+SB_KEY,"Content-Type":"application/json",Prefer:opts.prefer||"return=representation",...(opts.headers||{})}});
+    const t=await res.text(); return t?JSON.parse(t):null;
+  }
+
+  const DEMO=[
+    {id:"p1",category:"Content",model:"Claude",icon:"✍️",title:"LinkedIn post from scratch — story format",description:"Generates a punchy LinkedIn post using the hook → insight → CTA structure that gets 2K+ impressions.",prompt:"You are a LinkedIn ghostwriter for indie founders.\n\nWrite a LinkedIn post for [your name] about [topic/experience].\n\nFormat:\n— Hook: One short, emotionally charged sentence (no 'I' start)\n— Context: 2-3 lines of background\n— Insight: The lesson or pattern you noticed\n— CTA: Soft ask — no links in the post, link in comments\n\nTone: Direct, human, no corporate speak. Read like a text message from a smart friend.\n\nDo not use emojis unless [use emojis: yes/no].",variables:["your name","topic/experience","use emojis: yes/no"],likes:24,copies:87,created_at:new Date(Date.now()-86400000).toISOString()},
+    {id:"p2",category:"Business",model:"Any",icon:"💼",title:"Cold DM that doesn't sound like a pitch",description:"A short, human cold outreach message for LinkedIn or Twitter that gets actual replies.",prompt:"Write a cold DM from [your name] to [recipient's role, e.g. 'a solo founder'].\n\nContext: I'm building [product — 1 sentence]. I want to learn if [specific problem] is real for them.\n\nRules:\n— Under 4 lines total\n— No pitch, no links, no 'I'd love to connect'\n— Reference one specific thing about their work: [something specific you noticed]\n— End with one genuine question, not a meeting request\n\nTone: Curious, peer-to-peer. Not salesy.",variables:["your name","recipient's role","product — 1 sentence","specific problem","something specific you noticed"],likes:31,copies:142,created_at:new Date(Date.now()-3600000).toISOString()},
+    {id:"p3",category:"Dev",model:"Claude",icon:"💻",title:"Debug any error — full context prompt",description:"Gives Claude everything it needs to debug a real error without you repeating yourself 5 times.",prompt:"I'm getting the following error:\n\n```\n[paste full error message here]\n```\n\nContext:\n- Language / framework: [e.g. JavaScript / Next.js 14]\n- What I was trying to do: [1-2 sentences]\n- What I already tried: [list what didn't work]\n- Relevant code:\n\n```\n[paste the relevant code block]\n```\n\nPlease:\n1. Explain what's causing the error in plain English\n2. Give me the exact fix with code\n3. Tell me if there's a better pattern I should be using instead",variables:["paste full error message here","e.g. JavaScript / Next.js 14","1-2 sentences","list what didn't work","paste the relevant code block"],likes:18,copies:203,created_at:new Date(Date.now()-7200000).toISOString()},
+    {id:"p4",category:"Marketing",model:"Claude",icon:"📣",title:"Landing page hero copy — conversion focused",description:"Produces a full hero section with headline, subheading, and CTA options for any product.",prompt:"You are a conversion copywriter. Write landing page hero copy for:\n\nProduct: [product name]\nWhat it does: [one sentence — what it does and for whom]\nMain outcome users get: [e.g. 'Save 3 hours per week']\nTarget user: [e.g. 'Solo founders with no marketing background']\nTone: [e.g. Direct and confident / Friendly and approachable]\n\nDeliver:\n1. Three headline options (under 10 words each)\n2. One subheading (1-2 sentences, outcome-focused)\n3. Two CTA button options\n\nNo hype words. No 'revolutionary' or 'game-changing'. Write like a smart human.",variables:["product name","one sentence — what it does and for whom","e.g. 'Save 3 hours per week'","e.g. 'Solo founders with no marketing background'","e.g. Direct and confident / Friendly and approachable"],likes:41,copies:178,created_at:new Date(Date.now()-86400000*2).toISOString()},
+    {id:"p5",category:"Research",model:"Any",icon:"🔬",title:"Competitor teardown — structured analysis",description:"Deep-dives any competitor product and returns a structured breakdown of strengths, gaps, and your angle.",prompt:"Analyse [competitor name] as a competitor to [your product name].\n\nFocus areas:\n1. What they do well (top 3 things)\n2. Where they fall short or frustrate users (check G2/Trustpilot reviews if you can)\n3. Who their primary user is vs who they underserve\n4. Pricing model and what that signals about their strategy\n5. The gap we could own that they don't cover\n\nOutput format: bullet points per section, concise. End with a one-paragraph positioning recommendation for [your product name].",variables:["competitor name","your product name","your product name"],likes:15,copies:64,created_at:new Date(Date.now()-86400000*3).toISOString()},
+    {id:"p6",category:"Productivity",model:"ChatGPT",icon:"⚡",title:"Weekly review — founder edition",description:"A structured weekly reflection prompt that surfaces what's actually moving the needle vs what's busywork.",prompt:"Run a weekly review for a solo founder.\n\nThis week I worked on:\n[list the main things you did]\n\nMy north star metric right now: [e.g. Gumroad sales / active users / email subscribers]\nCurrent number: [X]\nLast week's number: [Y]\n\nFor each thing I listed, tell me:\n1. Did it move my north star? Yes / No / Indirectly\n2. Should I do more of it, less, or stop entirely?\n\nThen give me:\n— Top 3 priorities for next week ranked by impact\n— One thing I should stop doing entirely\n— One honest observation about where I'm wasting time",variables:["list the main things you did","e.g. Gumroad sales / active users / email subscribers","X","Y"],likes:29,copies:119,created_at:new Date(Date.now()-86400000).toISOString()},
+    {id:"p7",category:"Sales",model:"Claude",icon:"🎯",title:"Objection handler — any sales conversation",description:"Generates calm, non-pushy responses to any sales objection based on your product context.",prompt:"I'm selling [product name] at [price point] to [target customer].\n\nThe objection I just heard: \"[exact objection as they said it]\"\n\nWrite 2-3 response options that:\n— Acknowledge the objection genuinely (not dismissively)\n— Reframe without being manipulative\n— Give them a logical next step that isn't 'just buy it'\n\nContext about my product's main value: [what you actually deliver]\nTone: Confident but not pushy. Peer-level conversation.",variables:["product name","price point","target customer","exact objection as they said it","what you actually deliver"],likes:12,copies:58,created_at:new Date(Date.now()-86400000*4).toISOString()},
+    {id:"p8",category:"Content",model:"Any",icon:"🧵",title:"Twitter/X thread from any idea",description:"Turns a rough idea or insight into a structured thread with a strong hook and viral potential.",prompt:"Turn this idea into a Twitter/X thread:\n\nCore idea: [your raw thought or insight]\nMy target audience: [e.g. indie hackers, startup founders, designers]\nMy Twitter account focus: [e.g. building in public, AI tools, no-code]\n\nThread format:\n— Tweet 1: Hook (pattern interrupt, strong claim, or counterintuitive truth)\n— Tweets 2-6: One insight per tweet, tight. No filler.\n— Tweet 7: Summary or callback to tweet 1\n— Tweet 8: CTA (follow for more / link to [resource])\n\nRules: No generic advice. No 'unpopular opinion:'. Max 240 chars per tweet. Write like a real person.",variables:["your raw thought or insight","e.g. indie hackers, startup founders, designers","e.g. building in public, AI tools, no-code","resource"],likes:37,copies:155,created_at:new Date(Date.now()-86400000).toISOString()},
+    {id:"p9",category:"Productivity",model:"Claude",icon:"🪙",title:"Token-saver — compress any prompt without losing intent",description:"Rewrites a verbose prompt into a shorter version that costs fewer tokens but keeps the same output quality.",prompt:"Rewrite the following prompt to use fewer tokens while keeping the exact same intent and output quality. Remove filler words, redundant context, and unnecessary politeness. Keep all [variables] and specific instructions intact.\n\nOriginal prompt:\n[paste your prompt here]\n\nReturn only the compressed version — no explanation.",variables:["paste your prompt here"],likes:9,copies:33,created_at:new Date(Date.now()-86400000*0.5).toISOString()}
+  ];
+
+  async function load(){
+    try{
+      const data=await sbFetch("/rest/v1/prompts?select=*&status=eq.approved&order=created_at.desc&limit=100");
+      allPrompts=Array.isArray(data)&&data.length?data:DEMO;
+    }catch{ allPrompts=DEMO; }
+    buildDropdowns();
+    renderList();
+    renderStats();
+  }
+
+  function renderStats(){
+    const cats=new Set(allPrompts.map(p=>p.category)).size;
+    const copies=allPrompts.reduce((s,p)=>s+(p.copies||0),0);
+    anim("stat-total",allPrompts.length); anim("stat-copies",copies); anim("stat-cats",cats);
+  }
+  function anim(id,target){
+    const el=document.getElementById(id); if(!el)return;
+    const t0=performance.now();
+    const tick=now=>{ const p=Math.min((now-t0)/800,1); el.textContent=Math.floor((1-Math.pow(1-p,3))*target); if(p<1)requestAnimationFrame(tick); else el.textContent=target; };
+    requestAnimationFrame(tick);
+  }
+
+  /* ── DROPDOWNS ── */
+  function buildDropdowns(){
+    const cats=["All",...new Set(allPrompts.map(p=>p.category))];
+    const counts={}; allPrompts.forEach(p=>{counts[p.category]=(counts[p.category]||0)+1;});
+    document.getElementById("dd-category-menu").innerHTML=cats.map(c=>
+      `<button class="p-dropdown-item ${c===activeCategory?"active":""}" onclick="setCategory('${c}')">${c}<span class="p-dropdown-item-count">${c==="All"?allPrompts.length:(counts[c]||0)}</span></button>`
+    ).join("");
+
+    const models=["All","Claude","ChatGPT","Gemini","Any"];
+    document.getElementById("dd-model-menu").innerHTML=models.map(m=>
+      `<button class="p-dropdown-item ${m===activeModel?"active":""}" onclick="setModel('${m}')">${m}</button>`
+    ).join("");
+
+    const sorts=[["popular","Most liked"],["copies","Most copied"],["newest","Newest"]];
+    document.getElementById("dd-sort-menu").innerHTML=sorts.map(([v,l])=>
+      `<button class="p-dropdown-item ${v===activeSort?"active":""}" onclick="setSort('${v}')">${l}</button>`
+    ).join("");
+
+    updateDropdownLabels();
+  }
+  function updateDropdownLabels(){
+    document.getElementById("dd-category-label").textContent = activeCategory==="All" ? "Category" : activeCategory;
+    document.getElementById("dd-category").querySelector(".p-dropdown-btn").classList.toggle("has-filter", activeCategory!=="All");
+    document.getElementById("dd-model-label").textContent = activeModel==="All" ? "Model" : activeModel;
+    document.getElementById("dd-model").querySelector(".p-dropdown-btn").classList.toggle("has-filter", activeModel!=="All");
+    const sortLabels={popular:"Most liked",copies:"Most copied",newest:"Newest"};
+    document.getElementById("dd-sort-label").textContent = sortLabels[activeSort];
+    const clearBtn=document.getElementById("p-clear-btn");
+    clearBtn.classList.toggle("show", activeCategory!=="All"||activeModel!=="All"||searchTerm!=="");
+  }
+
+  window.toggleDropdown=function(id){
+    const isOpen=document.getElementById(id).classList.contains("open");
+    document.querySelectorAll(".p-dropdown").forEach(d=>d.classList.remove("open"));
+    if(!isOpen) document.getElementById(id).classList.add("open");
+  };
+  document.addEventListener("click", e=>{
+    if(!e.target.closest(".p-dropdown")) document.querySelectorAll(".p-dropdown").forEach(d=>d.classList.remove("open"));
+  });
+
+  window.setCategory=function(c){ activeCategory=c; selectedId=null; buildDropdowns(); renderList(); resetPreview(); closeAllDropdowns(); };
+  window.setModel=function(m){ activeModel=m; buildDropdowns(); renderList(); closeAllDropdowns(); };
+  window.setSort=function(s){ activeSort=s; buildDropdowns(); renderList(); closeAllDropdowns(); };
+  function closeAllDropdowns(){ document.querySelectorAll(".p-dropdown").forEach(d=>d.classList.remove("open")); }
+  window.clearFilters=function(){
+    activeCategory="All"; activeModel="All"; searchTerm="";
+    document.getElementById("p-search").value="";
+    selectedId=null; buildDropdowns(); renderList(); resetPreview();
+  };
+
+  function getFiltered(){
+    let items=allPrompts.slice();
+    if(activeCategory!=="All") items=items.filter(p=>p.category===activeCategory);
+    if(activeModel!=="All") items=items.filter(p=>p.model===activeModel||p.model==="Any");
+    if(searchTerm){
+      const t=searchTerm.toLowerCase();
+      items=items.filter(p=>(p.title||"").toLowerCase().includes(t)||(p.description||"").toLowerCase().includes(t)||(p.category||"").toLowerCase().includes(t));
+    }
+    if(activeSort==="popular") items.sort((a,b)=>(b.likes||0)-(a.likes||0));
+    if(activeSort==="copies") items.sort((a,b)=>(b.copies||0)-(a.copies||0));
+    if(activeSort==="newest") items.sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
+    return items;
+  }
+
+  function renderList(){
+    const list=document.getElementById("p-list");
+    const items=getFiltered();
+    document.getElementById("p-result-count").textContent=items.length+" prompt"+(items.length!==1?"s":"");
+    const liked=getLiked();
+    if(!items.length){
+      list.innerHTML=`<div class="p-empty"><div class="p-empty-icon">🔍</div><h3>No prompts found</h3><p>Try a different filter or <button onclick="openSubmitModal()" style="background:none;border:none;color:#818cf8;cursor:pointer;font-family:inherit;font-size:inherit;padding:0;text-decoration:underline;">submit one</button>.</p></div>`;
+      return;
+    }
+    list.innerHTML=items.map((p,i)=>buildCard(p,liked,i)).join("");
+  }
+
+  function buildCard(p,liked,idx){
+    const isLiked=liked.has(p.id), isSelected=p.id===selectedId, delay=Math.min(idx*0.04,0.25);
+    return `<article class="p-card ${isSelected?"selected":""}" style="animation-delay:${delay}s" onclick="selectPrompt('${p.id}')" data-id="${p.id}" role="button" tabindex="0" onkeydown="if(event.key==='Enter')selectPrompt('${p.id}')">
+      <div class="p-card-top">
+        <div class="p-card-icon">${p.icon||"⚡"}</div>
+        <div class="p-card-meta">
+          <div class="p-card-title">${esc(p.title)}</div>
+          <div class="p-card-tags"><span class="p-tag p-tag-cat">${esc(p.category)}</span><span class="p-tag p-tag-model">${esc(p.model||"Any")}</span></div>
+        </div>
+      </div>
+      <div class="p-card-desc">${esc(p.description||"")}</div>
+      <div class="p-card-footer">
+        <button class="p-card-action ${isLiked?"liked":""}" onclick="event.stopPropagation();toggleLike('${p.id}',this)" aria-label="Like">
+          <svg fill="${isLiked?"currentColor":"none"}" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+          <span class="lc">${p.likes||0}</span>
+        </button>
+        <button class="p-card-action" aria-label="Copies">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+          ${p.copies||0}
+        </button>
+        <button class="p-card-copy-btn" onclick="event.stopPropagation();quickCopy('${p.id}',this)" aria-label="Quick copy">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+          Copy
+        </button>
+      </div>
+    </article>`;
+  }
+
+  window.selectPrompt=function(id){
+    selectedId=id;
+    const p=allPrompts.find(x=>x.id===id); if(!p)return;
+    document.querySelectorAll(".p-card").forEach(c=>c.classList.toggle("selected",c.dataset.id===id));
+    document.getElementById("preview-title").textContent=p.title;
+    document.getElementById("preview-model").textContent="Best for: "+(p.model||"Any model");
+    document.getElementById("preview-copy-btn").style.display="flex";
+    document.getElementById("preview-footer").style.display="flex";
+    document.getElementById("p-preview").classList.add("has-content");
+    const vars=p.variables||extractVars(p.prompt||"");
+    const highlighted=highlightPrompt(p.prompt||"");
+    let varSection="";
+    if(vars.length){
+      varSection=`<div class="p-preview-variables"><div class="p-preview-var-label">Fill in your details</div>${vars.map(v=>`<div class="p-var-row"><span class="p-var-name">[${esc(v)}]</span><input class="p-var-input" placeholder="${esc(v)}" data-var="${esc(v)}" oninput="updatePreviewText()" aria-label="${esc(v)}"/></div>`).join("")}</div>`;
+    }
+    document.getElementById("preview-body").innerHTML=`<div id="prompt-display" class="p-prompt-text">${highlighted}</div>${varSection}`;
+  };
+
+  function extractVars(text){ const m=text.match(/\[([^\]]+)\]/g)||[]; return [...new Set(m.map(x=>x.slice(1,-1)))]; }
+  function highlightPrompt(text){
+    return esc(text).replace(/\[([^\]]+)\]/g,'<span class="ph-bracket">[$1]</span>')
+      .replace(/(You are|Write|Create|Generate|Analyse|Analyze|Format|Rules|Output|Deliver|Please):/g,'<span class="ph-keyword">$1:</span>')
+      .replace(/(—[^<\n]+)/g,'<span class="ph-comment">$1</span>');
+  }
+  window.updatePreviewText=function(){
+    const p=allPrompts.find(x=>x.id===selectedId); if(!p)return;
+    let text=p.prompt||"";
+    document.querySelectorAll(".p-var-input").forEach(inp=>{ const v=inp.getAttribute("data-var"),val=inp.value.trim(); if(val) text=text.split("["+v+"]").join(val); });
+    const d=document.getElementById("prompt-display"); if(d) d.innerHTML=highlightPrompt(text);
+  };
+  window.copyPreview=async function(){
+    const p=allPrompts.find(x=>x.id===selectedId); if(!p)return;
+    let text=p.prompt||"";
+    document.querySelectorAll(".p-var-input").forEach(inp=>{ const v=inp.getAttribute("data-var"),val=inp.value.trim(); if(val) text=text.split("["+v+"]").join(val); });
+    try{
+      await navigator.clipboard.writeText(text);
+      showToast("✓ Copied to clipboard","success");
+      p.copies=(p.copies||0)+1;
+      if(!p.id.startsWith("p")) sbFetch(`/rest/v1/prompts?id=eq.${p.id}`,{method:"PATCH",prefer:"return=minimal",body:JSON.stringify({copies:p.copies})}).catch(()=>{});
+      renderList();
+    }catch{ showToast("Copy failed — try again","error"); }
+  };
+  window.quickCopy=async function(id,btn){
+    const p=allPrompts.find(x=>x.id===id); if(!p)return;
+    try{
+      await navigator.clipboard.writeText(p.prompt||"");
+      const orig=btn.innerHTML;
+      btn.innerHTML=`<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="11" height="11"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Copied!`;
+      btn.style.color="#34d399"; p.copies=(p.copies||0)+1;
+      setTimeout(()=>{btn.innerHTML=orig;btn.style.color="";renderList();},1600);
+    }catch{ showToast("Copy failed","error"); }
+  };
+  window.sharePrompt=function(){
+    const p=allPrompts.find(x=>x.id===selectedId); if(!p)return;
+    if(navigator.share) navigator.share({title:p.title,text:p.description,url:window.location.href+"?p="+p.id});
+    else { navigator.clipboard.writeText(window.location.href+"?p="+p.id); showToast("Link copied","success"); }
+  };
+
+  function getLiked(){ try{return new Set(JSON.parse(localStorage.getItem(LIKED_KEY)||"[]"));}catch{return new Set();} }
+  window.toggleLike=async function(id,btn){
+    const liked=getLiked(); const p=allPrompts.find(x=>x.id===id); if(!p)return;
+    const was=liked.has(id);
+    if(was){liked.delete(id);p.likes=Math.max(0,(p.likes||0)-1);} else {liked.add(id);p.likes=(p.likes||0)+1;}
+    localStorage.setItem(LIKED_KEY,JSON.stringify([...liked]));
+    btn.querySelector(".lc").textContent=p.likes;
+    btn.classList.toggle("liked",!was);
+    btn.querySelector("svg").setAttribute("fill",was?"none":"currentColor");
+    if(!id.startsWith("p")) sbFetch(`/rest/v1/prompts?id=eq.${id}`,{method:"PATCH",prefer:"return=minimal",body:JSON.stringify({likes:p.likes})}).catch(()=>{});
+  };
+
+  document.getElementById("p-search").addEventListener("input",e=>{ searchTerm=e.target.value.trim(); updateDropdownLabels(); renderList(); });
+
+  function resetPreview(){
+    document.getElementById("p-preview").classList.remove("has-content");
+    document.getElementById("preview-title").textContent="No prompt selected";
+    document.getElementById("preview-model").textContent="";
+    document.getElementById("preview-copy-btn").style.display="none";
+    document.getElementById("preview-footer").style.display="none";
+    document.getElementById("preview-body").innerHTML=`<div class="p-preview-empty"><div class="p-preview-empty-icon">⚡</div><div class="p-preview-empty-title">Select a prompt to preview</div><div class="p-preview-empty-sub">Click any card on the left to see the full prompt, fill in variables, and copy it ready-to-use.</div></div>`;
+  }
+
+  window.openSubmitModal=function(){ document.getElementById("submit-modal").classList.add("open"); document.body.style.overflow="hidden"; setTimeout(()=>document.getElementById("f-title")?.focus(),150); };
+  window.closeSubmitModal=function(){ document.getElementById("submit-modal").classList.remove("open"); document.body.style.overflow=""; };
+  document.getElementById("submit-modal").addEventListener("click",e=>{ if(e.target===e.currentTarget) closeSubmitModal(); });
+  document.addEventListener("keydown",e=>{ if(e.key==="Escape") closeSubmitModal(); });
+
+  window.submitPrompt=async function(){
+    const title=document.getElementById("f-title").value.trim();
+    const prompt=document.getElementById("f-prompt").value.trim();
+    const desc=document.getElementById("f-desc").value.trim();
+    const cat=document.getElementById("f-cat").value;
+    const model=document.getElementById("f-model").value;
+    const author=document.getElementById("f-author").value.trim()||"Anonymous";
+    if(!title||!prompt||!desc||!cat){ showFStatus("Fill in all required fields (*).","error"); return; }
+    const btn=document.getElementById("f-submit-btn"), lbl=document.getElementById("f-submit-label");
+    btn.disabled=true; lbl.textContent="Submitting…";
+    try{
+      await sbFetch("/rest/v1/prompts",{method:"POST",prefer:"return=minimal",body:JSON.stringify({title,prompt,description:desc,category:cat,model,author,variables:extractVars(prompt),likes:0,copies:0,status:"pending",created_at:new Date().toISOString()})});
+      showFStatus("✓ Submitted! Goes live after review — usually within 24h.","success");
+      setTimeout(()=>{closeSubmitModal();resetForm();},2200);
+    }catch{ showFStatus("Something went wrong. Try again.","error"); btn.disabled=false; lbl.textContent="Submit for review"; }
+  };
+  function showFStatus(msg,type){ const el=document.getElementById("f-status"); el.textContent=msg; el.className="f-status "+type; }
+  function resetForm(){
+    ["f-title","f-prompt","f-desc","f-author"].forEach(id=>{const el=document.getElementById(id);if(el)el.value="";});
+    document.getElementById("f-cat").value=""; document.getElementById("f-model").value="Any";
+    document.getElementById("f-status").className="f-status";
+    document.getElementById("f-submit-btn").disabled=false;
+    document.getElementById("f-submit-label").textContent="Submit for review";
+  }
+
+  function showToast(msg,type){
+    const t=document.getElementById("p-toast");
+    t.textContent=msg; t.style.borderColor=type==="error"?"rgba(248,113,113,0.3)":"rgba(52,211,153,0.3)";
+    t.style.color=type==="error"?"#f87171":"#34d399"; t.style.border="1px solid";
+    t.classList.add("show"); setTimeout(()=>t.classList.remove("show"),2800);
+  }
+
+  const toggle=document.getElementById("mobile-menu-toggle"), menu=document.getElementById("mobileMenu");
+  let menuOpen=false;
+  toggle.addEventListener("click",()=>{
+    menuOpen=!menuOpen; menu.classList.toggle("open",menuOpen); toggle.classList.toggle("open",menuOpen);
+    toggle.setAttribute("aria-expanded",menuOpen); document.body.style.overflow=menuOpen?"hidden":"";
+  });
+  menu.querySelectorAll("a").forEach(a=>a.addEventListener("click",()=>{ menuOpen=false; menu.classList.remove("open"); toggle.classList.remove("open"); document.body.style.overflow=""; }));
+
+  const urlP=new URLSearchParams(window.location.search).get("p");
+  function esc(s){ return String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[c]); }
+
+  load().then(()=>{ if(urlP){ const p=allPrompts.find(x=>x.id===urlP); if(p) setTimeout(()=>selectPrompt(urlP),100); } });
+})();
+</script>
+</body>
+</html>
