@@ -3450,18 +3450,46 @@
         provider.addScope("email");
 
         window.signInWithGoogle = () => {
-          auth.signInWithPopup(provider)
-            .then(({ user }) => {
-              db.collection("users").doc(user.uid).set({
-                name: user.displayName, email: user.email,
-                photoURL: user.photoURL, uid: user.uid,
-                lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
-              }, { merge: true });
-            })
-            .catch(err => { console.error("Login error:", err); alert("Login failed. Please try again."); });
-        };
+  auth.signInWithPopup(provider)
+    .then(({ user }) => {
+      // Check if this is a new user (first time sign-up)
+      const isNewUser = user.metadata.creationTime === user.metadata.lastSignInTime;
+      
+      db.collection("users").doc(user.uid).set({
+        name: user.displayName, 
+        email: user.email,
+        photoURL: user.photoURL, 
+        uid: user.uid,
+        lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        welcomeSent: isNewUser ? false : true // Track if welcome email sent
+      }, { merge: true });
 
+      // Send welcome email only on first sign-up
+      if (isNewUser && user.email) {
+        fetch("https://welcome.kumarharsha980.workers.dev", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: user.email,
+            name: user.displayName || ""
+          })
+        })
+        .then(res => {
+          if (res.ok) {
+            // Mark welcome as sent in Firestore
+            db.collection("users").doc(user.uid).update({ welcomeSent: true });
+            console.log("Welcome email sent to:", user.email);
+          }
+        })
+        .catch(err => console.log("Welcome email failed (non-blocking):", err));
+      }
+    })
+    .catch(err => { 
+      console.error("Login error:", err); 
+      alert("Login failed. Please try again."); 
+    });
+};
         window.logoutUser = () => auth.signOut();
 
         auth.onAuthStateChanged(user => {
