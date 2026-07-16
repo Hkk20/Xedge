@@ -38,7 +38,12 @@
       accent: "linear-gradient(135deg, #60a5fa, #6366f1)",
       label: "Today's builder",
       publishedAt: "2026-07-16",
-      quote: "I have 15 years of experience in marketing, starting back when print ads were still the norm. Today, my core tech stack is built on AI foundations and glazing. Because I suffer from severe FOMO, a good chunk of my time goes into experimenting with new tools. However, when work needs to get done, my go-to tools are Codex, Google Workspace, and Canva.The tools people are sleeping on right now? Grok Build and Google Apps Script. When it comes to automation, the combination of Google Sheets and Apps Script is the silent winner.",
+      quote: [
+        "I have 15 years in marketing, from back when it was still printed ads and handing out flyers on the street..",
+        "Today, my tech stack is, ofc, AI in both foundation and glazing. I suffer from severe FOMO, so a good chunk of my time goes to trying new stuff, experimenting.",
+        "But when work needs to get done, it's Codex, Google Workspace, and Canva. Yes, I’m not ashamed to say Canva, lol.",
+        "Tools people are sleeping on? Grok Build, and Apps Script. When it comes to automation, Google Sheets + Apps Script are still the best."
+      ],
       stack: ["Codex", "Google Workspace", "Canva", "Grok Build", "Apps Script", "Google Sheets"]
     }
   ].sort(function (a, b) {
@@ -85,6 +90,17 @@
     byline.appendChild(el("span", "", story.role));
     wrap.appendChild(byline);
     return wrap;
+  }
+
+  function storyQuote(story) {
+    const quote = el("blockquote", "builder-story-quote");
+    const paragraphs = Array.isArray(story.quote) ? story.quote : [story.quote];
+    paragraphs.filter(Boolean).forEach(function (paragraph) {
+      const line = el("p");
+      line.appendChild(el("strong", "", paragraph));
+      quote.appendChild(line);
+    });
+    return quote;
   }
 
   function normalise(value) {
@@ -189,7 +205,7 @@
     top.appendChild(el("span", "builder-read-more", "Read the story ->"));
     mainLink.appendChild(top);
     mainLink.appendChild(profile(story));
-    mainLink.appendChild(el("blockquote", "", "\"" + story.quote + "\""));
+    mainLink.appendChild(storyQuote(story));
     card.appendChild(mainLink);
     card.appendChild(recommendation(story));
     target.replaceChildren(card);
@@ -205,7 +221,7 @@
       head.appendChild(profile(story, "builder-profile builder-profile-large"));
       if (index === 0) head.appendChild(el("span", "builder-card-kicker", story.label));
       card.appendChild(head);
-      card.appendChild(el("blockquote", "", "\"" + story.quote + "\""));
+      card.appendChild(storyQuote(story));
       const detail = el("div", "builder-story-detail");
       if (story.story) detail.appendChild(el("p", "", story.story));
       detail.appendChild(recommendation(story));
