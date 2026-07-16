@@ -1,0 +1,115 @@
+XEDGE BUILDER STORIES - HOW TO ADD A NEW CARD
+==============================================
+
+You add Builder Stories in one place only:
+
+    builders.js
+
+Do not add builder cards directly to index.html or builders.html. Those pages
+load builders.js automatically.
+
+WHAT HAPPENS WHEN YOU ADD A STORY
+---------------------------------
+
+- The newest story appears as the ONE Builder Story card on the homepage.
+- Every story, including the newest one, appears on builders.html.
+- Older stories stay in the Builder Stories library. Do not delete them when
+  you add a new story.
+
+The newest story is chosen from `publishedAt`, not from its position in the
+file. Use the format YYYY-MM-DD. A later date always wins.
+
+HOW TO ADD A NEW STORY
+----------------------
+
+1. Open builders.js.
+2. Find `const stories = [` near the top of the file.
+3. Paste a new story object inside the square brackets. Put a comma after the
+   previous story object before adding the new one.
+4. Fill in every field in the template below.
+5. Give `publishedAt` today's date (or the actual publish date).
+6. Save builders.js and refresh both index.html and builders.html.
+
+COPY THIS TEMPLATE
+------------------
+
+    {
+      slug: "jane-doe",
+      name: "Jane Doe",
+      role: "Founder at Example",
+      initials: "JD",
+      photo: "assets/builders/jane-doe.webp",
+      accent: "linear-gradient(135deg, #60a5fa, #6366f1)",
+      label: "Latest builder",
+      publishedAt: "2026-07-16",
+      quote: "Use the person's real approved quote here.",
+      story: "Optional: add a short explanation or context for the full builders.html card.",
+      stack: ["Notion", "Framer", "Gumroad"],
+      takeaway: "Optional: add the practical lesson people should remember."
+    }
+
+FIELD RULES
+-----------
+
+slug
+  Required. Lowercase, unique, and use hyphens only. Example: "jane-doe".
+  It is used in the link from the homepage to the full story.
+
+name, role, initials
+  Required. `initials` should normally be two letters.
+
+photo
+  Optional. Add a local square image path, such as
+  "assets/builders/jane-doe.webp". Use an approved profile image. If the
+  photo is unavailable, XEdge shows the initials avatar automatically.
+
+accent
+  Required. This controls the avatar colour. You can keep the template value.
+
+label
+  Required. A short badge such as "Latest builder" or "Community spotlight".
+
+publishedAt
+  Required. Use YYYY-MM-DD. This decides which one story appears on the home
+  page. A story dated 2026-07-20 is newer than one dated 2026-07-16.
+
+quote
+  Required. Use a real quote that the person has approved for publication.
+
+story and takeaway
+  Optional. They appear only on builders.html, below the quote.
+
+stack
+  Required. List the tool names the person actually mentioned. Use the exact
+  tool name used by XEdge when possible, for example "Notion", "Framer", or
+  "Google Sheets". XEdge looks up each name in its tool directory and displays
+  that tool's real logo and clickable link automatically.
+
+IMPORTANT: KEEP ALL STORIES
+---------------------------
+
+The `stories` array is the complete Builder Stories archive. Never replace the
+whole array with only the new story. Add the new object and leave earlier
+objects in place. The code automatically sorts the list newest-first:
+
+    Homepage: only the story with the latest publishedAt date
+    builders.html: every story, newest first
+
+CHECK YOUR WORK
+---------------
+
+1. Open index.html. There should be exactly one Builder Stories card.
+2. Click "Read the story" or "Browse the library".
+3. Open builders.html. The new story should be at the top and older stories
+   should still be underneath it.
+4. Click each tool card. It should show the real logo and open that tool's link.
+5. If a logo is missing, first check the spelling in `stack`. If that tool is
+   not yet in the XEdge tool directory, the site uses a safe placeholder and
+   links to its XEdge tool page until the real directory entry is available.
+
+ONLY YOU CAN ADD STORIES
+------------------------
+
+There is no public submission form. Builder Stories are code-managed by you in
+builders.js, which keeps the library curated and lets you publish only approved
+stories.

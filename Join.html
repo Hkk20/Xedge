@@ -1,127 +1,231 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Join Beta — X Edge</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="icon" href="logo.png">
+  <meta name="theme-color" content="#0b0f15">
+  <title>Join the XEdge Beta</title>
+  <link rel="icon" href="xedge-logo.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root { color-scheme: dark; }
+    * { box-sizing: border-box; }
+    body {
+      min-width: 320px;
+      margin: 0;
+      overflow-x: hidden;
+      background: #0b0f15;
+      color: #fff;
+      font-family: "Space Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+    a { color: inherit; }
+    .xe-nav {
+      position: fixed;
+      inset: 0 0 auto;
+      z-index: 10;
+      height: 68px;
+      display: flex;
+      align-items: center;
+      background: rgba(11, 15, 21, .9);
+      border-bottom: 1px solid rgba(255, 255, 255, .07);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+    .xe-nav-inner {
+      width: min(1400px, 100%);
+      margin: auto;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .xe-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .xe-logo img { width: 36px; height: 36px; border-radius: 8px; }
+    .xe-logo span { color: #60a5fa; font-size: 1.25rem; font-weight: 700; letter-spacing: -.3px; }
+    .xe-back {
+      padding: 8px 16px;
+      border: 1px solid rgba(255, 255, 255, .12);
+      border-radius: 999px;
+      color: #d1d5db;
+      font-size: .85rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: color .15s, background .15s, border-color .15s;
+    }
+    .xe-back:hover { color: #fff; background: rgba(255, 255, 255, .07); border-color: rgba(96, 165, 250, .48); }
+    .join-page {
+      position: relative;
+      display: grid;
+      min-height: 100vh;
+      place-items: center;
+      padding: 118px 24px 52px;
+      isolation: isolate;
+    }
+    .join-page::before, .join-page::after { position: absolute; z-index: -1; content: ""; pointer-events: none; filter: blur(18px); }
+    .join-page::before { width: 550px; height: 550px; top: 80px; left: -230px; background: radial-gradient(circle, rgba(37, 99, 235, .24), transparent 67%); }
+    .join-page::after { width: 460px; height: 460px; right: -170px; bottom: 10px; background: radial-gradient(circle, rgba(99, 102, 241, .18), transparent 66%); }
+    .join-wrap { width: min(100%, 1040px); display: grid; grid-template-columns: minmax(0, .92fr) minmax(360px, 1.08fr); align-items: center; gap: clamp(36px, 7vw, 92px); }
+    .eyebrow { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 18px; color: #bfdbfe; font-size: .75rem; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; }
+    .eyebrow::before { width: 8px; height: 8px; border-radius: 50%; background: #60a5fa; box-shadow: 0 0 14px #60a5fa; content: ""; }
+    h1 { max-width: 570px; margin: 0; font-size: clamp(2.45rem, 5vw, 4.5rem); line-height: 1.02; letter-spacing: -.065em; }
+    h1 span { color: #60a5fa; }
+    .intro { max-width: 500px; margin: 24px 0 0; color: #aeb7c8; font-size: 1.03rem; line-height: 1.75; }
+    .perks { display: grid; gap: 14px; margin: 34px 0 0; padding: 0; list-style: none; }
+    .perks li { display: flex; align-items: center; gap: 11px; color: #dbeafe; font-size: .92rem; }
+    .perk-icon { display: grid; width: 25px; height: 25px; place-items: center; border: 1px solid rgba(96, 165, 250, .28); border-radius: 50%; background: rgba(59, 130, 246, .11); color: #93c5fd; font-size: .8rem; }
+    .join-card { padding: clamp(25px, 4vw, 40px); border: 1px solid rgba(96, 165, 250, .2); border-radius: 24px; background: linear-gradient(145deg, rgba(30, 41, 59, .72), rgba(17, 24, 39, .84)); box-shadow: 0 26px 70px rgba(0, 0, 0, .29); }
+    .join-card h2 { margin: 0; font-size: 1.5rem; letter-spacing: -.035em; }
+    .join-card > p { margin: 9px 0 26px; color: #9ca3af; font-size: .9rem; line-height: 1.6; }
+    .field { display: grid; gap: 8px; margin-top: 18px; }
+    label { color: #d1d5db; font-size: .84rem; font-weight: 600; }
+    input, textarea {
+      width: 100%;
+      border: 1px solid rgba(255, 255, 255, .1);
+      border-radius: 11px;
+      outline: none;
+      background: rgba(11, 15, 21, .68);
+      color: #fff;
+      font: inherit;
+      font-size: .94rem;
+      transition: border-color .15s, box-shadow .15s, background .15s;
+    }
+    input { height: 48px; padding: 0 14px; }
+    textarea { min-height: 96px; padding: 12px 14px; resize: vertical; }
+    input::placeholder, textarea::placeholder { color: #697386; }
+    input:focus, textarea:focus { border-color: #60a5fa; background: rgba(11, 15, 21, .92); box-shadow: 0 0 0 3px rgba(59, 130, 246, .16); }
+    .submit {
+      display: flex;
+      width: 100%;
+      min-height: 50px;
+      align-items: center;
+      justify-content: center;
+      margin-top: 25px;
+      border: 0;
+      border-radius: 11px;
+      cursor: pointer;
+      background: linear-gradient(135deg, #3b82f6, #6366f1);
+      color: #fff;
+      font: inherit;
+      font-size: .94rem;
+      font-weight: 700;
+      transition: transform .15s, opacity .15s, box-shadow .15s;
+    }
+    .submit:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 12px 25px rgba(59, 130, 246, .23); }
+    .submit:disabled { cursor: wait; opacity: .7; }
+    .status { min-height: 22px; margin: 15px 0 0; text-align: center; font-size: .84rem; line-height: 1.45; }
+    .status.success { color: #6ee7b7; }
+    .status.error { color: #fda4af; }
+    .fine-print { margin: 15px 0 0; color: #7d8798; font-size: .72rem; line-height: 1.55; text-align: center; }
+    footer { padding: 0 24px 24px; color: #6b7280; font-size: .76rem; text-align: center; }
+    @media (max-width: 780px) { .join-wrap { grid-template-columns: 1fr; max-width: 560px; gap: 38px; } .join-page { place-items: start center; } }
+    @media (max-width: 480px) { .xe-nav-inner { padding: 0 16px; } .xe-logo span { font-size: 1.1rem; } .xe-back { padding: 7px 12px; } .join-page { padding: 104px 16px 35px; } .join-card { border-radius: 19px; } }
+  </style>
 </head>
-<body class="bg-gray-900 text-white">
 
-  <!-- 🔹 Navbar -->
-  <nav class="fixed top-0 left-0 w-full bg-gray-900/95 border-b border-gray-800 z-50">
-  <div class="max-w-[1400px] mx-auto px-4 py-4 flex items-center justify-between">
-    
-    <a href="index.html" class="flex items-center gap-3">
-      <img src="xedge-logo.png" class="w-10 h-10" />
-      <span class="text-2xl font-bold text-blue-400">XEDGE</span>
-    </a>
-      <button 
-  onclick="goBack()"
-  class="px-4 py-2 mb-4 bg-gray-800 border border-gray-700 rounded-lg 
-         text-gray-300 hover:bg-gray-700 hover:text-white transition flex items-center gap-2">
-  ← Back
-</button>
-
-<script>
-function goBack() {
-  if (document.referrer) {
-    history.back();
-  } else {
-    window.location.href = "Categories.html";
-  }
-}
-</script>
-
+<body>
+  <nav class="xe-nav" aria-label="Main navigation">
+    <div class="xe-nav-inner">
+      <a class="xe-logo" href="index.html" aria-label="XEdge home">
+        <img src="xedge-logo.png" alt="XEdge">
+        <span>XEDGE</span>
+      </a>
+      <a class="xe-back" href="index.html">← Back home</a>
     </div>
   </nav>
 
-  <!-- 🔹 Main content -->
-  <main class="pt-28 max-w-3xl mx-auto px-6">
-    <h1 class="text-3xl font-semibold mb-2 text-center">Join the <span class="text-blue-500">X Edge Beta</span></h1>
-    <p class="text-gray-400 mb-8 text-center">Sign up now to get early access to the smartest AI directory of 2025.</p>
+  <main class="join-page">
+    <div class="join-wrap">
+      <section aria-labelledby="join-title">
+        <p class="eyebrow">Early access</p>
+        <h1 id="join-title">Build your edge with <span>XEdge.</span></h1>
+        <p class="intro">Join the beta for a sharper way to discover the AI tools, stacks, and practical playbooks that move your work forward.</p>
+        <ul class="perks">
+          <li><span class="perk-icon">✓</span> Curated AI tools for real goals</li>
+          <li><span class="perk-icon">✓</span> Actionable stacks, not endless lists</li>
+          <li><span class="perk-icon">✓</span> Early access to what we are building next</li>
+        </ul>
+      </section>
 
-    <form id="joinForm" action="https://formspree.io/f/mblzvykd" method="POST" 
-          class="space-y-5 bg-gray-800/60 border border-gray-700 p-8 rounded-2xl shadow-lg transition">
-      
-      <div>
-        <label class="block mb-1 text-gray-300 font-medium" for="name">Your Name</label>
-        <input name="name" id="name" placeholder="John Doe" 
-               class="w-full p-3 rounded bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" required />
-      </div>
-
-      <div>
-        <label class="block mb-1 text-gray-300 font-medium" for="email">Email Address</label>
-        <input name="email" id="email" type="email" placeholder="you@example.com" 
-               class="w-full p-3 rounded bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" required />
-      </div>
-
-      <div>
-        <label class="block mb-1 text-gray-300 font-medium" for="message">Message (Optional)</label>
-        <textarea name="message" id="message" placeholder="Share your thoughts..." 
-                  class="w-full p-3 rounded bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
-      </div>
-
-      <!-- Submit Button -->
-      <button id="submitBtn" type="submit" 
-              class="w-full bg-gradient-to-r from-blue-500 to-blue-600 px-6 py-3 rounded-lg font-semibold hover:from-blue-600 hover:to-blue-700 transition duration-200">
-        Join Beta
-      </button>
-
-      <!-- Status message -->
-      <p id="joinStatus" class="text-sm text-center mt-3 text-gray-400"></p>
-    </form>
+      <section class="join-card" aria-labelledby="form-title">
+        <h2 id="form-title">Get on the beta list</h2>
+        <p>Share a few details and we will keep you in the loop.</p>
+        <form id="joinForm" action="https://formspree.io/f/mblzvykd" method="POST">
+          <div class="field">
+            <label for="name">Your name</label>
+            <input name="name" id="name" placeholder="John Doe" autocomplete="name" required>
+          </div>
+          <div class="field">
+            <label for="email">Email address</label>
+            <input name="email" id="email" type="email" placeholder="you@example.com" autocomplete="email" required>
+          </div>
+          <div class="field">
+            <label for="message">Message <span aria-hidden="true">(optional)</span></label>
+            <textarea name="message" id="message" placeholder="Share your thoughts..."></textarea>
+          </div>
+          <button id="submitBtn" class="submit" type="submit">Join the beta</button>
+          <p id="joinStatus" class="status" role="status" aria-live="polite"></p>
+          <p class="fine-print">Your email is also added to the XEdge updates list. We only send your email address to that list.</p>
+        </form>
+      </section>
+    </div>
   </main>
+  <footer>© 2026 XEdge. All rights reserved.</footer>
 
-  <!-- 🔹 Footer -->
-  <footer class="mt-16 text-center text-gray-500 text-sm pb-6">
-    © 2025 X Edge. All rights reserved.
-  </footer>
-
-  <!-- 🔹 Script -->
   <script>
-  const form = document.getElementById('joinForm');
-  const status = document.getElementById('joinStatus');
-  const submitBtn = document.getElementById('submitBtn');
+    const form = document.getElementById('joinForm');
+    const status = document.getElementById('joinStatus');
+    const submitBtn = document.getElementById('submitBtn');
+    const BREVO_LIST_ENDPOINT = 'https://restless-wave-aabc.kumarharsha980.workers.dev/';
 
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    status.textContent = '';
-    submitBtn.disabled = true;
-    submitBtn.innerHTML = '<div class="animate-spin inline-block h-5 w-5 border-b-2 border-white mr-2"></div> Sending...';
-
-    const data = new FormData(form);
-
-    try {
-      const res = await fetch(form.action, {
-        method: 'POST',
-        body: data,
-        headers: { 'Accept': 'application/json' }
-      });
-
-      if (res.ok) {
-        status.textContent = '✅ Thanks for joining! You’re on the beta list.';
-        status.className = "text-green-400 text-center mt-3";
-        form.reset();
-      } else {
-        const error = await res.json();
-        status.textContent = error.errors
-          ? `⚠️ ${error.errors.map(e => e.message).join(', ')}`
-          : '⚠️ Something went wrong — please try again.';
-        status.className = "text-yellow-400 text-center mt-3";
-      }
-    } catch (err) {
-      console.error(err);
-      status.textContent = '🚫 Network error — please try again later.';
-      status.className = "text-red-400 text-center mt-3";
-    } finally {
-      submitBtn.disabled = false;
-      submitBtn.innerHTML = 'Join Beta';
+    function showStatus(message, type) {
+      status.textContent = message;
+      status.className = `status ${type}`;
     }
-  });
-  </script>
 
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const formData = new FormData(form);
+      const email = String(formData.get('email') || '').trim();
+      const originalLabel = submitBtn.textContent;
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Joining...';
+      status.textContent = '';
+      status.className = 'status';
+
+      try {
+        const [formspreeResponse, brevoResponse] = await Promise.all([
+          fetch(form.action, {
+            method: 'POST',
+            body: formData,
+            headers: { Accept: 'application/json' }
+          }),
+          fetch(BREVO_LIST_ENDPOINT, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email })
+          })
+        ]);
+
+        if (!formspreeResponse.ok || !brevoResponse.ok) {
+          throw new Error('Signup request failed');
+        }
+
+        form.reset();
+        showStatus('Thanks for joining — you are on the XEdge beta list.', 'success');
+      } catch (error) {
+        console.error('Beta signup failed:', error);
+        showStatus('Something went wrong. Please try again in a moment.', 'error');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalLabel;
+      }
+    });
+  </script>
 </body>
+
 </html>
