@@ -22,13 +22,27 @@
     canva: { logo: "https://www.google.com/s2/favicons?domain=canva.com&sz=128", link: "https://www.canva.com/" },
     grokbuild: { logo: "https://www.google.com/s2/favicons?domain=grok.com&sz=128", link: "https://grok.com/" },
     appsscript: { logo: "https://www.google.com/s2/favicons?domain=script.google.com&sz=128", link: "https://script.google.com/" },
-    googlesheets: { logo: "https://www.google.com/s2/favicons?domain=sheets.google.com&sz=128", link: "https://www.google.com/sheets/about/" }
+    googlesheets: { logo: "https://www.google.com/s2/favicons?domain=sheets.google.com&sz=128", link: "https://www.google.com/sheets/about/" },
+    momentumhive: { logo: "https://www.google.com/s2/favicons?domain=momentumhive.app&sz=128", link: "https://momentumhive.app/" },
+    claude: { logo: "https://www.google.com/s2/favicons?domain=claude.ai&sz=128", link: "https://claude.ai/" }
   };
   let toolDirectoryPromise;
 
   // Keep every approved story here. The newest `publishedAt` value is the only
   // story shown on the homepage; this full list is always shown on builders.html.
   const stories = [
+    {
+      slug: "momentumhive-builder",
+      name: "Zvonko Biškup",
+      role: "Founder, MomentumHive",
+      initials: "ZB",
+      photo: "assets/builders/momentumhive-builder.png",
+      accent: "linear-gradient(135deg, #38bdf8, #2563eb)",
+      label: "Today's builder",
+      publishedAt: "2026-07-18",
+      quote: "MomentumHive for scheduling and analytics. Claude for everything else. That's the whole stack. MomentumHive removes the willpower requirement because posts go out whether I show up that morning or not.",
+      stack: ["MomentumHive", "Claude"]
+    },
     {
       slug: "damir-regoc",
       name: "Damir Regoc",
