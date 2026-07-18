@@ -40,7 +40,7 @@
       accent: "linear-gradient(135deg, #38bdf8, #2563eb)",
       label: "Today's builder",
       publishedAt: "2026-07-18",
-      quote: "MomentumHive for scheduling and analytics. Claude for everything else. That's the whole stack. MomentumHive removes the willpower requirement because posts go out whether I show up that morning or not.",
+      quote: " I use MomentumHive fors scheduling and analytics. Claude for everything else. That's the whole stack. MomentumHive removes the willpower requirement because posts go out whether I show up that morning or not.",
       stack: ["MomentumHive", "Claude"]
     },
     {
